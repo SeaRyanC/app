@@ -710,6 +710,7 @@ function findTransparentPixels(imageData, perimeterColor, threshold) {
 }
 
 // src/regions.ts
+var CELL_FILL_THRESHOLD = 0.5;
 function analyzeRegionShape(result, imageData) {
   const { bounds, pixels } = result;
   const width = bounds.maxX - bounds.minX + 1;
@@ -844,7 +845,7 @@ function computeShapeMaskAndColors(result, imageData, gw, gh) {
           }
         }
       }
-      const isFilled = cellPixels > cellArea * 0.5;
+      const isFilled = cellPixels > cellArea * CELL_FILL_THRESHOLD;
       shapeMask[gy][gx] = isFilled;
       if (isFilled) {
         filledCellCount++;
@@ -1119,7 +1120,7 @@ function u3(e3, t3, n2, o3, i4, u4) {
 
 // src/app.tsx
 var VERSION = true ? "0.2.0" : "0.1.0";
-var COMMIT_HASH = true ? "8dc616e" : "dev";
+var COMMIT_HASH = true ? "285db97" : "dev";
 function App() {
   const [state, setState] = d2(loadState);
   const [image, setImage] = d2(null);
@@ -1596,4 +1597,3 @@ function App() {
   ] });
 }
 G(/* @__PURE__ */ u3(App, {}), document.getElementById("app"));
-//# sourceMappingURL=app.js.map

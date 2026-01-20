@@ -5,6 +5,12 @@
 import { RGB, medianColor } from './colors.js';
 import { FloodFillResult, getPixel } from './floodFill.js';
 
+/**
+ * Minimum fill ratio for a cell to be considered "filled" in the shape mask.
+ * A cell is filled if more than this fraction of its area has flood-fill pixels.
+ */
+const CELL_FILL_THRESHOLD = 0.5;
+
 export interface Region {
   id: string;
   pixels: Set<string>;
@@ -241,8 +247,8 @@ function computeShapeMaskAndColors(
         }
       }
       
-      // Cell is filled if more than 50% of its area has flood-fill pixels
-      const isFilled = cellPixels > cellArea * 0.5;
+      // Cell is filled if more than CELL_FILL_THRESHOLD of its area has flood-fill pixels
+      const isFilled = cellPixels > cellArea * CELL_FILL_THRESHOLD;
       shapeMask[gy][gx] = isFilled;
       
       if (isFilled) {
