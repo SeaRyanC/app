@@ -25,7 +25,7 @@ If more than one looks plausible, show the user a modal dialog with a zoomed-in 
 
 Known Regions are subtly outlined in the input image area, and their pixels appear in the Output preview.
 
-Once four or more Known Regions are identified, it's time to Infer the rest of the grid. Using the coordinates of the known regions, infer the pixel pitch, offset, rotation, scale, etc of the implied pixel grid of the image. Use a center-weighted average of each pixel when determining the output pixel's color. Overlay this inferred grid on the preview image so the user can tell if it's correct or not.
+Once four or more Known Regions are identified, it's time to Infer the rest of the grid. Using the coordinates of the known regions, infer the pixel pitch, offset, rotation, scale, etc of the implied pixel grid of the image. The grid inference uses a **nonuniform interpolation algorithm**: instead of assuming all pixels have the same size throughout the image, it uses the centroids of known regions as control points and interpolates (or extrapolates) pixel positions based on these observations. This handles images where pixel spacing varies across the image due to perspective, distortion, or inconsistent drawing. Use a center-weighted average of each pixel when determining the output pixel's color. Overlay this inferred grid on the preview image so the user can tell if it's correct or not.
 
 The user can still add more Known Regions to improve grid alignment if needed, or delete mis-aligned Known Regions.
 
@@ -37,7 +37,7 @@ I can clear out the input image.
 
 Reloading the browser does not lose ANY work (use localstorage).
 
-I see the input image on the left and the output image on the right. The output image is scaled up without any smoothing/interpolation so its edges are nice and crisp. Faint and thin lines overlay the pixel grid of the image.
+I see the input image on the left and the output image on the right. The output image is scaled up without any smoothing/interpolation so its edges are nice and crisp. Visible grid lines overlay the pixel grid of the image for easy alignment verification.
 
 The output image can be copied to clipboard, or downloaded in PNG format.
 

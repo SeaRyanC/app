@@ -1,6 +1,6 @@
 {
   "name": "pix",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Pixel Image Extractor - Extract pixel-perfect images from roughly drawn pixel art",
   "type": "module",
   "scripts": {
