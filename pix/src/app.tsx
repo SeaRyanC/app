@@ -73,7 +73,7 @@ function App() {
     } else {
       setGrid(null);
     }
-  }, [state.regions.length, imageData]);
+  }, [state.regions, imageData]);
 
   // Generate output when grid or settings change
   useEffect(() => {
