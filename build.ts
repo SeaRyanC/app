@@ -1,129 +1,150 @@
-#!/usr/bin/env npx tsx
-/**
- * Build script that regenerates /docs/index.html based on README.md files from each app.
- * Run this script after modifying any app's README.md.
- */
+#!/usr/bin/env node
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { fileURLToPath } from 'url';
 
-const rootDir = path.dirname(new URL(import.meta.url).pathname);
-const docsDir = path.join(rootDir, 'docs');
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Find all app directories (those with a README.md and package.json)
-function findApps(): { name: string; readme: string; description: string }[] {
-  const apps: { name: string; readme: string; description: string }[] = [];
+interface AppInfo {
+  name: string;
+  dir: string;
+  readme: string;
+}
+
+function getApps(): AppInfo[] {
+  const apps: AppInfo[] = [];
+  const rootDir = __dirname;
   
   const entries = fs.readdirSync(rootDir, { withFileTypes: true });
+  
   for (const entry of entries) {
     if (!entry.isDirectory()) continue;
     if (entry.name.startsWith('.') || entry.name === 'docs' || entry.name === 'node_modules') continue;
     
     const appDir = path.join(rootDir, entry.name);
     const readmePath = path.join(appDir, 'README.md');
-    const packagePath = path.join(appDir, 'package.json');
     
-    if (fs.existsSync(readmePath) && fs.existsSync(packagePath)) {
-      const readme = fs.readFileSync(readmePath, 'utf-8');
-      // Extract first paragraph after the ## heading as description
-      const lines = readme.split('\n');
-      let description = '';
-      let foundHeading = false;
-      for (const line of lines) {
-        if (line.startsWith('## ')) {
-          foundHeading = true;
-          continue;
-        }
-        if (foundHeading && line.trim()) {
-          description = line.trim();
-          break;
-        }
-      }
-      apps.push({ name: entry.name, readme, description });
+    if (fs.existsSync(readmePath)) {
+      const readmeContent = fs.readFileSync(readmePath, 'utf-8');
+      apps.push({
+        name: entry.name,
+        dir: entry.name,
+        readme: readmeContent
+      });
     }
   }
   
-  return apps.sort((a, b) => a.name.localeCompare(b.name));
+  return apps;
 }
 
-function generateIndexHtml(apps: { name: string; readme: string; description: string }[]): string {
-  const appCards = apps.map(app => {
-    // Get title from README (first ## heading)
-    const titleMatch = app.readme.match(/^## (.+)$/m);
-    const title = titleMatch ? titleMatch[1] : app.name;
-    
-    return `    <div class="app-card">
-      <h2><a href="${app.name}/">${title}</a></h2>
-      <p>${app.description}</p>
-    </div>`;
-  }).join('\n    \n');
+function readmeToHtml(readme: string): string {
+  // Extract content after the first ## heading
+  const lines = readme.split('\n');
+  let title = '';
+  const contentLines: string[] = [];
+  let inContent = false;
+  
+  for (const line of lines) {
+    if (line.startsWith('## ')) {
+      if (!title) {
+        title = line.substring(3).trim();
+        inContent = true;
+        continue;
+      }
+    }
+    if (inContent) {
+      contentLines.push(line);
+    }
+  }
+  
+  // Convert paragraphs to HTML
+  const content = contentLines.join('\n').trim();
+  const paragraphs = content.split(/\n\n+/).filter(p => p.trim());
+  const htmlParagraphs = paragraphs.map(p => `<p>${p.replace(/\n/g, ' ').trim()}</p>`).join('\n');
+  
+  return `<div class="app-card">
+<h2><a href="${title.toLowerCase().split(' ')[0]}/">${title}</a></h2>
+${htmlParagraphs}
+</div>`;
+}
 
-  return `<!DOCTYPE html>
+function generateIndex(apps: AppInfo[]): string {
+  const template = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SeaRyanC Apps</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: #1a1a2e;
+      color: #eaeaea;
       margin: 0;
-      padding: 40px 20px;
-      background-color: #f5f5f5;
-      line-height: 1.6;
+      padding: 2rem;
+      min-height: 100vh;
     }
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    h1 {
-      margin-top: 0;
-      margin-bottom: 30px;
-    }
+    .container { max-width: 800px; margin: 0 auto; }
+    h1 { margin-bottom: 2rem; }
+    .app-list { display: grid; gap: 1.5rem; }
     .app-card {
-      background: white;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      background: #16213e;
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid #2a2a4e;
     }
-    .app-card h2 {
-      margin-top: 0;
-      margin-bottom: 10px;
-    }
+    .app-card h2 { margin: 0 0 0.5rem 0; }
     .app-card h2 a {
-      color: #007bff;
+      color: #4a9eff;
       text-decoration: none;
     }
-    .app-card h2 a:hover {
-      text-decoration: underline;
-    }
-    .app-card p {
-      margin: 0;
+    .app-card h2 a:hover { text-decoration: underline; }
+    .app-card p { margin: 0.5rem 0; color: #aaa; line-height: 1.6; }
+    footer {
+      margin-top: 3rem;
+      text-align: center;
       color: #666;
+      font-size: 0.9rem;
     }
+    footer a { color: #4a9eff; }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>SeaRyanC Apps</h1>
-    
-${appCards}
-    
+    <h1>🎨 SeaRyanC Apps</h1>
+    <div class="app-list">
+      <!-- APP_LIST_START -->
+${apps.map(app => readmeToHtml(app.readme)).join('\n')}
+      <!-- APP_LIST_END -->
+    </div>
   </div>
+  <footer>
+    <a href="https://searyanc.dev">SeaRyanC</a> |
+    <a href="https://github.com/SeaRyanC/app">GitHub</a>
+  </footer>
 </body>
-</html>
-`;
+</html>`;
+
+  return template;
 }
 
-// Main
-const apps = findApps();
-console.log(`Found ${apps.length} app(s): ${apps.map(a => a.name).join(', ')}`);
+function main() {
+  const apps = getApps();
+  console.log(`Found ${apps.length} apps: ${apps.map(a => a.name).join(', ')}`);
+  
+  const indexHtml = generateIndex(apps);
+  const outputPath = path.join(__dirname, 'docs', 'index.html');
+  
+  // Ensure docs directory exists
+  const docsDir = path.join(__dirname, 'docs');
+  if (!fs.existsSync(docsDir)) {
+    fs.mkdirSync(docsDir, { recursive: true });
+  }
+  
+  fs.writeFileSync(outputPath, indexHtml);
+  console.log(`Generated ${outputPath}`);
+}
 
-const html = generateIndexHtml(apps);
-const indexPath = path.join(docsDir, 'index.html');
-fs.writeFileSync(indexPath, html);
-console.log(`Generated ${indexPath}`);
+main();

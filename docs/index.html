@@ -5,57 +5,63 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SeaRyanC Apps</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: #1a1a2e;
+      color: #eaeaea;
       margin: 0;
-      padding: 40px 20px;
-      background-color: #f5f5f5;
-      line-height: 1.6;
+      padding: 2rem;
+      min-height: 100vh;
     }
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    h1 {
-      margin-top: 0;
-      margin-bottom: 30px;
-    }
+    .container { max-width: 800px; margin: 0 auto; }
+    h1 { margin-bottom: 2rem; }
+    .app-list { display: grid; gap: 1.5rem; }
     .app-card {
-      background: white;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      background: #16213e;
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid #2a2a4e;
     }
-    .app-card h2 {
-      margin-top: 0;
-      margin-bottom: 10px;
-    }
+    .app-card h2 { margin: 0 0 0.5rem 0; }
     .app-card h2 a {
-      color: #007bff;
+      color: #4a9eff;
       text-decoration: none;
     }
-    .app-card h2 a:hover {
-      text-decoration: underline;
-    }
-    .app-card p {
-      margin: 0;
+    .app-card h2 a:hover { text-decoration: underline; }
+    .app-card p { margin: 0.5rem 0; color: #aaa; line-height: 1.6; }
+    footer {
+      margin-top: 3rem;
+      text-align: center;
       color: #666;
+      font-size: 0.9rem;
     }
+    footer a { color: #4a9eff; }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>SeaRyanC Apps</h1>
-    
-    <div class="app-card">
-      <h2><a href="csi/">CSI - Category Spending Insights</a></h2>
-      <p>A simple expense tracker and pivot table viewer. Paste your transaction data in TSV format (tab-separated values) to get a monthly breakdown by spending category.</p>
+    <h1>🎨 SeaRyanC Apps</h1>
+    <div class="app-list">
+      <!-- APP_LIST_START -->
+<div class="app-card">
+<h2><a href="csi/">CSI - Category Spending Insights</a></h2>
+<p>A simple expense tracker and pivot table viewer. Paste your transaction data in TSV format (tab-separated values) to get a monthly breakdown by spending category.</p>
+<p>The app automatically detects common column names (Date, Merchant, Category, Amount, etc.) and handles different date formats (ISO, US MM/DD/YYYY, European DD/MM/YYYY). It also detects whether negative or positive amounts represent expenses. Click on any cell in the pivot table to drill down into the individual transactions for that category and month.</p>
+<p>Data is persisted in localStorage, so you won't lose your work when refreshing the page. The app comes pre-populated with sample data to demonstrate its features.</p>
+</div>
+<div class="app-card">
+<h2><a href="pix/">Pix - Pixel Image Extractor</a></h2>
+<p>Pix extracts clean, pixel-perfect images from roughly drawn pixel art. When you have pixel art that's been scaled up, has misaligned pixels, or contains noise, Pix helps you recover the original grid and export a crisp result.</p>
+<p>Load an image by pasting, dragging, or uploading. Click on the image to identify regions of similar color—Pix will analyze the shape and help you build up a map of the pixel grid. Once four or more regions are defined, the tool infers the overall grid alignment and generates a preview of the extracted pixel art.</p>
+<p>The output can be refined with optional transparency inference (detecting background colors that should be transparent) and color limiting (reducing the palette to a specified number of colors). Export the result to your clipboard or as a PNG file.</p>
+</div>
+      <!-- APP_LIST_END -->
     </div>
-    
   </div>
+  <footer>
+    <a href="https://searyanc.dev">SeaRyanC</a> |
+    <a href="https://github.com/SeaRyanC/app">GitHub</a>
+  </footer>
 </body>
 </html>
