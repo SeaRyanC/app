@@ -400,123 +400,6 @@ function D2(n2, t3) {
   return "function" == typeof t3 ? t3(n2) : t3;
 }
 
-// src/regions.ts
-function analyzeRegionShape(result) {
-  const { bounds, pixels } = result;
-  const width = bounds.maxX - bounds.minX + 1;
-  const height = bounds.maxY - bounds.minY + 1;
-  const aspectRatio = width / height;
-  const pixelCount = pixels.size;
-  const area = width * height;
-  const density = pixelCount / area;
-  const candidates = [];
-  const possibleShapes = [];
-  if (aspectRatio >= 0.7 && aspectRatio <= 1.4) {
-    possibleShapes.push([1, 1], [2, 2], [3, 3], [4, 4]);
-  } else if (aspectRatio > 1.4) {
-    const ratio = Math.round(aspectRatio);
-    possibleShapes.push([1, 1]);
-    for (let w3 = 2; w3 <= Math.min(8, ratio + 2); w3++) {
-      for (let h3 = 1; h3 <= Math.min(4, w3); h3++) {
-        if (Math.abs(w3 / h3 - aspectRatio) < 1) {
-          possibleShapes.push([w3, h3]);
-        }
-      }
-    }
-  } else {
-    const ratio = Math.round(1 / aspectRatio);
-    possibleShapes.push([1, 1]);
-    for (let h3 = 2; h3 <= Math.min(8, ratio + 2); h3++) {
-      for (let w3 = 1; w3 <= Math.min(4, h3); w3++) {
-        if (Math.abs(w3 / h3 - aspectRatio) < 1) {
-          possibleShapes.push([w3, h3]);
-        }
-      }
-    }
-  }
-  for (const [gw, gh] of possibleShapes) {
-    const expectedAspect = gw / gh;
-    const aspectScore = 1 - Math.abs(aspectRatio - expectedAspect) / Math.max(aspectRatio, expectedAspect);
-    const densityScore = density > 0.5 ? 1 : density * 2;
-    const rectangularityScore = calculateRectangularity(result, gw, gh);
-    const score = aspectScore * 0.4 + densityScore * 0.3 + rectangularityScore * 0.3;
-    const previewPixels = [];
-    const cellW = width / gw;
-    const cellH = height / gh;
-    for (let gy = 0; gy < gh; gy++) {
-      for (let gx = 0; gx < gw; gx++) {
-        previewPixels.push({
-          x: bounds.minX + Math.floor(cellW * (gx + 0.5)),
-          y: bounds.minY + Math.floor(cellH * (gy + 0.5))
-        });
-      }
-    }
-    candidates.push({
-      gridWidth: gw,
-      gridHeight: gh,
-      score,
-      previewPixels
-    });
-  }
-  candidates.sort((a3, b) => b.score - a3.score);
-  const unique = [];
-  const seen = /* @__PURE__ */ new Set();
-  for (const c3 of candidates) {
-    const key = `${c3.gridWidth}x${c3.gridHeight}`;
-    if (!seen.has(key)) {
-      seen.add(key);
-      unique.push(c3);
-      if (unique.length >= 4) break;
-    }
-  }
-  return unique;
-}
-function calculateRectangularity(result, gw, gh) {
-  const { bounds, pixels } = result;
-  const width = bounds.maxX - bounds.minX + 1;
-  const height = bounds.maxY - bounds.minY + 1;
-  const cellW = width / gw;
-  const cellH = height / gh;
-  let totalExpectedPixels = 0;
-  let actualFilledPixels = 0;
-  for (let gy = 0; gy < gh; gy++) {
-    for (let gx = 0; gx < gw; gx++) {
-      const cellMinX = Math.floor(bounds.minX + cellW * gx);
-      const cellMaxX = Math.floor(bounds.minX + cellW * (gx + 1));
-      const cellMinY = Math.floor(bounds.minY + cellH * gy);
-      const cellMaxY = Math.floor(bounds.minY + cellH * (gy + 1));
-      let cellPixels = 0;
-      const cellArea = (cellMaxX - cellMinX) * (cellMaxY - cellMinY);
-      for (let y3 = cellMinY; y3 < cellMaxY; y3++) {
-        for (let x2 = cellMinX; x2 < cellMaxX; x2++) {
-          if (pixels.has(`${x2},${y3}`)) {
-            cellPixels++;
-          }
-        }
-      }
-      if (cellPixels > cellArea * 0.5) {
-        totalExpectedPixels += cellArea;
-        actualFilledPixels += cellPixels;
-      }
-    }
-  }
-  if (totalExpectedPixels === 0) return 0;
-  return actualFilledPixels / totalExpectedPixels;
-}
-function createRegion(result, gridWidth, gridHeight) {
-  return {
-    id: crypto.randomUUID(),
-    pixels: result.pixels,
-    bounds: result.bounds,
-    color: result.color,
-    gridX: 0,
-    // Will be set by grid inference
-    gridY: 0,
-    gridWidth,
-    gridHeight
-  };
-}
-
 // src/colors.ts
 function srgbToLinear(c3) {
   const s3 = c3 / 255;
@@ -826,6 +709,170 @@ function findTransparentPixels(imageData, perimeterColor, threshold) {
   return transparent;
 }
 
+// src/regions.ts
+var CELL_FILL_THRESHOLD = 0.5;
+function analyzeRegionShape(result, imageData) {
+  const { bounds, pixels } = result;
+  const width = bounds.maxX - bounds.minX + 1;
+  const height = bounds.maxY - bounds.minY + 1;
+  const aspectRatio = width / height;
+  const pixelCount = pixels.size;
+  const area = width * height;
+  const density = pixelCount / area;
+  const candidates = [];
+  const possibleShapes = [];
+  if (aspectRatio >= 0.7 && aspectRatio <= 1.4) {
+    possibleShapes.push([1, 1], [2, 2], [3, 3], [4, 4]);
+  } else if (aspectRatio > 1.4) {
+    const ratio = Math.round(aspectRatio);
+    possibleShapes.push([1, 1]);
+    for (let w3 = 2; w3 <= Math.min(8, ratio + 2); w3++) {
+      for (let h3 = 1; h3 <= Math.min(4, w3); h3++) {
+        if (Math.abs(w3 / h3 - aspectRatio) < 1) {
+          possibleShapes.push([w3, h3]);
+        }
+      }
+    }
+  } else {
+    const ratio = Math.round(1 / aspectRatio);
+    possibleShapes.push([1, 1]);
+    for (let h3 = 2; h3 <= Math.min(8, ratio + 2); h3++) {
+      for (let w3 = 1; w3 <= Math.min(4, h3); w3++) {
+        if (Math.abs(w3 / h3 - aspectRatio) < 1) {
+          possibleShapes.push([w3, h3]);
+        }
+      }
+    }
+  }
+  for (const [gw, gh] of possibleShapes) {
+    const expectedAspect = gw / gh;
+    const aspectScore = 1 - Math.abs(aspectRatio - expectedAspect) / Math.max(aspectRatio, expectedAspect);
+    const densityScore = density > 0.5 ? 1 : density * 2;
+    const { shapeMask, cellColors, filledCellCount } = computeShapeMaskAndColors(result, imageData, gw, gh);
+    const expectedFilledCells = gw * gh;
+    const fillRatio = filledCellCount / expectedFilledCells;
+    const rectangularityScore = calculateRectangularityWithMask(result, gw, gh, shapeMask);
+    const score = (aspectScore * 0.4 + densityScore * 0.3 + rectangularityScore * 0.3) * fillRatio;
+    const previewPixels = [];
+    const cellW = width / gw;
+    const cellH = height / gh;
+    for (let gy = 0; gy < gh; gy++) {
+      for (let gx = 0; gx < gw; gx++) {
+        previewPixels.push({
+          x: bounds.minX + Math.floor(cellW * (gx + 0.5)),
+          y: bounds.minY + Math.floor(cellH * (gy + 0.5))
+        });
+      }
+    }
+    candidates.push({
+      gridWidth: gw,
+      gridHeight: gh,
+      score,
+      previewPixels,
+      shapeMask,
+      cellColors
+    });
+  }
+  candidates.sort((a3, b) => b.score - a3.score);
+  const unique = [];
+  const seen = /* @__PURE__ */ new Set();
+  for (const c3 of candidates) {
+    const key = `${c3.gridWidth}x${c3.gridHeight}`;
+    if (!seen.has(key)) {
+      seen.add(key);
+      unique.push(c3);
+      if (unique.length >= 4) break;
+    }
+  }
+  return unique;
+}
+function calculateRectangularityWithMask(result, gw, gh, shapeMask) {
+  const { bounds, pixels } = result;
+  const width = bounds.maxX - bounds.minX + 1;
+  const height = bounds.maxY - bounds.minY + 1;
+  const cellW = width / gw;
+  const cellH = height / gh;
+  let totalExpectedPixels = 0;
+  let actualFilledPixels = 0;
+  for (let gy = 0; gy < gh; gy++) {
+    for (let gx = 0; gx < gw; gx++) {
+      if (!shapeMask[gy][gx]) continue;
+      const cellMinX = Math.floor(bounds.minX + cellW * gx);
+      const cellMaxX = Math.floor(bounds.minX + cellW * (gx + 1));
+      const cellMinY = Math.floor(bounds.minY + cellH * gy);
+      const cellMaxY = Math.floor(bounds.minY + cellH * (gy + 1));
+      let cellPixels = 0;
+      const cellArea = (cellMaxX - cellMinX) * (cellMaxY - cellMinY);
+      for (let y3 = cellMinY; y3 < cellMaxY; y3++) {
+        for (let x2 = cellMinX; x2 < cellMaxX; x2++) {
+          if (pixels.has(`${x2},${y3}`)) {
+            cellPixels++;
+          }
+        }
+      }
+      totalExpectedPixels += cellArea;
+      actualFilledPixels += cellPixels;
+    }
+  }
+  if (totalExpectedPixels === 0) return 0;
+  return actualFilledPixels / totalExpectedPixels;
+}
+function computeShapeMaskAndColors(result, imageData, gw, gh) {
+  const { bounds, pixels } = result;
+  const width = bounds.maxX - bounds.minX + 1;
+  const height = bounds.maxY - bounds.minY + 1;
+  const cellW = width / gw;
+  const cellH = height / gh;
+  const shapeMask = [];
+  const cellColors = [];
+  let filledCellCount = 0;
+  for (let gy = 0; gy < gh; gy++) {
+    shapeMask[gy] = [];
+    cellColors[gy] = [];
+    for (let gx = 0; gx < gw; gx++) {
+      const cellMinX = Math.floor(bounds.minX + cellW * gx);
+      const cellMaxX = Math.floor(bounds.minX + cellW * (gx + 1));
+      const cellMinY = Math.floor(bounds.minY + cellH * gy);
+      const cellMaxY = Math.floor(bounds.minY + cellH * (gy + 1));
+      let cellPixels = 0;
+      const cellArea = (cellMaxX - cellMinX) * (cellMaxY - cellMinY);
+      const colorSamples = [];
+      for (let y3 = cellMinY; y3 < cellMaxY; y3++) {
+        for (let x2 = cellMinX; x2 < cellMaxX; x2++) {
+          if (pixels.has(`${x2},${y3}`)) {
+            cellPixels++;
+            colorSamples.push(getPixel(imageData, x2, y3));
+          }
+        }
+      }
+      const isFilled = cellPixels > cellArea * CELL_FILL_THRESHOLD;
+      shapeMask[gy][gx] = isFilled;
+      if (isFilled) {
+        filledCellCount++;
+        cellColors[gy][gx] = colorSamples.length > 0 ? medianColor(colorSamples) : null;
+      } else {
+        cellColors[gy][gx] = null;
+      }
+    }
+  }
+  return { shapeMask, cellColors, filledCellCount };
+}
+function createRegion(result, candidate) {
+  return {
+    id: crypto.randomUUID(),
+    pixels: result.pixels,
+    bounds: result.bounds,
+    color: result.color,
+    gridX: 0,
+    // Will be set by grid inference
+    gridY: 0,
+    gridWidth: candidate.gridWidth,
+    gridHeight: candidate.gridHeight,
+    shapeMask: candidate.shapeMask,
+    cellColors: candidate.cellColors
+  };
+}
+
 // src/grid.ts
 function inferGrid(regions, imageWidth, imageHeight) {
   if (regions.length < 4) {
@@ -963,8 +1010,12 @@ function generateOutput(imageData, grid, regions, transparentPixels, colorCentro
   for (const region of regions) {
     for (let dy = 0; dy < region.gridHeight; dy++) {
       for (let dx = 0; dx < region.gridWidth; dx++) {
+        if (region.shapeMask && region.shapeMask[dy] && !region.shapeMask[dy][dx]) {
+          continue;
+        }
         const key = `${region.gridX + dx},${region.gridY + dy}`;
-        regionMap.set(key, region.color);
+        const cellColor = region.cellColors?.[dy]?.[dx] ?? region.color;
+        regionMap.set(key, cellColor);
       }
     }
   }
@@ -1009,7 +1060,7 @@ function findNearestCentroid(color, centroids) {
 
 // src/state.ts
 var STORAGE_KEY = "pix-app-state";
-var STATE_VERSION = "1";
+var STATE_VERSION = "2";
 function getDefaultState() {
   return {
     imageDataUrl: null,
@@ -1068,8 +1119,8 @@ function u3(e3, t3, n2, o3, i4, u4) {
 }
 
 // src/app.tsx
-var VERSION = true ? "0.1.3" : "0.1.0";
-var COMMIT_HASH = true ? "7636686" : "dev";
+var VERSION = true ? "0.2.0" : "0.1.0";
+var COMMIT_HASH = true ? "285db97" : "dev";
 function App() {
   const [state, setState] = d2(loadState);
   const [image, setImage] = d2(null);
@@ -1107,19 +1158,24 @@ function App() {
   y2(() => {
     if (imageData && state.regions.length >= 4) {
       const result = inferGrid(state.regions, imageData.width, imageData.height);
-      if (result.grid && result.confidence > 0.3) {
+      if (result.grid) {
         setGrid(result.grid);
         const updated = assignGridPositions(state.regions, result.grid);
         if (JSON.stringify(updated) !== JSON.stringify(state.regions)) {
           setState((s3) => ({ ...s3, regions: updated }));
         }
+      } else {
+        console.log("Failed to infer grid");
       }
     } else {
+      console.log("Not enough regions yet");
       setGrid(null);
     }
   }, [state.regions, imageData]);
   y2(() => {
     if (!imageData || !grid) {
+      console.log(imageData);
+      console.log(grid);
       setOutputImageData(null);
       return;
     }
@@ -1271,10 +1327,10 @@ function App() {
     } else {
       const candidates = getFloodFillCandidates(imageData, x2, y3);
       const result = candidates[1] || candidates[0];
-      const shapeCandidates = analyzeRegionShape(result);
+      const shapeCandidates = analyzeRegionShape(result, imageData);
       if (shapeCandidates.length === 0) return;
       if (shapeCandidates[0].score > 0.8 && (shapeCandidates.length === 1 || shapeCandidates[0].score > shapeCandidates[1].score * 1.2)) {
-        const region = createRegion(result, shapeCandidates[0].gridWidth, shapeCandidates[0].gridHeight);
+        const region = createRegion(result, shapeCandidates[0]);
         setState((s3) => ({ ...s3, regions: [...s3.regions, region] }));
       } else {
         setCandidateModal({ result, candidates: shapeCandidates });
@@ -1298,7 +1354,7 @@ function App() {
   }, [imageData, state.regions]);
   const handleSelectCandidate = q2((candidate) => {
     if (!candidateModal) return;
-    const region = createRegion(candidateModal.result, candidate.gridWidth, candidate.gridHeight);
+    const region = createRegion(candidateModal.result, candidate);
     setState((s3) => ({ ...s3, regions: [...s3.regions, region] }));
     setCandidateModal(null);
   }, [candidateModal]);
@@ -1488,12 +1544,19 @@ function App() {
               display: "grid",
               gridTemplateColumns: `repeat(${candidate.gridWidth}, 20px)`,
               gap: "2px"
-            }, children: Array.from({ length: candidate.gridWidth * candidate.gridHeight }).map((_2, j3) => /* @__PURE__ */ u3("div", { style: {
-              width: "20px",
-              height: "20px",
-              backgroundColor: `rgb(${candidateModal.result.color.r}, ${candidateModal.result.color.g}, ${candidateModal.result.color.b})`,
-              borderRadius: "2px"
-            } }, j3)) }) }),
+            }, children: Array.from({ length: candidate.gridHeight }).flatMap(
+              (_2, gy) => Array.from({ length: candidate.gridWidth }).map((_3, gx) => {
+                const isFilled = candidate.shapeMask[gy][gx];
+                const cellColor = candidate.cellColors[gy][gx];
+                return /* @__PURE__ */ u3("div", { style: {
+                  width: "20px",
+                  height: "20px",
+                  backgroundColor: isFilled && cellColor ? `rgb(${cellColor.r}, ${cellColor.g}, ${cellColor.b})` : "transparent",
+                  borderRadius: "2px",
+                  border: isFilled ? "none" : "1px dashed rgba(255,255,255,0.2)"
+                } }, `${gy}-${gx}`);
+              })
+            ) }) }),
             /* @__PURE__ */ u3("span", { class: "candidate-label", children: [
               candidate.gridWidth,
               "\xD7",
@@ -1534,4 +1597,3 @@ function App() {
   ] });
 }
 G(/* @__PURE__ */ u3(App, {}), document.getElementById("app"));
-//# sourceMappingURL=app.js.map
