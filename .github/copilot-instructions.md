@@ -106,6 +106,8 @@ The USER_STORY is a list of user stories that each app enables. Think of this as
 
 You can use DEV_NOTES to keep track of information between runs. Read this file first when working on a project to see what notes you've left yourself, and be liberal in adding to it whenever it's useful to do so
 
+You MUST update one of README, USER_STORY, or DEV_NOTES on every PR that changes code. There's no excuse for this -- SOMETHING must have been wrong (either specification, documentation, or implementation) if code changed, and you should be taking notes on this.
+
 # Unit Testing
 
 Write unit tests using jest. Be very selective about what you choose to unit test and how.
