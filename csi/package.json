@@ -1,0 +1,27 @@
+{
+  "name": "csi",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Category Spending Insights - Expense tracker and pivot table",
+  "main": "src/index.tsx",
+  "scripts": {
+    "bundle": "esbuild src/index.tsx --bundle --outfile=../docs/csi/app.js --minify --sourcemap",
+    "check": "tsc --noEmit",
+    "lint": "eslint src/",
+    "dev": "esbuild src/index.tsx --bundle --outfile=../docs/csi/app.js --sourcemap --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "preact": "^10.28.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.27.0",
+    "@types/node": "^22.15.29",
+    "esbuild": "^0.27.2",
+    "eslint": "^9.27.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.32.1"
+  }
+}
