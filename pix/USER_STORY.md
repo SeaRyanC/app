@@ -50,3 +50,5 @@ The "transparent" regions of the output preview show a grey/lighter-grey checker
 I can select a maximum number of colors to use in the output image. This is done through clustering analysis, not the median cut algorithm.
 
 I can enable "infer transparency", which assumes that any pixel connected to the edge of the image via a set of pixels which are "the same" color, and which are the same color as the most common color on the perimeter of the image, should instead be treated as transparent. "the same" threshold is configurable.
+
+Regions support non-rectangular shapes (shape masks). When adding a region, the candidate shape previews accurately show which cells within the bounding rectangle are filled based on the flood-fill pixel coverage, with per-cell color sampling. Non-filled cells within a region's bounding rectangle are displayed with a dashed outline. In the output, only filled cells contribute their color; unfilled cells within a region are sampled from the inferred grid instead.

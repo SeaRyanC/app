@@ -14,7 +14,7 @@ export interface AppState {
 }
 
 const STORAGE_KEY = 'pix-app-state';
-const STATE_VERSION = '1';
+const STATE_VERSION = '2';
 
 export function getDefaultState(): AppState {
   return {

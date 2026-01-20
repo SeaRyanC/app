@@ -240,13 +240,19 @@ export function generateOutput(
 ): ImageData {
   const output = new ImageData(grid.width, grid.height);
   
-  // Create a map of known region colors
+  // Create a map of known region colors, respecting shape masks
   const regionMap = new Map<string, RGB>();
   for (const region of regions) {
     for (let dy = 0; dy < region.gridHeight; dy++) {
       for (let dx = 0; dx < region.gridWidth; dx++) {
+        // Only include cells that are filled according to the shape mask
+        if (region.shapeMask && region.shapeMask[dy] && !region.shapeMask[dy][dx]) {
+          continue;
+        }
         const key = `${region.gridX + dx},${region.gridY + dy}`;
-        regionMap.set(key, region.color);
+        // Use per-cell color if available, otherwise fall back to region color
+        const cellColor = region.cellColors?.[dy]?.[dx] ?? region.color;
+        regionMap.set(key, cellColor);
       }
     }
   }

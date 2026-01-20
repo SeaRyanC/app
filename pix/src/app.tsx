@@ -278,7 +278,7 @@ function App() {
       const result = candidates[1] || candidates[0];
       
       // Analyze shape candidates
-      const shapeCandidates = analyzeRegionShape(result);
+      const shapeCandidates = analyzeRegionShape(result, imageData);
       
       if (shapeCandidates.length === 0) return;
       
@@ -286,7 +286,7 @@ function App() {
       if (shapeCandidates[0].score > 0.8 && 
           (shapeCandidates.length === 1 || shapeCandidates[0].score > shapeCandidates[1].score * 1.2)) {
         // Auto-select
-        const region = createRegion(result, shapeCandidates[0].gridWidth, shapeCandidates[0].gridHeight);
+        const region = createRegion(result, shapeCandidates[0]);
         setState(s => ({ ...s, regions: [...s.regions, region] }));
       } else {
         // Show modal for user selection
@@ -317,7 +317,7 @@ function App() {
   const handleSelectCandidate = useCallback((candidate: RegionCandidate) => {
     if (!candidateModal) return;
     
-    const region = createRegion(candidateModal.result, candidate.gridWidth, candidate.gridHeight);
+    const region = createRegion(candidateModal.result, candidate);
     setState(s => ({ ...s, regions: [...s.regions, region] }));
     setCandidateModal(null);
   }, [candidateModal]);
@@ -523,14 +523,23 @@ function App() {
                       gridTemplateColumns: `repeat(${candidate.gridWidth}, 20px)`,
                       gap: '2px'
                     }}>
-                      {Array.from({ length: candidate.gridWidth * candidate.gridHeight }).map((_, j) => (
-                        <div key={j} style={{
-                          width: '20px',
-                          height: '20px',
-                          backgroundColor: `rgb(${candidateModal.result.color.r}, ${candidateModal.result.color.g}, ${candidateModal.result.color.b})`,
-                          borderRadius: '2px'
-                        }} />
-                      ))}
+                      {Array.from({ length: candidate.gridHeight }).flatMap((_, gy) =>
+                        Array.from({ length: candidate.gridWidth }).map((_, gx) => {
+                          const isFilled = candidate.shapeMask[gy][gx];
+                          const cellColor = candidate.cellColors[gy][gx];
+                          return (
+                            <div key={`${gy}-${gx}`} style={{
+                              width: '20px',
+                              height: '20px',
+                              backgroundColor: isFilled && cellColor
+                                ? `rgb(${cellColor.r}, ${cellColor.g}, ${cellColor.b})`
+                                : 'transparent',
+                              borderRadius: '2px',
+                              border: isFilled ? 'none' : '1px dashed rgba(255,255,255,0.2)'
+                            }} />
+                          );
+                        })
+                      )}
                     </div>
                   </div>
                   <span class="candidate-label">
