@@ -1068,8 +1068,8 @@ function u3(e3, t3, n2, o3, i4, u4) {
 }
 
 // src/app.tsx
-var VERSION = true ? "0.1.2" : "0.1.0";
-var COMMIT_HASH = true ? "30c213c" : "dev";
+var VERSION = true ? "0.1.3" : "0.1.0";
+var COMMIT_HASH = true ? "7636686" : "dev";
 function App() {
   const [state, setState] = d2(loadState);
   const [image, setImage] = d2(null);
@@ -1534,3 +1534,4 @@ function App() {
   ] });
 }
 G(/* @__PURE__ */ u3(App, {}), document.getElementById("app"));
+//# sourceMappingURL=app.js.map
