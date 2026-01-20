@@ -1,0 +1,483 @@
+import { useState, useMemo, useCallback, useEffect } from 'preact/hooks';
+import type { FunctionComponent } from 'preact';
+import { parseCSV, applyTemplate, getPlaceholders, getUsedPlaceholders } from './csv-parser';
+import { parseMarkdown } from './markdown';
+import { paperFormats, searchFormats, type PaperFormat } from './paper-formats';
+import { generatePDF, type PDFOptions } from './pdf-generator';
+
+// Version info - will be replaced during build
+const VERSION = '1.0.0';
+const COMMIT_HASH = 'dev';
+
+// Sample data for new sessions
+const SAMPLE_CSV_DATA = `FirstName,LastName,Address,City,State,Zip
+John,Doe,123 Main St,Anytown,CA,90210
+Jane,Smith,456 Oak Ave,Springfield,IL,62701
+Bob,Johnson,789 Pine Rd,Somewhere,TX,75001`;
+
+const SAMPLE_TEMPLATE = `<<Firstname>> <<Lastname>>
+<<Address>>
+<<City>>, <<State>> <<Zip>>`;
+
+// LocalStorage keys
+const STORAGE_KEYS = {
+  CSV_INPUT: 'lmm_csvInput',
+  TEMPLATE: 'lmm_template',
+  SELECTED_FORMAT: 'lmm_selectedFormat',
+  SHOW_CUT_MARKS: 'lmm_showCutMarks',
+  SHOW_BORDERS: 'lmm_showBorders',
+  FONT_SIZE: 'lmm_fontSize',
+  TEXT_ALIGN: 'lmm_textAlign',
+  VERTICAL_ALIGN: 'lmm_verticalAlign',
+  PADDING: 'lmm_padding',
+};
+
+// Load from localStorage or return default
+function loadFromStorage<T>(key: string, defaultValue: T): T {
+  try {
+    const stored = localStorage.getItem(key);
+    if (stored !== null) {
+      return JSON.parse(stored) as T;
+    }
+  } catch (e) {
+    console.error(`Error loading ${key} from localStorage:`, e);
+  }
+  return defaultValue;
+}
+
+// Save to localStorage
+function saveToStorage<T>(key: string, value: T): void {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (e) {
+    console.error(`Error saving ${key} to localStorage:`, e);
+  }
+}
+
+function Footer() {
+  return (
+    <footer class="app-footer">
+      <span>A vibe-coded micro-app via </span>
+      <a href="https://searyanc.dev" target="_blank" rel="noopener noreferrer">SeaRyanC</a>
+      <a href="https://github.com/SeaRyanC/app/tree/main/lmm" class="github-link" target="_blank" rel="noopener noreferrer" title="View source on GitHub">
+        <svg viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+      </a>
+      <span class="version">v{VERSION}+{COMMIT_HASH}</span>
+    </footer>
+  );
+}
+
+export const App: FunctionComponent = () => {
+  // Data input state - load from localStorage or use sample data
+  const [csvInput, setCsvInput] = useState<string>(() => 
+    loadFromStorage(STORAGE_KEYS.CSV_INPUT, SAMPLE_CSV_DATA)
+  );
+  const [template, setTemplate] = useState<string>(() =>
+    loadFromStorage(STORAGE_KEYS.TEMPLATE, SAMPLE_TEMPLATE)
+  );
+  
+  // Format selection state
+  const [formatSearch, setFormatSearch] = useState<string>('');
+  const [selectedFormatId, setSelectedFormatId] = useState<string>(() =>
+    loadFromStorage(STORAGE_KEYS.SELECTED_FORMAT, 'avery-5160')
+  );
+  const [showFormatDropdown, setShowFormatDropdown] = useState<boolean>(false);
+  
+  // PDF options - load from localStorage
+  const [showCutMarks, setShowCutMarks] = useState<boolean>(() =>
+    loadFromStorage(STORAGE_KEYS.SHOW_CUT_MARKS, false)
+  );
+  const [showBorders, setShowBorders] = useState<boolean>(() =>
+    loadFromStorage(STORAGE_KEYS.SHOW_BORDERS, false)
+  );
+  const [fontSize, setFontSize] = useState<number>(() =>
+    loadFromStorage(STORAGE_KEYS.FONT_SIZE, 10)
+  );
+  const [textAlign, setTextAlign] = useState<'left' | 'center' | 'right'>(() =>
+    loadFromStorage(STORAGE_KEYS.TEXT_ALIGN, 'left')
+  );
+  const [verticalAlign, setVerticalAlign] = useState<'top' | 'middle' | 'bottom'>(() =>
+    loadFromStorage(STORAGE_KEYS.VERTICAL_ALIGN, 'middle')
+  );
+  const [padding, setPadding] = useState<number>(() =>
+    loadFromStorage(STORAGE_KEYS.PADDING, 5)
+  );
+  
+  // UI state
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Save to localStorage whenever state changes
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.CSV_INPUT, csvInput);
+  }, [csvInput]);
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.TEMPLATE, template);
+  }, [template]);
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.SELECTED_FORMAT, selectedFormatId);
+  }, [selectedFormatId]);
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.SHOW_CUT_MARKS, showCutMarks);
+  }, [showCutMarks]);
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.SHOW_BORDERS, showBorders);
+  }, [showBorders]);
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.FONT_SIZE, fontSize);
+  }, [fontSize]);
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.TEXT_ALIGN, textAlign);
+  }, [textAlign]);
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.VERTICAL_ALIGN, verticalAlign);
+  }, [verticalAlign]);
+
+  useEffect(() => {
+    saveToStorage(STORAGE_KEYS.PADDING, padding);
+  }, [padding]);
+
+  // Parse CSV data
+  const parsedData = useMemo(() => {
+    if (!csvInput.trim()) {
+      return { headers: [], rows: [], hasHeaders: false };
+    }
+    try {
+      return parseCSV(csvInput);
+    } catch {
+      return { headers: [], rows: [], hasHeaders: false };
+    }
+  }, [csvInput]);
+
+  // Get available placeholders
+  const placeholders = useMemo(() => {
+    return getPlaceholders(parsedData.headers);
+  }, [parsedData.headers]);
+
+  // Detect unknown placeholders used in template
+  const unknownPlaceholders = useMemo(() => {
+    const usedPlaceholders = getUsedPlaceholders(template);
+    const availableHeaders = new Set(parsedData.headers);
+    return usedPlaceholders.filter(p => !availableHeaders.has(p));
+  }, [template, parsedData.headers]);
+
+  // Preview using second row (or first if only one row)
+  const previewData = useMemo(() => {
+    if (parsedData.rows.length === 0) return {};
+    // Use second row for preview (index 1) or first row if only one exists
+    return parsedData.rows[1] ?? parsedData.rows[0] ?? {};
+  }, [parsedData.rows]);
+
+  const previewText = useMemo(() => {
+    if (Object.keys(previewData).length === 0) return '';
+    return applyTemplate(template, previewData);
+  }, [template, previewData]);
+
+  const previewHtml = useMemo(() => {
+    if (!previewText) return '';
+    return parseMarkdown(previewText);
+  }, [previewText]);
+
+  // Filter formats based on search
+  const filteredFormats = useMemo(() => {
+    return searchFormats(formatSearch);
+  }, [formatSearch]);
+
+  const selectedFormat = useMemo(() => {
+    return paperFormats.find(f => f.id === selectedFormatId) ?? paperFormats[0];
+  }, [selectedFormatId]);
+
+  const handleFormatSelect = useCallback((format: PaperFormat) => {
+    setSelectedFormatId(format.id);
+    setFormatSearch('');
+    setShowFormatDropdown(false);
+  }, []);
+
+  const handleGeneratePDF = useCallback(async () => {
+    if (!selectedFormat) {
+      setError('Please select a paper format');
+      return;
+    }
+    if (parsedData.rows.length === 0) {
+      setError('Please enter some data');
+      return;
+    }
+
+    setIsGenerating(true);
+    setError(null);
+
+    try {
+      const options: PDFOptions = {
+        format: selectedFormat,
+        template,
+        data: parsedData.rows,
+        showCutMarks,
+        showBorders,
+        fontSize,
+        fontFamily: 'Helvetica',
+        textAlign,
+        verticalAlign,
+        padding,
+      };
+
+      const blob = await generatePDF(options);
+      
+      // Create download link
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'labels.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      setError(`Failed to generate PDF: ${e instanceof Error ? e.message : 'Unknown error'}`);
+    } finally {
+      setIsGenerating(false);
+    }
+  }, [selectedFormat, template, parsedData.rows, showCutMarks, showBorders, fontSize, textAlign, verticalAlign, padding]);
+
+  const handlePlaceholderClick = useCallback((placeholder: string) => {
+    setTemplate(prev => prev + placeholder);
+  }, []);
+
+  return (
+    <div class="app">
+      <header class="header">
+        <h1>📬 Label Mail Merge</h1>
+        <p>Create printable labels from your address data</p>
+      </header>
+
+      <main class="main">
+        <div class="input-section">
+          <div class="panel">
+            <h2>1. Paste Your Data</h2>
+            <p class="help-text">
+              Paste CSV or TSV data. Headers will be auto-detected.
+            </p>
+            <textarea
+              class="data-input"
+              value={csvInput}
+              onInput={(e) => setCsvInput((e.target as HTMLTextAreaElement).value)}
+              placeholder="FirstName,LastName,Address,City,State,Zip&#10;John,Doe,123 Main St,Anytown,CA,90210&#10;Jane,Smith,456 Oak Ave,Springfield,IL,62701"
+              rows={8}
+            />
+            {parsedData.headers.length > 0 && (
+              <div class="data-info">
+                <span class="badge">{parsedData.hasHeaders ? 'Headers detected' : 'No headers detected'}</span>
+                <span class="badge">{parsedData.rows.length} record{parsedData.rows.length !== 1 ? 's' : ''}</span>
+              </div>
+            )}
+          </div>
+
+          <div class="panel">
+            <h2>2. Design Your Label</h2>
+            <p class="help-text">
+              Use placeholders like <code>&lt;&lt;FieldName&gt;&gt;</code> and Markdown for formatting.
+            </p>
+            
+            {placeholders.length > 0 && (
+              <div class="placeholders">
+                <span class="label">Available placeholders:</span>
+                {placeholders.map(p => (
+                  <button
+                    key={p}
+                    class="placeholder-btn"
+                    onClick={() => handlePlaceholderClick(p)}
+                    title="Click to insert"
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
+            )}
+            
+            <textarea
+              class="template-input"
+              value={template}
+              onInput={(e) => setTemplate((e.target as HTMLTextAreaElement).value)}
+              placeholder="<<FirstName>> <<LastName>>&#10;<<Address>>&#10;<<City>>, <<State>> <<Zip>>"
+              rows={5}
+            />
+            
+            {unknownPlaceholders.length > 0 && (
+              <div class="warning-message">
+                <strong>⚠️ Unknown placeholder{unknownPlaceholders.length !== 1 ? 's' : ''}:</strong> {unknownPlaceholders.map(p => `<<${p}>>`).join(', ')}
+              </div>
+            )}
+            
+            <div class="format-help">
+              <span class="label">Formatting:</span>
+              <code>**bold**</code>
+              <code>*italic*</code>
+              <code>~~underline~~</code>
+            </div>
+          </div>
+        </div>
+
+        <div class="preview-section">
+          <div class="panel">
+            <h2>Preview</h2>
+            {previewHtml ? (
+              <div
+                class="preview-content"
+                dangerouslySetInnerHTML={{ __html: previewHtml }}
+              />
+            ) : (
+              <div class="preview-empty">
+                Enter data and a template to see a preview
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="panel">
+            <h2>3. Select Paper Format</h2>
+            <div class="format-selector">
+              <div class="format-search-container">
+                <input
+                  type="text"
+                  class="format-search"
+                  value={formatSearch}
+                  onInput={(e) => {
+                    setFormatSearch((e.target as HTMLInputElement).value);
+                    setShowFormatDropdown(true);
+                  }}
+                  onFocus={() => setShowFormatDropdown(true)}
+                  placeholder="Search formats (e.g., Avery, A4, 30 per sheet)..."
+                />
+                {showFormatDropdown && (
+                  <div class="format-dropdown">
+                    {filteredFormats.map(format => (
+                      <button
+                        key={format.id}
+                        class={`format-option ${format.id === selectedFormatId ? 'selected' : ''}`}
+                        onClick={() => handleFormatSelect(format)}
+                      >
+                        <strong>{format.name}</strong>
+                        <span>{format.description}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <button
+                class="format-close-btn"
+                onClick={() => setShowFormatDropdown(false)}
+                style={{ display: showFormatDropdown ? 'block' : 'none' }}
+              >
+                ✕
+              </button>
+            </div>
+            {selectedFormat && (
+              <div class="selected-format">
+                <strong>Selected:</strong> {selectedFormat.name} - {selectedFormat.description}
+              </div>
+            )}
+          </div>
+
+          <div class="panel">
+            <h2>4. Options</h2>
+            <div class="options-grid">
+              <label class="option">
+                <input
+                  type="checkbox"
+                  checked={showCutMarks}
+                  onChange={(e) => setShowCutMarks((e.target as HTMLInputElement).checked)}
+                />
+                Show cut marks
+              </label>
+              <label class="option">
+                <input
+                  type="checkbox"
+                  checked={showBorders}
+                  onChange={(e) => setShowBorders((e.target as HTMLInputElement).checked)}
+                />
+                Show label borders
+              </label>
+              <label class="option">
+                Font size:
+                <input
+                  type="number"
+                  value={fontSize}
+                  onInput={(e) => setFontSize(parseInt((e.target as HTMLInputElement).value) || 10)}
+                  min={6}
+                  max={72}
+                  class="number-input"
+                />
+              </label>
+              <label class="option">
+                Padding:
+                <input
+                  type="number"
+                  value={padding}
+                  onInput={(e) => setPadding(parseInt((e.target as HTMLInputElement).value) || 5)}
+                  min={0}
+                  max={50}
+                  class="number-input"
+                />
+              </label>
+              <label class="option">
+                Horizontal:
+                <select
+                  value={textAlign}
+                  onChange={(e) => setTextAlign((e.target as HTMLSelectElement).value as 'left' | 'center' | 'right')}
+                  class="select-input"
+                >
+                  <option value="left">Left</option>
+                  <option value="center">Center</option>
+                  <option value="right">Right</option>
+                </select>
+              </label>
+              <label class="option">
+                Vertical:
+                <select
+                  value={verticalAlign}
+                  onChange={(e) => setVerticalAlign((e.target as HTMLSelectElement).value as 'top' | 'middle' | 'bottom')}
+                  class="select-input"
+                >
+                  <option value="top">Top</option>
+                  <option value="middle">Middle</option>
+                  <option value="bottom">Bottom</option>
+                </select>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions-section">
+          {error && <div class="error-message">{error}</div>}
+          <button
+            class="generate-btn"
+            onClick={() => void handleGeneratePDF()}
+            disabled={isGenerating || parsedData.rows.length === 0}
+          >
+            {isGenerating ? 'Generating...' : '📄 Generate PDF'}
+          </button>
+          <p class="records-info">
+            {parsedData.rows.length > 0 && selectedFormat && (
+              <>
+                {parsedData.rows.length} labels across{' '}
+                {Math.ceil(parsedData.rows.length / (selectedFormat.columns * selectedFormat.rows))} page
+                {Math.ceil(parsedData.rows.length / (selectedFormat.columns * selectedFormat.rows)) !== 1 ? 's' : ''}
+              </>
+            )}
+          </p>
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  );
+};
