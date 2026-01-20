@@ -874,36 +874,86 @@ function createRegion(result, candidate) {
 }
 
 // src/grid.ts
+function buildNonuniformPositions(controlPoints, gridSize, fallbackPitch, fallbackOffset) {
+  if (controlPoints.length === 0) {
+    const positions2 = [];
+    for (let i4 = 0; i4 < gridSize; i4++) {
+      positions2.push(fallbackOffset + i4 * fallbackPitch);
+    }
+    return positions2;
+  }
+  const sorted = [...controlPoints].sort((a3, b) => a3.gridPos - b.gridPos);
+  const merged = [];
+  for (const cp of sorted) {
+    if (merged.length > 0 && Math.abs(merged[merged.length - 1].gridPos - cp.gridPos) < 0.5) {
+      const last = merged[merged.length - 1];
+      last.pixelPos = (last.pixelPos + cp.pixelPos) / 2;
+      last.gridPos = (last.gridPos + cp.gridPos) / 2;
+    } else {
+      merged.push({ ...cp });
+    }
+  }
+  const positions = [];
+  for (let i4 = 0; i4 < gridSize; i4++) {
+    const gridPos = i4;
+    let lower = null;
+    let upper = null;
+    for (const cp of merged) {
+      if (cp.gridPos <= gridPos) {
+        if (!lower || cp.gridPos > lower.gridPos) {
+          lower = cp;
+        }
+      }
+      if (cp.gridPos >= gridPos) {
+        if (!upper || cp.gridPos < upper.gridPos) {
+          upper = cp;
+        }
+      }
+    }
+    if (lower && upper && lower !== upper) {
+      const t3 = (gridPos - lower.gridPos) / (upper.gridPos - lower.gridPos);
+      positions.push(lower.pixelPos + t3 * (upper.pixelPos - lower.pixelPos));
+    } else if (lower && upper && lower === upper) {
+      positions.push(lower.pixelPos);
+    } else if (lower) {
+      let secondLower;
+      for (let j3 = merged.length - 1; j3 >= 0; j3--) {
+        if (merged[j3].gridPos < lower.gridPos) {
+          secondLower = merged[j3];
+          break;
+        }
+      }
+      if (secondLower) {
+        const localPitch = (lower.pixelPos - secondLower.pixelPos) / (lower.gridPos - secondLower.gridPos);
+        positions.push(lower.pixelPos + (gridPos - lower.gridPos) * localPitch);
+      } else {
+        positions.push(lower.pixelPos + (gridPos - lower.gridPos) * fallbackPitch);
+      }
+    } else if (upper) {
+      const secondUpper = merged.find((cp) => cp.gridPos > upper.gridPos);
+      if (secondUpper) {
+        const localPitch = (secondUpper.pixelPos - upper.pixelPos) / (secondUpper.gridPos - upper.gridPos);
+        positions.push(upper.pixelPos + (gridPos - upper.gridPos) * localPitch);
+      } else {
+        positions.push(upper.pixelPos + (gridPos - upper.gridPos) * fallbackPitch);
+      }
+    } else {
+      positions.push(fallbackOffset + gridPos * fallbackPitch);
+    }
+  }
+  return positions;
+}
 function inferGrid(regions, imageWidth, imageHeight) {
   if (regions.length < 4) {
     return { grid: null, confidence: 0 };
   }
-  const samples = [];
+  const pitchSamples = [];
   for (const region of regions) {
-    const centerX = (region.bounds.minX + region.bounds.maxX) / 2;
-    const centerY = (region.bounds.minY + region.bounds.maxY) / 2;
     const pixelWidth = region.bounds.maxX - region.bounds.minX + 1;
     const pixelHeight = region.bounds.maxY - region.bounds.minY + 1;
-    samples.push({
-      centerX,
-      centerY,
-      gridWidth: region.gridWidth,
-      gridHeight: region.gridHeight
-    });
     const estimatedPitchX = pixelWidth / region.gridWidth;
     const estimatedPitchY = pixelHeight / region.gridHeight;
-    samples[samples.length - 1] = {
-      ...samples[samples.length - 1],
-      estimatedPitchX,
-      estimatedPitchY
-    };
-  }
-  const pitchSamples = samples.map((s3) => {
-    const es = s3;
-    return { x: es.estimatedPitchX, y: es.estimatedPitchY };
-  }).filter((p3) => p3.x && p3.y);
-  if (pitchSamples.length === 0) {
-    return { grid: null, confidence: 0 };
+    pitchSamples.push({ x: estimatedPitchX, y: estimatedPitchY });
   }
   pitchSamples.sort((a3, b) => a3.x - b.x);
   const medianPitchX = pitchSamples[Math.floor(pitchSamples.length / 2)].x;
@@ -925,14 +975,40 @@ function inferGrid(regions, imageWidth, imageHeight) {
   const offsetY = offsetYCandidates[Math.floor(offsetYCandidates.length / 2)];
   const width = Math.ceil(imageWidth / medianPitchX);
   const height = Math.ceil(imageHeight / medianPitchY);
+  const xControlPoints = [];
+  const yControlPoints = [];
+  for (const region of regions) {
+    const centerX = (region.bounds.minX + region.bounds.maxX) / 2;
+    const centerY = (region.bounds.minY + region.bounds.maxY) / 2;
+    const gridX = Math.round((centerX - offsetX) / medianPitchX);
+    const gridY = Math.round((centerY - offsetY) / medianPitchY);
+    const regionPitchX = (region.bounds.maxX - region.bounds.minX + 1) / region.gridWidth;
+    const regionPitchY = (region.bounds.maxY - region.bounds.minY + 1) / region.gridHeight;
+    for (let dx = 0; dx < region.gridWidth; dx++) {
+      const cellCenterX = region.bounds.minX + (dx + 0.5) * regionPitchX;
+      xControlPoints.push({
+        gridPos: gridX + dx,
+        pixelPos: cellCenterX
+      });
+    }
+    for (let dy = 0; dy < region.gridHeight; dy++) {
+      const cellCenterY = region.bounds.minY + (dy + 0.5) * regionPitchY;
+      yControlPoints.push({
+        gridPos: gridY + dy,
+        pixelPos: cellCenterY
+      });
+    }
+  }
+  const xPositions = buildNonuniformPositions(xControlPoints, width, medianPitchX, offsetX);
+  const yPositions = buildNonuniformPositions(yControlPoints, height, medianPitchY, offsetY);
   let alignmentError = 0;
   for (const region of regions) {
     const centerX = (region.bounds.minX + region.bounds.maxX) / 2;
     const centerY = (region.bounds.minY + region.bounds.maxY) / 2;
     const gridX = Math.round((centerX - offsetX) / medianPitchX);
     const gridY = Math.round((centerY - offsetY) / medianPitchY);
-    const expectedX = offsetX + gridX * medianPitchX;
-    const expectedY = offsetY + gridY * medianPitchY;
+    const expectedX = xPositions[Math.max(0, Math.min(gridX, width - 1))] ?? offsetX + gridX * medianPitchX;
+    const expectedY = yPositions[Math.max(0, Math.min(gridY, height - 1))] ?? offsetY + gridY * medianPitchY;
     alignmentError += Math.sqrt(
       Math.pow(centerX - expectedX, 2) + Math.pow(centerY - expectedY, 2)
     );
@@ -947,7 +1023,9 @@ function inferGrid(regions, imageWidth, imageHeight) {
       offsetX,
       offsetY,
       width,
-      height
+      height,
+      xPositions,
+      yPositions
     },
     confidence
   };
@@ -965,15 +1043,54 @@ function assignGridPositions(regions, grid) {
     };
   });
 }
+function getPixelCenter(grid, gridX, gridY) {
+  const x2 = grid.xPositions?.[gridX] ?? grid.offsetX + gridX * grid.pitchX;
+  const y3 = grid.yPositions?.[gridY] ?? grid.offsetY + gridY * grid.pitchY;
+  return { x: x2, y: y3 };
+}
+function getLocalPitch(grid, gridX, gridY) {
+  let pitchX = grid.pitchX;
+  let pitchY = grid.pitchY;
+  if (grid.xPositions && gridX < grid.xPositions.length - 1 && gridX >= 0) {
+    const nextX = grid.xPositions[gridX + 1];
+    const currX = grid.xPositions[gridX];
+    if (nextX !== void 0 && currX !== void 0) {
+      pitchX = nextX - currX;
+    }
+  }
+  if (grid.yPositions && gridY < grid.yPositions.length - 1 && gridY >= 0) {
+    const nextY = grid.yPositions[gridY + 1];
+    const currY = grid.yPositions[gridY];
+    if (nextY !== void 0 && currY !== void 0) {
+      pitchY = nextY - currY;
+    }
+  }
+  return { pitchX: Math.abs(pitchX), pitchY: Math.abs(pitchY) };
+}
+function getGridLinePosition(positions, index, size, fallbackOffset, fallbackPitch) {
+  if (index === 0) {
+    const firstCenter = positions?.[0] ?? fallbackOffset;
+    const localPitch = positions && positions.length > 1 ? positions[1] - positions[0] : fallbackPitch;
+    return firstCenter - localPitch / 2;
+  } else if (index === size) {
+    const lastCenter = positions?.[size - 1] ?? fallbackOffset + (size - 1) * fallbackPitch;
+    const localPitch = positions && positions.length > 1 ? positions[size - 1] - positions[size - 2] : fallbackPitch;
+    return lastCenter + localPitch / 2;
+  } else {
+    const prevCenter = positions?.[index - 1] ?? fallbackOffset + (index - 1) * fallbackPitch;
+    const currCenter = positions?.[index] ?? fallbackOffset + index * fallbackPitch;
+    return (prevCenter + currCenter) / 2;
+  }
+}
 function sampleGridPixel(imageData, grid, gridX, gridY) {
-  const centerX = grid.offsetX + gridX * grid.pitchX;
-  const centerY = grid.offsetY + gridY * grid.pitchY;
-  const halfPitchX = grid.pitchX / 2;
-  const halfPitchY = grid.pitchY / 2;
+  const { x: centerX, y: centerY } = getPixelCenter(grid, gridX, gridY);
+  const { pitchX, pitchY } = getLocalPitch(grid, gridX, gridY);
+  const halfPitchX = pitchX / 2;
+  const halfPitchY = pitchY / 2;
   const colors = [];
-  const sampleRadius = Math.min(grid.pitchX, grid.pitchY) * 0.4;
-  for (let dy = -halfPitchY; dy <= halfPitchY; dy += grid.pitchY / 4) {
-    for (let dx = -halfPitchX; dx <= halfPitchX; dx += grid.pitchX / 4) {
+  const sampleRadius = Math.min(pitchX, pitchY) * 0.4;
+  for (let dy = -halfPitchY; dy <= halfPitchY; dy += pitchY / 4) {
+    for (let dx = -halfPitchX; dx <= halfPitchX; dx += pitchX / 4) {
       const x2 = Math.round(centerX + dx);
       const y3 = Math.round(centerY + dy);
       if (x2 < 0 || x2 >= imageData.width || y3 < 0 || y3 >= imageData.height) {
@@ -1035,9 +1152,8 @@ function generateOutput(imageData, grid, regions, transparentPixels, colorCentro
       output.data[idx] = color.r;
       output.data[idx + 1] = color.g;
       output.data[idx + 2] = color.b;
-      const centerX = Math.round(grid.offsetX + x2 * grid.pitchX);
-      const centerY = Math.round(grid.offsetY + y3 * grid.pitchY);
-      const isTransparent = transparentPixels?.has(`${centerX},${centerY}`);
+      const { x: centerX, y: centerY } = getPixelCenter(grid, x2, y3);
+      const isTransparent = transparentPixels?.has(`${Math.round(centerX)},${Math.round(centerY)}`);
       output.data[idx + 3] = isTransparent ? 0 : 255;
     }
   }
@@ -1119,8 +1235,8 @@ function u3(e3, t3, n2, o3, i4, u4) {
 }
 
 // src/app.tsx
-var VERSION = true ? "0.2.0" : "0.1.0";
-var COMMIT_HASH = true ? "285db97" : "dev";
+var VERSION = true ? "0.3.0" : "0.1.0";
+var COMMIT_HASH = true ? "d02a678" : "dev";
 function App() {
   const [state, setState] = d2(loadState);
   const [image, setImage] = d2(null);
@@ -1208,17 +1324,17 @@ function App() {
     const ctx = canvas.getContext("2d");
     ctx.drawImage(image, 0, 0);
     if (grid) {
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.2)";
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
+      ctx.lineWidth = 2;
       for (let x2 = 0; x2 <= grid.width; x2++) {
-        const px = grid.offsetX + x2 * grid.pitchX - grid.pitchX / 2;
+        const px = getGridLinePosition(grid.xPositions, x2, grid.width, grid.offsetX, grid.pitchX);
         ctx.beginPath();
         ctx.moveTo(px, 0);
         ctx.lineTo(px, canvas.height);
         ctx.stroke();
       }
       for (let y3 = 0; y3 <= grid.height; y3++) {
-        const py = grid.offsetY + y3 * grid.pitchY - grid.pitchY / 2;
+        const py = getGridLinePosition(grid.yPositions, y3, grid.height, grid.offsetY, grid.pitchY);
         ctx.beginPath();
         ctx.moveTo(0, py);
         ctx.lineTo(canvas.width, py);
@@ -1254,8 +1370,8 @@ function App() {
     const tempCtx = tempCanvas.getContext("2d");
     tempCtx.putImageData(outputImageData, 0, 0);
     ctx.drawImage(tempCanvas, 0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
-    ctx.lineWidth = 1;
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.25)";
+    ctx.lineWidth = 2;
     for (let x2 = 0; x2 <= outputImageData.width; x2++) {
       ctx.beginPath();
       ctx.moveTo(x2 * outputZoom, 0);

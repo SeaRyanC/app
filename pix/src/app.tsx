@@ -2,7 +2,7 @@ import { render } from 'preact';
 import { useState, useEffect, useRef, useCallback } from 'preact/hooks';
 import { analyzeRegionShape, createRegion, RegionCandidate } from './regions.js';
 import { getFloodFillCandidates, FloodFillResult, getMostCommonPerimeterColor, findTransparentPixels } from './floodFill.js';
-import { inferGrid, assignGridPositions, generateOutput, Grid } from './grid.js';
+import { inferGrid, assignGridPositions, generateOutput, getGridLinePosition, Grid } from './grid.js';
 import { kMeansCluster, RGB } from './colors.js';
 import { AppState, loadState, saveState, getDefaultState } from './state.js';
 
@@ -127,19 +127,21 @@ function App() {
     
     // Draw grid overlay if available
     if (grid) {
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+      ctx.lineWidth = 2;
       
+      // Draw vertical grid lines using interpolated positions
       for (let x = 0; x <= grid.width; x++) {
-        const px = grid.offsetX + x * grid.pitchX - grid.pitchX / 2;
+        const px = getGridLinePosition(grid.xPositions, x, grid.width, grid.offsetX, grid.pitchX);
         ctx.beginPath();
         ctx.moveTo(px, 0);
         ctx.lineTo(px, canvas.height);
         ctx.stroke();
       }
       
+      // Draw horizontal grid lines using interpolated positions
       for (let y = 0; y <= grid.height; y++) {
-        const py = grid.offsetY + y * grid.pitchY - grid.pitchY / 2;
+        const py = getGridLinePosition(grid.yPositions, y, grid.height, grid.offsetY, grid.pitchY);
         ctx.beginPath();
         ctx.moveTo(0, py);
         ctx.lineTo(canvas.width, py);
@@ -189,8 +191,8 @@ function App() {
     ctx.drawImage(tempCanvas, 0, 0, canvas.width, canvas.height);
     
     // Draw grid lines
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+    ctx.lineWidth = 2;
     
     for (let x = 0; x <= outputImageData.width; x++) {
       ctx.beginPath();
