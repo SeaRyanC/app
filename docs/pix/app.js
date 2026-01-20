@@ -1069,7 +1069,7 @@ function u3(e3, t3, n2, o3, i4, u4) {
 
 // src/app.tsx
 var VERSION = true ? "0.1.0" : "0.1.0";
-var COMMIT_HASH = true ? "65e0734" : "dev";
+var COMMIT_HASH = true ? "254c1e1" : "dev";
 function App() {
   const [state, setState] = d2(loadState);
   const [image, setImage] = d2(null);
