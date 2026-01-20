@@ -1,6 +1,6 @@
 # General Information
 
-This is a quasi-mono-repo of many different small webapps.
+This is a quasi-mono-repo of many different small webapps. Every app is a static single-page app that doesn't require any backend server.
 
 Each one follows the same basic principles:
  * TypeScript 6.0 (install `typescript@next`)
@@ -67,7 +67,7 @@ Folder layout, for example
 
 I might ask you to *import* one of my existing repositories. I think you can figure this out. Restructure the project as needed to fit into this repo's conventions (most will be quite close).
 
-I might ask you to *create* a new app.
+I might ask you to *create* a new app by filling in its USER_STORY.md first. You do the rest. In your implementation PR, ask me as many follow-up questions as you need (I will address in a subsequent iteration), but still write the application.
 
 I might ask you to fix or implement a feature in an existing app. I will tell you which one.
 
@@ -127,3 +127,9 @@ If it makes sense to, use a `/baselines` folder in each project structured as fo
  * Verify that baseline changes you incur are both intentional and correct
 
 Your human will be looking at these files in order to verify that your changes or new functionality are correctly implemented
+
+## Other
+
+You never need to run CodeQL or security checks; these projects are all client-side only and have no security implications.
+
+All `package.json` should have a `npm run local` that runs a simple static server (e.g. `serve` or `http-server`) to serve the app for local testing.
