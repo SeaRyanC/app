@@ -1,6 +1,6 @@
 {
   "name": "pix",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Pixel Image Extractor - Extract pixel-perfect images from roughly drawn pixel art",
   "type": "module",
   "scripts": {
@@ -8,7 +8,8 @@
     "check": "tsc --noEmit",
     "lint": "eslint src --ext .ts,.tsx",
     "build": "npm run check && npm run lint && npm run bundle && npm run copy-assets",
-    "copy-assets": "cp index.html style.css ../docs/pix/"
+    "copy-assets": "cp index.html style.css ../docs/pix/",
+    "local": "serve ../docs/pix"
   },
   "keywords": [
     "pixel-art",
@@ -21,6 +22,7 @@
     "@types/node": "^22.0.0",
     "esbuild": "^0.24.0",
     "eslint": "^9.0.0",
+    "serve": "^14.2.5",
     "typescript": "^5.8.0-dev.20250114",
     "typescript-eslint": "^8.0.0"
   },
