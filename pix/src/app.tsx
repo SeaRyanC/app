@@ -62,15 +62,18 @@ function App() {
   useEffect(() => {
     if (imageData && state.regions.length >= 4) {
       const result = inferGrid(state.regions, imageData.width, imageData.height);
-      if (result.grid && result.confidence > 0.3) {
+      if (result.grid) {
         setGrid(result.grid);
         // Assign grid positions to regions
         const updated = assignGridPositions(state.regions, result.grid);
         if (JSON.stringify(updated) !== JSON.stringify(state.regions)) {
           setState(s => ({ ...s, regions: updated }));
         }
+      } else {
+        console.log('Failed to infer grid');
       }
     } else {
+        console.log('Not enough regions yet');
       setGrid(null);
     }
   }, [state.regions, imageData]);
@@ -78,6 +81,8 @@ function App() {
   // Generate output when grid or settings change
   useEffect(() => {
     if (!imageData || !grid) {
+      console.log(imageData);
+      console.log(grid);
       setOutputImageData(null);
       return;
     }
