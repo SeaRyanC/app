@@ -108,7 +108,14 @@ function buildNonuniformPositions(
     } else if (lower) {
       // Extrapolate beyond the highest control point
       // Use the local pitch derived from the two highest points, or fallback
-      const secondLower = merged.filter(cp => cp.gridPos < lower!.gridPos).pop();
+      // Find the second highest point by iterating backwards through merged array
+      let secondLower: ControlPoint | undefined;
+      for (let j = merged.length - 1; j >= 0; j--) {
+        if (merged[j].gridPos < lower.gridPos) {
+          secondLower = merged[j];
+          break;
+        }
+      }
       if (secondLower) {
         const localPitch = (lower.pixelPos - secondLower.pixelPos) / (lower.gridPos - secondLower.gridPos);
         positions.push(lower.pixelPos + (gridPos - lower.gridPos) * localPitch);
@@ -118,7 +125,7 @@ function buildNonuniformPositions(
     } else if (upper) {
       // Extrapolate below the lowest control point
       // Use the local pitch derived from the two lowest points, or fallback
-      const secondUpper = merged.filter(cp => cp.gridPos > upper!.gridPos)[0];
+      const secondUpper = merged.find(cp => cp.gridPos > upper!.gridPos);
       if (secondUpper) {
         const localPitch = (secondUpper.pixelPos - upper.pixelPos) / (secondUpper.gridPos - upper.gridPos);
         positions.push(upper.pixelPos + (gridPos - upper.gridPos) * localPitch);

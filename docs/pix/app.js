@@ -916,7 +916,13 @@ function buildNonuniformPositions(controlPoints, gridSize, fallbackPitch, fallba
     } else if (lower && upper && lower === upper) {
       positions.push(lower.pixelPos);
     } else if (lower) {
-      const secondLower = merged.filter((cp) => cp.gridPos < lower.gridPos).pop();
+      let secondLower;
+      for (let j3 = merged.length - 1; j3 >= 0; j3--) {
+        if (merged[j3].gridPos < lower.gridPos) {
+          secondLower = merged[j3];
+          break;
+        }
+      }
       if (secondLower) {
         const localPitch = (lower.pixelPos - secondLower.pixelPos) / (lower.gridPos - secondLower.gridPos);
         positions.push(lower.pixelPos + (gridPos - lower.gridPos) * localPitch);
@@ -924,7 +930,7 @@ function buildNonuniformPositions(controlPoints, gridSize, fallbackPitch, fallba
         positions.push(lower.pixelPos + (gridPos - lower.gridPos) * fallbackPitch);
       }
     } else if (upper) {
-      const secondUpper = merged.filter((cp) => cp.gridPos > upper.gridPos)[0];
+      const secondUpper = merged.find((cp) => cp.gridPos > upper.gridPos);
       if (secondUpper) {
         const localPitch = (secondUpper.pixelPos - upper.pixelPos) / (secondUpper.gridPos - upper.gridPos);
         positions.push(upper.pixelPos + (gridPos - upper.gridPos) * localPitch);
@@ -1230,7 +1236,7 @@ function u3(e3, t3, n2, o3, i4, u4) {
 
 // src/app.tsx
 var VERSION = true ? "0.3.0" : "0.1.0";
-var COMMIT_HASH = true ? "8b1f389" : "dev";
+var COMMIT_HASH = true ? "d02a678" : "dev";
 function App() {
   const [state, setState] = d2(loadState);
   const [image, setImage] = d2(null);
