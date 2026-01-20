@@ -132,4 +132,4 @@ Your human will be looking at these files in order to verify that your changes o
 
 You never need to run CodeQL or security checks; these projects are all client-side only and have no security implications.
 
-All `package.json` should have a `npm run local` that runs a simple static server (e.g. `serve` or `http-server`) to serve the app for local testing.
+All `package.json` should have a `npm run local` that runs the esbuild dev server, appropriately configured
