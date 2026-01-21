@@ -10,7 +10,7 @@ const underlineExtension = {
   },
   tokenizer(src: string) {
     // Match both ~text~ and ~~text~~ patterns with matching tilde counts
-    // Using backreference to ensure opening and closing tildes match
+    // Using lookahead assertions to ensure proper matching
     const singleTildeRule = /^~(?!~)(?=\S)([\s\S]*?\S)~(?!~)/;
     const doubleTildeRule = /^~~(?=\S)([\s\S]*?\S)~~(?!~)/;
     
@@ -89,6 +89,7 @@ export function parseMarkdownToSegments(text: string): TextSegment[] {
     
     while (i < remaining.length) {
       const char = remaining[i];
+      // nextChar may be undefined if i is at the last character - this is expected behavior
       const nextChar = remaining[i + 1];
       
       // Check for bold (** or __)
