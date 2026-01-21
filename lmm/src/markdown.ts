@@ -9,17 +9,33 @@ const underlineExtension = {
     return src.indexOf('~');
   },
   tokenizer(src: string) {
-    // Match both ~text~ and ~~text~~ patterns
-    const rule = /^~{1,2}(?=\S)([\s\S]*?\S)~{1,2}(?!~)/;
-    const match = rule.exec(src);
-    if (match) {
+    // Match both ~text~ and ~~text~~ patterns with matching tilde counts
+    // Using backreference to ensure opening and closing tildes match
+    const singleTildeRule = /^~(?!~)(?=\S)([\s\S]*?\S)~(?!~)/;
+    const doubleTildeRule = /^~~(?=\S)([\s\S]*?\S)~~(?!~)/;
+    
+    // Try double tilde first (more specific)
+    const doubleMatch = doubleTildeRule.exec(src);
+    if (doubleMatch) {
       return {
         type: 'underline',
-        raw: match[0],
-        text: match[1],
+        raw: doubleMatch[0],
+        text: doubleMatch[1],
         tokens: [],
       };
     }
+    
+    // Then try single tilde
+    const singleMatch = singleTildeRule.exec(src);
+    if (singleMatch) {
+      return {
+        type: 'underline',
+        raw: singleMatch[0],
+        text: singleMatch[1],
+        tokens: [],
+      };
+    }
+    
     return undefined;
   },
   renderer(token: { text: string }) {
@@ -133,7 +149,7 @@ export function parseMarkdownToSegments(text: string): TextSegment[] {
         }
         // Single tilde - only treat as underline if next char is not whitespace (opening)
         // or if we're already in underline mode (closing)
-        const prevChar = remaining[i - 1];
+        const prevChar = i > 0 ? remaining[i - 1] : undefined;
         const isOpening = !currentUnderline && nextChar !== undefined && nextChar !== ' ' && nextChar !== '\t';
         const isClosing = currentUnderline && (prevChar !== undefined && prevChar !== ' ' && prevChar !== '\t');
         if (isOpening || isClosing) {
