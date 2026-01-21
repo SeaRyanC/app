@@ -1,9 +1,53 @@
 import { marked } from 'marked';
 
-// Configure marked for inline use
+// Custom extension to render tildes as underline instead of strikethrough
+// Supports both ~text~ (single) and ~~text~~ (double) as underline
+const underlineExtension = {
+  name: 'underline',
+  level: 'inline' as const,
+  start(src: string) {
+    return src.indexOf('~');
+  },
+  tokenizer(src: string) {
+    // Match both ~text~ and ~~text~~ patterns with matching tilde counts
+    // Using lookahead assertions to ensure proper matching
+    const singleTildeRule = /^~(?!~)(?=\S)([\s\S]*?\S)~(?!~)/;
+    const doubleTildeRule = /^~~(?=\S)([\s\S]*?\S)~~(?!~)/;
+    
+    // Try double tilde first (more specific)
+    const doubleMatch = doubleTildeRule.exec(src);
+    if (doubleMatch) {
+      return {
+        type: 'underline',
+        raw: doubleMatch[0],
+        text: doubleMatch[1],
+        tokens: [],
+      };
+    }
+    
+    // Then try single tilde
+    const singleMatch = singleTildeRule.exec(src);
+    if (singleMatch) {
+      return {
+        type: 'underline',
+        raw: singleMatch[0],
+        text: singleMatch[1],
+        tokens: [],
+      };
+    }
+    
+    return undefined;
+  },
+  renderer(token: { text: string }) {
+    return `<u>${token.text}</u>`;
+  },
+};
+
+// Configure marked for inline use with custom underline extension
 marked.use({
   gfm: true,
   breaks: true,
+  extensions: [underlineExtension],
 });
 
 export function parseMarkdown(text: string): string {
@@ -45,6 +89,7 @@ export function parseMarkdownToSegments(text: string): TextSegment[] {
     
     while (i < remaining.length) {
       const char = remaining[i];
+      // nextChar may be undefined if i is at the last character - this is expected behavior
       const nextChar = remaining[i + 1];
       
       // Check for bold (** or __)
@@ -85,21 +130,44 @@ export function parseMarkdownToSegments(text: string): TextSegment[] {
         }
       }
       
-      // Check for underline (~~) - using strikethrough syntax for underline
-      if (char === '~' && nextChar === '~') {
-        if (buffer) {
-          segments.push({
-            text: buffer,
-            bold: currentBold,
-            italic: currentItalic,
-            underline: currentUnderline,
-            newline: false,
-          });
-          buffer = '';
+      // Check for underline (~~ or ~) - supports both single and double tildes
+      if (char === '~') {
+        // Check if it's double tilde first
+        if (nextChar === '~') {
+          if (buffer) {
+            segments.push({
+              text: buffer,
+              bold: currentBold,
+              italic: currentItalic,
+              underline: currentUnderline,
+              newline: false,
+            });
+            buffer = '';
+          }
+          currentUnderline = !currentUnderline;
+          i += 2;
+          continue;
         }
-        currentUnderline = !currentUnderline;
-        i += 2;
-        continue;
+        // Single tilde - only treat as underline if next char is not whitespace (opening)
+        // or if we're already in underline mode (closing)
+        const prevChar = i > 0 ? remaining[i - 1] : undefined;
+        const isOpening = !currentUnderline && nextChar !== undefined && nextChar !== ' ' && nextChar !== '\t';
+        const isClosing = currentUnderline && (prevChar !== undefined && prevChar !== ' ' && prevChar !== '\t');
+        if (isOpening || isClosing) {
+          if (buffer) {
+            segments.push({
+              text: buffer,
+              bold: currentBold,
+              italic: currentItalic,
+              underline: currentUnderline,
+              newline: false,
+            });
+            buffer = '';
+          }
+          currentUnderline = !currentUnderline;
+          i += 1;
+          continue;
+        }
       }
       
       buffer += char;
@@ -127,5 +195,6 @@ export function markdownToPlainText(text: string): string {
     .replace(/__(.+?)__/g, '$1')
     .replace(/\*(.+?)\*/g, '$1')
     .replace(/_(.+?)_/g, '$1')
-    .replace(/~~(.+?)~~/g, '$1');
+    .replace(/~~(.+?)~~/g, '$1')
+    .replace(/~(.+?)~/g, '$1');
 }
