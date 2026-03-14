@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'preact/hooks';
 import { generatePDF, type PaperSize } from './pdf-generator';
 
-const VERSION = '1.0.0';
+const VERSION = '1.1.0';
 const COMMIT_HASH = 'dev';
 
 /** Resolution of the exported crop image (px). 600 px ≈ 300 DPI at 2″. */
@@ -19,7 +19,7 @@ function drawFaceGuide(ctx: CanvasRenderingContext2D, size: number): void {
   const cx = size / 2;
 
   ctx.save();
-  ctx.strokeStyle = 'rgba(255,255,255,0.55)';
+  ctx.strokeStyle = 'rgba(255,255,255,0.7)';
   ctx.lineWidth = 1.5;
   ctx.setLineDash([6, 4]);
 
@@ -44,6 +44,19 @@ function drawFaceGuide(ctx: CanvasRenderingContext2D, size: number): void {
   ctx.moveTo(cx - headRX * 0.75, eyeY);
   ctx.lineTo(cx + headRX * 0.75, eyeY);
   ctx.stroke();
+
+  // Labels
+  ctx.setLineDash([]);
+  ctx.font = `${Math.round(size * 0.03)}px sans-serif`;
+  ctx.fillStyle = 'rgba(255,255,255,0.75)';
+  ctx.textBaseline = 'middle';
+
+  // Eye line label – right of the line
+  ctx.textAlign = 'left';
+  ctx.fillText('eyes', cx + headRX * 0.75 + 4, eyeY);
+
+  // Chin line label – right of the line
+  ctx.fillText('chin', cx + headRX * 0.6 + 4, chinY);
 
   ctx.restore();
 }
@@ -273,9 +286,11 @@ function CropEditor({
 
 function PreviewAndGenerate({
   croppedUrl,
+  onBack,
   onReset,
 }: {
   croppedUrl: string;
+  onBack: () => void;
   onReset: () => void;
 }) {
   const [paperSize, setPaperSize] = useState<PaperSize>('4x6');
@@ -323,6 +338,9 @@ function PreviewAndGenerate({
       </div>
 
       <div class="action-row">
+        <button type="button" onClick={onBack}>
+          ← Back to crop
+        </button>
         <button
           type="button"
           class="primary"
@@ -395,7 +413,11 @@ export function App() {
       )}
 
       {croppedUrl && (
-        <PreviewAndGenerate croppedUrl={croppedUrl} onReset={reset} />
+        <PreviewAndGenerate
+          croppedUrl={croppedUrl}
+          onBack={() => setCroppedUrl(null)}
+          onReset={reset}
+        />
       )}
 
       <Footer />

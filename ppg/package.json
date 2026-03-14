@@ -1,6 +1,6 @@
 {
   "name": "ppg",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "description": "Passport Photo Generator - Create printable US passport photo sheets",
   "main": "src/index.tsx",
