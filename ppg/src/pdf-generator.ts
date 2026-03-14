@@ -23,7 +23,7 @@ interface PaperLayout {
 
 const layouts: Record<PaperSize, PaperLayout> = {
   '3x5': { width: 3 * PPI, height: 5 * PPI, cols: 1, rows: 2 },
-  '4x6': { width: 4 * PPI, height: 6 * PPI, cols: 2, rows: 1 },
+  '4x6': { width: 4 * PPI, height: 6 * PPI, cols: 1, rows: 2 },
   '8x10': { width: 8 * PPI, height: 10 * PPI, cols: 2, rows: 2 },
 };
 
@@ -56,28 +56,31 @@ export async function generatePDF(
 
     doc.addPage();
 
-    // Centre the grid of photos on the page
-    const gridW = layout.cols * PHOTO_PTS;
-    const gridH = layout.rows * PHOTO_PTS;
-    const originX = (layout.width - gridW) / 2;
-    const originY = (layout.height - gridH) / 2;
+    // Place each photo centred within its own equal-sized cell on the page
+    const cellW = layout.width / layout.cols;
+    const cellH = layout.height / layout.rows;
+
+    // Collect photo positions for cut marks
+    const photos: { x: number; y: number }[] = [];
 
     // Draw each photo cell
     for (let r = 0; r < layout.rows; r++) {
       for (let c = 0; c < layout.cols; c++) {
-        const x = originX + c * PHOTO_PTS;
-        const y = originY + r * PHOTO_PTS;
+        const x = c * cellW + (cellW - PHOTO_PTS) / 2;
+        const y = r * cellH + (cellH - PHOTO_PTS) / 2;
 
         // Embed the image
         doc.image(imageDataUrl, x, y, {
           width: PHOTO_PTS,
           height: PHOTO_PTS,
         });
+
+        photos.push({ x, y });
       }
     }
 
-    // Draw cut marks around every photo cell
-    drawCutMarks(doc, layout, originX, originY);
+    // Draw cut marks around every photo
+    drawCutMarks(doc, layout, photos);
 
     doc.end();
 
@@ -90,41 +93,40 @@ export async function generatePDF(
 }
 
 /**
- * Draw corner-tick cut marks for each photo boundary.
+ * Draw corner-tick cut marks around each photo.
  */
 function drawCutMarks(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   doc: any,
   layout: PaperLayout,
-  originX: number,
-  originY: number,
+  photos: { x: number; y: number }[],
 ): void {
   doc.strokeColor('#888888').lineWidth(0.5);
 
-  // We need marks at every grid intersection, including the outer edges.
-  for (let r = 0; r <= layout.rows; r++) {
-    for (let c = 0; c <= layout.cols; c++) {
-      const x = originX + c * PHOTO_PTS;
-      const y = originY + r * PHOTO_PTS;
+  for (const { x, y } of photos) {
+    // Four corners of this photo
+    const corners = [
+      { cx: x, cy: y },                             // top-left
+      { cx: x + PHOTO_PTS, cy: y },                 // top-right
+      { cx: x, cy: y + PHOTO_PTS },                 // bottom-left
+      { cx: x + PHOTO_PTS, cy: y + PHOTO_PTS },     // bottom-right
+    ];
 
+    for (const { cx, cy } of corners) {
       // Horizontal ticks
-      // tick going left
-      if (c > 0 || originX >= CUT_MARK_LEN) {
-        doc.moveTo(x - CUT_MARK_LEN, y).lineTo(x, y).stroke();
+      if (cx - CUT_MARK_LEN >= 0) {
+        doc.moveTo(cx - CUT_MARK_LEN, cy).lineTo(cx, cy).stroke();
       }
-      // tick going right
-      if (c < layout.cols || layout.width - x >= CUT_MARK_LEN) {
-        doc.moveTo(x, y).lineTo(x + CUT_MARK_LEN, y).stroke();
+      if (cx + CUT_MARK_LEN <= layout.width) {
+        doc.moveTo(cx, cy).lineTo(cx + CUT_MARK_LEN, cy).stroke();
       }
 
       // Vertical ticks
-      // tick going up
-      if (r > 0 || originY >= CUT_MARK_LEN) {
-        doc.moveTo(x, y - CUT_MARK_LEN).lineTo(x, y).stroke();
+      if (cy - CUT_MARK_LEN >= 0) {
+        doc.moveTo(cx, cy - CUT_MARK_LEN).lineTo(cx, cy).stroke();
       }
-      // tick going down
-      if (r < layout.rows || layout.height - y >= CUT_MARK_LEN) {
-        doc.moveTo(x, y).lineTo(x, y + CUT_MARK_LEN).stroke();
+      if (cy + CUT_MARK_LEN <= layout.height) {
+        doc.moveTo(cx, cy).lineTo(cx, cy + CUT_MARK_LEN).stroke();
       }
     }
   }

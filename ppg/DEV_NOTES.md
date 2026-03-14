@@ -13,5 +13,7 @@
 | Paper | Photo copies | Columns × Rows |
 |-------|-------------|-----------------|
 | 3×5   | 2           | 1 × 2           |
-| 4×6   | 2           | 2 × 1           |
+| 4×6   | 2           | 1 × 2           |
 | 8×10  | 4           | 2 × 2           |
+
+Each photo is centred within its own equal-sized cell on the page (cell = page ÷ grid), so there is even padding around every image rather than photos butting up against each other.
