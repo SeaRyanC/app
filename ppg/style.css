@@ -82,6 +82,8 @@ h1 {
   background: #1a1a1a;
   cursor: grab;
   touch-action: none;
+  max-width: 100%;
+  height: auto;
 }
 
 .crop-canvas:active {
