@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'preact/hooks';
 import { generatePDF, type PaperSize } from './pdf-generator';
 
-const VERSION = '1.1.0';
+const VERSION = '1.2.0';
 const COMMIT_HASH = 'dev';
 
 /** Resolution of the exported crop image (px). 600 px ≈ 300 DPI at 2″. */
@@ -197,8 +197,11 @@ function CropEditor({
   // State: scale + offset (in canvas-bitmap-pixel space)
   const [scale, setScale] = useState(1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
-  const dragging = useRef(false);
-  const lastPos = useRef({ x: 0, y: 0 });
+
+  // Track all active pointers for single-finger pan and two-finger pinch-to-zoom
+  const activePointers = useRef<Map<number, { x: number; y: number }>>(
+    new Map(),
+  );
 
   // Fit image into the canvas on first load
   useEffect(() => {
@@ -219,46 +222,99 @@ function CropEditor({
     paint(canvas, img, scale, offset.x, offset.y);
   }, [img, scale, offset]);
 
-  // --- Mouse / touch handlers ---
+  // Register wheel handler imperatively so we can call preventDefault()
+  // (passive:false is required in modern browsers to override scroll behaviour)
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const factor = e.deltaY < 0 ? 1.08 : 1 / 1.08;
+      const rect = canvas.getBoundingClientRect();
+      const displayToCanvas = CANVAS_CSS / rect.width;
+      // Zoom towards the cursor position
+      const cx = (e.clientX - rect.left) * displayToCanvas;
+      const cy = (e.clientY - rect.top) * displayToCanvas;
+      setScale((s) => s * factor);
+      setOffset((prev) => ({
+        x: cx + (prev.x - cx) * factor,
+        y: cy + (prev.y - cy) * factor,
+      }));
+    };
+    canvas.addEventListener('wheel', handleWheel, { passive: false });
+    return () => canvas.removeEventListener('wheel', handleWheel);
+  }, []);
+
+  // --- Pointer handlers: single-finger pan + two-finger pinch-to-zoom ---
   const onPointerDown = (e: PointerEvent) => {
-    dragging.current = true;
-    lastPos.current = { x: e.clientX, y: e.clientY };
+    activePointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   };
 
   const onPointerMove = (e: PointerEvent) => {
-    if (!dragging.current) return;
-    const dx = e.clientX - lastPos.current.x;
-    const dy = e.clientY - lastPos.current.y;
-    lastPos.current = { x: e.clientX, y: e.clientY };
-    setOffset((prev) => ({ x: prev.x + dx, y: prev.y + dy }));
+    const prev = activePointers.current.get(e.pointerId);
+    if (!prev) return;
+    const newPos = { x: e.clientX, y: e.clientY };
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const displayToCanvas = CANVAS_CSS / rect.width;
+
+    const ptrs = Array.from(activePointers.current.entries());
+    if (ptrs.length === 1) {
+      // Single pointer: pan
+      const dx = (newPos.x - prev.x) * displayToCanvas;
+      const dy = (newPos.y - prev.y) * displayToCanvas;
+      setOffset((o) => ({ x: o.x + dx, y: o.y + dy }));
+    } else if (ptrs.length >= 2) {
+      // Two pointers: pinch-to-zoom combined with pan
+      const otherEntry = ptrs.find(([id]) => id !== e.pointerId);
+      if (otherEntry) {
+        const otherPos = otherEntry[1];
+
+        const oldMidX = (prev.x + otherPos.x) / 2;
+        const oldMidY = (prev.y + otherPos.y) / 2;
+        const oldDist = Math.hypot(
+          prev.x - otherPos.x,
+          prev.y - otherPos.y,
+        );
+
+        const newMidX = (newPos.x + otherPos.x) / 2;
+        const newMidY = (newPos.y + otherPos.y) / 2;
+        const newDist = Math.hypot(
+          newPos.x - otherPos.x,
+          newPos.y - otherPos.y,
+        );
+
+        const factor = oldDist > 0 ? newDist / oldDist : 1;
+
+        // Zoom anchor: midpoint of the two fingers in canvas coordinates
+        const cx = (newMidX - rect.left) * displayToCanvas;
+        const cy = (newMidY - rect.top) * displayToCanvas;
+
+        // Pan from midpoint movement
+        const dx = (newMidX - oldMidX) * displayToCanvas;
+        const dy = (newMidY - oldMidY) * displayToCanvas;
+
+        setScale((s) => s * factor);
+        setOffset((o) => ({
+          x: cx + (o.x - cx) * factor + dx,
+          y: cy + (o.y - cy) * factor + dy,
+        }));
+      }
+    }
+
+    activePointers.current.set(e.pointerId, newPos);
   };
 
-  const onPointerUp = () => {
-    dragging.current = false;
-  };
-
-  const onWheel = (e: WheelEvent) => {
-    e.preventDefault();
-    const factor = e.deltaY < 0 ? 1.08 : 1 / 1.08;
-    setScale((s) => s * factor);
-
-    // Zoom towards the centre of the canvas
-    const cx = CANVAS_CSS / 2;
-    const cy = CANVAS_CSS / 2;
-    setOffset((prev) => ({
-      x: cx + (prev.x - cx) * factor,
-      y: cy + (prev.y - cy) * factor,
-    }));
+  const onPointerUp = (e: PointerEvent) => {
+    activePointers.current.delete(e.pointerId);
   };
 
   const handleExport = () => {
     const dataUrl = exportCrop(img, scale, offset.x, offset.y, CANVAS_CSS);
     onExport(dataUrl);
   };
-
-  // Immediately provide export helper to parent on every render
-  // (the parent can call handleExport via a ref if desired)
 
   return (
     <div class="crop-section">
@@ -271,9 +327,9 @@ function CropEditor({
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
-          onWheel={onWheel}
+          onPointerCancel={(e) => onPointerUp(e)}
         />
-        <p class="hint">Drag to pan · scroll to zoom</p>
+        <p class="hint">Drag to pan · scroll or pinch to zoom</p>
       </div>
       <div class="export-controls">
         <button type="button" class="primary" onClick={handleExport}>

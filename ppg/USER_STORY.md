@@ -8,7 +8,8 @@
 ## Crop Editor
 - The crop area is a fixed **square** (representing the 2″×2″ passport photo).
 - Inside the square, a **US Passport face-proportion guide** (oval head outline, eye-line, and chin-line) is drawn as a semi-transparent overlay with **text labels** ("eyes", "chin") so the user can line up the subject's face.
-- The user can **pan** (drag) and **zoom** (mouse wheel / pinch) the image behind the crop frame to position the face correctly.
+- The user can **pan** (drag) and **zoom** (mouse wheel, pinch gesture, or trackpad) the image behind the crop frame to position the face correctly.
+- On touch devices, a **two-finger pinch gesture** zooms in/out while simultaneously panning to the pinch midpoint, making it comfortable to use on phones and tablets.
 - A **preview thumbnail** of the cropped result is shown next to the editor.
 
 ## Preview & Navigation
