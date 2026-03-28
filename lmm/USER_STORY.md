@@ -17,7 +17,7 @@ A single-page web application for creating printable labels from CSV/TSV data us
 - As a user, I can design a label template using placeholders like `<<FieldName>>`
 - As a user, I see clickable buttons for available placeholders that insert them into my template
 - As a user, I am warned if I use a placeholder that doesn't match any column in my data
-- As a user, I can format labels with Markdown: **bold**, *italic*, and ~~underline~~ text
+- As a user, I can format labels with Markdown: **bold**, *italic*, and ~underline~ text (or ~~underline~~)
 - As a user, I see a live preview of how my label will look with actual data
 
 ### Paper Format Selection
