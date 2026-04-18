@@ -5,7 +5,7 @@ import { generatePDF } from './pdf';
 import type { Grid, Difficulty } from './grid';
 import type { PaperSize } from './pdf';
 
-const VERSION = '1.1.0';
+const VERSION = '1.1.1';
 const COMMIT_HASH = 'dev';
 
 const WORD_COUNT_OPTIONS = [6, 8, 10, 12, 15, 20, 25];

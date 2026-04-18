@@ -198,7 +198,93 @@ export function gridSizeForWordCount(wordCount: number): number {
   return 18;
 }
 
+// ── Placement helpers ──────────────────────────────────────────────────────────
+
+/** Fisher-Yates shuffle (in place). */
+function shuffle<T>(arr: T[]): T[] {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j]!, arr[i]!];
+  }
+  return arr;
+}
+
+/**
+ * Find all valid positions for a word on the grid, returned in random order.
+ */
+function findAllValidPositions(
+  grid: string[][],
+  word: string,
+  dirs: Direction[],
+  size: number,
+): { row: number; col: number; dir: Direction }[] {
+  const positions: { row: number; col: number; dir: Direction }[] = [];
+  for (const dir of dirs) {
+    for (let row = 0; row < size; row++) {
+      for (let col = 0; col < size; col++) {
+        if (canPlace(grid, word, row, col, dir, size)) {
+          positions.push({ row, col, dir });
+        }
+      }
+    }
+  }
+  return shuffle(positions);
+}
+
 // ── Main generation ────────────────────────────────────────────────────────────
+
+/** Maximum grid dimension. */
+const MAX_GRID_SIZE = 24;
+
+/**
+ * Attempt to place all words on a grid of the given size.
+ * Returns the filled cells and placed-word metadata, or null if placement failed.
+ */
+function tryPlaceWords(
+  words: string[],
+  size: number,
+  allowedDirs: Direction[],
+): { cells: string[][]; placed: PlacedWord[] } | null {
+  const cells = makeEmptyGrid(size);
+  const placed: PlacedWord[] = [];
+
+  // Sort words longest-first; shuffle equal-length words for variety
+  const sorted = [...words].sort((a, b) => b.length - a.length || Math.random() - 0.5);
+
+  for (const word of sorted) {
+    let wordPlaced = false;
+
+    // Fast path: try random positions first
+    const dirs = shuffle([...allowedDirs]);
+    for (let tries = 0; tries < 200 && !wordPlaced; tries++) {
+      const dir = dirs[tries % dirs.length]!;
+      const row = Math.floor(Math.random() * size);
+      const col = Math.floor(Math.random() * size);
+
+      if (canPlace(cells, word, row, col, dir, size)) {
+        placeWord(cells, word, row, col, dir);
+        placed.push({ word, row, col, dx: dir.dx, dy: dir.dy });
+        wordPlaced = true;
+      }
+    }
+
+    // Exhaustive fallback: enumerate every valid position so we never
+    // miss a placement that actually exists.
+    if (!wordPlaced) {
+      const allPositions = findAllValidPositions(cells, word, allowedDirs, size);
+      if (allPositions.length > 0) {
+        const { row, col, dir } = allPositions[0]!;
+        placeWord(cells, word, row, col, dir);
+        placed.push({ word, row, col, dx: dir.dx, dy: dir.dy });
+        wordPlaced = true;
+      }
+    }
+
+    if (!wordPlaced) return null;
+  }
+
+  return { cells, placed };
+}
 
 /**
  * Generate a complete word search grid.
@@ -208,63 +294,40 @@ export function gridSizeForWordCount(wordCount: number): number {
  * @returns          A filled Grid, or null if placement failed after retries.
  */
 export function generateGrid(words: string[], difficulty: Difficulty = 'expert'): Grid | null {
+  if (words.length === 0) return null;
+
   const longest = Math.max(...words.map(w => w.length));
-  const size = Math.max(gridSizeForWordCount(words.length), longest + 1);
+  const baseSize = Math.max(gridSizeForWordCount(words.length), longest + 1);
   const allowedDirs = DIRECTIONS_BY_DIFFICULTY[difficulty];
 
-  for (let attempt = 0; attempt < 50; attempt++) {
-    const cells = makeEmptyGrid(size);
-    const placed: PlacedWord[] = [];
-    let ok = true;
+  // Try progressively larger grids if placement keeps failing
+  for (let size = baseSize; size <= MAX_GRID_SIZE; size += 2) {
+    for (let attempt = 0; attempt < 50; attempt++) {
+      const result = tryPlaceWords(words, size, allowedDirs);
+      if (!result) continue;
 
-    // Sort words longest-first for better packing
-    const sorted = [...words].sort((a, b) => b.length - a.length);
+      const { cells, placed } = result;
 
-    for (const word of sorted) {
-      let wordPlaced = false;
-
-      // Shuffle directions & try many random starting positions
-      const dirs = [...allowedDirs].sort(() => Math.random() - 0.5);
-
-      for (let tries = 0; tries < 200 && !wordPlaced; tries++) {
-        const dir = dirs[tries % dirs.length]!;
-        const row = Math.floor(Math.random() * size);
-        const col = Math.floor(Math.random() * size);
-
-        if (canPlace(cells, word, row, col, dir, size)) {
-          placeWord(cells, word, row, col, dir);
-          placed.push({ word, row, col, dx: dir.dx, dy: dir.dy });
-          wordPlaced = true;
-        }
-      }
-
-      if (!wordPlaced) {
-        ok = false;
-        break;
-      }
-    }
-
-    if (!ok) continue;
-
-    // Fill blanks with random English-weighted letters, avoiding swear words
-    let clean = false;
-    for (let fillAttempt = 0; fillAttempt < 20; fillAttempt++) {
-      const filled = cells.map(row => row.map(c => c || randomLetter()));
-      if (!containsBannedWord(filled, size)) {
-        // Copy filled values back
-        for (let r = 0; r < size; r++) {
-          for (let c = 0; c < size; c++) {
-            cells[r]![c] = filled[r]![c]!;
+      // Fill blanks with random English-weighted letters, avoiding swear words
+      let clean = false;
+      for (let fillAttempt = 0; fillAttempt < 20; fillAttempt++) {
+        const filled = cells.map(row => row.map(c => c || randomLetter()));
+        if (!containsBannedWord(filled, size)) {
+          // Copy filled values back
+          for (let r = 0; r < size; r++) {
+            for (let c = 0; c < size; c++) {
+              cells[r]![c] = filled[r]![c]!;
+            }
           }
+          clean = true;
+          break;
         }
-        clean = true;
-        break;
       }
+
+      if (!clean) continue;
+
+      return { size, cells, placedWords: placed };
     }
-
-    if (!clean) continue;
-
-    return { size, cells, placedWords: placed };
   }
 
   return null;
