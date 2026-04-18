@@ -39,3 +39,4 @@ Grid is also at least `longestWord + 1` cells in each dimension.
 - 20 themes, each with 120–150 words.
 - All words are 3–12 characters, uppercased at runtime.
 - "Random" theme is the union of all theme pools, deduplicated.
+- Multi-puzzle generation tracks used words and passes an exclusion set to `pickWords`. Preferred (unused) words are selected first; excluded words are used as fallback only when the pool runs out.

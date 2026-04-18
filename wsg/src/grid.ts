@@ -338,8 +338,13 @@ export function generateGrid(words: string[], difficulty: Difficulty = 'expert')
  * Filters out words that are too long for a sensible grid, and
  * words that contain a banned substring (or whose banned word is
  * a substring of them), e.g. DONUT contains NUT.
+ *
+ * @param exclude  Optional set of words to skip (e.g. words already used in
+ *                 earlier puzzles). When the pool minus exclusions is too
+ *                 small, excluded words are allowed as a fallback so we
+ *                 always return the requested count when possible.
  */
-export function pickWords(pool: string[], count: number): string[] {
+export function pickWords(pool: string[], count: number, exclude?: Set<string>): string[] {
   const maxLen = 12;
   const eligible = pool.filter(w => {
     if (w.length < 3 || w.length > maxLen) return false;
@@ -349,15 +354,26 @@ export function pickWords(pool: string[], count: number): string[] {
     }
     return true;
   });
-  const shuffled = [...eligible].sort(() => Math.random() - 0.5);
-  // Deduplicate
+  const shuffled = shuffle([...eligible]);
+
+  // Partition into preferred (not excluded) and fallback (excluded)
+  const preferred: string[] = [];
+  const fallback: string[] = [];
   const seen = new Set<string>();
-  const result: string[] = [];
   for (const w of shuffled) {
     if (seen.has(w)) continue;
     seen.add(w);
-    result.push(w);
-    if (result.length >= count) break;
+    if (exclude?.has(w)) {
+      fallback.push(w);
+    } else {
+      preferred.push(w);
+    }
+  }
+
+  // Take from preferred first, then fall back to excluded words if needed
+  const result = preferred.slice(0, count);
+  if (result.length < count) {
+    result.push(...fallback.slice(0, count - result.length));
   }
   return result;
 }
