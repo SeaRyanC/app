@@ -1,15 +1,16 @@
 import { useState, useEffect, useCallback, useMemo } from 'preact/hooks';
 import { themeNames, getThemeWords } from './words';
-import { generateGrid, pickWords, gridSizeForWordCount } from './grid';
+import { generateGrid, pickWords, gridSizeForWordCount, DIFFICULTY_LABELS } from './grid';
 import { generatePDF } from './pdf';
-import type { Grid } from './grid';
+import type { Grid, Difficulty } from './grid';
 import type { PaperSize } from './pdf';
 
-const VERSION = '1.0.0';
+const VERSION = '1.1.0';
 const COMMIT_HASH = 'dev';
 
 const WORD_COUNT_OPTIONS = [6, 8, 10, 12, 15, 20, 25];
 const PUZZLE_COUNT_OPTIONS = [1, 2, 3, 4, 5, 10];
+const DIFFICULTY_OPTIONS: Difficulty[] = ['easy', 'medium', 'hard', 'expert'];
 
 // ── Preview Grid Component ──────────────────────────────────────────────────
 
@@ -95,6 +96,7 @@ export function App() {
   const [wordCount, setWordCount] = useState(10);
   const [puzzleCount, setPuzzleCount] = useState(1);
   const [paperSize, setPaperSize] = useState<PaperSize>('letter');
+  const [difficulty, setDifficulty] = useState<Difficulty>('easy');
   const [busy, setBusy] = useState(false);
 
   // Preview grid state
@@ -107,7 +109,7 @@ export function App() {
     setError(null);
     const pool = getThemeWords(theme);
     const words = pickWords(pool, wordCount);
-    const grid = generateGrid(words);
+    const grid = generateGrid(words, difficulty);
     if (grid) {
       setPreviewGrid(grid);
       setPreviewWords(grid.placedWords.map(pw => pw.word));
@@ -116,7 +118,7 @@ export function App() {
       setPreviewWords([]);
       setError('Could not generate a valid grid. Try fewer words or a different theme.');
     }
-  }, [theme, wordCount]);
+  }, [theme, wordCount, difficulty]);
 
   // Auto-regenerate on settings change
   useEffect(() => {
@@ -136,7 +138,7 @@ export function App() {
           : pickWords(pool, wordCount);
         const grid = i === 0 && previewGrid
           ? previewGrid
-          : generateGrid(words);
+          : generateGrid(words, difficulty);
         if (!grid) {
           setError(`Failed to generate puzzle ${i + 1}. Try fewer words.`);
           setBusy(false);
@@ -201,6 +203,19 @@ export function App() {
           >
             {PUZZLE_COUNT_OPTIONS.map(n => (
               <option key={n} value={n}>{n} {n === 1 ? 'puzzle' : 'puzzles'}</option>
+            ))}
+          </select>
+        </div>
+
+        <div class="setting-group">
+          <label for="difficulty">Difficulty</label>
+          <select
+            id="difficulty"
+            value={difficulty}
+            onChange={(e) => setDifficulty((e.target as HTMLSelectElement).value as Difficulty)}
+          >
+            {DIFFICULTY_OPTIONS.map(d => (
+              <option key={d} value={d}>{DIFFICULTY_LABELS[d]}</option>
             ))}
           </select>
         </div>

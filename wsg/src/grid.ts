@@ -48,20 +48,49 @@ function randomLetter(): string {
   return WEIGHTED[Math.floor(Math.random() * WEIGHTED.length)]!;
 }
 
-// ── Direction vectors ──────────────────────────────────────────────────────────
+// ── Difficulty levels ──────────────────────────────────────────────────────────
+
+export type Difficulty = 'easy' | 'medium' | 'hard' | 'expert';
+
+export const DIFFICULTY_LABELS: Record<Difficulty, string> = {
+  easy: 'Easy (→ ↓)',
+  medium: 'Medium (→ ↓ ← ↑)',
+  hard: 'Hard (+ diagonals)',
+  expert: 'Expert (+ reverse diagonals)',
+};
 
 type Direction = { dx: number; dy: number };
 
-const DIRECTIONS: Direction[] = [
-  { dx: 1, dy: 0 },   // right
-  { dx: 0, dy: 1 },   // down
-  { dx: 1, dy: 1 },   // diagonal down-right
-  { dx: -1, dy: 1 },  // diagonal down-left
-  { dx: -1, dy: 0 },  // left
-  { dx: 0, dy: -1 },  // up
-  { dx: -1, dy: -1 }, // diagonal up-left
-  { dx: 1, dy: -1 },  // diagonal up-right
-];
+const DIRECTIONS_BY_DIFFICULTY: Record<Difficulty, Direction[]> = {
+  easy: [
+    { dx: 1, dy: 0 },   // right
+    { dx: 0, dy: 1 },   // down
+  ],
+  medium: [
+    { dx: 1, dy: 0 },   // right
+    { dx: 0, dy: 1 },   // down
+    { dx: -1, dy: 0 },  // left
+    { dx: 0, dy: -1 },  // up
+  ],
+  hard: [
+    { dx: 1, dy: 0 },   // right
+    { dx: 0, dy: 1 },   // down
+    { dx: -1, dy: 0 },  // left
+    { dx: 0, dy: -1 },  // up
+    { dx: 1, dy: 1 },   // diagonal down-right
+    { dx: -1, dy: 1 },  // diagonal down-left
+  ],
+  expert: [
+    { dx: 1, dy: 0 },   // right
+    { dx: 0, dy: 1 },   // down
+    { dx: -1, dy: 0 },  // left
+    { dx: 0, dy: -1 },  // up
+    { dx: 1, dy: 1 },   // diagonal down-right
+    { dx: -1, dy: 1 },  // diagonal down-left
+    { dx: -1, dy: -1 }, // diagonal up-left
+    { dx: 1, dy: -1 },  // diagonal up-right
+  ],
+};
 
 // ── Grid helpers ───────────────────────────────────────────────────────────────
 
@@ -174,12 +203,14 @@ export function gridSizeForWordCount(wordCount: number): number {
 /**
  * Generate a complete word search grid.
  *
- * @param words  List of words to place (already upper-cased).
- * @returns      A filled Grid, or null if placement failed after retries.
+ * @param words      List of words to place (already upper-cased).
+ * @param difficulty Difficulty level controlling allowed directions.
+ * @returns          A filled Grid, or null if placement failed after retries.
  */
-export function generateGrid(words: string[]): Grid | null {
+export function generateGrid(words: string[], difficulty: Difficulty = 'expert'): Grid | null {
   const longest = Math.max(...words.map(w => w.length));
   const size = Math.max(gridSizeForWordCount(words.length), longest + 1);
+  const allowedDirs = DIRECTIONS_BY_DIFFICULTY[difficulty];
 
   for (let attempt = 0; attempt < 50; attempt++) {
     const cells = makeEmptyGrid(size);
@@ -193,7 +224,7 @@ export function generateGrid(words: string[]): Grid | null {
       let wordPlaced = false;
 
       // Shuffle directions & try many random starting positions
-      const dirs = [...DIRECTIONS].sort(() => Math.random() - 0.5);
+      const dirs = [...allowedDirs].sort(() => Math.random() - 0.5);
 
       for (let tries = 0; tries < 200 && !wordPlaced; tries++) {
         const dir = dirs[tries % dirs.length]!;
@@ -241,11 +272,20 @@ export function generateGrid(words: string[]): Grid | null {
 
 /**
  * Pick N random words from a pool, ensuring they fit the grid.
- * Filters out words that are too long for a sensible grid.
+ * Filters out words that are too long for a sensible grid, and
+ * words that contain a banned substring (or whose banned word is
+ * a substring of them), e.g. DONUT contains NUT.
  */
 export function pickWords(pool: string[], count: number): string[] {
   const maxLen = 12;
-  const eligible = pool.filter(w => w.length >= 3 && w.length <= maxLen);
+  const eligible = pool.filter(w => {
+    if (w.length < 3 || w.length > maxLen) return false;
+    const upper = w.toUpperCase();
+    for (const bad of BANNED_WORDS) {
+      if (upper.includes(bad) || bad.includes(upper)) return false;
+    }
+    return true;
+  });
   const shuffled = [...eligible].sort(() => Math.random() - 0.5);
   // Deduplicate
   const seen = new Set<string>();

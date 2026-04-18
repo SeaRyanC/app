@@ -3,14 +3,23 @@
 ## PDF generation
 - Uses `pdfkit-browserify` + `blob-stream`, same stack as PPG and LMM apps.
 - Needs the same polyfills (Buffer, process, process.nextTick).
-- Each puzzle generates 2 pages: puzzle + answer key.
+- Each puzzle generates 1 page (no answer key).
 
 ## Grid generation
 - Words placed longest-first for better packing.
-- All 8 directions supported.
+- Direction set controlled by difficulty level (easy: 2 dirs, up to expert: all 8).
 - Swear-word scanning checks all rows, columns, and diagonals in both reading directions.
 - English letter frequencies used for filler to produce natural-looking grids.
 - Up to 50 placement attempts × 20 fill attempts to find a clean grid.
+- Word pool filtering removes words that contain banned substrings (e.g. DONUT contains NUT).
+
+## Difficulty levels
+| Level  | Directions                         |
+|--------|------------------------------------|
+| Easy   | → ↓                               |
+| Medium | → ↓ ← ↑                           |
+| Hard   | → ↓ ← ↑ ↘ ↙                       |
+| Expert | → ↓ ← ↑ ↘ ↙ ↖ ↗ (all 8)          |
 
 ## Grid sizing heuristic
 | Word count | Grid size |

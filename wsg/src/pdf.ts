@@ -120,61 +120,6 @@ export function generatePDF(
             currentRow++;
           }
         }
-
-        // Answer key page
-        doc.addPage({ size: [paper.width, paper.height], margin: 36 });
-        doc.fontSize(18).font('Helvetica-Bold');
-        doc.text(`${title} — Answer Key`, margin, margin, { width: usableWidth, align: 'center' });
-
-        let ansHeaderBottom = margin + 28;
-        if (grids.length > 1) {
-          doc.fontSize(10).font('Helvetica');
-          doc.text(`Puzzle ${gi + 1} of ${grids.length}`, margin, ansHeaderBottom, {
-            width: usableWidth,
-            align: 'center',
-          });
-          ansHeaderBottom += 16;
-        }
-
-        const ansGridTop = ansHeaderBottom + 12;
-
-        // Build a set of cells that belong to placed words
-        const highlightCells = new Set<string>();
-        for (const pw of grid.placedWords) {
-          for (let i = 0; i < pw.word.length; i++) {
-            const r = pw.row + pw.dy * i;
-            const c = pw.col + pw.dx * i;
-            highlightCells.add(`${r},${c}`);
-          }
-        }
-
-        doc.fontSize(Math.max(8, cellSize * 0.55)).font('Courier');
-
-        for (let r = 0; r < grid.size; r++) {
-          for (let c = 0; c < grid.size; c++) {
-            const x = gridLeft + c * cellSize;
-            const y = ansGridTop + r * cellSize;
-            const letter = grid.cells[r]![c]!;
-            const isHighlighted = highlightCells.has(`${r},${c}`);
-
-            if (isHighlighted) {
-              doc.rect(x, y, cellSize, cellSize).fill('#FFF3CD');
-            }
-
-            doc.rect(x, y, cellSize, cellSize)
-              .lineWidth(0.25)
-              .stroke('#cccccc');
-
-            const textWidth = doc.widthOfString(letter);
-            const textHeight = doc.currentLineHeight();
-            doc.fillColor(isHighlighted ? '#000000' : '#bbbbbb').text(
-              letter,
-              x + (cellSize - textWidth) / 2,
-              y + (cellSize - textHeight) / 2,
-              { lineBreak: false },
-            );
-          }
-        }
       }
 
       doc.end();

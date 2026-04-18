@@ -21,15 +21,19 @@
 - Only the first puzzle is shown in preview; the remaining puzzles are generated at PDF time with freshly picked words and grids.
 
 ## Grid Generation
-- Words are placed in all 8 directions: horizontal, vertical, and both diagonals, in either forward or reverse.
+- The user selects a **difficulty level** that controls which directions words can be placed:
+  - **Easy**: right and down only (best for younger kids)
+  - **Medium**: adds left and up
+  - **Hard**: adds forward diagonals (down-right, down-left)
+  - **Expert**: adds reverse diagonals (up-left, up-right) — all 8 directions
 - Empty cells are filled with random letters following an **English letter frequency distribution** (more Es and Ts, fewer Qs and Zs).
 - The grid is guaranteed **not to contain any swear words or inappropriate language** in any row, column, or diagonal reading direction.
+- Words from the pool that contain banned substrings (e.g. DONUT contains NUT) are automatically excluded from selection.
 
 ## PDF Output
 - The user can select **US Letter** or **A4** paper size.
 - Clicking **"Generate PDF"** creates a multi-page PDF:
   - Each puzzle occupies one page showing the grid and the alphabetized word list.
-  - Each puzzle is followed by an **answer key page** with the solution words highlighted.
 - The PDF opens in a new tab or triggers a download.
 
 ## Footer
