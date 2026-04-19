@@ -12,7 +12,7 @@
 - If all words cannot be placed at the heuristic grid size, the algorithm retries with progressively larger grids (up to 24×24).
 - Swear-word scanning checks all rows, columns, and diagonals in both reading directions.
 - English letter frequencies used for filler to produce natural-looking grids.
-- Up to 50 placement attempts × 20 fill attempts per grid size, with grid-size escalation.
+- Up to 50 placement attempts per grid size; if all fail the grid size is increased by 1 and retried indefinitely. This guarantees generation always succeeds — users never see a failure message.
 - Word pool filtering removes words that contain banned substrings (e.g. DONUT contains NUT).
 
 ## Difficulty levels

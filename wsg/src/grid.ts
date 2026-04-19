@@ -233,9 +233,6 @@ function findAllValidPositions(
 
 // ── Main generation ────────────────────────────────────────────────────────────
 
-/** Maximum grid dimension. */
-const MAX_GRID_SIZE = 24;
-
 /**
  * Attempt to place all words on a grid of the given size.
  * Returns the filled cells and placed-word metadata, or null if placement failed.
@@ -286,23 +283,31 @@ function tryPlaceWords(
   return { cells, placed };
 }
 
+/** Number of placement attempts per grid size before growing. */
+const ATTEMPTS_PER_SIZE = 50;
+
 /**
  * Generate a complete word search grid.
  *
+ * This function retries indefinitely: after {@link ATTEMPTS_PER_SIZE}
+ * failed attempts at a given grid size it increases the size by 1 and
+ * tries again.  Because placement becomes trivially possible at large
+ * enough sizes, this is guaranteed to terminate.
+ *
  * @param words      List of words to place (already upper-cased).
  * @param difficulty Difficulty level controlling allowed directions.
- * @returns          A filled Grid, or null if placement failed after retries.
+ * @returns          A filled Grid, or null only when `words` is empty.
  */
 export function generateGrid(words: string[], difficulty: Difficulty = 'expert'): Grid | null {
   if (words.length === 0) return null;
 
   const longest = Math.max(...words.map(w => w.length));
-  const baseSize = Math.max(gridSizeForWordCount(words.length), longest + 1);
+  let size = Math.max(gridSizeForWordCount(words.length), longest + 1);
   const allowedDirs = DIRECTIONS_BY_DIFFICULTY[difficulty];
 
-  // Try progressively larger grids if placement keeps failing
-  for (let size = baseSize; size <= MAX_GRID_SIZE; size += 2) {
-    for (let attempt = 0; attempt < 50; attempt++) {
+  // Retry indefinitely, growing the grid after each round of attempts
+  while (true) {
+    for (let attempt = 0; attempt < ATTEMPTS_PER_SIZE; attempt++) {
       const result = tryPlaceWords(words, size, allowedDirs);
       if (!result) continue;
 
@@ -328,9 +333,10 @@ export function generateGrid(words: string[], difficulty: Difficulty = 'expert')
 
       return { size, cells, placedWords: placed };
     }
-  }
 
-  return null;
+    // Increase grid size by 1 and retry
+    size++;
+  }
 }
 
 /**
