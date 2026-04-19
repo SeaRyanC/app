@@ -19,6 +19,7 @@
 ## Puzzle Count
 - The user can select a number of puzzles to generate (1, 2, 3, 4, 5, or 10).
 - Only the first puzzle is shown in preview; the remaining puzzles are generated at PDF time with freshly picked words and grids.
+- When generating multiple puzzles, words are **not reused** across puzzles to the largest extent possible. If the theme pool is large enough, every puzzle will have entirely unique words. When the pool is exhausted, words may be reused as a fallback so that every puzzle is still fully populated.
 
 ## Grid Generation
 - The user selects a **difficulty level** that controls which directions words can be placed:

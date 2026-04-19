@@ -5,7 +5,7 @@ import { generatePDF } from './pdf';
 import type { Grid, Difficulty } from './grid';
 import type { PaperSize } from './pdf';
 
-const VERSION = '1.1.0';
+const VERSION = '1.2.0';
 const COMMIT_HASH = 'dev';
 
 const WORD_COUNT_OPTIONS = [6, 8, 10, 12, 15, 20, 25];
@@ -131,11 +131,12 @@ export function App() {
     try {
       const pool = getThemeWords(theme);
       const grids: Grid[] = [];
+      const usedWords = new Set<string>();
 
       for (let i = 0; i < puzzleCount; i++) {
         const words = i === 0 && previewGrid
           ? previewGrid.placedWords.map(pw => pw.word)
-          : pickWords(pool, wordCount);
+          : pickWords(pool, wordCount, usedWords);
         const grid = i === 0 && previewGrid
           ? previewGrid
           : generateGrid(words, difficulty);
@@ -144,6 +145,7 @@ export function App() {
           setBusy(false);
           return;
         }
+        for (const pw of grid.placedWords) usedWords.add(pw.word);
         grids.push(grid);
       }
 
