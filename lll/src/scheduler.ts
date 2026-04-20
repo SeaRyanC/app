@@ -1,8 +1,9 @@
-export type Position = 'P' | 'C' | '1B' | '2B' | '3B' | 'SS' | 'LF' | 'CF' | 'RF' | 'Bench';
+export type Position = 'P' | 'C' | '1B' | '2B' | '3B' | 'SS' | 'LF' | 'CF' | 'RF' | 'Off';
 
-export const ALL_POSITIONS: Position[] = ['P', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'Bench'];
+export const ALL_POSITIONS: Position[] = ['P', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'Off'];
 export const FIELD_POSITIONS: Position[] = ['P', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF'];
-export const HIGH_INTENSITY = new Set<Position>(['P', 'C', '1B', '2B']);
+export const INFIELD_POSITIONS = new Set<Position>(['P', 'C', '1B', '2B', '3B', 'SS']);
+export const OUTFIELD_POSITIONS = new Set<Position>(['LF', 'CF', 'RF']);
 
 export interface Player {
     name: string;
@@ -44,6 +45,8 @@ function generateOneSchedule(players: Player[], numInnings: number): Schedule {
     for (let inning = 0; inning < numInnings; inning++) {
         const assignment: InningAssignment = {};
         const assigned = new Set<string>();
+        const prevAssignment = schedule.length > 0 ? schedule[schedule.length - 1] : null;
+        const wasOffLastInning = (name: string) => prevAssignment?.[name] === 'Off';
 
         // Shuffle field positions for randomness
         const shuffledFieldPos = shuffle([...FIELD_POSITIONS]);
@@ -55,7 +58,11 @@ function generateOneSchedule(players: Player[], numInnings: number): Schedule {
 
             // Round-robin: pick from those with minimum play count for this position
             const minCount = Math.min(...eligible.map(p => getCount(p.name, pos)));
-            const candidates = eligible.filter(p => getCount(p.name, pos) === minCount);
+            let candidates = eligible.filter(p => getCount(p.name, pos) === minCount);
+
+            // Prefer players who were Off last inning (avoids consecutive Off)
+            const preferred = candidates.filter(p => wasOffLastInning(p.name));
+            if (preferred.length > 0) candidates = preferred;
 
             const chosen = candidates[Math.floor(Math.random() * candidates.length)]!;
             assignment[chosen.name] = pos;
@@ -63,12 +70,12 @@ function generateOneSchedule(players: Player[], numInnings: number): Schedule {
             incCount(chosen.name, pos);
         }
 
-        // Bench all remaining present players
+        // Assign Off to all remaining present players
         for (const p of present) {
             if (!assigned.has(p.name)) {
-                assignment[p.name] = 'Bench';
+                assignment[p.name] = 'Off';
                 assigned.add(p.name);
-                incCount(p.name, 'Bench');
+                incCount(p.name, 'Off');
             }
         }
 
@@ -79,20 +86,20 @@ function generateOneSchedule(players: Player[], numInnings: number): Schedule {
 }
 
 function scoreSoftCriteria(schedule: Schedule, players: Player[]): number {
-    // Penalty for consecutive same-intensity assignments
+    // Penalty for consecutive Off assignments
     let score = 0;
     const present = players.filter(p => p.here);
 
     for (const p of present) {
-        let prevHigh: boolean | null = null;
+        let prevOff = false;
         for (const inning of schedule) {
             const pos = inning[p.name];
             if (pos === undefined) continue;
-            const isHigh = HIGH_INTENSITY.has(pos);
-            if (prevHigh !== null && prevHigh === isHigh) {
+            const isOff = pos === 'Off';
+            if (prevOff && isOff) {
                 score++;
             }
-            prevHigh = isHigh;
+            prevOff = isOff;
         }
     }
 

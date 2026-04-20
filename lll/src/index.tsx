@@ -1,9 +1,9 @@
 import { render } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
-import { ALL_POSITIONS, FIELD_POSITIONS, HIGH_INTENSITY, generateBestSchedule } from './scheduler.js';
+import { ALL_POSITIONS, FIELD_POSITIONS, INFIELD_POSITIONS, OUTFIELD_POSITIONS, generateBestSchedule } from './scheduler.js';
 import type { Position, Player, Schedule } from './scheduler.js';
 
-const VERSION = '1.0.0';
+const VERSION = '2.0.0';
 const COMMIT_HASH = 'dev';
 const STORAGE_KEY = 'lll-config';
 const NUM_ATTEMPTS = 50;
@@ -13,6 +13,14 @@ interface StoredConfig {
     here: Record<string, boolean>;
     eligible: Record<string, Partial<Record<Position, boolean>>>;
     numInnings: number;
+}
+
+interface ShareData {
+    playersText?: string;
+    here?: Record<string, boolean>;
+    eligible?: Record<string, Partial<Record<Position, boolean>>>;
+    numInnings?: number;
+    schedule?: Schedule | null;
 }
 
 function parsePlayers(text: string): string[] {
@@ -30,10 +38,18 @@ function defaultEligible(): Record<Position, boolean> {
     return result;
 }
 
-function positionClass(pos: Position): string {
-    if (HIGH_INTENSITY.has(pos)) return 'pos-high';
-    if (pos === 'Bench') return 'pos-bench';
-    return 'pos-low';
+function buildEligibleMap(raw: Record<string, Partial<Record<Position, boolean>>>): Record<string, Record<Position, boolean>> {
+    const result: Record<string, Record<Position, boolean>> = {};
+    for (const [name, e] of Object.entries(raw)) {
+        const full = defaultEligible();
+        for (const pos of ALL_POSITIONS) {
+            if (e[pos] !== undefined) {
+                full[pos] = e[pos]!;
+            }
+        }
+        result[name] = full;
+    }
+    return result;
 }
 
 function Footer() {
@@ -57,9 +73,26 @@ function App() {
     const [eligibleMap, setEligibleMap] = useState<Record<string, Record<Position, boolean>>>({});
     const [numInnings, setNumInnings] = useState<number>(7);
     const [schedule, setSchedule] = useState<Schedule | null>(null);
+    const [shareCopied, setShareCopied] = useState(false);
 
-    // Load from localStorage on mount
+    // Load from URL or localStorage on mount
     useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const s = params.get('s');
+        if (s) {
+            try {
+                const data = JSON.parse(decodeURIComponent(atob(s))) as ShareData;
+                setPlayersText(data.playersText ?? '');
+                setHereMap(data.here ?? {});
+                setNumInnings(data.numInnings ?? 7);
+                setEligibleMap(buildEligibleMap(data.eligible ?? {}));
+                if (data.schedule) setSchedule(data.schedule);
+                return;
+            } catch {
+                // ignore, fall through to localStorage
+            }
+        }
+
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
             try {
@@ -67,18 +100,7 @@ function App() {
                 setPlayersText(config.playersText ?? '');
                 setHereMap(config.here ?? {});
                 setNumInnings(config.numInnings ?? 7);
-                // Rebuild eligibleMap with defaults for any missing positions
-                const newEligible: Record<string, Record<Position, boolean>> = {};
-                for (const [name, e] of Object.entries(config.eligible ?? {})) {
-                    const full = defaultEligible();
-                    for (const pos of ALL_POSITIONS) {
-                        if (e[pos] !== undefined) {
-                            full[pos] = e[pos]!;
-                        }
-                    }
-                    newEligible[name] = full;
-                }
-                setEligibleMap(newEligible);
+                setEligibleMap(buildEligibleMap(config.eligible ?? {}));
             } catch {
                 // ignore parse errors
             }
@@ -98,7 +120,6 @@ function App() {
 
     const playerNames = parsePlayers(playersText);
 
-    // Get or create config for a player
     function getHere(name: string): boolean {
         return hereMap[name] ?? true;
     }
@@ -137,6 +158,22 @@ function App() {
         setSchedule(result);
     }
 
+    function handleShare() {
+        const shareData: ShareData = {
+            playersText,
+            here: hereMap,
+            eligible: eligibleMap,
+            numInnings,
+            schedule,
+        };
+        const encoded = btoa(encodeURIComponent(JSON.stringify(shareData)));
+        const url = `${window.location.origin}${window.location.pathname}?s=${encodeURIComponent(encoded)}`;
+        window.history.replaceState(null, '', url);
+        navigator.clipboard?.writeText(url).catch(() => {});
+        setShareCopied(true);
+        setTimeout(() => setShareCopied(false), 2000);
+    }
+
     function handlePlayersTextChange(text: string) {
         setPlayersText(text);
         setSchedule(null);
@@ -155,7 +192,6 @@ function App() {
 
             <section class="section">
                 <h2>Roster</h2>
-                <p class="hint">Enter player names separated by commas, newlines, semicolons, or spaces.</p>
                 <textarea
                     value={playersText}
                     onInput={(e) => handlePlayersTextChange((e.target as HTMLTextAreaElement).value)}
@@ -175,7 +211,7 @@ function App() {
                                     <th class="col-here">Here</th>
                                     <th class="col-name">Player</th>
                                     {ALL_POSITIONS.map(pos => (
-                                        <th key={pos} class={`col-pos ${positionClass(pos)}-header`}>{pos}</th>
+                                        <th key={pos} class="col-pos">{pos}</th>
                                     ))}
                                 </tr>
                             </thead>
@@ -198,7 +234,6 @@ function App() {
                                                     checked={getEligible(name, pos)}
                                                     onChange={(e) => setEligible(name, pos, (e.target as HTMLInputElement).checked)}
                                                     aria-label={`${name} eligible for ${pos}`}
-                                                    disabled={!getHere(name)}
                                                 />
                                             </td>
                                         ))}
@@ -234,17 +269,19 @@ function App() {
 
             {schedule !== null && (
                 <section class="section">
-                    <h2>Lineup</h2>
-                    <div class="legend">
-                        <span class="legend-item pos-high">High intensity (P, C, 1B, 2B)</span>
-                        <span class="legend-item pos-low">Low intensity (3B, SS, LF, CF, RF)</span>
-                        <span class="legend-item pos-bench">Bench</span>
+                    <div class="lineup-header">
+                        <h2>Lineup</h2>
+                        <button class="btn-share" onClick={handleShare}>
+                            {shareCopied ? '✅ Copied!' : '🔗 Share'}
+                        </button>
                     </div>
                     <ScheduleTable
                         schedule={schedule}
                         players={buildPlayers().filter(p => p.here)}
                         numInnings={numInnings}
                     />
+                    <h3 class="transposed-heading">By Position</h3>
+                    <TransposedTable schedule={schedule} numInnings={numInnings} />
                 </section>
             )}
 
@@ -269,46 +306,82 @@ function ScheduleTable({ schedule, players, numInnings }: ScheduleTableProps) {
                     <tr>
                         <th class="col-name">Player</th>
                         {innings.map(i => (
-                            <th key={i} class="col-inning">Inn {i + 1}</th>
+                            <th key={i} class="col-inning">{i + 1}</th>
+                        ))}
+                        <th class="col-summary">IF</th>
+                        <th class="col-summary">OF</th>
+                        <th class="col-summary">Off</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {players.map(player => {
+                        let ifCount = 0, ofCount = 0, offCount = 0;
+                        for (const i of innings) {
+                            const pos = schedule[i]?.[player.name];
+                            if (pos === undefined) continue;
+                            if (INFIELD_POSITIONS.has(pos)) ifCount++;
+                            else if (OUTFIELD_POSITIONS.has(pos)) ofCount++;
+                            else if (pos === 'Off') offCount++;
+                        }
+                        return (
+                            <tr key={player.name}>
+                                <td class="col-name player-name">{player.name}</td>
+                                {innings.map(i => {
+                                    const inningData = schedule[i];
+                                    const pos: Position | undefined = inningData?.[player.name];
+                                    if (pos === undefined) {
+                                        return <td key={i} class="col-inning pos-empty">—</td>;
+                                    }
+                                    return (
+                                        <td key={i} class={`col-inning${pos === 'Off' ? ' pos-off' : ''}`}>
+                                            {pos}
+                                        </td>
+                                    );
+                                })}
+                                <td class="col-summary">{ifCount}</td>
+                                <td class="col-summary">{ofCount}</td>
+                                <td class="col-summary">{offCount}</td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
+        </div>
+    );
+}
+
+interface TransposedTableProps {
+    schedule: Schedule;
+    numInnings: number;
+}
+
+function TransposedTable({ schedule, numInnings }: TransposedTableProps) {
+    const innings = Array.from({ length: numInnings }, (_, i) => i);
+
+    return (
+        <div class="table-scroll">
+            <table class="schedule-table transposed-table">
+                <thead>
+                    <tr>
+                        <th class="col-name">Position</th>
+                        {innings.map(i => (
+                            <th key={i} class="col-inning">{i + 1}</th>
                         ))}
                     </tr>
                 </thead>
                 <tbody>
-                    {players.map(player => (
-                        <tr key={player.name}>
-                            <td class="col-name player-name">{player.name}</td>
+                    {FIELD_POSITIONS.map(pos => (
+                        <tr key={pos}>
+                            <td class="col-name player-name">{pos}</td>
                             {innings.map(i => {
                                 const inningData = schedule[i];
-                                const pos: Position | undefined = inningData?.[player.name];
-                                if (pos === undefined) {
-                                    return <td key={i} class="col-inning pos-empty">—</td>;
-                                }
-                                return (
-                                    <td key={i} class={`col-inning ${positionClass(pos)}`}>
-                                        {pos}
-                                    </td>
-                                );
+                                if (!inningData) return <td key={i} class="col-inning pos-empty">—</td>;
+                                const name = Object.entries(inningData).find(([, p]) => p === pos)?.[0];
+                                return <td key={i} class="col-inning">{name ?? <span class="pos-empty">—</span>}</td>;
                             })}
                         </tr>
                     ))}
                 </tbody>
-                <tfoot>
-                    <tr>
-                        <td class="col-name summary-label">Field</td>
-                        {innings.map(i => {
-                            const inningData = schedule[i];
-                            if (!inningData) return <td key={i} class="col-inning">—</td>;
-                            const fieldPlayers = Object.entries(inningData)
-                                .filter(([, pos]) => FIELD_POSITIONS.includes(pos as typeof FIELD_POSITIONS[number]))
-                                .map(([, pos]) => pos);
-                            return (
-                                <td key={i} class="col-inning summary-cell">
-                                    {fieldPlayers.length}/{Math.min(players.length, FIELD_POSITIONS.length)}
-                                </td>
-                            );
-                        })}
-                    </tr>
-                </tfoot>
             </table>
         </div>
     );

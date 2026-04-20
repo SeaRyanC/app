@@ -97,19 +97,11 @@ textarea {
 }
 
 /* Position column headers */
-.pos-high-header {
-    background: #fff3e0 !important;
-    color: #e65100;
-}
-
-.pos-low-header {
-    background: #e8f5e9 !important;
-    color: #2e7d32;
-}
-
+.pos-high-header,
+.pos-low-header,
 .pos-bench-header {
-    background: #f3f3f3 !important;
-    color: #555;
+    background: #f8f9fa;
+    color: #333;
 }
 
 /* Controls */
@@ -163,6 +155,41 @@ textarea {
     color: #c62828;
 }
 
+/* Lineup section header with share button */
+.lineup-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.lineup-header h2 {
+    margin: 0;
+}
+
+.btn-share {
+    padding: 5px 14px;
+    background: #00897b;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.btn-share:hover {
+    background: #00acc1;
+}
+
+.transposed-heading {
+    font-size: 1rem;
+    margin: 18px 0 8px 0;
+    color: #444;
+    font-weight: 600;
+}
+
 /* Schedule table */
 .schedule-table {
     border-collapse: collapse;
@@ -192,25 +219,21 @@ textarea {
 }
 
 /* Position cell colors */
-.pos-high {
-    background: #fff3e0;
-    color: #e65100;
-    font-weight: 600;
-}
-
-.pos-low {
-    background: #e8f5e9;
-    color: #2e7d32;
-    font-weight: 500;
-}
-
-.pos-bench {
+.pos-off {
     background: #f3f3f3;
     color: #666;
 }
 
 .pos-empty {
     color: #ccc;
+}
+
+/* Summary columns */
+.col-summary {
+    min-width: 36px;
+    background: #f0f4ff;
+    font-weight: 600;
+    font-size: 12px;
 }
 
 /* Summary footer row */
@@ -229,19 +252,9 @@ textarea {
     font-weight: 500;
 }
 
-/* Legend */
-.legend {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-bottom: 10px;
-    font-size: 12px;
-}
-
-.legend-item {
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-weight: 500;
+/* Transposed table spacing */
+.transposed-table {
+    margin-top: 4px;
 }
 
 /* Footer */
