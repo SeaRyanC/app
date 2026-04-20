@@ -27,6 +27,9 @@ A browser-based game scheduling tool for Little League baseball coaches. The too
   - A player does not repeat a position until every other eligible (present) player has played it at least once, including Off time
 - As a coach, the generated lineup tries to satisfy soft criteria:
   - Players avoid consecutive "Off" innings when possible
+  - All present players have approximately the same number of high-intensity (infield) innings — within 1 of each other (subject to eligibility)
+  - All present players have approximately the same number of low-intensity (outfield) innings — within 1 of each other (subject to eligibility)
+  - All present players have approximately equal bench (Off) innings — within 1 of each other
 - As a coach, the algorithm works left-to-right by inning so that if a game is cut short, all completed innings still satisfy the hard criteria
 - As a coach, the app generates multiple candidate schedules and returns the one that best meets the soft criteria
 
@@ -40,6 +43,8 @@ A browser-based game scheduling tool for Little League baseball coaches. The too
 - As a coach, I can click "Share" to encode the full lineup (roster, eligibility, inning count, and generated schedule) into a URL
 - As a coach, the share URL is copied to my clipboard and the browser address bar updates to the share link
 - As a coach, opening a share URL pre-loads the exact lineup that was shared, including the generated schedule
+- As a coach, I can click "Share Lineup" to encode only the output schedule into a compact URL that opens a read-only viewer
+- As a coach, opening a Share Lineup URL shows a clean view of both the player-inning table and the by-position table, with no roster or configuration UI
 
 ### Persistence
 - As a coach, all roster data, eligibility settings, and inning count are automatically saved to localStorage

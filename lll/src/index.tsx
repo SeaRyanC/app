@@ -3,7 +3,7 @@ import { useState, useEffect } from 'preact/hooks';
 import { ALL_POSITIONS, FIELD_POSITIONS, INFIELD_POSITIONS, OUTFIELD_POSITIONS, generateBestSchedule } from './scheduler.js';
 import type { Position, Player, Schedule } from './scheduler.js';
 
-const VERSION = '2.0.0';
+const VERSION = '2.1.0';
 const COMMIT_HASH = 'dev';
 const STORAGE_KEY = 'lll-config';
 const NUM_ATTEMPTS = 50;
@@ -21,6 +21,12 @@ interface ShareData {
     eligible?: Record<string, Partial<Record<Position, boolean>>>;
     numInnings?: number;
     schedule?: Schedule | null;
+}
+
+interface LineupViewData {
+    players: string[];
+    schedule: Schedule;
+    numInnings: number;
 }
 
 function parsePlayers(text: string): string[] {
@@ -174,6 +180,18 @@ function App() {
         setTimeout(() => setShareCopied(false), 2000);
     }
 
+    function handleShareLineup() {
+        const presentPlayers = buildPlayers().filter(p => p.here);
+        const viewData: LineupViewData = {
+            players: presentPlayers.map(p => p.name),
+            schedule: schedule!,
+            numInnings,
+        };
+        const encoded = btoa(encodeURIComponent(JSON.stringify(viewData)));
+        const url = `${window.location.origin}${window.location.pathname}?lineup=${encodeURIComponent(encoded)}`;
+        window.open(url, '_blank');
+    }
+
     function handlePlayersTextChange(text: string) {
         setPlayersText(text);
         setSchedule(null);
@@ -273,6 +291,9 @@ function App() {
                         <h2>Lineup</h2>
                         <button class="btn-share" onClick={handleShare}>
                             {shareCopied ? '✅ Copied!' : '🔗 Share'}
+                        </button>
+                        <button class="btn-share-lineup" onClick={handleShareLineup}>
+                            📋 Share Lineup
                         </button>
                     </div>
                     <ScheduleTable
@@ -387,7 +408,43 @@ function TransposedTable({ schedule, numInnings }: TransposedTableProps) {
     );
 }
 
+interface LineupViewerProps {
+    data: LineupViewData;
+}
+
+function LineupViewer({ data }: LineupViewerProps) {
+    const players: Player[] = data.players.map(name => ({
+        name,
+        here: true,
+        eligible: defaultEligible(),
+    }));
+
+    return (
+        <div class="container">
+            <h1>⚾ LLL — Little League Lineup</h1>
+            <section class="section">
+                <h2>Lineup</h2>
+                <ScheduleTable schedule={data.schedule} players={players} numInnings={data.numInnings} />
+                <h3 class="transposed-heading">By Position</h3>
+                <TransposedTable schedule={data.schedule} numInnings={data.numInnings} />
+            </section>
+            <Footer />
+        </div>
+    );
+}
+
 const appElement = document.getElementById('app');
 if (appElement) {
-    render(<App />, appElement);
+    const params = new URLSearchParams(window.location.search);
+    const lineupParam = params.get('lineup');
+    if (lineupParam) {
+        try {
+            const data = JSON.parse(decodeURIComponent(atob(lineupParam))) as LineupViewData;
+            render(<LineupViewer data={data} />, appElement);
+        } catch {
+            render(<App />, appElement);
+        }
+    } else {
+        render(<App />, appElement);
+    }
 }

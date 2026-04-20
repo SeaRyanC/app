@@ -31,13 +31,20 @@ function generateOneSchedule(players: Player[], numInnings: number): Schedule {
 
     // playCount[playerName][position] = times assigned
     const playCount = new Map<string, Map<Position, number>>();
+    // typeCount tracks high-intensity (infield) and low-intensity (outfield) per player
+    const infieldTypeCount = new Map<string, number>();
+    const outfieldTypeCount = new Map<string, number>();
     for (const p of present) {
         playCount.set(p.name, new Map());
+        infieldTypeCount.set(p.name, 0);
+        outfieldTypeCount.set(p.name, 0);
     }
 
     const getCount = (name: string, pos: Position) => playCount.get(name)!.get(pos) ?? 0;
     const incCount = (name: string, pos: Position) => {
         playCount.get(name)!.set(pos, getCount(name, pos) + 1);
+        if (INFIELD_POSITIONS.has(pos)) infieldTypeCount.set(name, (infieldTypeCount.get(name) ?? 0) + 1);
+        else if (OUTFIELD_POSITIONS.has(pos)) outfieldTypeCount.set(name, (outfieldTypeCount.get(name) ?? 0) + 1);
     };
 
     const schedule: Schedule = [];
@@ -59,6 +66,17 @@ function generateOneSchedule(players: Player[], numInnings: number): Schedule {
             // Round-robin: pick from those with minimum play count for this position
             const minCount = Math.min(...eligible.map(p => getCount(p.name, pos)));
             let candidates = eligible.filter(p => getCount(p.name, pos) === minCount);
+
+            // Type-balance tiebreaker: prefer players with fewest high/low-intensity innings
+            if (INFIELD_POSITIONS.has(pos)) {
+                const minIF = Math.min(...candidates.map(p => infieldTypeCount.get(p.name) ?? 0));
+                const balanced = candidates.filter(p => (infieldTypeCount.get(p.name) ?? 0) === minIF);
+                if (balanced.length > 0) candidates = balanced;
+            } else if (OUTFIELD_POSITIONS.has(pos)) {
+                const minOF = Math.min(...candidates.map(p => outfieldTypeCount.get(p.name) ?? 0));
+                const balanced = candidates.filter(p => (outfieldTypeCount.get(p.name) ?? 0) === minOF);
+                if (balanced.length > 0) candidates = balanced;
+            }
 
             // Prefer players who were Off last inning (avoids consecutive Off)
             const preferred = candidates.filter(p => wasOffLastInning(p.name));
@@ -85,22 +103,49 @@ function generateOneSchedule(players: Player[], numInnings: number): Schedule {
     return schedule;
 }
 
+function countSpreadPenalty(counts: number[]): number {
+    if (counts.length <= 1) return 0;
+    return Math.max(0, Math.max(...counts) - Math.min(...counts) - 1);
+}
+
 function scoreSoftCriteria(schedule: Schedule, players: Player[]): number {
-    // Penalty for consecutive Off assignments
     let score = 0;
     const present = players.filter(p => p.here);
 
+    // Penalty for consecutive Off assignments (low weight)
     for (const p of present) {
         let prevOff = false;
         for (const inning of schedule) {
             const pos = inning[p.name];
             if (pos === undefined) continue;
             const isOff = pos === 'Off';
-            if (prevOff && isOff) {
-                score++;
-            }
+            if (prevOff && isOff) score++;
             prevOff = isOff;
         }
+    }
+
+    // Penalty for imbalanced bench (Off) time — all players (high weight)
+    const benchCounts = present.map(p =>
+        schedule.reduce((n, inning) => n + (inning[p.name] === 'Off' ? 1 : 0), 0)
+    );
+    score += countSpreadPenalty(benchCounts) * 100;
+
+    // Penalty for imbalanced high-intensity (infield) time — only players eligible for >= 1 infield pos
+    const infieldEligible = present.filter(p => [...INFIELD_POSITIONS].some(pos => p.eligible[pos]));
+    if (infieldEligible.length > 1) {
+        const ifCounts = infieldEligible.map(p =>
+            schedule.reduce((n, inning) => n + (INFIELD_POSITIONS.has(inning[p.name]!) ? 1 : 0), 0)
+        );
+        score += countSpreadPenalty(ifCounts) * 100;
+    }
+
+    // Penalty for imbalanced low-intensity (outfield) time — only players eligible for >= 1 outfield pos
+    const outfieldEligible = present.filter(p => [...OUTFIELD_POSITIONS].some(pos => p.eligible[pos]));
+    if (outfieldEligible.length > 1) {
+        const ofCounts = outfieldEligible.map(p =>
+            schedule.reduce((n, inning) => n + (OUTFIELD_POSITIONS.has(inning[p.name]!) ? 1 : 0), 0)
+        );
+        score += countSpreadPenalty(ofCounts) * 100;
     }
 
     return score;
