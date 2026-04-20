@@ -47,6 +47,12 @@ function generateOneSchedule(players: Player[], numInnings: number): Schedule {
         else if (OUTFIELD_POSITIONS.has(pos)) outfieldTypeCount.set(name, (outfieldTypeCount.get(name) ?? 0) + 1);
     };
 
+    // Precompute the number of eligible field positions per player (used for consecutive-position constraint)
+    const eligibleFieldPosCount = new Map<string, number>();
+    for (const p of present) {
+        eligibleFieldPosCount.set(p.name, FIELD_POSITIONS.filter(fp => p.eligible[fp]).length);
+    }
+
     const schedule: Schedule = [];
 
     for (let inning = 0; inning < numInnings; inning++) {
@@ -59,8 +65,18 @@ function generateOneSchedule(players: Player[], numInnings: number): Schedule {
         const shuffledFieldPos = shuffle([...FIELD_POSITIONS]);
 
         for (const pos of shuffledFieldPos) {
-            // Find eligible, unassigned, present players for this position
-            const eligible = present.filter(p => !assigned.has(p.name) && p.eligible[pos]);
+            // Find eligible, unassigned, present players for this position.
+            // Hard constraint: a player cannot play the same field position in consecutive innings,
+            // unless they are only globally eligible for one field position.
+            let eligible = present.filter(p =>
+                !assigned.has(p.name) &&
+                p.eligible[pos] &&
+                (prevAssignment?.[p.name] !== pos || (eligibleFieldPosCount.get(p.name) ?? 0) <= 1)
+            );
+            // Fallback: if the hard constraint eliminates everyone, relax it
+            if (eligible.length === 0) {
+                eligible = present.filter(p => !assigned.has(p.name) && p.eligible[pos]);
+            }
             if (eligible.length === 0) continue;
 
             // Round-robin: pick from those with minimum play count for this position

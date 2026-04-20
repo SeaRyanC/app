@@ -3,7 +3,7 @@ import { useState, useEffect } from 'preact/hooks';
 import { ALL_POSITIONS, FIELD_POSITIONS, INFIELD_POSITIONS, OUTFIELD_POSITIONS, generateBestSchedule } from './scheduler.js';
 import type { Position, Player, Schedule } from './scheduler.js';
 
-const VERSION = '2.1.0';
+const VERSION = '2.2.0';
 const COMMIT_HASH = 'dev';
 const STORAGE_KEY = 'lll-config';
 const NUM_ATTEMPTS = 50;
