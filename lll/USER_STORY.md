@@ -25,6 +25,7 @@ A browser-based game scheduling tool for Little League baseball coaches. The too
 - As a coach, the generated lineup satisfies all hard criteria:
   - A player is never assigned a position they are not eligible for
   - A player does not repeat a position until every other eligible (present) player has played it at least once, including Off time
+  - A player is never assigned the same position in back-to-back innings, unless they are only globally eligible for one field position
 - As a coach, the generated lineup tries to satisfy soft criteria:
   - Players avoid consecutive "Off" innings when possible
   - All present players have approximately the same number of high-intensity (infield) innings — within 1 of each other (subject to eligibility)
