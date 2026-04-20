@@ -59,12 +59,17 @@ function encodeLineupCompact(data: LineupViewData): string {
 
 function decodeLineupCompact(encoded: string): LineupViewData {
     const compact = JSON.parse(decodeURIComponent(atob(encoded))) as CompactLineupData;
+    const expectedLen = compact.p.length * compact.n;
+    if (compact.s.length < expectedLen) {
+        throw new Error('Compact lineup data is truncated');
+    }
     const schedule: Schedule = [];
     for (let i = 0; i < compact.n; i++) {
         const assignment: InningAssignment = {};
         for (let j = 0; j < compact.p.length; j++) {
-            const ch = compact.s[i * compact.p.length + j] ?? '9';
-            const pos = CHAR_TO_POS[parseInt(ch, 10)];
+            const ch = compact.s[i * compact.p.length + j]!;
+            const idx = ch >= '0' && ch <= '9' ? parseInt(ch, 10) : 9;
+            const pos = CHAR_TO_POS[idx];
             if (pos !== undefined) {
                 assignment[compact.p[j]!] = pos;
             }
