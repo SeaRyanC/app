@@ -183,6 +183,22 @@ textarea {
     background: #00acc1;
 }
 
+.btn-share-lineup {
+    padding: 5px 14px;
+    background: #5c6bc0;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.btn-share-lineup:hover {
+    background: #7986cb;
+}
+
 .transposed-heading {
     font-size: 1rem;
     margin: 18px 0 8px 0;
