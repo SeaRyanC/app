@@ -199,6 +199,22 @@ textarea {
     background: #7986cb;
 }
 
+.btn-print {
+    padding: 5px 14px;
+    background: #e65100;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.btn-print:hover {
+    background: #ef6c00;
+}
+
 .transposed-heading {
     font-size: 1rem;
     margin: 18px 0 8px 0;

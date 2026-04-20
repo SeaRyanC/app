@@ -14,6 +14,15 @@ export default tseslint.config(
     },
   },
   {
+    files: ['src/**/*.js'],
+    languageOptions: {
+      globals: {
+        globalThis: 'readonly',
+        queueMicrotask: 'readonly',
+      },
+    },
+  },
+  {
     ignores: ['dist/**', 'node_modules/**'],
   }
 );
