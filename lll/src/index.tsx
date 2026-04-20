@@ -3,7 +3,7 @@ import { useState, useEffect } from 'preact/hooks';
 import { ALL_POSITIONS, FIELD_POSITIONS, INFIELD_POSITIONS, OUTFIELD_POSITIONS, generateBestSchedule } from './scheduler.js';
 import type { Position, Player, Schedule, InningAssignment } from './scheduler.js';
 
-const VERSION = '2.3.0';
+const VERSION = '2.4.0';
 const COMMIT_HASH = 'dev';
 const STORAGE_KEY = 'lll-config';
 const NUM_ATTEMPTS = 50;
@@ -79,6 +79,68 @@ function decodeLineupCompact(encoded: string): LineupViewData {
     return { players: compact.p, schedule, numInnings: compact.n };
 }
 
+// Roster share URL format (?r=...):
+// base64( JSON { p: string[], n: number, b: base64(binary bits) } )
+// binary bits: for each player (in p order): 1 bit here + 10 bits eligibility (ALL_POSITIONS order), MSB-first packing
+interface RosterShareCompact {
+    p: string[];
+    n: number;
+    b: string; // base64 of bit-packed Uint8Array
+}
+
+function encodeRosterBinary(
+    playerNames: string[],
+    hereMap: Record<string, boolean>,
+    eligibleMap: Record<string, Record<Position, boolean>>,
+    numInnings: number
+): string {
+    const totalBits = playerNames.length * 11; // 1 here + 10 positions
+    const bytes = new Uint8Array(Math.ceil(totalBits / 8));
+    let bitIdx = 0;
+    for (const name of playerNames) {
+        const byteIdx0 = bitIdx >> 3;
+        if (hereMap[name] ?? true) bytes[byteIdx0] = (bytes[byteIdx0] ?? 0) | (1 << (7 - (bitIdx & 7)));
+        bitIdx++;
+        for (const pos of ALL_POSITIONS) {
+            const byteIdx = bitIdx >> 3;
+            if (eligibleMap[name]?.[pos] ?? true) bytes[byteIdx] = (bytes[byteIdx] ?? 0) | (1 << (7 - (bitIdx & 7)));
+            bitIdx++;
+        }
+    }
+    let binaryStr = '';
+    for (let i = 0; i < bytes.length; i++) binaryStr += String.fromCharCode(bytes[i]!);
+    const compact: RosterShareCompact = { p: playerNames, n: numInnings, b: btoa(binaryStr) };
+    return btoa(encodeURIComponent(JSON.stringify(compact)));
+}
+
+interface DecodedRoster {
+    playersText: string;
+    hereMap: Record<string, boolean>;
+    eligibleMap: Record<string, Record<Position, boolean>>;
+    numInnings: number;
+}
+
+function decodeRosterBinary(encoded: string): DecodedRoster {
+    const compact = JSON.parse(decodeURIComponent(atob(encoded))) as RosterShareCompact;
+    const binaryStr = atob(compact.b);
+    const bytes = new Uint8Array(binaryStr.length);
+    for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
+    const hereMap: Record<string, boolean> = {};
+    const eligibleMap: Record<string, Record<Position, boolean>> = {};
+    let bitIdx = 0;
+    for (const name of compact.p) {
+        hereMap[name] = !!(bytes[bitIdx >> 3]! & (1 << (7 - (bitIdx & 7))));
+        bitIdx++;
+        const elig = defaultEligible();
+        for (const pos of ALL_POSITIONS) {
+            elig[pos] = !!(bytes[bitIdx >> 3]! & (1 << (7 - (bitIdx & 7))));
+            bitIdx++;
+        }
+        eligibleMap[name] = elig;
+    }
+    return { playersText: compact.p.join('\n'), hereMap, eligibleMap, numInnings: compact.n };
+}
+
 function parsePlayers(text: string): string[] {
     return text
         .split(/[\n,\t ;]+/)
@@ -129,11 +191,24 @@ function App() {
     const [eligibleMap, setEligibleMap] = useState<Record<string, Record<Position, boolean>>>({});
     const [numInnings, setNumInnings] = useState<number>(7);
     const [schedule, setSchedule] = useState<Schedule | null>(null);
-    const [shareCopied, setShareCopied] = useState(false);
+    const [rosterShareCopied, setRosterShareCopied] = useState(false);
 
     // Load from URL or localStorage on mount
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
+        const r = params.get('r');
+        if (r) {
+            try {
+                const data = decodeRosterBinary(r);
+                setPlayersText(data.playersText);
+                setHereMap(data.hereMap);
+                setNumInnings(data.numInnings);
+                setEligibleMap(data.eligibleMap);
+                return;
+            } catch {
+                // ignore, fall through to 's' param or localStorage
+            }
+        }
         const s = params.get('s');
         if (s) {
             try {
@@ -214,20 +289,13 @@ function App() {
         setSchedule(result);
     }
 
-    function handleShare() {
-        const shareData: ShareData = {
-            playersText,
-            here: hereMap,
-            eligible: eligibleMap,
-            numInnings,
-            schedule,
-        };
-        const encoded = btoa(encodeURIComponent(JSON.stringify(shareData)));
-        const url = `${window.location.origin}${window.location.pathname}?s=${encodeURIComponent(encoded)}`;
+    function handleShareRoster() {
+        const encoded = encodeRosterBinary(playerNames, hereMap, eligibleMap, numInnings);
+        const url = `${window.location.origin}${window.location.pathname}?r=${encodeURIComponent(encoded)}`;
         window.history.replaceState(null, '', url);
         navigator.clipboard?.writeText(url).catch(() => {});
-        setShareCopied(true);
-        setTimeout(() => setShareCopied(false), 2000);
+        setRosterShareCopied(true);
+        setTimeout(() => setRosterShareCopied(false), 2000);
     }
 
     function handleShareLineup() {
@@ -270,7 +338,12 @@ function App() {
 
             {playerNames.length > 0 && (
                 <section class="section">
-                    <h2>Position Eligibility</h2>
+                    <div class="lineup-header">
+                        <h2>Position Eligibility</h2>
+                        <button class="btn-share" onClick={handleShareRoster}>
+                            {rosterShareCopied ? '✅ Copied!' : '🔗 Share Roster'}
+                        </button>
+                    </div>
                     <p class="hint">Check each position a player is eligible to play. Uncheck to exclude a player from a position.</p>
                     <div class="table-scroll">
                         <table class="eligibility-table">
@@ -339,9 +412,6 @@ function App() {
                 <section class="section">
                     <div class="lineup-header">
                         <h2>Lineup</h2>
-                        <button class="btn-share" onClick={handleShare}>
-                            {shareCopied ? '✅ Copied!' : '🔗 Share'}
-                        </button>
                         <button class="btn-share-lineup" onClick={handleShareLineup}>
                             📋 Share Lineup
                         </button>
