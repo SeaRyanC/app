@@ -167,9 +167,9 @@ function App() {
             schedule,
         };
         const encoded = btoa(encodeURIComponent(JSON.stringify(shareData)));
-        const url = `${window.location.origin}${window.location.pathname}?s=${encoded}`;
+        const url = `${window.location.origin}${window.location.pathname}?s=${encodeURIComponent(encoded)}`;
         window.history.replaceState(null, '', url);
-        void navigator.clipboard?.writeText(url);
+        navigator.clipboard?.writeText(url).catch(() => {});
         setShareCopied(true);
         setTimeout(() => setShareCopied(false), 2000);
     }
