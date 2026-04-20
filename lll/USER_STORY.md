@@ -43,7 +43,7 @@ A browser-based game scheduling tool for Little League baseball coaches. The too
 - As a coach, I can click "Share" to encode the full lineup (roster, eligibility, inning count, and generated schedule) into a URL
 - As a coach, the share URL is copied to my clipboard and the browser address bar updates to the share link
 - As a coach, opening a share URL pre-loads the exact lineup that was shared, including the generated schedule
-- As a coach, I can click "Share Lineup" to encode only the output schedule into a compact URL that opens a read-only viewer
+- As a coach, I can click "Share Lineup" to encode only the output schedule into a compact URL that opens a read-only viewer; the URL uses a space-efficient encoding (player names stored once, schedule stored as a flat position-code string) so the link stays short even for large rosters and many innings
 - As a coach, opening a Share Lineup URL shows a clean view of both the player-inning table and the by-position table, with no roster or configuration UI
 
 ### Persistence

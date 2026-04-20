@@ -1,9 +1,9 @@
 import { render } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
 import { ALL_POSITIONS, FIELD_POSITIONS, INFIELD_POSITIONS, OUTFIELD_POSITIONS, generateBestSchedule } from './scheduler.js';
-import type { Position, Player, Schedule } from './scheduler.js';
+import type { Position, Player, Schedule, InningAssignment } from './scheduler.js';
 
-const VERSION = '2.1.0';
+const VERSION = '2.2.0';
 const COMMIT_HASH = 'dev';
 const STORAGE_KEY = 'lll-config';
 const NUM_ATTEMPTS = 50;
@@ -27,6 +27,51 @@ interface LineupViewData {
     players: string[];
     schedule: Schedule;
     numInnings: number;
+}
+
+// Compact lineup URL format:
+// { p: string[], n: number, s: string }
+// s is a flat string of length p.length * n; each char is the ALL_POSITIONS index
+// for player[j] in inning[i] at offset i * p.length + j.
+interface CompactLineupData {
+    p: string[];
+    n: number;
+    s: string;
+}
+
+const POS_TO_CHAR: Record<Position, string> = {
+    'P': '0', 'C': '1', '1B': '2', '2B': '3', '3B': '4',
+    'SS': '5', 'LF': '6', 'CF': '7', 'RF': '8', 'Off': '9',
+};
+const CHAR_TO_POS: Position[] = ['P', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'Off'];
+
+function encodeLineupCompact(data: LineupViewData): string {
+    const chars: string[] = [];
+    for (let i = 0; i < data.numInnings; i++) {
+        for (const player of data.players) {
+            const pos = data.schedule[i]?.[player] ?? 'Off';
+            chars.push(POS_TO_CHAR[pos]);
+        }
+    }
+    const compact: CompactLineupData = { p: data.players, n: data.numInnings, s: chars.join('') };
+    return btoa(encodeURIComponent(JSON.stringify(compact)));
+}
+
+function decodeLineupCompact(encoded: string): LineupViewData {
+    const compact = JSON.parse(decodeURIComponent(atob(encoded))) as CompactLineupData;
+    const schedule: Schedule = [];
+    for (let i = 0; i < compact.n; i++) {
+        const assignment: InningAssignment = {};
+        for (let j = 0; j < compact.p.length; j++) {
+            const ch = compact.s[i * compact.p.length + j] ?? '9';
+            const pos = CHAR_TO_POS[parseInt(ch, 10)];
+            if (pos !== undefined) {
+                assignment[compact.p[j]!] = pos;
+            }
+        }
+        schedule.push(assignment);
+    }
+    return { players: compact.p, schedule, numInnings: compact.n };
 }
 
 function parsePlayers(text: string): string[] {
@@ -187,7 +232,7 @@ function App() {
             schedule: schedule!,
             numInnings,
         };
-        const encoded = btoa(encodeURIComponent(JSON.stringify(viewData)));
+        const encoded = encodeLineupCompact(viewData);
         const url = `${window.location.origin}${window.location.pathname}?lineup=${encodeURIComponent(encoded)}`;
         window.open(url, '_blank');
     }
@@ -439,7 +484,13 @@ if (appElement) {
     const lineupParam = params.get('lineup');
     if (lineupParam) {
         try {
-            const data = JSON.parse(decodeURIComponent(atob(lineupParam))) as LineupViewData;
+            // Try compact format first; fall back to legacy JSON format
+            let data: LineupViewData;
+            try {
+                data = decodeLineupCompact(lineupParam);
+            } catch {
+                data = JSON.parse(decodeURIComponent(atob(lineupParam))) as LineupViewData;
+            }
             render(<LineupViewer data={data} />, appElement);
         } catch {
             render(<App />, appElement);
