@@ -30,6 +30,7 @@
 - Empty cells are filled with random letters following an **English letter frequency distribution** (more Es and Ts, fewer Qs and Zs).
 - The grid is guaranteed **not to contain any swear words or inappropriate language** in any row, column, or diagonal reading direction.
 - Words from the pool that contain banned substrings (e.g. DONUT contains NUT) are automatically excluded from selection.
+- **Grid generation always succeeds.** If the initial grid size cannot accommodate all words, the algorithm automatically retries with progressively larger grids (increasing by 1 each round) until placement succeeds. Users will never see a generation failure.
 
 ## PDF Output
 - The user can select **US Letter** or **A4** paper size.

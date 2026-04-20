@@ -5,7 +5,7 @@ import { generatePDF } from './pdf';
 import type { Grid, Difficulty } from './grid';
 import type { PaperSize } from './pdf';
 
-const VERSION = '1.2.0';
+const VERSION = '1.3.0';
 const COMMIT_HASH = 'dev';
 
 const WORD_COUNT_OPTIONS = [6, 8, 10, 12, 15, 20, 25];
@@ -113,10 +113,6 @@ export function App() {
     if (grid) {
       setPreviewGrid(grid);
       setPreviewWords(grid.placedWords.map(pw => pw.word));
-    } else {
-      setPreviewGrid(null);
-      setPreviewWords([]);
-      setError('Could not generate a valid grid. Try fewer words or a different theme.');
     }
   }, [theme, wordCount, difficulty]);
 
@@ -140,13 +136,10 @@ export function App() {
         const grid = i === 0 && previewGrid
           ? previewGrid
           : generateGrid(words, difficulty);
-        if (!grid) {
-          setError(`Failed to generate puzzle ${i + 1}. Try fewer words.`);
-          setBusy(false);
-          return;
+        if (grid) {
+          for (const pw of grid.placedWords) usedWords.add(pw.word);
+          grids.push(grid);
         }
-        for (const pw of grid.placedWords) usedWords.add(pw.word);
-        grids.push(grid);
       }
 
       const themeLabel = theme === 'Random' ? 'Word Search' : `${theme} Word Search`;
