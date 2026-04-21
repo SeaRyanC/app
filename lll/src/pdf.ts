@@ -13,7 +13,7 @@ import { FIELD_POSITIONS, INFIELD_POSITIONS, OUTFIELD_POSITIONS } from './schedu
 // US Letter landscape: 11 × 8.5 inches at 72 pt/in
 const PAGE_WIDTH = 792;
 const PAGE_HEIGHT = 612;
-const MARGIN = 36;
+const MARGIN = 72;
 const USABLE_W = PAGE_WIDTH - MARGIN * 2;
 const USABLE_H = PAGE_HEIGHT - MARGIN * 2;
 
@@ -50,14 +50,7 @@ function generateLineupPDF(data: LineupPDFData): Promise<Blob> {
             // ── Page 1: Player × Inning ──────────────────────────────────────────
             doc.addPage({ size: [PAGE_WIDTH, PAGE_HEIGHT], margin: MARGIN });
 
-            doc.fontSize(14).font('Helvetica-Bold');
-            doc.text('⚾ Little League Lineup — By Player', MARGIN, MARGIN, {
-                width: USABLE_W,
-                align: 'center',
-            });
-
-            const titleH = 22;
-            const tableTop = MARGIN + titleH + 4;
+            const tableTop = MARGIN;
 
             // Column layout:  playerName | inn1 … innN | IF | OF | Off
             const summaryColW = 28;
@@ -104,15 +97,7 @@ function generateLineupPDF(data: LineupPDFData): Promise<Blob> {
                 drawCell(doc, player, MARGIN, y, nameColW, rowH, 'left');
                 for (const i of innings) {
                     const pos = schedule[i]?.[player] ?? '—';
-                    const isOff = pos === 'Off';
-                    if (isOff) {
-                        doc.rect(colX(i + 1), y, innColW, rowH).fillColor('#f0f0f0').fill();
-                        doc.fillColor('#888888');
-                        drawCell(doc, pos, colX(i + 1), y, innColW, rowH, 'center');
-                        doc.fillColor('#111111');
-                    } else {
-                        drawCell(doc, pos, colX(i + 1), y, innColW, rowH, 'center');
-                    }
+                    drawCell(doc, pos, colX(i + 1), y, innColW, rowH, 'center');
                 }
                 doc.fillColor('#333366');
                 drawCell(doc, String(ifCount), summaryX(0), y, summaryColW, rowH, 'center');
@@ -124,13 +109,7 @@ function generateLineupPDF(data: LineupPDFData): Promise<Blob> {
             // ── Page 2: Position × Inning ────────────────────────────────────────
             doc.addPage({ size: [PAGE_WIDTH, PAGE_HEIGHT], margin: MARGIN });
 
-            doc.fontSize(14).font('Helvetica-Bold').fillColor('#111111');
-            doc.text('⚾ Little League Lineup — By Position', MARGIN, MARGIN, {
-                width: USABLE_W,
-                align: 'center',
-            });
-
-            const tableTop2 = MARGIN + titleH + 4;
+            const tableTop2 = MARGIN;
             const posColW = Math.min(50, USABLE_W * 0.08);
             const innColW2 = (USABLE_W - posColW) / numInnings;
             const rowCount2 = FIELD_POSITIONS.length + 1;
