@@ -36,7 +36,7 @@ A browser-based game scheduling tool for Little League baseball coaches. The too
   - Pitchers should preferentially also receive an Off inning immediately before they pitch
   - Players avoid consecutive "Off" innings when possible
 - As a coach, the algorithm works left-to-right by inning so that if a game is cut short, all completed innings still satisfy the hard criteria
-- As a coach, the app generates as many candidate schedules as possible within 400 ms and returns the one that best meets the soft criteria
+- As a coach, the app generates as many candidate schedules as possible within 200 ms and returns the one that best meets the soft criteria
 
 ### Schedule Display
 - As a coach, I can view the generated schedule as a table with players as rows and innings as columns
@@ -45,14 +45,15 @@ A browser-based game scheduling tool for Little League baseball coaches. The too
 - As a coach, I can click "Generate Lineup" again to produce a new random schedule
 
 ### Print
-- As a coach, I can click "Print" next to Share Lineup to generate a two-page US Letter landscape PDF of the current lineup
+- As a coach, I can click the printer icon button next to "Lineup" to generate a two-page US Letter landscape PDF of the current lineup
 - The first page shows the player-inning table (with IF/OF/Off summary columns); the second page shows the by-position table
 - The PDF opens in a new browser tab, ready to print or save
+- All cells in the PDF are formatted uniformly; "Off" cells are not visually distinguished
 
 ### Sharing
 - As a coach, I can click "Share Roster" (shown in the Position Eligibility section header) to encode my roster configuration — player names, here/absent status, position eligibility, and inning count — into a compact URL using a binary bit-packed representation of position eligibility (11 bits per player: 1 here bit + 10 eligibility bits). The URL is copied to my clipboard and the browser address bar is updated.
 - As a coach, opening a Share Roster URL pre-loads the exact roster configuration that was shared, ready for lineup generation.
-- As a coach, I can click "Share Lineup" to encode only the output schedule into a compact URL that opens a read-only viewer; the URL uses a space-efficient encoding (player names stored once, schedule stored as a flat position-code string) so the link stays short even for large rosters and many innings.
+- As a coach, I can click the share icon button next to "Lineup" to encode only the output schedule into a compact URL that opens a read-only viewer; the URL uses a space-efficient encoding (player names stored once, schedule stored as a flat position-code string) so the link stays short even for large rosters and many innings.
 - As a coach, opening a Share Lineup URL shows a clean view of both the player-inning table and the by-position table, with no roster or configuration UI.
 
 ### Persistence

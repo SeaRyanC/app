@@ -216,7 +216,7 @@ function scoreSoftCriteria(schedule: Schedule, players: Player[], numInnings: nu
 export function generateBestSchedule(
     players: Player[],
     numInnings: number,
-    budgetMs = 400
+    budgetMs = 200
 ): Schedule | null {
     const present = players.filter(p => p.here);
     if (present.length === 0) return null;

@@ -4,7 +4,7 @@ import { ALL_POSITIONS, FIELD_POSITIONS, INFIELD_POSITIONS, OUTFIELD_POSITIONS, 
 import type { Position, Player, Schedule, InningAssignment } from './scheduler.js';
 import { printLineupPDF } from './pdf.js';
 
-const VERSION = '3.0.0';
+const VERSION = '3.1.0';
 const COMMIT_HASH = 'dev';
 const STORAGE_KEY = 'lll-config';
 
@@ -421,11 +421,11 @@ function App() {
                 <section class="section">
                     <div class="lineup-header">
                         <h2>Lineup</h2>
-                        <button class="btn-share-lineup" onClick={handleShareLineup}>
-                            📋 Share Lineup
+                        <button class="btn-icon" onClick={handleShareLineup} title="Share Lineup">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11A2.993 2.993 0 0 0 18 8a3 3 0 1 0-3-3c0 .24.04.47.09.7L8.04 9.81A3 3 0 0 0 6 9a3 3 0 0 0 0 6 2.993 2.993 0 0 0 1.96-.77l7.13 4.15c-.05.21-.09.43-.09.65a3 3 0 1 0 3-2.95z"/></svg>
                         </button>
-                        <button class="btn-print" onClick={handlePrint}>
-                            🖨️ Print
+                        <button class="btn-icon" onClick={handlePrint} title="Print / PDF">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
                         </button>
                     </div>
                     <ScheduleTable
