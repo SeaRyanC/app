@@ -124,7 +124,7 @@ function countSpreadPenalty(counts: number[]): number {
     return Math.max(0, Math.max(...counts) - Math.min(...counts) - 1);
 }
 
-function scoreSoftCriteria(schedule: Schedule, players: Player[]): number {
+function scoreSoftCriteria(schedule: Schedule, players: Player[], numInnings: number): number {
     let score = 0;
     const present = players.filter(p => p.here);
 
@@ -164,29 +164,76 @@ function scoreSoftCriteria(schedule: Schedule, players: Player[]): number {
         score += countSpreadPenalty(ofCounts) * 100;
     }
 
+    // Penalty for Off innings that are clustered rather than spread out
+    for (const p of present) {
+        const offInnings: number[] = [];
+        for (let i = 0; i < numInnings; i++) {
+            if (schedule[i]?.[p.name] === 'Off') offInnings.push(i);
+        }
+        if (offInnings.length >= 2) {
+            const idealGap = (numInnings - 1) / (offInnings.length - 1);
+            for (let i = 1; i < offInnings.length; i++) {
+                const gap = offInnings[i]! - offInnings[i - 1]!;
+                if (gap < idealGap) score += Math.round((idealGap - gap) * 5);
+            }
+        }
+    }
+
+    // Penalty for Off innings not adjacent to a high-intensity (infield) inning
+    for (const p of present) {
+        for (let i = 0; i < numInnings; i++) {
+            if (schedule[i]?.[p.name] !== 'Off') continue;
+            const prevPos = i > 0 ? schedule[i - 1]?.[p.name] : undefined;
+            const nextPos = i < numInnings - 1 ? schedule[i + 1]?.[p.name] : undefined;
+            const prevInfield = prevPos !== undefined && INFIELD_POSITIONS.has(prevPos);
+            const nextInfield = nextPos !== undefined && INFIELD_POSITIONS.has(nextPos);
+            if (!prevInfield && !nextInfield) score += 5;
+        }
+    }
+
+    // Triple-weight penalty: Pitchers and catchers should always have an adjacent Off inning
+    for (const p of present) {
+        for (let i = 0; i < numInnings; i++) {
+            const pos = schedule[i]?.[p.name];
+            if (pos !== 'P' && pos !== 'C') continue;
+            const prevOff = i > 0 && schedule[i - 1]?.[p.name] === 'Off';
+            const nextOff = i < numInnings - 1 && schedule[i + 1]?.[p.name] === 'Off';
+            if (!prevOff && !nextOff) score += 15;
+        }
+    }
+
+    // Extra penalty: Pitchers should preferentially have an Off inning BEFORE they pitch
+    for (const p of present) {
+        for (let i = 1; i < numInnings; i++) {
+            if (schedule[i]?.[p.name] !== 'P') continue;
+            if (schedule[i - 1]?.[p.name] !== 'Off') score += 10;
+        }
+    }
+
     return score;
 }
 
 export function generateBestSchedule(
     players: Player[],
     numInnings: number,
-    attempts = 50
+    budgetMs = 400
 ): Schedule | null {
     const present = players.filter(p => p.here);
     if (present.length === 0) return null;
 
     let best: Schedule | null = null;
     let bestScore = Infinity;
+    const deadline = Date.now() + budgetMs;
 
-    for (let i = 0; i < attempts; i++) {
+    do {
         const schedule = generateOneSchedule(players, numInnings);
-        const score = scoreSoftCriteria(schedule, players);
+        const score = scoreSoftCriteria(schedule, players, numInnings);
         if (score < bestScore) {
             bestScore = score;
             best = schedule;
         }
         if (bestScore === 0) break; // Perfect score, no need to try more
-    }
+    } while (Date.now() < deadline);
 
     return best;
 }

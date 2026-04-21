@@ -2,11 +2,11 @@ import { render } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
 import { ALL_POSITIONS, FIELD_POSITIONS, INFIELD_POSITIONS, OUTFIELD_POSITIONS, generateBestSchedule } from './scheduler.js';
 import type { Position, Player, Schedule, InningAssignment } from './scheduler.js';
+import { printLineupPDF } from './pdf.js';
 
-const VERSION = '2.4.0';
+const VERSION = '3.0.0';
 const COMMIT_HASH = 'dev';
 const STORAGE_KEY = 'lll-config';
-const NUM_ATTEMPTS = 50;
 
 interface StoredConfig {
     playersText: string;
@@ -285,7 +285,7 @@ function App() {
 
     function handleGenerate() {
         const players = buildPlayers();
-        const result = generateBestSchedule(players, numInnings, NUM_ATTEMPTS);
+        const result = generateBestSchedule(players, numInnings);
         setSchedule(result);
     }
 
@@ -308,6 +308,15 @@ function App() {
         const encoded = encodeLineupCompact(viewData);
         const url = `${window.location.origin}${window.location.pathname}?lineup=${encodeURIComponent(encoded)}`;
         window.open(url, '_blank');
+    }
+
+    function handlePrint() {
+        const presentPlayers = buildPlayers().filter(p => p.here);
+        printLineupPDF({
+            players: presentPlayers.map(p => p.name),
+            schedule: schedule!,
+            numInnings,
+        });
     }
 
     function handlePlayersTextChange(text: string) {
@@ -414,6 +423,9 @@ function App() {
                         <h2>Lineup</h2>
                         <button class="btn-share-lineup" onClick={handleShareLineup}>
                             📋 Share Lineup
+                        </button>
+                        <button class="btn-print" onClick={handlePrint}>
+                            🖨️ Print
                         </button>
                     </div>
                     <ScheduleTable

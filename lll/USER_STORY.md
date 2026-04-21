@@ -26,19 +26,28 @@ A browser-based game scheduling tool for Little League baseball coaches. The too
   - A player is never assigned a position they are not eligible for
   - A player does not repeat a position until every other eligible (present) player has played it at least once, including Off time
   - A player is never assigned the same position in back-to-back innings, unless they are only globally eligible for one field position
-- As a coach, the generated lineup tries to satisfy soft criteria:
-  - Players avoid consecutive "Off" innings when possible
+- As a coach, the generated lineup tries to satisfy soft criteria (in priority order, none may override hard criteria):
+  - All present players have approximately equal bench (Off) innings — within 1 of each other
   - All present players have approximately the same number of high-intensity (infield) innings — within 1 of each other (subject to eligibility)
   - All present players have approximately the same number of low-intensity (outfield) innings — within 1 of each other (subject to eligibility)
-  - All present players have approximately equal bench (Off) innings — within 1 of each other
+  - Each player's Off innings are spaced as far apart as possible throughout the game
+  - Each player's Off innings are adjacent (before or after) a high-intensity (infield) inning when possible
+  - Pitchers (P) and catchers (C) should always have an Off inning immediately before or after their high-intensity stint
+  - Pitchers should preferentially also receive an Off inning immediately before they pitch
+  - Players avoid consecutive "Off" innings when possible
 - As a coach, the algorithm works left-to-right by inning so that if a game is cut short, all completed innings still satisfy the hard criteria
-- As a coach, the app generates multiple candidate schedules and returns the one that best meets the soft criteria
+- As a coach, the app generates as many candidate schedules as possible within 400 ms and returns the one that best meets the soft criteria
 
 ### Schedule Display
 - As a coach, I can view the generated schedule as a table with players as rows and innings as columns
 - As a coach, each row includes summary counts: IF (infield innings), OF (outfield innings), and Off innings
 - As a coach, a second "By Position" table shows positions as rows and innings as columns, so I can quickly see who plays where each inning
 - As a coach, I can click "Generate Lineup" again to produce a new random schedule
+
+### Print
+- As a coach, I can click "Print" next to Share Lineup to generate a two-page US Letter landscape PDF of the current lineup
+- The first page shows the player-inning table (with IF/OF/Off summary columns); the second page shows the by-position table
+- The PDF opens in a new browser tab, ready to print or save
 
 ### Sharing
 - As a coach, I can click "Share Roster" (shown in the Position Eligibility section header) to encode my roster configuration — player names, here/absent status, position eligibility, and inning count — into a compact URL using a binary bit-packed representation of position eligibility (11 bits per player: 1 here bit + 10 eligibility bits). The URL is copied to my clipboard and the browser address bar is updated.
