@@ -23,9 +23,11 @@ A browser-based game scheduling tool for Little League baseball coaches. The too
 ### Lineup Generation
 - As a coach, I can click "Generate Lineup" to produce a randomized schedule for all innings
 - As a coach, the generated lineup satisfies all hard criteria:
-  - A player is never assigned a position they are not eligible for
+  - **All infield slots are always filled** (P, C, 1B, 2B, 3B, SS), especially Pitcher — this is the highest-priority constraint and overrides all others. If no eligible unassigned player is available for an infield slot after relaxing the consecutive-position constraint, any remaining unassigned player is used regardless of their listed eligibility.
+  - Infield slots (and pitcher first among them) are assigned before outfield slots, so they always have first pick of available players
+  - A player is never assigned a position they are not eligible for (relaxed only as a last resort to fill infield slots, as above)
   - A player does not repeat a position until every other eligible (present) player has played it at least once, including Off time
-  - A player is never assigned the same position in back-to-back innings, unless they are only globally eligible for one field position
+  - A player is never assigned the same position in back-to-back innings, unless they are only globally eligible for one field position (relaxed before eligibility as a fallback for infield)
 - As a coach, the generated lineup tries to satisfy soft criteria (in priority order, none may override hard criteria):
   - All present players have approximately equal bench (Off) innings — within 1 of each other
   - All present players have approximately the same number of high-intensity (infield) innings — within 1 of each other (subject to eligibility)
