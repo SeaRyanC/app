@@ -61,10 +61,14 @@ function generateOneSchedule(players: Player[], numInnings: number): Schedule {
         const prevAssignment = schedule.length > 0 ? schedule[schedule.length - 1] : null;
         const wasOffLastInning = (name: string) => prevAssignment?.[name] === 'Off';
 
-        // Shuffle field positions for randomness
-        const shuffledFieldPos = shuffle([...FIELD_POSITIONS]);
+        // Process P first (mandatory), then shuffled remaining infield, then shuffled outfield.
+        // This guarantees infield slots — especially pitcher — always get first pick of available
+        // players, so they are never left unfilled due to outfield positions "stealing" candidates.
+        const remainingInfield = shuffle(([...INFIELD_POSITIONS] as Position[]).filter(p => p !== 'P'));
+        const shuffledOutfield = shuffle([...OUTFIELD_POSITIONS] as Position[]);
+        const orderedFieldPos: Position[] = ['P', ...remainingInfield, ...shuffledOutfield];
 
-        for (const pos of shuffledFieldPos) {
+        for (const pos of orderedFieldPos) {
             // Find eligible, unassigned, present players for this position.
             // Hard constraint: a player cannot play the same field position in consecutive innings,
             // unless they are only globally eligible for one field position.
@@ -73,9 +77,14 @@ function generateOneSchedule(players: Player[], numInnings: number): Schedule {
                 p.eligible[pos] &&
                 (prevAssignment?.[p.name] !== pos || (eligibleFieldPosCount.get(p.name) ?? 0) <= 1)
             );
-            // Fallback: if the hard constraint eliminates everyone, relax it
+            // Fallback 1: if the consecutive constraint eliminates everyone, relax it
             if (eligible.length === 0) {
                 eligible = present.filter(p => !assigned.has(p.name) && p.eligible[pos]);
+            }
+            // Fallback 2 (infield only): mandatory fill — if still no eligible player is available,
+            // use any unassigned player regardless of eligibility. This overrides all prior constraints.
+            if (eligible.length === 0 && INFIELD_POSITIONS.has(pos)) {
+                eligible = present.filter(p => !assigned.has(p.name));
             }
             if (eligible.length === 0) continue;
 
