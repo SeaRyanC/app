@@ -42,17 +42,23 @@ const BANNED_WORDS: string[] = [
   "TORTURE", "TORTURES",
   "SUFFER", "SUFFERS",
   // Death
-  "DEAD", "DYING",
+  "DEAD", "DEATH", "DEATHS", "DYING",
   "SUICIDE", "SUICIDES",
   "GRAVE", "GRAVES",
-  // Terror & discrimination
-  "TERROR", "TERRORIST", "TERRORISM",
+  "DROWN", "DROWNS",
+  "NOOSE", "COFFIN",
+  // Hate & discrimination
+  "HATE", "HATES", "HATRED",
   "RACIST", "RACISM",
   // Drugs & alcohol
   "NUT", "NUTS", "DRUG", "DRUGS",
+  "HEROIN",
   "METH",
   "COCAINE",
   "BOOZE",
+  "ABUSE", "ABUSES",
+  // Profanity (additional)
+  "BASTARD", "BASTARDS",
   // Other negative
   "EVIL",
 ];
@@ -377,8 +383,7 @@ export function generateGrid(words: string[], difficulty: Difficulty = 'expert')
 /**
  * Pick N random words from a pool, ensuring they fit the grid.
  * Filters out words that are too long for a sensible grid, and
- * words that contain a banned substring (or whose banned word is
- * a substring of them), e.g. DONUT contains NUT.
+ * words that contain a banned substring, e.g. DONUT contains NUT.
  *
  * @param exclude  Optional set of words to skip (e.g. words already used in
  *                 earlier puzzles). When the pool minus exclusions is too
@@ -391,7 +396,7 @@ export function pickWords(pool: string[], count: number, exclude?: Set<string>):
     if (w.length < 3 || w.length > maxLen) return false;
     const upper = w.toUpperCase();
     for (const bad of BANNED_WORDS) {
-      if (upper.includes(bad) || bad.includes(upper)) return false;
+      if (upper.includes(bad)) return false;
     }
     return true;
   });
