@@ -10,6 +10,7 @@
 // ── Swear-word filter ──────────────────────────────────────────────────────────
 
 const BANNED_WORDS: string[] = [
+  // Profanity
   "ASS", "ASSES", "DAMN", "DAMNS", "HELL", "HELLS",
   "SHIT", "SHITS", "PISS", "PISSED", "FUCK", "FUCKS",
   "CRAP", "CRAPS", "DICK", "DICKS", "COCK", "COCKS",
@@ -17,9 +18,43 @@ const BANNED_WORDS: string[] = [
   "TIT", "TITS", "FAG", "FAGS", "BUTT", "BUTTS",
   "BOOB", "BOOBS", "POOP", "POOPS", "PEE", "PEES",
   "ARSE", "ARSES", "WANK", "WANKS", "TWAT", "TWATS",
+  "PRICK", "PRICKS",
+  // Sexual content
   "NUDE", "NUDES", "PORN", "SEX", "SEXY", "SUCK",
-  "SUCKS", "NUT", "NUTS", "KILL", "KILLS", "DRUG",
-  "DRUGS", "ANAL", "RAPE", "RAPES",
+  "SUCKS", "ANAL", "RAPE", "RAPES", "LUST", "LUSTS",
+  // Violence & harm
+  "KILL", "KILLS", "KILLER", "KILLERS",
+  "MURDER", "MURDERS",
+  "STAB", "STABS",
+  "SHOOT", "SHOOTS",
+  "BOMB", "BOMBS",
+  "GUN", "GUNS",
+  "GORE", "GORY",
+  "BLOOD", "BLOODY",
+  "BLEED", "BLEEDS",
+  "WOUND", "WOUNDS",
+  "MAIM", "MAIMS",
+  "SLAY", "SLAYS",
+  "HARM", "HARMS",
+  "CORPSE", "CORPSES",
+  "MASSACRE", "MASSACRES",
+  "SLAUGHTER", "SLAUGHTERS",
+  "TORTURE", "TORTURES",
+  "SUFFER", "SUFFERS",
+  // Death
+  "DEAD", "DYING",
+  "SUICIDE", "SUICIDES",
+  "GRAVE", "GRAVES",
+  // Terror & discrimination
+  "TERROR", "TERRORIST", "TERRORISM",
+  "RACIST", "RACISM",
+  // Drugs & alcohol
+  "NUT", "NUTS", "DRUG", "DRUGS",
+  "METH",
+  "COCAINE",
+  "BOOZE",
+  // Other negative
+  "EVIL",
 ];
 
 // ── English letter frequencies ─────────────────────────────────────────────────

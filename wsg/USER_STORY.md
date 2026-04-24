@@ -30,6 +30,7 @@
 - Empty cells are filled with random letters following an **English letter frequency distribution** (more Es and Ts, fewer Qs and Zs).
 - The grid is guaranteed **not to contain any swear words or inappropriate language** in any row, column, or diagonal reading direction.
 - Words from the pool that contain banned substrings (e.g. DONUT contains NUT) are automatically excluded from selection.
+- The banned word list covers profanity, sexual content, violence and harm (KILL, MURDER, GORE, BLOOD, BOMB, GUN, STAB, SHOOT, CORPSE, MASSACRE, SLAUGHTER, TORTURE, WOUND, BLEED, MAIM, SLAY, HARM, SUFFER), death (DEAD, DYING, SUICIDE, GRAVE), terror and discrimination (TERROR, TERRORIST, RACIST, RACISM), drugs and alcohol (DRUG, METH, COCAINE, BOOZE), and other high-valence negative words (EVIL, LUST) — ensuring all generated content is suitable for children.
 - **Grid generation always succeeds.** If the initial grid size cannot accommodate all words, the algorithm automatically retries with progressively larger grids (increasing by 1 each round) until placement succeeds. Users will never see a generation failure.
 
 ## PDF Output
