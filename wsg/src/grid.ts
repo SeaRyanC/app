@@ -9,7 +9,38 @@
 
 // ── Swear-word filter ──────────────────────────────────────────────────────────
 
-const BANNED_WORDS: string[] = [
+/** ROT13 decode: rotates each uppercase letter by 13 positions. */
+function rot13(s: string): string {
+  return s.replace(/[A-Z]/g, c => String.fromCharCode(((c.charCodeAt(0) - 65 + 13) % 26) + 65));
+}
+
+/**
+ * Severe slurs stored ROT13-encoded so that offensive words don't appear as
+ * readable plaintext in source.  They are decoded once at module load time and
+ * merged into BANNED_WORDS below.
+ */
+const BANNED_SLURS: readonly string[] = [
+  // Anti-Black racial slurs
+  "AVTTRE", "AVTTN", "PBBA", "WVTNOBB", "FNZOB", "FCNQR",
+  // Anti-Jewish slurs
+  "XVXR",
+  // Anti-Hispanic / Latino slurs
+  "FCVP", "ORNARE", "JRGONPX",
+  // Anti-Asian slurs
+  "PUVAX", "TBBX", "FYBCR", "CNXV", "WNC",
+  // Anti-Arab / Muslim slurs
+  "ENTURNQ", "GBJRYURNQ",
+  // Anti-white slurs
+  "UBAXL", "PENPXRE",
+  // LGBTQ+ slurs
+  "SNTTBG", "QLXR", "GENAAL",
+  // Ableist slurs
+  "ERGNEQ",
+  // Other ethnic slurs
+  "QNTB", "JBT",
+].map(rot13);
+
+const BANNED_WORDS: readonly string[] = [
   // Profanity
   "ASS", "ASSES", "DAMN", "DAMNS", "HELL", "HELLS",
   "SHIT", "SHITS", "PISS", "PISSED", "FUCK", "FUCKS",
@@ -61,6 +92,8 @@ const BANNED_WORDS: string[] = [
   "BASTARD", "BASTARDS",
   // Other negative
   "EVIL",
+  // Slurs (ROT13-decoded at module load)
+  ...BANNED_SLURS,
 ];
 
 // ── English letter frequencies ─────────────────────────────────────────────────
