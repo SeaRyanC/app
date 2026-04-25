@@ -50,6 +50,7 @@ const BANNED_WORDS: string[] = [
   // Hate & discrimination
   "HATE", "HATES", "HATRED",
   "RACIST", "RACISM",
+  "IGGER", // catches the N-word and variants without spelling it out
   // Drugs & alcohol
   "NUT", "NUTS", "DRUG", "DRUGS",
   "HEROIN",
