@@ -27,7 +27,7 @@ const BANNED_SLURS: readonly string[] = [
   // Anti-Hispanic / Latino slurs
   "FCVP", "ORNARE", "JRGONPX",
   // Anti-Asian slurs
-  "PUVAX", "TBBX", "FYBCR", "CNXV",
+  "PUVAX", "TBBX", "FYBCR", "CNXV", "WNC",
   // Anti-Arab / Muslim slurs
   "ENTURNQ", "GBJRYURNQ",
   // Anti-white slurs
