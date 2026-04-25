@@ -37,7 +37,7 @@ const BANNED_SLURS: readonly string[] = [
   // Ableist slurs
   "ERGNEQ",
   // Other ethnic slurs
-  "QNTB", "WBT",
+  "QNTB", "JBT",
 ].map(rot13);
 
 const BANNED_WORDS: readonly string[] = [
