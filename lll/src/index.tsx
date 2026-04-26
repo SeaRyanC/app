@@ -1,6 +1,6 @@
 import { render } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
-import { ALL_POSITIONS, FIELD_POSITIONS, INFIELD_POSITIONS, OUTFIELD_POSITIONS, OFF_POSITIONS, generateBestSchedule } from './scheduler.js';
+import { ALL_POSITIONS, FIELD_POSITIONS, INFIELD_POSITIONS, OUTFIELD_POSITIONS, generateBestSchedule } from './scheduler.js';
 import type { Position, Player, Schedule, InningAssignment } from './scheduler.js';
 import { printLineupPDF } from './pdf.js';
 
@@ -41,9 +41,9 @@ interface CompactLineupData {
 
 const POS_TO_CHAR: Record<Position, string> = {
     'P': '0', 'C': '1', '1B': '2', '2B': '3', '3B': '4',
-    'SS': '5', 'OF': '6', 'Off 1': '7', 'Off 2': '8', 'Off 3': '9',
+    'SS': '5', 'OF': '6', 'Off': '7',
 };
-const CHAR_TO_POS: Position[] = ['P', 'C', '1B', '2B', '3B', 'SS', 'OF', 'Off 1', 'Off 2', 'Off 3'];
+const CHAR_TO_POS: Position[] = ['P', 'C', '1B', '2B', '3B', 'SS', 'OF', 'Off'];
 
 function encodeLineupCompact(data: LineupViewData): string {
     const chars: string[] = [];
@@ -81,7 +81,7 @@ function decodeLineupCompact(encoded: string): LineupViewData {
 
 // Roster share URL format (?r=...):
 // base64( JSON { p: string[], n: number, b: base64(binary bits) } )
-// binary bits: for each player (in p order): 1 bit here + 10 bits eligibility (ALL_POSITIONS order), MSB-first packing
+// binary bits: for each player (in p order): 1 bit here + 8 bits eligibility (ALL_POSITIONS order), MSB-first packing
 interface RosterShareCompact {
     p: string[];
     n: number;
@@ -94,7 +94,7 @@ function encodeRosterBinary(
     eligibleMap: Record<string, Record<Position, boolean>>,
     numInnings: number
 ): string {
-    const totalBits = playerNames.length * 11; // 1 here + 10 positions
+    const totalBits = playerNames.length * (1 + ALL_POSITIONS.length); // 1 here + 8 positions
     const bytes = new Uint8Array(Math.ceil(totalBits / 8));
     let bitIdx = 0;
     for (const name of playerNames) {
@@ -498,7 +498,7 @@ function ScheduleTable({ schedule, battingOrder, numInnings }: ScheduleTableProp
                             if (pos === undefined) continue;
                             if (INFIELD_POSITIONS.has(pos)) ifCount++;
                             else if (OUTFIELD_POSITIONS.has(pos)) ofCount++;
-                            else if (OFF_POSITIONS.includes(pos)) offCount++;
+                            else if (pos === 'Off') offCount++;
                         }
                         return (
                             <tr key={name}>
@@ -510,9 +510,8 @@ function ScheduleTable({ schedule, battingOrder, numInnings }: ScheduleTableProp
                                     if (pos === undefined) {
                                         return <td key={i} class="col-inning pos-empty">—</td>;
                                     }
-                                    const isOff = OFF_POSITIONS.includes(pos);
                                     return (
-                                        <td key={i} class={`col-inning${isOff ? ' pos-off' : ''}`}>
+                                        <td key={i} class={`col-inning${pos === 'Off' ? ' pos-off' : ''}`}>
                                             {pos}
                                         </td>
                                     );
@@ -534,8 +533,8 @@ interface TransposedTableProps {
     numInnings: number;
 }
 
-// All rows to show in the By Position table: infield, OF, then bench slots
-const TRANSPOSED_ROWS: Position[] = [...(FIELD_POSITIONS as Position[]), ...OFF_POSITIONS];
+// All rows to show in the By Position table: field positions then Off bench
+const TRANSPOSED_ROWS: Position[] = [...(FIELD_POSITIONS as Position[]), 'Off'];
 
 function TransposedTable({ schedule, numInnings }: TransposedTableProps) {
     const innings = Array.from({ length: numInnings }, (_, i) => i);
@@ -553,12 +552,12 @@ function TransposedTable({ schedule, numInnings }: TransposedTableProps) {
                 </thead>
                 <tbody>
                     {TRANSPOSED_ROWS.map(pos => (
-                        <tr key={pos} class={OFF_POSITIONS.includes(pos) ? 'off-row' : ''}>
+                        <tr key={pos}>
                             <td class="col-name player-name">{pos}</td>
                             {innings.map(i => {
                                 const inningData = schedule[i];
                                 if (!inningData) return <td key={i} class="col-inning pos-empty">—</td>;
-                                // OF can have multiple players; all others have at most one
+                                // OF and Off can have multiple players; infield positions have at most one
                                 const names = Object.entries(inningData)
                                     .filter(([, p]) => p === pos)
                                     .map(([n]) => n);
@@ -566,7 +565,7 @@ function TransposedTable({ schedule, numInnings }: TransposedTableProps) {
                                     return <td key={i} class="col-inning"><span class="pos-empty">—</span></td>;
                                 }
                                 return (
-                                    <td key={i} class={`col-inning${OFF_POSITIONS.includes(pos) ? ' pos-off' : ''}`}>
+                                    <td key={i} class={`col-inning${pos === 'Off' ? ' pos-off' : ''}`}>
                                         {names.join(', ')}
                                     </td>
                                 );

@@ -2,13 +2,13 @@
  * PDF generation for the Little League Lineup.
  * Produces a two-page landscape US Letter PDF:
  *   Page 1 — Player × Inning table (with IF/OF/Off summary columns)
- *   Page 2 — Position × Inning table (infield, OF, Off 1/2/3)
+ *   Page 2 — Position × Inning table (infield, OF, Off)
  */
 
 import PDFDocument from 'pdfkit-browserify';
 import blobStream from 'blob-stream';
 import type { Schedule } from './scheduler.js';
-import { FIELD_POSITIONS, INFIELD_POSITIONS, OUTFIELD_POSITIONS, OFF_POSITIONS } from './scheduler.js';
+import { FIELD_POSITIONS, INFIELD_POSITIONS, OUTFIELD_POSITIONS } from './scheduler.js';
 
 // US Letter landscape: 11 × 8.5 inches at 72 pt/in
 const PAGE_WIDTH = 792;
@@ -91,7 +91,7 @@ function generateLineupPDF(data: LineupPDFData): Promise<Blob> {
                     const pos = schedule[i]?.[player];
                     if (pos && INFIELD_POSITIONS.has(pos)) ifCount++;
                     else if (pos && OUTFIELD_POSITIONS.has(pos)) ofCount++;
-                    else if (pos && OFF_POSITIONS.includes(pos)) offCount++;
+                    else if (pos && pos === 'Off') offCount++;
                 }
 
                 doc.fillColor('#111111');
@@ -111,8 +111,8 @@ function generateLineupPDF(data: LineupPDFData): Promise<Blob> {
             // ── Page 2: Position × Inning ────────────────────────────────────────
             doc.addPage({ size: [PAGE_WIDTH, PAGE_HEIGHT], margin: MARGIN });
 
-            // Rows: all field positions + Off 1/2/3
-            const posRows = [...FIELD_POSITIONS, ...OFF_POSITIONS];
+            // Rows: all field positions + Off bench
+            const posRows = [...FIELD_POSITIONS, 'Off' as const];
             const tableTop2 = MARGIN;
             const posColW = Math.min(50, USABLE_W * 0.08);
             const innColW2 = (USABLE_W - posColW) / numInnings;

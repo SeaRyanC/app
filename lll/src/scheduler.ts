@@ -1,17 +1,12 @@
-export type Position = 'P' | 'C' | '1B' | '2B' | '3B' | 'SS' | 'OF' | 'Off 1' | 'Off 2' | 'Off 3';
+export type Position = 'P' | 'C' | '1B' | '2B' | '3B' | 'SS' | 'OF' | 'Off';
 
-export const ALL_POSITIONS: Position[] = ['P', 'C', '1B', '2B', '3B', 'SS', 'OF', 'Off 1', 'Off 2', 'Off 3'];
+export const ALL_POSITIONS: Position[] = ['P', 'C', '1B', '2B', '3B', 'SS', 'OF', 'Off'];
 export const FIELD_POSITIONS: Position[] = ['P', 'C', '1B', '2B', '3B', 'SS', 'OF'];
 export const INFIELD_POSITIONS = new Set<Position>(['P', 'C', '1B', '2B', '3B', 'SS']);
 export const OUTFIELD_POSITIONS = new Set<Position>(['OF']);
-export const OFF_POSITIONS: Position[] = ['Off 1', 'Off 2', 'Off 3'];
 
-// Maximum number of players that can fill each position in a single inning
-export const POSITION_CAPACITY: Record<Position, number> = {
-    'P': 1, 'C': 1, '1B': 1, '2B': 1, '3B': 1, 'SS': 1,
-    'OF': 3,
-    'Off 1': 1, 'Off 2': 1, 'Off 3': 1,
-};
+// OF holds up to 3 players per inning; all other field positions hold exactly 1.
+const OF_CAPACITY = 3;
 
 export interface Player {
     name: string;
@@ -66,9 +61,7 @@ function generateOneSchedule(players: Player[], numInnings: number): OneResult {
     for (let inning = 0; inning < numInnings; inning++) {
         const assignment: InningAssignment = {};
         const assigned = new Set<string>();
-        const posCount = new Map<Position, number>();
-        const getPosCount = (pos: Position) => posCount.get(pos) ?? 0;
-        const hasCapacity = (pos: Position) => getPosCount(pos) < POSITION_CAPACITY[pos];
+        let ofFilled = 0;
 
         // Step 1: Fill all infield positions (mandatory hard constraint).
         // Shuffle the infield positions so no single slot always has priority for player choice.
@@ -91,44 +84,32 @@ function generateOneSchedule(players: Player[], numInnings: number): OneResult {
             const chosen = minCandidates[Math.floor(Math.random() * minCandidates.length)]!;
             assignment[chosen.name] = pos;
             assigned.add(chosen.name);
-            posCount.set(pos, 1);
             incCount(chosen.name, pos);
         }
 
         // Step 2: Fill OF (capacity 3) from unassigned players eligible for OF.
         // Round-robin: pick the eligible player(s) with fewest OF innings first.
         const ofPool = battingOrder.filter(p => !assigned.has(p.name) && p.eligible['OF']);
-        while (hasCapacity('OF') && ofPool.length > 0) {
+        while (ofFilled < OF_CAPACITY && ofPool.length > 0) {
             const minCount = Math.min(...ofPool.map(p => getCount(p.name, 'OF')));
             const minCandidates = ofPool.filter(p => getCount(p.name, 'OF') === minCount);
             const chosen = minCandidates[Math.floor(Math.random() * minCandidates.length)]!;
             assignment[chosen.name] = 'OF';
             assigned.add(chosen.name);
-            posCount.set('OF', getPosCount('OF') + 1);
+            ofFilled++;
             incCount(chosen.name, 'OF');
             ofPool.splice(ofPool.indexOf(chosen), 1);
         }
 
-        // Step 3: Remaining players sit out — assign to Off 1 / Off 2 / Off 3.
+        // Step 3: All remaining players sit out (Off).
         // No one reaches this step if they had any eligible field position available
-        // (steps 1 and 2 exhaust all field slots before reaching here).
-        const remaining = battingOrder.filter(p => !assigned.has(p.name));
-        for (const player of remaining) {
-            const offOptions = OFF_POSITIONS.filter(pos => player.eligible[pos] && hasCapacity(pos));
-            if (offOptions.length === 0) {
-                return {
-                    ok: false,
-                    failureMessage: `Failed to find a bench slot for ${player.name} in inning ${inning + 1}`,
-                };
+        // (steps 1 and 2 exhaust all field capacity before reaching here).
+        for (const player of battingOrder) {
+            if (!assigned.has(player.name)) {
+                assignment[player.name] = 'Off';
+                assigned.add(player.name);
+                incCount(player.name, 'Off');
             }
-            // Round-robin: prefer the Off slot this player has sat out fewest times
-            const minCount = Math.min(...offOptions.map(pos => getCount(player.name, pos)));
-            const minCandidates = offOptions.filter(pos => getCount(player.name, pos) === minCount);
-            const chosen = minCandidates[Math.floor(Math.random() * minCandidates.length)]!;
-            assignment[player.name] = chosen;
-            assigned.add(player.name);
-            posCount.set(chosen, getPosCount(chosen) + 1);
-            incCount(player.name, chosen);
         }
 
         schedule.push(assignment);
