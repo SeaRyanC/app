@@ -32,10 +32,10 @@ A browser-based game scheduling tool for Little League baseball coaches. The too
   - A player does not repeat a position until every other eligible (present) player has played it at least once — round-robin resets naturally when all eligible players reach the same play count
   - Players with Off eligibility only bench when all their eligible field positions (infield + OF) are already filled for that inning — no one sits out unnecessarily
   - Players eligible for constrained roles (P, 1B, etc.) naturally receive fewer Off innings because they are needed on the field more often
-- As a coach, the generated lineup tries to satisfy soft criteria to pick the best schedule among all candidates:
-  - **Minimize consecutive high-intensity (infield) innings** for the same player
-  - **Minimize consecutive low-intensity (OF) innings** for the same player
-  - When multiple schedules tie on this score, one is chosen at random
+- As a coach, the generated lineup tries to satisfy soft criteria to pick the best schedule among all candidates, evaluated in priority order:
+  1. **Balanced Off innings** — schedules where every player's Off-inning count differs by at most 1 (e.g. everyone has 0 or 1, 1 or 2, 2 or 3 Off innings) beat all schedules where the Off counts are more uneven. This is the highest-priority soft criterion.
+  2. **Minimize consecutive same-intensity innings** — among schedules with equally balanced Off innings, prefer fewer pairs of back-to-back high-intensity (infield) innings or back-to-back low-intensity (OF) innings for any player.
+  - When multiple schedules tie on both criteria, one is chosen at random
 - As a coach, if no valid schedule can be generated within the time budget, the most common failure reason is shown (e.g. "Failed to find a player for P in inning 3")
 - As a coach, the algorithm works left-to-right by inning so that if a game is cut short, all completed innings still satisfy the hard criteria
 - As a coach, the app generates as many candidate schedules as possible within 200 ms and returns the best one

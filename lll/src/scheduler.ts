@@ -118,7 +118,17 @@ function generateOneSchedule(players: Player[], numInnings: number): OneResult {
     return { ok: true, schedule, battingOrder: battingOrder.map(p => p.name) };
 }
 
-function scoreSoftCriteria(schedule: Schedule, battingOrder: string[], numInnings: number): number {
+// Returns true when all present players' Off-inning counts are within 1 of each other
+// (i.e. max - min <= 1), meaning everyone gets "0 or 1", "1 or 2", "2 or 3", etc.
+function isOffBalanced(schedule: Schedule, battingOrder: string[]): boolean {
+    if (battingOrder.length === 0) return true;
+    const offCounts = battingOrder.map(name =>
+        schedule.reduce((n, inning) => n + (inning[name] === 'Off' ? 1 : 0), 0)
+    );
+    return Math.max(...offCounts) - Math.min(...offCounts) <= 1;
+}
+
+function scoreAdjacency(schedule: Schedule, battingOrder: string[], numInnings: number): number {
     let score = 0;
     // Penalise adjacent innings of the same intensity for each player:
     //   +1 per pair of consecutive high-intensity (infield) innings
@@ -143,7 +153,11 @@ export function generateBestSchedule(
     const present = players.filter(p => p.here);
     if (present.length === 0) return null;
 
-    let bestScore = Infinity;
+    // Primary criterion (higher priority): Off-innings are balanced across all players
+    //   (max Off count − min Off count ≤ 1).  A balanced schedule beats any unbalanced one.
+    // Secondary criterion: fewest consecutive same-intensity innings (adjacency score).
+    let bestOffBalanced = false;
+    let bestAdjacency = Infinity;
     let tiedCount = 0;
     let best: { schedule: Schedule; battingOrder: string[] } | null = null;
     const failureCounts = new Map<string, number>();
@@ -154,19 +168,28 @@ export function generateBestSchedule(
         if (!result.ok) {
             failureCounts.set(result.failureMessage, (failureCounts.get(result.failureMessage) ?? 0) + 1);
         } else {
-            const score = scoreSoftCriteria(result.schedule, result.battingOrder, numInnings);
-            if (score < bestScore) {
-                bestScore = score;
+            const offBalanced = isOffBalanced(result.schedule, result.battingOrder);
+            const adjacency = scoreAdjacency(result.schedule, result.battingOrder, numInnings);
+
+            // Lexicographic comparison: offBalanced first (true > false), then lower adjacency wins.
+            const newIsBetter =
+                (!bestOffBalanced && offBalanced) ||
+                (offBalanced === bestOffBalanced && adjacency < bestAdjacency);
+            const newIsTied = offBalanced === bestOffBalanced && adjacency === bestAdjacency;
+
+            if (newIsBetter) {
+                bestOffBalanced = offBalanced;
+                bestAdjacency = adjacency;
                 best = result;
                 tiedCount = 1;
-            } else if (score === bestScore) {
+            } else if (newIsTied) {
                 tiedCount++;
                 // Reservoir sampling: uniformly pick among all tied-best results
                 if (Math.random() < 1 / tiedCount) {
                     best = result;
                 }
             }
-            if (bestScore === 0) break;
+            if (bestOffBalanced && bestAdjacency === 0) break;
         }
     } while (Date.now() < deadline);
 
