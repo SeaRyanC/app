@@ -4,7 +4,7 @@ import { ALL_POSITIONS, FIELD_POSITIONS, INFIELD_POSITIONS, OUTFIELD_POSITIONS, 
 import type { Position, Player, Schedule, InningAssignment } from './scheduler.js';
 import { printLineupPDF } from './pdf.js';
 
-const VERSION = '3.3.0';
+const VERSION = '4.0.0';
 const COMMIT_HASH = 'dev';
 const STORAGE_KEY = 'lll-config';
 
@@ -41,9 +41,9 @@ interface CompactLineupData {
 
 const POS_TO_CHAR: Record<Position, string> = {
     'P': '0', 'C': '1', '1B': '2', '2B': '3', '3B': '4',
-    'SS': '5', 'LF': '6', 'CF': '7', 'RF': '8', 'Off': '9',
+    'SS': '5', 'OF': '6', 'Off': '7',
 };
-const CHAR_TO_POS: Position[] = ['P', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'Off'];
+const CHAR_TO_POS: Position[] = ['P', 'C', '1B', '2B', '3B', 'SS', 'OF', 'Off'];
 
 function encodeLineupCompact(data: LineupViewData): string {
     const chars: string[] = [];
@@ -81,7 +81,7 @@ function decodeLineupCompact(encoded: string): LineupViewData {
 
 // Roster share URL format (?r=...):
 // base64( JSON { p: string[], n: number, b: base64(binary bits) } )
-// binary bits: for each player (in p order): 1 bit here + 10 bits eligibility (ALL_POSITIONS order), MSB-first packing
+// binary bits: for each player (in p order): 1 bit here + 8 bits eligibility (ALL_POSITIONS order), MSB-first packing
 interface RosterShareCompact {
     p: string[];
     n: number;
@@ -94,7 +94,7 @@ function encodeRosterBinary(
     eligibleMap: Record<string, Record<Position, boolean>>,
     numInnings: number
 ): string {
-    const totalBits = playerNames.length * 11; // 1 here + 10 positions
+    const totalBits = playerNames.length * (1 + ALL_POSITIONS.length); // 1 here + 8 positions
     const bytes = new Uint8Array(Math.ceil(totalBits / 8));
     let bitIdx = 0;
     for (const name of playerNames) {
@@ -191,6 +191,8 @@ function App() {
     const [eligibleMap, setEligibleMap] = useState<Record<string, Record<Position, boolean>>>({});
     const [numInnings, setNumInnings] = useState<number>(7);
     const [schedule, setSchedule] = useState<Schedule | null>(null);
+    const [battingOrder, setBattingOrder] = useState<string[]>([]);
+    const [failureMessage, setFailureMessage] = useState<string | undefined>(undefined);
     const [rosterShareCopied, setRosterShareCopied] = useState(false);
 
     // Load from URL or localStorage on mount
@@ -262,6 +264,8 @@ function App() {
     function setHere(name: string, value: boolean) {
         setHereMap(prev => ({ ...prev, [name]: value }));
         setSchedule(null);
+        setBattingOrder([]);
+        setFailureMessage(undefined);
     }
 
     function setEligible(name: string, pos: Position, value: boolean) {
@@ -270,6 +274,8 @@ function App() {
             return { ...prev, [name]: { ...existing, [pos]: value } };
         });
         setSchedule(null);
+        setBattingOrder([]);
+        setFailureMessage(undefined);
     }
 
     function buildPlayers(): Player[] {
@@ -286,7 +292,15 @@ function App() {
     function handleGenerate() {
         const players = buildPlayers();
         const result = generateBestSchedule(players, numInnings);
-        setSchedule(result);
+        if (result === null) {
+            setSchedule(null);
+            setBattingOrder([]);
+            setFailureMessage(undefined);
+        } else {
+            setSchedule(result.schedule.length > 0 ? result.schedule : null);
+            setBattingOrder(result.battingOrder);
+            setFailureMessage(result.failureMessage);
+        }
     }
 
     function handleShareRoster() {
@@ -299,9 +313,8 @@ function App() {
     }
 
     function handleShareLineup() {
-        const presentPlayers = buildPlayers().filter(p => p.here);
         const viewData: LineupViewData = {
-            players: presentPlayers.map(p => p.name),
+            players: battingOrder,
             schedule: schedule!,
             numInnings,
         };
@@ -311,9 +324,8 @@ function App() {
     }
 
     function handlePrint() {
-        const presentPlayers = buildPlayers().filter(p => p.here);
         printLineupPDF({
-            players: presentPlayers.map(p => p.name),
+            players: battingOrder,
             schedule: schedule!,
             numInnings,
         });
@@ -322,11 +334,15 @@ function App() {
     function handlePlayersTextChange(text: string) {
         setPlayersText(text);
         setSchedule(null);
+        setBattingOrder([]);
+        setFailureMessage(undefined);
     }
 
     function handleNumInningsChange(val: number) {
         setNumInnings(val);
         setSchedule(null);
+        setBattingOrder([]);
+        setFailureMessage(undefined);
     }
 
     const presentPlayers = playerNames.filter(n => getHere(n));
@@ -417,24 +433,31 @@ function App() {
                 </section>
             )}
 
-            {schedule !== null && (
+            {(schedule !== null || failureMessage) && (
                 <section class="section">
                     <div class="lineup-header">
                         <h2>Lineup</h2>
-                        <button class="btn-icon" onClick={handleShareLineup} title="Share Lineup">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11A2.993 2.993 0 0 0 18 8a3 3 0 1 0-3-3c0 .24.04.47.09.7L8.04 9.81A3 3 0 0 0 6 9a3 3 0 0 0 0 6 2.993 2.993 0 0 0 1.96-.77l7.13 4.15c-.05.21-.09.43-.09.65a3 3 0 1 0 3-2.95z"/></svg>
-                        </button>
-                        <button class="btn-icon" onClick={handlePrint} title="Print / PDF">
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
-                        </button>
+                        {schedule !== null && <>
+                            <button class="btn-icon" onClick={handleShareLineup} title="Share Lineup">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11A2.993 2.993 0 0 0 18 8a3 3 0 1 0-3-3c0 .24.04.47.09.7L8.04 9.81A3 3 0 0 0 6 9a3 3 0 0 0 0 6 2.993 2.993 0 0 0 1.96-.77l7.13 4.15c-.05.21-.09.43-.09.65a3 3 0 1 0 3-2.95z"/></svg>
+                            </button>
+                            <button class="btn-icon" onClick={handlePrint} title="Print / PDF">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+                            </button>
+                        </>}
                     </div>
-                    <ScheduleTable
-                        schedule={schedule}
-                        players={buildPlayers().filter(p => p.here)}
-                        numInnings={numInnings}
-                    />
-                    <h3 class="transposed-heading">By Position</h3>
-                    <TransposedTable schedule={schedule} numInnings={numInnings} />
+                    {failureMessage && (
+                        <p class="warning">⚠️ {failureMessage}</p>
+                    )}
+                    {schedule !== null && <>
+                        <ScheduleTable
+                            schedule={schedule}
+                            battingOrder={battingOrder}
+                            numInnings={numInnings}
+                        />
+                        <h3 class="transposed-heading">By Position</h3>
+                        <TransposedTable schedule={schedule} numInnings={numInnings} />
+                    </>}
                 </section>
             )}
 
@@ -445,11 +468,11 @@ function App() {
 
 interface ScheduleTableProps {
     schedule: Schedule;
-    players: Player[];
+    battingOrder: string[];
     numInnings: number;
 }
 
-function ScheduleTable({ schedule, players, numInnings }: ScheduleTableProps) {
+function ScheduleTable({ schedule, battingOrder, numInnings }: ScheduleTableProps) {
     const innings = Array.from({ length: numInnings }, (_, i) => i);
 
     return (
@@ -457,6 +480,7 @@ function ScheduleTable({ schedule, players, numInnings }: ScheduleTableProps) {
             <table class="schedule-table">
                 <thead>
                     <tr>
+                        <th class="col-bat">#</th>
                         <th class="col-name">Player</th>
                         {innings.map(i => (
                             <th key={i} class="col-inning">{i + 1}</th>
@@ -467,21 +491,22 @@ function ScheduleTable({ schedule, players, numInnings }: ScheduleTableProps) {
                     </tr>
                 </thead>
                 <tbody>
-                    {players.map(player => {
+                    {battingOrder.map((name, idx) => {
                         let ifCount = 0, ofCount = 0, offCount = 0;
                         for (const i of innings) {
-                            const pos = schedule[i]?.[player.name];
+                            const pos = schedule[i]?.[name];
                             if (pos === undefined) continue;
                             if (INFIELD_POSITIONS.has(pos)) ifCount++;
                             else if (OUTFIELD_POSITIONS.has(pos)) ofCount++;
                             else if (pos === 'Off') offCount++;
                         }
                         return (
-                            <tr key={player.name}>
-                                <td class="col-name player-name">{player.name}</td>
+                            <tr key={name}>
+                                <td class="col-bat">{idx + 1}</td>
+                                <td class="col-name player-name">{name}</td>
                                 {innings.map(i => {
                                     const inningData = schedule[i];
-                                    const pos: Position | undefined = inningData?.[player.name];
+                                    const pos: Position | undefined = inningData?.[name];
                                     if (pos === undefined) {
                                         return <td key={i} class="col-inning pos-empty">—</td>;
                                     }
@@ -508,6 +533,9 @@ interface TransposedTableProps {
     numInnings: number;
 }
 
+// All rows to show in the By Position table: field positions then Off bench
+const TRANSPOSED_ROWS: Position[] = [...(FIELD_POSITIONS as Position[]), 'Off'];
+
 function TransposedTable({ schedule, numInnings }: TransposedTableProps) {
     const innings = Array.from({ length: numInnings }, (_, i) => i);
 
@@ -523,14 +551,24 @@ function TransposedTable({ schedule, numInnings }: TransposedTableProps) {
                     </tr>
                 </thead>
                 <tbody>
-                    {FIELD_POSITIONS.map(pos => (
+                    {TRANSPOSED_ROWS.map(pos => (
                         <tr key={pos}>
                             <td class="col-name player-name">{pos}</td>
                             {innings.map(i => {
                                 const inningData = schedule[i];
                                 if (!inningData) return <td key={i} class="col-inning pos-empty">—</td>;
-                                const name = Object.entries(inningData).find(([, p]) => p === pos)?.[0];
-                                return <td key={i} class="col-inning">{name ?? <span class="pos-empty">—</span>}</td>;
+                                // OF and Off can have multiple players; infield positions have at most one
+                                const names = Object.entries(inningData)
+                                    .filter(([, p]) => p === pos)
+                                    .map(([n]) => n);
+                                if (names.length === 0) {
+                                    return <td key={i} class="col-inning"><span class="pos-empty">—</span></td>;
+                                }
+                                return (
+                                    <td key={i} class={`col-inning${pos === 'Off' ? ' pos-off' : ''}`}>
+                                        {names.join(', ')}
+                                    </td>
+                                );
                             })}
                         </tr>
                     ))}
@@ -546,12 +584,6 @@ interface LineupViewerProps {
 
 function LineupViewer({ data }: LineupViewerProps) {
     const [shareCopied, setShareCopied] = useState(false);
-
-    const players: Player[] = data.players.map(name => ({
-        name,
-        here: true,
-        eligible: defaultEligible(),
-    }));
 
     function handlePrint() {
         printLineupPDF({
@@ -584,7 +616,7 @@ function LineupViewer({ data }: LineupViewerProps) {
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
                     </button>
                 </div>
-                <ScheduleTable schedule={data.schedule} players={players} numInnings={data.numInnings} />
+                <ScheduleTable schedule={data.schedule} battingOrder={data.players} numInnings={data.numInnings} />
                 <h3 class="transposed-heading">By Position</h3>
                 <TransposedTable schedule={data.schedule} numInnings={data.numInnings} />
             </section>

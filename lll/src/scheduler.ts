@@ -1,9 +1,12 @@
-export type Position = 'P' | 'C' | '1B' | '2B' | '3B' | 'SS' | 'LF' | 'CF' | 'RF' | 'Off';
+export type Position = 'P' | 'C' | '1B' | '2B' | '3B' | 'SS' | 'OF' | 'Off';
 
-export const ALL_POSITIONS: Position[] = ['P', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'Off'];
-export const FIELD_POSITIONS: Position[] = ['P', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF'];
+export const ALL_POSITIONS: Position[] = ['P', 'C', '1B', '2B', '3B', 'SS', 'OF', 'Off'];
+export const FIELD_POSITIONS: Position[] = ['P', 'C', '1B', '2B', '3B', 'SS', 'OF'];
 export const INFIELD_POSITIONS = new Set<Position>(['P', 'C', '1B', '2B', '3B', 'SS']);
-export const OUTFIELD_POSITIONS = new Set<Position>(['LF', 'CF', 'RF']);
+export const OUTFIELD_POSITIONS = new Set<Position>(['OF']);
+
+// OF holds up to 3 players per inning; all other field positions hold exactly 1.
+const OF_CAPACITY = 3;
 
 export interface Player {
     name: string;
@@ -13,6 +16,12 @@ export interface Player {
 
 export type InningAssignment = Record<string, Position>; // playerName -> position
 export type Schedule = InningAssignment[];
+
+export interface ScheduleResult {
+    schedule: Schedule;
+    battingOrder: string[];  // player names in batting/row order
+    failureMessage?: string; // set only when all attempts failed
+}
 
 function shuffle<T>(arr: T[]): T[] {
     const result = [...arr];
@@ -25,200 +34,104 @@ function shuffle<T>(arr: T[]): T[] {
     return result;
 }
 
-function generateOneSchedule(players: Player[], numInnings: number): Schedule {
-    const present = players.filter(p => p.here);
-    if (present.length === 0) return [];
+type OneResult =
+    | { ok: true; schedule: Schedule; battingOrder: string[] }
+    | { ok: false; failureMessage: string };
 
-    // playCount[playerName][position] = times assigned
+function generateOneSchedule(players: Player[], numInnings: number): OneResult {
+    const present = players.filter(p => p.here);
+    if (present.length === 0) return { ok: false, failureMessage: 'No players present' };
+
+    // Randomize player order once — this is also the batting order
+    const battingOrder = shuffle(present);
+
+    // playCount[playerName][position] = times assigned so far
     const playCount = new Map<string, Map<Position, number>>();
-    // typeCount tracks high-intensity (infield) and low-intensity (outfield) per player
-    const infieldTypeCount = new Map<string, number>();
-    const outfieldTypeCount = new Map<string, number>();
-    for (const p of present) {
+    for (const p of battingOrder) {
         playCount.set(p.name, new Map());
-        infieldTypeCount.set(p.name, 0);
-        outfieldTypeCount.set(p.name, 0);
     }
 
     const getCount = (name: string, pos: Position) => playCount.get(name)!.get(pos) ?? 0;
     const incCount = (name: string, pos: Position) => {
         playCount.get(name)!.set(pos, getCount(name, pos) + 1);
-        if (INFIELD_POSITIONS.has(pos)) infieldTypeCount.set(name, (infieldTypeCount.get(name) ?? 0) + 1);
-        else if (OUTFIELD_POSITIONS.has(pos)) outfieldTypeCount.set(name, (outfieldTypeCount.get(name) ?? 0) + 1);
     };
-
-    // Precompute the number of eligible field positions per player (used for consecutive-position constraint)
-    const eligibleFieldPosCount = new Map<string, number>();
-    for (const p of present) {
-        eligibleFieldPosCount.set(p.name, FIELD_POSITIONS.filter(fp => p.eligible[fp]).length);
-    }
 
     const schedule: Schedule = [];
 
     for (let inning = 0; inning < numInnings; inning++) {
         const assignment: InningAssignment = {};
         const assigned = new Set<string>();
-        const prevAssignment = schedule.length > 0 ? schedule[schedule.length - 1] : null;
-        const wasOffLastInning = (name: string) => prevAssignment?.[name] === 'Off';
+        let ofFilled = 0;
 
-        // Process P first (mandatory), then shuffled remaining infield, then shuffled outfield.
-        // This guarantees infield slots — especially pitcher — always get first pick of available
-        // players, so they are never left unfilled due to outfield positions "stealing" candidates.
-        const remainingInfield = shuffle(([...INFIELD_POSITIONS] as Position[]).filter(p => p !== 'P'));
-        const shuffledOutfield = shuffle([...OUTFIELD_POSITIONS] as Position[]);
-        const orderedFieldPos: Position[] = ['P', ...remainingInfield, ...shuffledOutfield];
-
-        for (const pos of orderedFieldPos) {
-            // Find eligible, unassigned, present players for this position.
-            // Hard constraint: a player cannot play the same field position in consecutive innings,
-            // unless they are only globally eligible for one field position.
-            let eligible = present.filter(p =>
-                !assigned.has(p.name) &&
-                p.eligible[pos] &&
-                (prevAssignment?.[p.name] !== pos || (eligibleFieldPosCount.get(p.name) ?? 0) <= 1)
-            );
-            // Fallback 1: if the consecutive constraint eliminates everyone, relax it
-            if (eligible.length === 0) {
-                eligible = present.filter(p => !assigned.has(p.name) && p.eligible[pos]);
+        // Step 1: Fill all infield positions (mandatory hard constraint).
+        // Shuffle the infield positions so no single slot always has priority for player choice.
+        const infieldOrder = shuffle([...INFIELD_POSITIONS] as Position[]);
+        for (const pos of infieldOrder) {
+            // Prefer eligible unassigned players; fall back to any unassigned player if needed.
+            let candidates = battingOrder.filter(p => !assigned.has(p.name) && p.eligible[pos]);
+            if (candidates.length === 0) {
+                candidates = battingOrder.filter(p => !assigned.has(p.name));
             }
-            // Fallback 2 (infield only): mandatory fill — if still no eligible player is available,
-            // use any unassigned player regardless of eligibility. This overrides all prior constraints.
-            if (eligible.length === 0 && INFIELD_POSITIONS.has(pos)) {
-                eligible = present.filter(p => !assigned.has(p.name));
+            if (candidates.length === 0) {
+                return {
+                    ok: false,
+                    failureMessage: `Failed to find a player for ${pos} in inning ${inning + 1}`,
+                };
             }
-            if (eligible.length === 0) continue;
-
-            // Round-robin: pick from those with minimum play count for this position
-            const minCount = Math.min(...eligible.map(p => getCount(p.name, pos)));
-            let candidates = eligible.filter(p => getCount(p.name, pos) === minCount);
-
-            // Type-balance tiebreaker: prefer players with fewest high/low-intensity innings
-            if (INFIELD_POSITIONS.has(pos)) {
-                const minIF = Math.min(...candidates.map(p => infieldTypeCount.get(p.name) ?? 0));
-                const balanced = candidates.filter(p => (infieldTypeCount.get(p.name) ?? 0) === minIF);
-                if (balanced.length > 0) candidates = balanced;
-            } else if (OUTFIELD_POSITIONS.has(pos)) {
-                const minOF = Math.min(...candidates.map(p => outfieldTypeCount.get(p.name) ?? 0));
-                const balanced = candidates.filter(p => (outfieldTypeCount.get(p.name) ?? 0) === minOF);
-                if (balanced.length > 0) candidates = balanced;
-            }
-
-            // Prefer players who were Off last inning (avoids consecutive Off)
-            const preferred = candidates.filter(p => wasOffLastInning(p.name));
-            if (preferred.length > 0) candidates = preferred;
-
-            const chosen = candidates[Math.floor(Math.random() * candidates.length)]!;
+            // Round-robin: prefer the player(s) who have played this position least
+            const minCount = Math.min(...candidates.map(p => getCount(p.name, pos)));
+            const minCandidates = candidates.filter(p => getCount(p.name, pos) === minCount);
+            const chosen = minCandidates[Math.floor(Math.random() * minCandidates.length)]!;
             assignment[chosen.name] = pos;
             assigned.add(chosen.name);
             incCount(chosen.name, pos);
         }
 
-        // Assign Off to all remaining present players
-        for (const p of present) {
-            if (!assigned.has(p.name)) {
-                assignment[p.name] = 'Off';
-                assigned.add(p.name);
-                incCount(p.name, 'Off');
+        // Step 2: Fill OF (capacity 3) from unassigned players eligible for OF.
+        // Round-robin: pick the eligible player(s) with fewest OF innings first.
+        const ofPool = battingOrder.filter(p => !assigned.has(p.name) && p.eligible['OF']);
+        while (ofFilled < OF_CAPACITY && ofPool.length > 0) {
+            const minCount = Math.min(...ofPool.map(p => getCount(p.name, 'OF')));
+            const minCandidates = ofPool.filter(p => getCount(p.name, 'OF') === minCount);
+            const chosen = minCandidates[Math.floor(Math.random() * minCandidates.length)]!;
+            assignment[chosen.name] = 'OF';
+            assigned.add(chosen.name);
+            ofFilled++;
+            incCount(chosen.name, 'OF');
+            ofPool.splice(ofPool.indexOf(chosen), 1);
+        }
+
+        // Step 3: All remaining players sit out (Off).
+        // No one reaches this step if they had any eligible field position available
+        // (steps 1 and 2 exhaust all field capacity before reaching here).
+        for (const player of battingOrder) {
+            if (!assigned.has(player.name)) {
+                assignment[player.name] = 'Off';
+                assigned.add(player.name);
+                incCount(player.name, 'Off');
             }
         }
 
         schedule.push(assignment);
     }
 
-    return schedule;
+    return { ok: true, schedule, battingOrder: battingOrder.map(p => p.name) };
 }
 
-function countSpreadPenalty(counts: number[]): number {
-    if (counts.length <= 1) return 0;
-    return Math.max(0, Math.max(...counts) - Math.min(...counts) - 1);
-}
-
-function scoreSoftCriteria(schedule: Schedule, players: Player[], numInnings: number): number {
+function scoreSoftCriteria(schedule: Schedule, battingOrder: string[], numInnings: number): number {
     let score = 0;
-    const present = players.filter(p => p.here);
-
-    // Penalty for consecutive Off assignments (low weight)
-    for (const p of present) {
-        let prevOff = false;
-        for (const inning of schedule) {
-            const pos = inning[p.name];
-            if (pos === undefined) continue;
-            const isOff = pos === 'Off';
-            if (prevOff && isOff) score++;
-            prevOff = isOff;
-        }
-    }
-
-    // Penalty for imbalanced bench (Off) time — all players (high weight)
-    const benchCounts = present.map(p =>
-        schedule.reduce((n, inning) => n + (inning[p.name] === 'Off' ? 1 : 0), 0)
-    );
-    score += countSpreadPenalty(benchCounts) * 100;
-
-    // Penalty for imbalanced high-intensity (infield) time — only players eligible for >= 1 infield pos
-    const infieldEligible = present.filter(p => [...INFIELD_POSITIONS].some(pos => p.eligible[pos]));
-    if (infieldEligible.length > 1) {
-        const ifCounts = infieldEligible.map(p =>
-            schedule.reduce((n, inning) => n + (INFIELD_POSITIONS.has(inning[p.name]!) ? 1 : 0), 0)
-        );
-        score += countSpreadPenalty(ifCounts) * 100;
-    }
-
-    // Penalty for imbalanced low-intensity (outfield) time — only players eligible for >= 1 outfield pos
-    const outfieldEligible = present.filter(p => [...OUTFIELD_POSITIONS].some(pos => p.eligible[pos]));
-    if (outfieldEligible.length > 1) {
-        const ofCounts = outfieldEligible.map(p =>
-            schedule.reduce((n, inning) => n + (OUTFIELD_POSITIONS.has(inning[p.name]!) ? 1 : 0), 0)
-        );
-        score += countSpreadPenalty(ofCounts) * 100;
-    }
-
-    // Penalty for Off innings that are clustered rather than spread out
-    for (const p of present) {
-        const offInnings: number[] = [];
-        for (let i = 0; i < numInnings; i++) {
-            if (schedule[i]?.[p.name] === 'Off') offInnings.push(i);
-        }
-        if (offInnings.length >= 2) {
-            const idealGap = (numInnings - 1) / (offInnings.length - 1);
-            for (let i = 1; i < offInnings.length; i++) {
-                const gap = offInnings[i]! - offInnings[i - 1]!;
-                if (gap < idealGap) score += Math.round((idealGap - gap) * 5);
-            }
-        }
-    }
-
-    // Penalty for Off innings not adjacent to a high-intensity (infield) inning
-    for (const p of present) {
-        for (let i = 0; i < numInnings; i++) {
-            if (schedule[i]?.[p.name] !== 'Off') continue;
-            const prevPos = i > 0 ? schedule[i - 1]?.[p.name] : undefined;
-            const nextPos = i < numInnings - 1 ? schedule[i + 1]?.[p.name] : undefined;
-            const prevInfield = prevPos !== undefined && INFIELD_POSITIONS.has(prevPos);
-            const nextInfield = nextPos !== undefined && INFIELD_POSITIONS.has(nextPos);
-            if (!prevInfield && !nextInfield) score += 5;
-        }
-    }
-
-    // Triple-weight penalty: Pitchers and catchers should always have an adjacent Off inning
-    for (const p of present) {
-        for (let i = 0; i < numInnings; i++) {
-            const pos = schedule[i]?.[p.name];
-            if (pos !== 'P' && pos !== 'C') continue;
-            const prevOff = i > 0 && schedule[i - 1]?.[p.name] === 'Off';
-            const nextOff = i < numInnings - 1 && schedule[i + 1]?.[p.name] === 'Off';
-            if (!prevOff && !nextOff) score += 15;
-        }
-    }
-
-    // Extra penalty: Pitchers should preferentially have an Off inning BEFORE they pitch
-    for (const p of present) {
+    // Penalise adjacent innings of the same intensity for each player:
+    //   +1 per pair of consecutive high-intensity (infield) innings
+    //   +1 per pair of consecutive low-intensity (OF) innings
+    for (const name of battingOrder) {
         for (let i = 1; i < numInnings; i++) {
-            if (schedule[i]?.[p.name] !== 'P') continue;
-            if (schedule[i - 1]?.[p.name] !== 'Off') score += 10;
+            const prev = schedule[i - 1]?.[name];
+            const curr = schedule[i]?.[name];
+            if (prev === undefined || curr === undefined) continue;
+            if (INFIELD_POSITIONS.has(prev) && INFIELD_POSITIONS.has(curr)) score++;
+            if (OUTFIELD_POSITIONS.has(prev) && OUTFIELD_POSITIONS.has(curr)) score++;
         }
     }
-
     return score;
 }
 
@@ -226,23 +139,45 @@ export function generateBestSchedule(
     players: Player[],
     numInnings: number,
     budgetMs = 200
-): Schedule | null {
+): ScheduleResult | null {
     const present = players.filter(p => p.here);
     if (present.length === 0) return null;
 
-    let best: Schedule | null = null;
     let bestScore = Infinity;
+    let tiedCount = 0;
+    let best: { schedule: Schedule; battingOrder: string[] } | null = null;
+    const failureCounts = new Map<string, number>();
     const deadline = Date.now() + budgetMs;
 
     do {
-        const schedule = generateOneSchedule(players, numInnings);
-        const score = scoreSoftCriteria(schedule, players, numInnings);
-        if (score < bestScore) {
-            bestScore = score;
-            best = schedule;
+        const result = generateOneSchedule(players, numInnings);
+        if (!result.ok) {
+            failureCounts.set(result.failureMessage, (failureCounts.get(result.failureMessage) ?? 0) + 1);
+        } else {
+            const score = scoreSoftCriteria(result.schedule, result.battingOrder, numInnings);
+            if (score < bestScore) {
+                bestScore = score;
+                best = result;
+                tiedCount = 1;
+            } else if (score === bestScore) {
+                tiedCount++;
+                // Reservoir sampling: uniformly pick among all tied-best results
+                if (Math.random() < 1 / tiedCount) {
+                    best = result;
+                }
+            }
+            if (bestScore === 0) break;
         }
-        if (bestScore === 0) break; // Perfect score, no need to try more
     } while (Date.now() < deadline);
 
-    return best;
+    if (best === null) {
+        let maxCount = 0;
+        let maxMsg = 'Failed to generate a valid schedule';
+        for (const [msg, count] of failureCounts) {
+            if (count > maxCount) { maxCount = count; maxMsg = msg; }
+        }
+        return { schedule: [], battingOrder: [], failureMessage: maxMsg };
+    }
+
+    return { schedule: best.schedule, battingOrder: best.battingOrder };
 }
