@@ -320,7 +320,7 @@ export const App: FunctionComponent = () => {
               <span class="label">Formatting:</span>
               <code>**bold**</code>
               <code>*italic*</code>
-              <code>~~underline~~</code>
+              <code>~underline~</code>
             </div>
           </div>
         </div>

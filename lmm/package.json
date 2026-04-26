@@ -1,6 +1,6 @@
 {
   "name": "lmm",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "Label Mail Merge - Create printable labels from CSV/TSV data",
   "main": "src/index.tsx",
