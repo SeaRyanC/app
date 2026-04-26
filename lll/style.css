@@ -245,7 +245,15 @@ textarea {
     min-width: 56px;
 }
 
-/* Position cell colors */
+/* Batting order number column */
+.col-bat {
+    width: 28px;
+    text-align: center;
+    color: #888;
+    font-size: 11px;
+}
+
+
 .pos-off {
     background: #f3f3f3;
     color: #666;

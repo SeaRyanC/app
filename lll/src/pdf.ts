@@ -2,13 +2,13 @@
  * PDF generation for the Little League Lineup.
  * Produces a two-page landscape US Letter PDF:
  *   Page 1 — Player × Inning table (with IF/OF/Off summary columns)
- *   Page 2 — Position × Inning table
+ *   Page 2 — Position × Inning table (infield, OF, Off 1/2/3)
  */
 
 import PDFDocument from 'pdfkit-browserify';
 import blobStream from 'blob-stream';
 import type { Schedule } from './scheduler.js';
-import { FIELD_POSITIONS, INFIELD_POSITIONS, OUTFIELD_POSITIONS } from './scheduler.js';
+import { FIELD_POSITIONS, INFIELD_POSITIONS, OUTFIELD_POSITIONS, OFF_POSITIONS } from './scheduler.js';
 
 // US Letter landscape: 11 × 8.5 inches at 72 pt/in
 const PAGE_WIDTH = 792;
@@ -18,7 +18,7 @@ const USABLE_W = PAGE_WIDTH - MARGIN * 2;
 const USABLE_H = PAGE_HEIGHT - MARGIN * 2;
 
 export interface LineupPDFData {
-    players: string[];
+    players: string[];  // in batting order
     schedule: Schedule;
     numInnings: number;
 }
@@ -52,67 +52,71 @@ function generateLineupPDF(data: LineupPDFData): Promise<Blob> {
 
             const tableTop = MARGIN;
 
-            // Column layout:  playerName | inn1 … innN | IF | OF | Off
+            // Column layout:  # | playerName | inn1 … innN | IF | OF | Off
+            const batColW = 18;
             const summaryColW = 28;
             const numSummaryCols = 3;
-            const nameColW = Math.min(110, Math.max(60, USABLE_W * 0.14));
-            const availForInnings = USABLE_W - nameColW - summaryColW * numSummaryCols;
+            const nameColW = Math.min(110, Math.max(60, USABLE_W * 0.13));
+            const availForInnings = USABLE_W - batColW - nameColW - summaryColW * numSummaryCols;
             const innColW = availForInnings / numInnings;
             const rowCount = players.length + 1; // +1 header
             const tableH = USABLE_H - (tableTop - MARGIN);
             const rowH = Math.min(20, tableH / rowCount);
             const fontSize = Math.min(9, rowH * 0.6);
 
-            const colX = (col: number): number => {
-                if (col === 0) return MARGIN;
-                return MARGIN + nameColW + (col - 1) * innColW;
-            };
+            const batX = MARGIN;
+            const nameX = MARGIN + batColW;
+            const colX = (col: number): number => nameX + nameColW + (col) * innColW;
             const summaryX = (idx: number): number =>
-                MARGIN + nameColW + numInnings * innColW + idx * summaryColW;
+                nameX + nameColW + numInnings * innColW + idx * summaryColW;
 
             // Header row
             let y = tableTop;
             doc.fontSize(fontSize).font('Helvetica-Bold').fillColor('#333333');
-            drawCell(doc, 'Player', MARGIN, y, nameColW, rowH, 'left');
+            drawCell(doc, '#', batX, y, batColW, rowH, 'center');
+            drawCell(doc, 'Player', nameX, y, nameColW, rowH, 'left');
             for (const i of innings) {
-                drawCell(doc, String(i + 1), colX(i + 1), y, innColW, rowH, 'center');
+                drawCell(doc, String(i + 1), colX(i), y, innColW, rowH, 'center');
             }
             drawCell(doc, 'IF', summaryX(0), y, summaryColW, rowH, 'center');
             drawCell(doc, 'OF', summaryX(1), y, summaryColW, rowH, 'center');
             drawCell(doc, 'Off', summaryX(2), y, summaryColW, rowH, 'center');
             y += rowH;
 
-            // Player rows
+            // Player rows (in batting order)
             doc.font('Helvetica');
-            for (const player of players) {
+            players.forEach((player, idx) => {
                 let ifCount = 0, ofCount = 0, offCount = 0;
                 for (const i of innings) {
                     const pos = schedule[i]?.[player];
                     if (pos && INFIELD_POSITIONS.has(pos)) ifCount++;
                     else if (pos && OUTFIELD_POSITIONS.has(pos)) ofCount++;
-                    else if (pos === 'Off') offCount++;
+                    else if (pos && OFF_POSITIONS.includes(pos)) offCount++;
                 }
 
                 doc.fillColor('#111111');
-                drawCell(doc, player, MARGIN, y, nameColW, rowH, 'left');
+                drawCell(doc, String(idx + 1), batX, y, batColW, rowH, 'center');
+                drawCell(doc, player, nameX, y, nameColW, rowH, 'left');
                 for (const i of innings) {
                     const pos = schedule[i]?.[player] ?? '—';
-                    drawCell(doc, pos, colX(i + 1), y, innColW, rowH, 'center');
+                    drawCell(doc, pos, colX(i), y, innColW, rowH, 'center');
                 }
                 doc.fillColor('#333366');
                 drawCell(doc, String(ifCount), summaryX(0), y, summaryColW, rowH, 'center');
                 drawCell(doc, String(ofCount), summaryX(1), y, summaryColW, rowH, 'center');
                 drawCell(doc, String(offCount), summaryX(2), y, summaryColW, rowH, 'center');
                 y += rowH;
-            }
+            });
 
             // ── Page 2: Position × Inning ────────────────────────────────────────
             doc.addPage({ size: [PAGE_WIDTH, PAGE_HEIGHT], margin: MARGIN });
 
+            // Rows: all field positions + Off 1/2/3
+            const posRows = [...FIELD_POSITIONS, ...OFF_POSITIONS];
             const tableTop2 = MARGIN;
             const posColW = Math.min(50, USABLE_W * 0.08);
             const innColW2 = (USABLE_W - posColW) / numInnings;
-            const rowCount2 = FIELD_POSITIONS.length + 1;
+            const rowCount2 = posRows.length + 1;
             const rowH2 = Math.min(24, (USABLE_H - (tableTop2 - MARGIN)) / rowCount2);
             const fontSize2 = Math.min(9, rowH2 * 0.6);
             const colX2 = (col: number): number =>
@@ -127,14 +131,18 @@ function generateLineupPDF(data: LineupPDFData): Promise<Blob> {
             y2 += rowH2;
 
             doc.font('Helvetica').fillColor('#111111');
-            for (const pos of FIELD_POSITIONS) {
+            for (const pos of posRows) {
                 drawCell(doc, pos, MARGIN, y2, posColW, rowH2, 'left');
                 for (const i of innings) {
                     const inningData = schedule[i];
-                    const name = inningData
-                        ? (Object.entries(inningData).find(([, p]) => p === pos)?.[0] ?? '—')
+                    // OF can have multiple players; others have at most one
+                    const names = inningData
+                        ? Object.entries(inningData)
+                            .filter(([, p]) => p === pos)
+                            .map(([n]) => n)
+                            .join(', ')
                         : '—';
-                    drawCell(doc, name, colX2(i), y2, innColW2, rowH2, 'center');
+                    drawCell(doc, names || '—', colX2(i), y2, innColW2, rowH2, 'center');
                 }
                 y2 += rowH2;
             }
