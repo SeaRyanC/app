@@ -4,7 +4,7 @@ import { ALL_POSITIONS, FIELD_POSITIONS, INFIELD_POSITIONS, OUTFIELD_POSITIONS, 
 import type { Position, Player, Schedule, InningAssignment } from './scheduler.js';
 import { printLineupPDF } from './pdf.js';
 
-const VERSION = '4.0.0';
+const VERSION = '5.0.0';
 const COMMIT_HASH = 'dev';
 const STORAGE_KEY = 'lll-config';
 
@@ -12,6 +12,7 @@ interface StoredConfig {
     playersText: string;
     here: Record<string, boolean>;
     eligible: Record<string, Partial<Record<Position, boolean>>>;
+    plus?: Record<string, Partial<Record<Position, boolean>>>;
     numInnings: number;
 }
 
@@ -19,6 +20,7 @@ interface ShareData {
     playersText?: string;
     here?: Record<string, boolean>;
     eligible?: Record<string, Partial<Record<Position, boolean>>>;
+    plus?: Record<string, Partial<Record<Position, boolean>>>;
     numInnings?: number;
     schedule?: Schedule | null;
 }
@@ -80,21 +82,25 @@ function decodeLineupCompact(encoded: string): LineupViewData {
 }
 
 // Roster share URL format (?r=...):
-// base64( JSON { p: string[], n: number, b: base64(binary bits) } )
-// binary bits: for each player (in p order): 1 bit here + 8 bits eligibility (ALL_POSITIONS order), MSB-first packing
+// base64( JSON { p: string[], n: number, b: base64(binary bits), v?: number } )
+// v1 (no v field): 1 bit here + 8 bits eligibility per player (9 bits/player)
+// v2 (v: 2):       1 bit here + 8 bits eligibility + 8 bits plus per player (17 bits/player)
 interface RosterShareCompact {
     p: string[];
     n: number;
     b: string; // base64 of bit-packed Uint8Array
+    v?: number; // 2 = v2 format with plus bits
 }
 
 function encodeRosterBinary(
     playerNames: string[],
     hereMap: Record<string, boolean>,
     eligibleMap: Record<string, Record<Position, boolean>>,
+    plusMap: Record<string, Record<Position, boolean>>,
     numInnings: number
 ): string {
-    const totalBits = playerNames.length * (1 + ALL_POSITIONS.length); // 1 here + 8 positions
+    const bitsPerPlayer = 1 + ALL_POSITIONS.length * 2; // 1 here + 8 eligible + 8 plus = 17
+    const totalBits = playerNames.length * bitsPerPlayer;
     const bytes = new Uint8Array(Math.ceil(totalBits / 8));
     let bitIdx = 0;
     for (const name of playerNames) {
@@ -106,10 +112,15 @@ function encodeRosterBinary(
             if (eligibleMap[name]?.[pos] ?? true) bytes[byteIdx] = (bytes[byteIdx] ?? 0) | (1 << (7 - (bitIdx & 7)));
             bitIdx++;
         }
+        for (const pos of ALL_POSITIONS) {
+            const byteIdx = bitIdx >> 3;
+            if (plusMap[name]?.[pos] ?? false) bytes[byteIdx] = (bytes[byteIdx] ?? 0) | (1 << (7 - (bitIdx & 7)));
+            bitIdx++;
+        }
     }
     let binaryStr = '';
     for (let i = 0; i < bytes.length; i++) binaryStr += String.fromCharCode(bytes[i]!);
-    const compact: RosterShareCompact = { p: playerNames, n: numInnings, b: btoa(binaryStr) };
+    const compact: RosterShareCompact = { p: playerNames, n: numInnings, b: btoa(binaryStr), v: 2 };
     return btoa(encodeURIComponent(JSON.stringify(compact)));
 }
 
@@ -117,6 +128,7 @@ interface DecodedRoster {
     playersText: string;
     hereMap: Record<string, boolean>;
     eligibleMap: Record<string, Record<Position, boolean>>;
+    plusMap: Record<string, Record<Position, boolean>>;
     numInnings: number;
 }
 
@@ -127,6 +139,8 @@ function decodeRosterBinary(encoded: string): DecodedRoster {
     for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
     const hereMap: Record<string, boolean> = {};
     const eligibleMap: Record<string, Record<Position, boolean>> = {};
+    const plusMap: Record<string, Record<Position, boolean>> = {};
+    const isV2 = compact.v === 2;
     let bitIdx = 0;
     for (const name of compact.p) {
         hereMap[name] = !!(bytes[bitIdx >> 3]! & (1 << (7 - (bitIdx & 7))));
@@ -137,8 +151,16 @@ function decodeRosterBinary(encoded: string): DecodedRoster {
             bitIdx++;
         }
         eligibleMap[name] = elig;
+        if (isV2) {
+            const plus = defaultPlus();
+            for (const pos of ALL_POSITIONS) {
+                plus[pos] = !!(bytes[bitIdx >> 3]! & (1 << (7 - (bitIdx & 7))));
+                bitIdx++;
+            }
+            plusMap[name] = plus;
+        }
     }
-    return { playersText: compact.p.join('\n'), hereMap, eligibleMap, numInnings: compact.n };
+    return { playersText: compact.p.join('\n'), hereMap, eligibleMap, plusMap, numInnings: compact.n };
 }
 
 function parsePlayers(text: string): string[] {
@@ -156,10 +178,32 @@ function defaultEligible(): Record<Position, boolean> {
     return result;
 }
 
+function defaultPlus(): Record<Position, boolean> {
+    const result = {} as Record<Position, boolean>;
+    for (const pos of ALL_POSITIONS) {
+        result[pos] = false;
+    }
+    return result;
+}
+
 function buildEligibleMap(raw: Record<string, Partial<Record<Position, boolean>>>): Record<string, Record<Position, boolean>> {
     const result: Record<string, Record<Position, boolean>> = {};
     for (const [name, e] of Object.entries(raw)) {
         const full = defaultEligible();
+        for (const pos of ALL_POSITIONS) {
+            if (e[pos] !== undefined) {
+                full[pos] = e[pos]!;
+            }
+        }
+        result[name] = full;
+    }
+    return result;
+}
+
+function buildPlusMap(raw: Record<string, Partial<Record<Position, boolean>>>): Record<string, Record<Position, boolean>> {
+    const result: Record<string, Record<Position, boolean>> = {};
+    for (const [name, e] of Object.entries(raw)) {
+        const full = defaultPlus();
         for (const pos of ALL_POSITIONS) {
             if (e[pos] !== undefined) {
                 full[pos] = e[pos]!;
@@ -189,6 +233,7 @@ function App() {
     const [playersText, setPlayersText] = useState<string>('');
     const [hereMap, setHereMap] = useState<Record<string, boolean>>({});
     const [eligibleMap, setEligibleMap] = useState<Record<string, Record<Position, boolean>>>({});
+    const [plusMap, setPlusMap] = useState<Record<string, Record<Position, boolean>>>({});
     const [numInnings, setNumInnings] = useState<number>(7);
     const [schedule, setSchedule] = useState<Schedule | null>(null);
     const [battingOrder, setBattingOrder] = useState<string[]>([]);
@@ -206,6 +251,7 @@ function App() {
                 setHereMap(data.hereMap);
                 setNumInnings(data.numInnings);
                 setEligibleMap(data.eligibleMap);
+                setPlusMap(data.plusMap);
                 return;
             } catch {
                 // ignore, fall through to 's' param or localStorage
@@ -219,6 +265,7 @@ function App() {
                 setHereMap(data.here ?? {});
                 setNumInnings(data.numInnings ?? 7);
                 setEligibleMap(buildEligibleMap(data.eligible ?? {}));
+                setPlusMap(buildPlusMap(data.plus ?? {}));
                 if (data.schedule) setSchedule(data.schedule);
                 return;
             } catch {
@@ -234,6 +281,7 @@ function App() {
                 setHereMap(config.here ?? {});
                 setNumInnings(config.numInnings ?? 7);
                 setEligibleMap(buildEligibleMap(config.eligible ?? {}));
+                setPlusMap(buildPlusMap(config.plus ?? {}));
             } catch {
                 // ignore parse errors
             }
@@ -246,10 +294,11 @@ function App() {
             playersText,
             here: hereMap,
             eligible: eligibleMap,
+            plus: plusMap,
             numInnings,
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
-    }, [playersText, hereMap, eligibleMap, numInnings]);
+    }, [playersText, hereMap, eligibleMap, plusMap, numInnings]);
 
     const playerNames = parsePlayers(playersText);
 
@@ -259,6 +308,10 @@ function App() {
 
     function getEligible(name: string, pos: Position): boolean {
         return eligibleMap[name]?.[pos] ?? true;
+    }
+
+    function getPlus(name: string, pos: Position): boolean {
+        return plusMap[name]?.[pos] ?? false;
     }
 
     function setHere(name: string, value: boolean) {
@@ -273,6 +326,23 @@ function App() {
             const existing = prev[name] ?? defaultEligible();
             return { ...prev, [name]: { ...existing, [pos]: value } };
         });
+        if (!value) {
+            // Clear "+" when eligibility is removed — "+" has no effect without eligibility
+            setPlusMap(prev => {
+                const existing = prev[name] ?? defaultPlus();
+                return { ...prev, [name]: { ...existing, [pos]: false } };
+            });
+        }
+        setSchedule(null);
+        setBattingOrder([]);
+        setFailureMessage(undefined);
+    }
+
+    function setPlus(name: string, pos: Position, value: boolean) {
+        setPlusMap(prev => {
+            const existing = prev[name] ?? defaultPlus();
+            return { ...prev, [name]: { ...existing, [pos]: value } };
+        });
         setSchedule(null);
         setBattingOrder([]);
         setFailureMessage(undefined);
@@ -284,6 +354,10 @@ function App() {
             here: getHere(name),
             eligible: ALL_POSITIONS.reduce((acc, pos) => {
                 acc[pos] = getEligible(name, pos);
+                return acc;
+            }, {} as Record<Position, boolean>),
+            plus: ALL_POSITIONS.reduce((acc, pos) => {
+                acc[pos] = getPlus(name, pos);
                 return acc;
             }, {} as Record<Position, boolean>),
         }));
@@ -304,7 +378,7 @@ function App() {
     }
 
     function handleShareRoster() {
-        const encoded = encodeRosterBinary(playerNames, hereMap, eligibleMap, numInnings);
+        const encoded = encodeRosterBinary(playerNames, hereMap, eligibleMap, plusMap, numInnings);
         const url = `${window.location.origin}${window.location.pathname}?r=${encodeURIComponent(encoded)}`;
         window.history.replaceState(null, '', url);
         navigator.clipboard?.writeText(url).catch(() => {});
@@ -369,7 +443,7 @@ function App() {
                             {rosterShareCopied ? '✅ Copied!' : '🔗 Share Roster'}
                         </button>
                     </div>
-                    <p class="hint">Check each position a player is eligible to play. Uncheck to exclude a player from a position.</p>
+                    <p class="hint">Check each position a player is eligible to play. Use the <strong>+</strong> column to give a player priority for that position — they will be chosen before non-+ players when constructing the lineup.</p>
                     <div class="table-scroll">
                         <table class="eligibility-table">
                             <thead>
@@ -377,7 +451,10 @@ function App() {
                                     <th class="col-here">Here</th>
                                     <th class="col-name">Player</th>
                                     {ALL_POSITIONS.map(pos => (
-                                        <th key={pos} class="col-pos">{pos}</th>
+                                        <>
+                                            <th key={pos} class="col-pos">{pos}</th>
+                                            <th key={pos + '+'} class="col-pos-plus">{pos}+</th>
+                                        </>
                                     ))}
                                 </tr>
                             </thead>
@@ -394,14 +471,25 @@ function App() {
                                         </td>
                                         <td class="col-name">{name}</td>
                                         {ALL_POSITIONS.map(pos => (
-                                            <td key={pos} class="col-pos">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={getEligible(name, pos)}
-                                                    onChange={(e) => setEligible(name, pos, (e.target as HTMLInputElement).checked)}
-                                                    aria-label={`${name} eligible for ${pos}`}
-                                                />
-                                            </td>
+                                            <>
+                                                <td key={pos} class="col-pos">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={getEligible(name, pos)}
+                                                        onChange={(e) => setEligible(name, pos, (e.target as HTMLInputElement).checked)}
+                                                        aria-label={`${name} eligible for ${pos}`}
+                                                    />
+                                                </td>
+                                                <td key={pos + '+'} class="col-pos-plus">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={getPlus(name, pos)}
+                                                        disabled={!getEligible(name, pos)}
+                                                        onChange={(e) => setPlus(name, pos, (e.target as HTMLInputElement).checked)}
+                                                        aria-label={`${name} priority for ${pos}`}
+                                                    />
+                                                </td>
+                                            </>
                                         ))}
                                     </tr>
                                 ))}

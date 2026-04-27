@@ -87,6 +87,17 @@ textarea {
     width: 44px;
 }
 
+.col-pos-plus {
+    width: 36px;
+    background: #fffde7;
+}
+
+.eligibility-table th.col-pos-plus {
+    background: #fff8e1;
+    color: #795548;
+    font-size: 12px;
+}
+
 .eligibility-table tr.absent td {
     background: #fafafa;
     color: #aaa;
