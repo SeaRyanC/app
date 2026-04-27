@@ -79,10 +79,13 @@ function generateOneSchedule(players: Player[], numInnings: number): OneResult {
                     failureMessage: `Failed to find a player for ${pos} in inning ${inning + 1}`,
                 };
             }
-            // Round-robin: prefer the player(s) who have played this position least.
-            // Among those tied at the minimum, "+" players get priority as a tiebreaker.
-            const minCount = Math.min(...candidates.map(p => getCount(p.name, pos)));
-            const atMin = candidates.filter(p => getCount(p.name, pos) === minCount);
+            // Primary: prefer players who have been benched (Off) the most — equalise bench time.
+            // Secondary: among those tied on Off count, prefer players who have played this position least.
+            // Tiebreaker: "+" players get priority.
+            const maxOff = Math.max(...candidates.map(p => getCount(p.name, 'Off')));
+            const mostBenched = candidates.filter(p => getCount(p.name, 'Off') === maxOff);
+            const minCount = Math.min(...mostBenched.map(p => getCount(p.name, pos)));
+            const atMin = mostBenched.filter(p => getCount(p.name, pos) === minCount);
             const plusAtMin = atMin.filter(p => p.plus[pos]);
             const minCandidates = plusAtMin.length > 0 ? plusAtMin : atMin;
             const chosen = minCandidates[Math.floor(Math.random() * minCandidates.length)]!;
@@ -92,13 +95,15 @@ function generateOneSchedule(players: Player[], numInnings: number): OneResult {
         }
 
         // Step 2: Fill OF (capacity 3) from unassigned players eligible for OF.
-        // Round-robin across all eligible players; among those tied at the minimum play count,
-        // "+" players are preferred as a tiebreaker so they get picked before non-"+" players
-        // at equal counts, but non-"+" players are picked before a "+" player repeats.
+        // Primary: prefer players who have been benched the most (equalise bench time).
+        // Secondary: among ties on Off count, round-robin on OF play count.
+        // Tiebreaker: "+" players are preferred at equal counts.
         const ofPool = battingOrder.filter(p => !assigned.has(p.name) && p.eligible['OF']);
         while (ofFilled < OF_CAPACITY && ofPool.length > 0) {
-            const minCount = Math.min(...ofPool.map(p => getCount(p.name, 'OF')));
-            const atMin = ofPool.filter(p => getCount(p.name, 'OF') === minCount);
+            const maxOff = Math.max(...ofPool.map(p => getCount(p.name, 'Off')));
+            const mostBenched = ofPool.filter(p => getCount(p.name, 'Off') === maxOff);
+            const minCount = Math.min(...mostBenched.map(p => getCount(p.name, 'OF')));
+            const atMin = mostBenched.filter(p => getCount(p.name, 'OF') === minCount);
             const plusAtMin = atMin.filter(p => p.plus['OF']);
             const ofCandidates = plusAtMin.length > 0 ? plusAtMin : atMin;
             const chosen = ofCandidates[Math.floor(Math.random() * ofCandidates.length)]!;
