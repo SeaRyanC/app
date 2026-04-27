@@ -37,8 +37,9 @@ A browser-based game scheduling tool for Little League baseball coaches. The too
   - **Position+ priority**: when filling any position, the round-robin considers all eligible (and unassigned) players; among players tied at the lowest play count for that position, "+" players are preferred as a tiebreaker. This ensures "+" players are always scheduled ahead of non-"+" players at equal counts, but non-"+" eligible players are rotated through before a "+" player repeats. For OF, the same tiebreaker applies across the unified eligible pool.
 - As a coach, the generated lineup tries to satisfy soft criteria to pick the best schedule among all candidates, evaluated in priority order:
   1. **Balanced Off innings** — schedules where every player's Off-inning count differs by at most 1 (e.g. everyone has 0 or 1, 1 or 2, 2 or 3 Off innings) beat all schedules where the Off counts are more uneven. This is the highest-priority soft criterion.
-  2. **Minimize consecutive same-intensity innings** — among schedules with equally balanced Off innings, prefer fewer pairs of back-to-back high-intensity (infield) innings or back-to-back low-intensity (OF) innings for any player.
-  - When multiple schedules tie on both criteria, one is chosen at random
+  2. **No consecutive Off innings** — among schedules with equally balanced Off innings, prefer schedules where no player sits out two innings in a row (fewest consecutive Off-inning pairs). This is the second-priority soft criterion.
+  3. **Minimize consecutive same-intensity innings** — among schedules that also tie on consecutive Off innings, prefer fewer pairs of back-to-back high-intensity (infield) innings or back-to-back low-intensity (OF) innings for any player.
+  - When multiple schedules tie on all criteria, one is chosen at random
 - As a coach, if no valid schedule can be generated within the time budget, the most common failure reason is shown (e.g. "Failed to find a player for P in inning 3")
 - As a coach, the algorithm works left-to-right by inning so that if a game is cut short, all completed innings still satisfy the hard criteria
 - As a coach, the app generates as many candidate schedules as possible within 200 ms and returns the best one

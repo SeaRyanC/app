@@ -136,6 +136,19 @@ function isOffBalanced(schedule: Schedule, battingOrder: string[]): boolean {
     return Math.max(...offCounts) - Math.min(...offCounts) <= 1;
 }
 
+// Returns the number of (player, inning) pairs where a player has two consecutive Off innings.
+function countConsecutiveOff(schedule: Schedule, battingOrder: string[], numInnings: number): number {
+    let count = 0;
+    for (const name of battingOrder) {
+        for (let i = 1; i < numInnings; i++) {
+            const prev = schedule[i - 1]?.[name];
+            const curr = schedule[i]?.[name];
+            if (prev === 'Off' && curr === 'Off') count++;
+        }
+    }
+    return count;
+}
+
 function scoreAdjacency(schedule: Schedule, battingOrder: string[], numInnings: number): number {
     let score = 0;
     // Penalise adjacent innings of the same intensity for each player:
@@ -161,10 +174,12 @@ export function generateBestSchedule(
     const present = players.filter(p => p.here);
     if (present.length === 0) return null;
 
-    // Primary criterion (higher priority): Off-innings are balanced across all players
+    // Primary criterion (highest priority): Off-innings are balanced across all players
     //   (max Off count − min Off count ≤ 1).  A balanced schedule beats any unbalanced one.
-    // Secondary criterion: fewest consecutive same-intensity innings (adjacency score).
+    // Secondary criterion: no player has two consecutive Off innings (lower consecutive-Off count wins).
+    // Tertiary criterion: fewest consecutive same-intensity innings (adjacency score).
     let bestOffBalanced = false;
+    let bestConsecOff = Infinity;
     let bestAdjacency = Infinity;
     let tiedCount = 0;
     let best: { schedule: Schedule; battingOrder: string[] } | null = null;
@@ -177,16 +192,22 @@ export function generateBestSchedule(
             failureCounts.set(result.failureMessage, (failureCounts.get(result.failureMessage) ?? 0) + 1);
         } else {
             const offBalanced = isOffBalanced(result.schedule, result.battingOrder);
+            const consecOff = countConsecutiveOff(result.schedule, result.battingOrder, numInnings);
             const adjacency = scoreAdjacency(result.schedule, result.battingOrder, numInnings);
 
-            // Lexicographic comparison: offBalanced first (true > false), then lower adjacency wins.
+            // Lexicographic comparison: offBalanced first (true > false), then lower consecOff, then lower adjacency.
             const newIsBetter =
                 (!bestOffBalanced && offBalanced) ||
-                (offBalanced === bestOffBalanced && adjacency < bestAdjacency);
-            const newIsTied = offBalanced === bestOffBalanced && adjacency === bestAdjacency;
+                (offBalanced === bestOffBalanced && consecOff < bestConsecOff) ||
+                (offBalanced === bestOffBalanced && consecOff === bestConsecOff && adjacency < bestAdjacency);
+            const newIsTied =
+                offBalanced === bestOffBalanced &&
+                consecOff === bestConsecOff &&
+                adjacency === bestAdjacency;
 
             if (newIsBetter) {
                 bestOffBalanced = offBalanced;
+                bestConsecOff = consecOff;
                 bestAdjacency = adjacency;
                 best = result;
                 tiedCount = 1;
@@ -197,7 +218,7 @@ export function generateBestSchedule(
                     best = result;
                 }
             }
-            if (bestOffBalanced && bestAdjacency === 0) break;
+            if (bestOffBalanced && bestConsecOff === 0 && bestAdjacency === 0) break;
         }
     } while (Date.now() < deadline);
 
