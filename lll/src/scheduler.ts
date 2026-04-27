@@ -12,6 +12,7 @@ export interface Player {
     name: string;
     here: boolean;
     eligible: Record<Position, boolean>;
+    plus: Record<Position, boolean>;
 }
 
 export type InningAssignment = Record<string, Position>; // playerName -> position
@@ -67,8 +68,11 @@ function generateOneSchedule(players: Player[], numInnings: number): OneResult {
         // Shuffle the infield positions so no single slot always has priority for player choice.
         const infieldOrder = shuffle([...INFIELD_POSITIONS] as Position[]);
         for (const pos of infieldOrder) {
-            // Prefer eligible unassigned players; fall back to any unassigned player if needed.
-            let candidates = battingOrder.filter(p => !assigned.has(p.name) && p.eligible[pos]);
+            // Among eligible unassigned players, prefer "+" players first; fall back to any
+            // eligible player, then to any unassigned player as a last resort.
+            const eligibleCandidates = battingOrder.filter(p => !assigned.has(p.name) && p.eligible[pos]);
+            const plusCandidates = eligibleCandidates.filter(p => p.plus[pos]);
+            let candidates = plusCandidates.length > 0 ? plusCandidates : eligibleCandidates;
             if (candidates.length === 0) {
                 candidates = battingOrder.filter(p => !assigned.has(p.name));
             }
@@ -88,17 +92,21 @@ function generateOneSchedule(players: Player[], numInnings: number): OneResult {
         }
 
         // Step 2: Fill OF (capacity 3) from unassigned players eligible for OF.
-        // Round-robin: pick the eligible player(s) with fewest OF innings first.
-        const ofPool = battingOrder.filter(p => !assigned.has(p.name) && p.eligible['OF']);
-        while (ofFilled < OF_CAPACITY && ofPool.length > 0) {
-            const minCount = Math.min(...ofPool.map(p => getCount(p.name, 'OF')));
-            const minCandidates = ofPool.filter(p => getCount(p.name, 'OF') === minCount);
-            const chosen = minCandidates[Math.floor(Math.random() * minCandidates.length)]!;
-            assignment[chosen.name] = 'OF';
-            assigned.add(chosen.name);
-            ofFilled++;
-            incCount(chosen.name, 'OF');
-            ofPool.splice(ofPool.indexOf(chosen), 1);
+        // "+" players are selected before non-"+" players; round-robin applies within each group.
+        const ofEligible = battingOrder.filter(p => !assigned.has(p.name) && p.eligible['OF']);
+        const ofPlusPool = ofEligible.filter(p => p.plus['OF']);
+        const ofNonPlusPool = ofEligible.filter(p => !p.plus['OF']);
+        for (const pool of [ofPlusPool, ofNonPlusPool]) {
+            while (ofFilled < OF_CAPACITY && pool.length > 0) {
+                const minCount = Math.min(...pool.map(p => getCount(p.name, 'OF')));
+                const minCandidates = pool.filter(p => getCount(p.name, 'OF') === minCount);
+                const chosen = minCandidates[Math.floor(Math.random() * minCandidates.length)]!;
+                assignment[chosen.name] = 'OF';
+                assigned.add(chosen.name);
+                ofFilled++;
+                incCount(chosen.name, 'OF');
+                pool.splice(pool.indexOf(chosen), 1);
+            }
         }
 
         // Step 3: All remaining players sit out (Off).

@@ -17,6 +17,8 @@ A browser-based game scheduling tool for Little League baseball coaches. The too
 - As a coach, I can uncheck specific positions for a player at any time, even if that player is marked as absent
 - As a coach, I can uncheck positions for absent players so eligibility changes are preserved regardless of attendance
 - As a coach, "OF" is a single outfield position that can hold up to 3 players per inning; coaches decide real-time how to allocate those outfielders
+- As a coach, each position column has a paired "X+" column (e.g. "P+", "C+", "1B+"); checking a player's "X+" marks them as a priority player for that position
+- As a coach, the "X+" checkbox is disabled (and automatically cleared) when a player is not eligible for that position, since priority is meaningless without eligibility
 
 ### Game Configuration
 - As a coach, I can specify the number of innings to schedule (default: 7)
@@ -32,6 +34,7 @@ A browser-based game scheduling tool for Little League baseball coaches. The too
   - A player does not repeat a position until every other eligible (present) player has played it at least once — round-robin resets naturally when all eligible players reach the same play count
   - Players with Off eligibility only bench when all their eligible field positions (infield + OF) are already filled for that inning — no one sits out unnecessarily
   - Players eligible for constrained roles (P, 1B, etc.) naturally receive fewer Off innings because they are needed on the field more often
+  - **Position+ priority**: when filling any position, players marked "+" for that position (and who are eligible and unassigned) are always selected before non-"+" eligible players. Within each priority group (+ vs non-+), normal round-robin applies. For OF, the "+" pool is exhausted first before drawing from the non-"+" pool.
 - As a coach, the generated lineup tries to satisfy soft criteria to pick the best schedule among all candidates, evaluated in priority order:
   1. **Balanced Off innings** — schedules where every player's Off-inning count differs by at most 1 (e.g. everyone has 0 or 1, 1 or 2, 2 or 3 Off innings) beat all schedules where the Off counts are more uneven. This is the highest-priority soft criterion.
   2. **Minimize consecutive same-intensity innings** — among schedules with equally balanced Off innings, prefer fewer pairs of back-to-back high-intensity (infield) innings or back-to-back low-intensity (OF) innings for any player.
@@ -53,7 +56,7 @@ A browser-based game scheduling tool for Little League baseball coaches. The too
 - The PDF opens in a new browser tab, ready to print or save
 
 ### Sharing
-- As a coach, I can click "Share Roster" (shown in the Position Eligibility section header) to encode my roster configuration — player names, here/absent status, position eligibility, and inning count — into a compact URL using a binary bit-packed representation of position eligibility (9 bits per player: 1 here bit + 8 eligibility bits). The URL is copied to my clipboard and the browser address bar is updated.
+- As a coach, I can click "Share Roster" (shown in the Position Eligibility section header) to encode my roster configuration — player names, here/absent status, position eligibility, position+ priorities, and inning count — into a compact URL using a binary bit-packed representation (17 bits per player: 1 here bit + 8 eligibility bits + 8 priority bits). The URL is copied to my clipboard and the browser address bar is updated.
 - As a coach, opening a Share Roster URL pre-loads the exact roster configuration that was shared, ready for lineup generation.
 - As a coach, I can click the share icon button next to "Lineup" to encode only the output schedule into a compact URL that opens a read-only viewer; the URL uses a space-efficient encoding (player names stored once in batting order, schedule stored as a flat position-code string) so the link stays short even for large rosters and many innings.
 - As a coach, opening a Share Lineup URL shows a clean view of both the player-inning table and the by-position table, with no roster or configuration UI. The share-link view also includes Print and Share buttons identical in function to those on the main screen, so the lineup can be printed or re-shared directly from the shared URL.
