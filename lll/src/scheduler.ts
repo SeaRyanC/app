@@ -68,23 +68,23 @@ function generateOneSchedule(players: Player[], numInnings: number): OneResult {
         // Shuffle the infield positions so no single slot always has priority for player choice.
         const infieldOrder = shuffle([...INFIELD_POSITIONS] as Position[]);
         for (const pos of infieldOrder) {
-            // Among eligible unassigned players, prefer "+" players first; fall back to any
-            // eligible player, then to any unassigned player as a last resort.
+            // Among eligible unassigned players, fall back to any unassigned player as a last resort.
             const eligibleCandidates = battingOrder.filter(p => !assigned.has(p.name) && p.eligible[pos]);
-            const plusCandidates = eligibleCandidates.filter(p => p.plus[pos]);
-            let candidates = plusCandidates.length > 0 ? plusCandidates : eligibleCandidates;
-            if (candidates.length === 0) {
-                candidates = battingOrder.filter(p => !assigned.has(p.name));
-            }
+            const candidates = eligibleCandidates.length > 0
+                ? eligibleCandidates
+                : battingOrder.filter(p => !assigned.has(p.name));
             if (candidates.length === 0) {
                 return {
                     ok: false,
                     failureMessage: `Failed to find a player for ${pos} in inning ${inning + 1}`,
                 };
             }
-            // Round-robin: prefer the player(s) who have played this position least
+            // Round-robin: prefer the player(s) who have played this position least.
+            // Among those tied at the minimum, "+" players get priority as a tiebreaker.
             const minCount = Math.min(...candidates.map(p => getCount(p.name, pos)));
-            const minCandidates = candidates.filter(p => getCount(p.name, pos) === minCount);
+            const atMin = candidates.filter(p => getCount(p.name, pos) === minCount);
+            const plusAtMin = atMin.filter(p => p.plus[pos]);
+            const minCandidates = plusAtMin.length > 0 ? plusAtMin : atMin;
             const chosen = minCandidates[Math.floor(Math.random() * minCandidates.length)]!;
             assignment[chosen.name] = pos;
             assigned.add(chosen.name);
@@ -92,21 +92,21 @@ function generateOneSchedule(players: Player[], numInnings: number): OneResult {
         }
 
         // Step 2: Fill OF (capacity 3) from unassigned players eligible for OF.
-        // "+" players are selected before non-"+" players; round-robin applies within each group.
-        const ofEligible = battingOrder.filter(p => !assigned.has(p.name) && p.eligible['OF']);
-        const ofPlusPool = ofEligible.filter(p => p.plus['OF']);
-        const ofNonPlusPool = ofEligible.filter(p => !p.plus['OF']);
-        for (const pool of [ofPlusPool, ofNonPlusPool]) {
-            while (ofFilled < OF_CAPACITY && pool.length > 0) {
-                const minCount = Math.min(...pool.map(p => getCount(p.name, 'OF')));
-                const minCandidates = pool.filter(p => getCount(p.name, 'OF') === minCount);
-                const chosen = minCandidates[Math.floor(Math.random() * minCandidates.length)]!;
-                assignment[chosen.name] = 'OF';
-                assigned.add(chosen.name);
-                ofFilled++;
-                incCount(chosen.name, 'OF');
-                pool.splice(pool.indexOf(chosen), 1);
-            }
+        // Round-robin across all eligible players; among those tied at the minimum play count,
+        // "+" players are preferred as a tiebreaker so they get picked before non-"+" players
+        // at equal counts, but non-"+" players are picked before a "+" player repeats.
+        const ofPool = battingOrder.filter(p => !assigned.has(p.name) && p.eligible['OF']);
+        while (ofFilled < OF_CAPACITY && ofPool.length > 0) {
+            const minCount = Math.min(...ofPool.map(p => getCount(p.name, 'OF')));
+            const atMin = ofPool.filter(p => getCount(p.name, 'OF') === minCount);
+            const plusAtMin = atMin.filter(p => p.plus['OF']);
+            const ofCandidates = plusAtMin.length > 0 ? plusAtMin : atMin;
+            const chosen = ofCandidates[Math.floor(Math.random() * ofCandidates.length)]!;
+            assignment[chosen.name] = 'OF';
+            assigned.add(chosen.name);
+            ofFilled++;
+            incCount(chosen.name, 'OF');
+            ofPool.splice(ofPool.indexOf(chosen), 1);
         }
 
         // Step 3: All remaining players sit out (Off).
