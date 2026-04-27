@@ -135,3 +135,11 @@ Your human will be looking at these files in order to verify that your changes o
 You never need to run CodeQL or security checks; these projects are all client-side only and have no security implications.
 
 All `package.json` should have a `npm run local` that runs the esbuild dev server, appropriately configured
+
+# PR Checklist
+
+Ensure you've done the following tasks in your PR:
+ [ ] Run tests BEFORE making any changes. There are no "pre-existing failures" in this repo; everything is your fault, or if not your fault, is your responsibility
+ [ ] Incremented the app version
+ [ ] Deployed to docs/
+ [ ] Updated USER_STORY.md if there's a new feature. Don't do this for straightforward bug fixes (add a test instead).
