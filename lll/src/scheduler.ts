@@ -6,7 +6,7 @@ export const INFIELD_POSITIONS = new Set<Position>(['P', 'C', '1B', '2B', '3B', 
 export const OUTFIELD_POSITIONS = new Set<Position>(['OF']);
 
 // OF holds up to 3 players per inning; all other field positions hold exactly 1.
-const OF_CAPACITY = 3;
+export const OF_CAPACITY = 3;
 
 export interface Player {
     name: string;
