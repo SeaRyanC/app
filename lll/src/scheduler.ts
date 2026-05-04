@@ -86,12 +86,17 @@ function generateOneSchedule(players: Player[], numInnings: number): OneResult {
                 ? candidates.filter(p => getCount(p.name, pos) === 0)
                 : candidates;
             // Secondary: prefer players who have been benched (Off) the most — equalise bench time.
-            // Tertiary: among those tied on Off count, prefer players who have played this position least.
-            // Tiebreaker: "+" players get priority.
             const maxOff = Math.max(...rotationCandidates.map(p => getCount(p.name, 'Off')));
             const mostBenched = rotationCandidates.filter(p => getCount(p.name, 'Off') === maxOff);
-            const minCount = Math.min(...mostBenched.map(p => getCount(p.name, pos)));
-            const atMin = mostBenched.filter(p => getCount(p.name, pos) === minCount);
+            // Off+ tiebreaker (after equalization): among players tied on Off count, prefer non-Off+
+            // for field slots so that Off+ players fill bench slots first. This preserves equal
+            // overall play time while routing bench innings to Off+ players preferentially.
+            const nonOffPlusMostBenched = mostBenched.filter(p => !p.plus['Off']);
+            const benchBalancedCandidates = nonOffPlusMostBenched.length > 0 ? nonOffPlusMostBenched : mostBenched;
+            // Tertiary: prefer players who have played this position least.
+            // Tiebreaker: "+" players get priority.
+            const minCount = Math.min(...benchBalancedCandidates.map(p => getCount(p.name, pos)));
+            const atMin = benchBalancedCandidates.filter(p => getCount(p.name, pos) === minCount);
             const plusAtMin = atMin.filter(p => p.plus[pos]);
             const minCandidates = plusAtMin.length > 0 ? plusAtMin : atMin;
             const chosen = minCandidates[Math.floor(Math.random() * minCandidates.length)]!;
@@ -102,14 +107,17 @@ function generateOneSchedule(players: Player[], numInnings: number): OneResult {
 
         // Step 2: Fill OF (capacity 3) from unassigned players eligible for OF.
         // Primary: prefer players who have been benched the most (equalise bench time).
-        // Secondary: among ties on Off count, round-robin on OF play count.
+        // Off+ tiebreaker (after equalization): among players tied on Off count, prefer non-Off+.
+        // Secondary: round-robin on OF play count.
         // Tiebreaker: "+" players are preferred at equal counts.
         const ofPool = battingOrder.filter(p => !assigned.has(p.name) && p.eligible['OF']);
         while (ofFilled < OF_CAPACITY && ofPool.length > 0) {
             const maxOff = Math.max(...ofPool.map(p => getCount(p.name, 'Off')));
             const mostBenched = ofPool.filter(p => getCount(p.name, 'Off') === maxOff);
-            const minCount = Math.min(...mostBenched.map(p => getCount(p.name, 'OF')));
-            const atMin = mostBenched.filter(p => getCount(p.name, 'OF') === minCount);
+            const nonOffPlusMostBenched = mostBenched.filter(p => !p.plus['Off']);
+            const benchBalancedCandidates = nonOffPlusMostBenched.length > 0 ? nonOffPlusMostBenched : mostBenched;
+            const minCount = Math.min(...benchBalancedCandidates.map(p => getCount(p.name, 'OF')));
+            const atMin = benchBalancedCandidates.filter(p => getCount(p.name, 'OF') === minCount);
             const plusAtMin = atMin.filter(p => p.plus['OF']);
             const ofCandidates = plusAtMin.length > 0 ? plusAtMin : atMin;
             const chosen = ofCandidates[Math.floor(Math.random() * ofCandidates.length)]!;
@@ -139,6 +147,8 @@ function generateOneSchedule(players: Player[], numInnings: number): OneResult {
 
 // Returns true when all present players' Off-inning counts are within 1 of each other
 // (i.e. max - min <= 1), meaning everyone gets "0 or 1", "1 or 2", "2 or 3", etc.
+// Off+ players receive more bench innings on average but still stay within this window
+// (e.g. Off+ get 2 bench while others get 1, so max - min = 1 which passes).
 function isOffBalanced(schedule: Schedule, battingOrder: string[]): boolean {
     if (battingOrder.length === 0) return true;
     const offCounts = battingOrder.map(name =>
@@ -186,7 +196,8 @@ export function generateBestSchedule(
     if (present.length === 0) return null;
 
     // Primary criterion (highest priority): Off-innings are balanced across all players
-    //   (max Off count − min Off count ≤ 1).  A balanced schedule beats any unbalanced one.
+    //   (max Off count − min Off count ≤ 1).  Off+ players naturally occupy the extra bench slots
+    //   but still stay within the window (e.g. Off+ get 2, others get 1 → max - min = 1).
     // Secondary criterion: no player has two consecutive Off innings (lower consecutive-Off count wins).
     // Tertiary criterion: fewest consecutive same-intensity innings (adjacency score).
     let bestOffBalanced = false;
