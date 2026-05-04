@@ -7,8 +7,8 @@
 
 import PDFDocument from 'pdfkit-browserify';
 import blobStream from 'blob-stream';
-import type { Schedule } from './scheduler.js';
-import { FIELD_POSITIONS, INFIELD_POSITIONS, OUTFIELD_POSITIONS } from './scheduler.js';
+import type { Schedule, Position } from './scheduler.js';
+import { INFIELD_POSITIONS, OUTFIELD_POSITIONS } from './scheduler.js';
 
 // US Letter landscape: 11 × 8.5 inches at 72 pt/in
 const PAGE_WIDTH = 792;
@@ -61,8 +61,8 @@ function generateLineupPDF(data: LineupPDFData): Promise<Blob> {
             const innColW = availForInnings / numInnings;
             const rowCount = players.length + 1; // +1 header
             const tableH = USABLE_H - (tableTop - MARGIN);
-            const rowH = Math.min(20, tableH / rowCount);
-            const fontSize = Math.min(9, rowH * 0.6);
+            const rowH = tableH / rowCount;
+            const fontSize = Math.min(12, rowH * 0.55);
 
             const batX = MARGIN;
             const nameX = MARGIN + batColW;
@@ -94,6 +94,10 @@ function generateLineupPDF(data: LineupPDFData): Promise<Blob> {
                     else if (pos && pos === 'Off') offCount++;
                 }
 
+                // Alternating row background (very light)
+                if (idx % 2 === 1) {
+                    doc.rect(batX, y, USABLE_W, rowH).fillColor('#f0f0f0').fill();
+                }
                 doc.fillColor('#111111');
                 drawCell(doc, String(idx + 1), batX, y, batColW, rowH, 'center');
                 drawCell(doc, player, nameX, y, nameColW, rowH, 'left');
@@ -111,14 +115,23 @@ function generateLineupPDF(data: LineupPDFData): Promise<Blob> {
             // ── Page 2: Position × Inning ────────────────────────────────────────
             doc.addPage({ size: [PAGE_WIDTH, PAGE_HEIGHT], margin: MARGIN });
 
-            // Rows: all field positions + Off bench
-            const posRows = [...FIELD_POSITIONS, 'Off' as const];
+            // Expand OF into three individual rows; all others stay single.
+            interface PosRowDef { label: string; pos: Position; index: number; }
+            const posRowDefs: PosRowDef[] = [
+                ...(['P', 'C', '1B', '2B', '3B', 'SS'] as Position[])
+                    .map(p => ({ label: p, pos: p, index: 0 })),
+                { label: 'OF', pos: 'OF' as Position, index: 0 },
+                { label: 'OF', pos: 'OF' as Position, index: 1 },
+                { label: 'OF', pos: 'OF' as Position, index: 2 },
+                { label: 'Off', pos: 'Off' as Position, index: 0 },
+            ];
+
             const tableTop2 = MARGIN;
             const posColW = Math.min(50, USABLE_W * 0.08);
             const innColW2 = (USABLE_W - posColW) / numInnings;
-            const rowCount2 = posRows.length + 1;
-            const rowH2 = Math.min(24, (USABLE_H - (tableTop2 - MARGIN)) / rowCount2);
-            const fontSize2 = Math.min(9, rowH2 * 0.6);
+            const rowCount2 = posRowDefs.length + 1;
+            const rowH2 = (USABLE_H - (tableTop2 - MARGIN)) / rowCount2;
+            const fontSize2 = Math.min(12, rowH2 * 0.55);
             const colX2 = (col: number): number =>
                 MARGIN + posColW + col * innColW2;
 
@@ -131,21 +144,25 @@ function generateLineupPDF(data: LineupPDFData): Promise<Blob> {
             y2 += rowH2;
 
             doc.font('Helvetica').fillColor('#111111');
-            for (const pos of posRows) {
-                drawCell(doc, pos, MARGIN, y2, posColW, rowH2, 'left');
+            posRowDefs.forEach((rowDef, rowIdx) => {
+                // Alternating row background (very light)
+                if (rowIdx % 2 === 1) {
+                    doc.rect(MARGIN, y2, USABLE_W, rowH2).fillColor('#f0f0f0').fill();
+                }
+                doc.fillColor('#111111');
+                drawCell(doc, rowDef.label, MARGIN, y2, posColW, rowH2, 'left');
                 for (const i of innings) {
                     const inningData = schedule[i];
-                    // OF can have multiple players; others have at most one
                     const names = inningData
                         ? Object.entries(inningData)
-                            .filter(([, p]) => p === pos)
+                            .filter(([, p]) => p === rowDef.pos)
                             .map(([n]) => n)
-                            .join(', ')
-                        : '—';
-                    drawCell(doc, names || '—', colX2(i), y2, innColW2, rowH2, 'center');
+                        : [];
+                    const name = names[rowDef.index] ?? '—';
+                    drawCell(doc, name, colX2(i), y2, innColW2, rowH2, 'center');
                 }
                 y2 += rowH2;
-            }
+            });
 
             doc.end();
             stream.on('finish', () => resolve(stream.toBlob('application/pdf')));
