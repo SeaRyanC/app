@@ -1,6 +1,6 @@
 {
   "name": "lll",
-  "version": "5.9.0",
+  "version": "5.10.0",
   "type": "module",
   "description": "Little League Lineup - Game scheduling tool for Little League baseball",
   "main": "src/index.tsx",
