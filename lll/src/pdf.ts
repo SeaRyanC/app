@@ -61,8 +61,8 @@ function generateLineupPDF(data: LineupPDFData): Promise<Blob> {
             const innColW = availForInnings / numInnings;
             const rowCount = players.length + 1; // +1 header
             const tableH = USABLE_H - (tableTop - MARGIN);
-            const rowH = Math.min(20, tableH / rowCount);
-            const fontSize = Math.min(9, rowH * 0.6);
+            const rowH = Math.min(32, tableH / rowCount);
+            const fontSize = Math.min(16, rowH * 0.55);
 
             const batX = MARGIN;
             const nameX = MARGIN + batColW;
@@ -117,8 +117,8 @@ function generateLineupPDF(data: LineupPDFData): Promise<Blob> {
             const posColW = Math.min(50, USABLE_W * 0.08);
             const innColW2 = (USABLE_W - posColW) / numInnings;
             const rowCount2 = posRows.length + 1;
-            const rowH2 = Math.min(24, (USABLE_H - (tableTop2 - MARGIN)) / rowCount2);
-            const fontSize2 = Math.min(9, rowH2 * 0.6);
+            const rowH2 = Math.min(40, (USABLE_H - (tableTop2 - MARGIN)) / rowCount2);
+            const fontSize2 = Math.min(16, rowH2 * 0.55);
             const colX2 = (col: number): number =>
                 MARGIN + posColW + col * innColW2;
 
