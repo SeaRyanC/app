@@ -79,11 +79,17 @@ function generateOneSchedule(players: Player[], numInnings: number): OneResult {
                     failureMessage: `Failed to find a player for ${pos} in inning ${inning + 1}`,
                 };
             }
-            // Primary: prefer players who have been benched (Off) the most — equalise bench time.
-            // Secondary: among those tied on Off count, prefer players who have played this position least.
+            // Primary (hard): rotation enforcement — if any candidate hasn't played this position yet,
+            // restrict to only those candidates. Only allow repeats when everyone has already played it.
+            const minPosCount = Math.min(...candidates.map(p => getCount(p.name, pos)));
+            const rotationCandidates = minPosCount === 0
+                ? candidates.filter(p => getCount(p.name, pos) === 0)
+                : candidates;
+            // Secondary: prefer players who have been benched (Off) the most — equalise bench time.
+            // Tertiary: among those tied on Off count, prefer players who have played this position least.
             // Tiebreaker: "+" players get priority.
-            const maxOff = Math.max(...candidates.map(p => getCount(p.name, 'Off')));
-            const mostBenched = candidates.filter(p => getCount(p.name, 'Off') === maxOff);
+            const maxOff = Math.max(...rotationCandidates.map(p => getCount(p.name, 'Off')));
+            const mostBenched = rotationCandidates.filter(p => getCount(p.name, 'Off') === maxOff);
             const minCount = Math.min(...mostBenched.map(p => getCount(p.name, pos)));
             const atMin = mostBenched.filter(p => getCount(p.name, pos) === minCount);
             const plusAtMin = atMin.filter(p => p.plus[pos]);
