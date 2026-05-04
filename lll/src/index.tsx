@@ -4,7 +4,7 @@ import { ALL_POSITIONS, FIELD_POSITIONS, INFIELD_POSITIONS, OUTFIELD_POSITIONS, 
 import type { Position, Player, Schedule, InningAssignment } from './scheduler.js';
 import { printLineupPDF } from './pdf.js';
 
-const VERSION = '5.4.0';
+const VERSION = '5.5.0';
 const COMMIT_HASH = 'dev';
 const STORAGE_KEY = 'lll-config';
 
@@ -443,7 +443,7 @@ function App() {
                             {rosterShareCopied ? '✅ Copied!' : '🔗 Share Roster'}
                         </button>
                     </div>
-                    <p class="hint">Check each position a player is eligible to play. Use the <strong>+</strong> column to give a player priority for that position — they will be chosen before non-+ players when constructing the lineup.</p>
+                    <p class="hint">Check each position a player is eligible to play. Use the <strong>+</strong> column to give a player priority for that position. Check <strong>Off+</strong> to mark a player as bench-preferred — they sit out before others when bench slots are available, while still receiving equal overall play time.</p>
                     <div class="table-scroll">
                         <table class="eligibility-table">
                             <thead>
@@ -452,7 +452,7 @@ function App() {
                                     <th class="col-name">Player</th>
                                     {ALL_POSITIONS.map(pos => (
                                         <>
-                                            <th key={pos} class="col-pos">{pos}</th>
+                                            {pos !== 'Off' && <th key={pos} class="col-pos">{pos}</th>}
                                             <th key={pos + '+'} class="col-pos-plus">{pos}+</th>
                                         </>
                                     ))}
@@ -472,19 +472,21 @@ function App() {
                                         <td class="col-name">{name}</td>
                                         {ALL_POSITIONS.map(pos => (
                                             <>
-                                                <td key={pos} class="col-pos">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={getEligible(name, pos)}
-                                                        onChange={(e) => setEligible(name, pos, (e.target as HTMLInputElement).checked)}
-                                                        aria-label={`${name} eligible for ${pos}`}
-                                                    />
-                                                </td>
+                                                {pos !== 'Off' && (
+                                                    <td key={pos} class="col-pos">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={getEligible(name, pos)}
+                                                            onChange={(e) => setEligible(name, pos, (e.target as HTMLInputElement).checked)}
+                                                            aria-label={`${name} eligible for ${pos}`}
+                                                        />
+                                                    </td>
+                                                )}
                                                 <td key={pos + '+'} class="col-pos-plus">
                                                     <input
                                                         type="checkbox"
                                                         checked={getPlus(name, pos)}
-                                                        disabled={!getEligible(name, pos)}
+                                                        disabled={pos !== 'Off' && !getEligible(name, pos)}
                                                         onChange={(e) => setPlus(name, pos, (e.target as HTMLInputElement).checked)}
                                                         aria-label={`${name} priority for ${pos}`}
                                                     />
