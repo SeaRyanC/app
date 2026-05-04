@@ -4,7 +4,7 @@ import { ALL_POSITIONS, FIELD_POSITIONS, INFIELD_POSITIONS, OUTFIELD_POSITIONS, 
 import type { Position, Player, Schedule, InningAssignment } from './scheduler.js';
 import { printLineupPDF } from './pdf.js';
 
-const VERSION = '5.7.0';
+const VERSION = '5.8.0';
 const COMMIT_HASH = 'dev';
 const STORAGE_KEY = 'lll-config';
 
