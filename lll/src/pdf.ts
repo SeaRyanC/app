@@ -16,6 +16,7 @@ const PAGE_HEIGHT = 612;
 const MARGIN = 72;
 const USABLE_W = PAGE_WIDTH - MARGIN * 2;
 const USABLE_H = PAGE_HEIGHT - MARGIN * 2;
+const SMALL_PADDING = 8;
 
 export interface LineupPDFData {
     players: string[];  // in batting order
@@ -64,7 +65,6 @@ function generateLineupPDF(data: LineupPDFData): Promise<Blob> {
             const rowH = Math.min(32, tableH / rowCount);
             const fontSize = Math.min(16, rowH * 0.55);
 
-            const batX = MARGIN;
             const nameX = MARGIN + batColW;
             const colX = (col: number): number => nameX + nameColW + (col) * innColW;
             const summaryX = (idx: number): number =>
@@ -73,14 +73,12 @@ function generateLineupPDF(data: LineupPDFData): Promise<Blob> {
             // Header row
             let y = tableTop;
             doc.fontSize(fontSize).font('Helvetica-Bold').fillColor('#333333');
-            drawCell(doc, '#', batX, y, batColW, rowH, 'center');
-            drawCell(doc, 'Player', nameX, y, nameColW, rowH, 'left');
             for (const i of innings) {
                 drawCell(doc, String(i + 1), colX(i), y, innColW, rowH, 'center');
             }
             drawCell(doc, 'IF', summaryX(0), y, summaryColW, rowH, 'center');
             drawCell(doc, 'OF', summaryX(1), y, summaryColW, rowH, 'center');
-            drawCell(doc, 'Off', summaryX(2), y, summaryColW, rowH, 'center');
+            drawCell(doc, 'B', summaryX(2), y, summaryColW, rowH, 'center');
             y += rowH;
 
             // Player rows (in batting order)
@@ -93,9 +91,12 @@ function generateLineupPDF(data: LineupPDFData): Promise<Blob> {
                     else if (pos && OUTFIELD_POSITIONS.has(pos)) ofCount++;
                     else if (pos && pos === 'Off') offCount++;
                 }
+                // Background for alternating rows
+                if (idx % 2 === 1) {
+                    doc.rect(nameX, y, USABLE_W - batColW, rowH).fill('#e8e8e8');
+                }
 
-                doc.fillColor('#111111');
-                drawCell(doc, String(idx + 1), batX, y, batColW, rowH, 'center');
+                doc.fillColor('#000000');
                 drawCell(doc, player, nameX, y, nameColW, rowH, 'left');
                 for (const i of innings) {
                     const pos = schedule[i]?.[player] ?? '—';
@@ -119,12 +120,12 @@ function generateLineupPDF(data: LineupPDFData): Promise<Blob> {
             const rowCount2 = infieldRows.length + OF_CAPACITY + 1 + 1; // +1 for Off, +1 header
             const rowH2 = Math.min(40, (USABLE_H - (tableTop2 - MARGIN)) / rowCount2);
             const fontSize2 = Math.min(16, rowH2 * 0.55);
+            const smallPadding = 3;
             const colX2 = (col: number): number =>
                 MARGIN + posColW + col * innColW2;
 
             let y2 = tableTop2;
             doc.fontSize(fontSize2).font('Helvetica-Bold').fillColor('#333333');
-            drawCell(doc, 'Position', MARGIN, y2, posColW, rowH2, 'left');
             for (const i of innings) {
                 drawCell(doc, String(i + 1), colX2(i), y2, innColW2, rowH2, 'center');
             }
@@ -133,7 +134,7 @@ function generateLineupPDF(data: LineupPDFData): Promise<Blob> {
             doc.font('Helvetica').fillColor('#111111');
             // Infield positions — one row each
             for (const pos of infieldRows) {
-                drawCell(doc, pos, MARGIN, y2, posColW, rowH2, 'left');
+                drawCell(doc, pos, MARGIN, y2, posColW, rowH2, 'center');
                 for (const i of innings) {
                     const inningData = schedule[i];
                     const name = inningData
@@ -145,7 +146,7 @@ function generateLineupPDF(data: LineupPDFData): Promise<Blob> {
             }
             // OF — one row per slot, in batting order
             for (let slot = 0; slot < OF_CAPACITY; slot++) {
-                drawCell(doc, 'OF', MARGIN, y2, posColW, rowH2, 'left');
+                drawCell(doc, 'OF', MARGIN, y2, posColW, rowH2, 'center');
                 for (const i of innings) {
                     const inningData = schedule[i];
                     const ofPlayers = inningData
@@ -156,7 +157,7 @@ function generateLineupPDF(data: LineupPDFData): Promise<Blob> {
                 y2 += rowH2;
             }
             // Off (bench) row
-            drawCell(doc, 'Off', MARGIN, y2, posColW, rowH2, 'left');
+            drawCell(doc, 'B', MARGIN, y2, posColW, rowH2, 'center');
             for (const i of innings) {
                 const inningData = schedule[i];
                 const offPlayers = inningData
@@ -187,16 +188,23 @@ function drawCell(
 ): void {
     doc.rect(x, y, w, h).lineWidth(0.4).strokeColor('#cccccc').stroke();
 
-    const pad = 3;
-    const textW = w - pad * 2;
+    const textW = w;
     const textH = doc.currentLineHeight();
     const ty = y + (h - textH) / 2;
     doc.save();
     doc.rect(x, y, w, h).clip();
-    doc.text(text, x + pad, ty, {
-        width: textW,
-        align,
-        lineBreak: false,
-    });
+    if (align === 'center') {
+        doc.text(text, x, ty, {
+            width: w,
+            align,
+            lineBreak: false,
+        });
+    } else /* left */ {
+        doc.text(text, x + SMALL_PADDING, ty, {
+            width: textW,
+            align,
+            lineBreak: false,
+        });
+    }
     doc.restore();
 }
