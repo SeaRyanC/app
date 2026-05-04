@@ -85,11 +85,16 @@ function generateOneSchedule(players: Player[], numInnings: number): OneResult {
             const rotationCandidates = minPosCount === 0
                 ? candidates.filter(p => getCount(p.name, pos) === 0)
                 : candidates;
+            // Off+ tiebreaker: among rotation candidates, deprioritise Off+ players so they
+            // remain available for the bench step. Fall back to Off+ players only if no non-Off+
+            // candidates remain after rotation filtering.
+            const nonOffPlusRotation = rotationCandidates.filter(p => !p.plus['Off']);
+            const fieldCandidates = nonOffPlusRotation.length > 0 ? nonOffPlusRotation : rotationCandidates;
             // Secondary: prefer players who have been benched (Off) the most — equalise bench time.
             // Tertiary: among those tied on Off count, prefer players who have played this position least.
             // Tiebreaker: "+" players get priority.
-            const maxOff = Math.max(...rotationCandidates.map(p => getCount(p.name, 'Off')));
-            const mostBenched = rotationCandidates.filter(p => getCount(p.name, 'Off') === maxOff);
+            const maxOff = Math.max(...fieldCandidates.map(p => getCount(p.name, 'Off')));
+            const mostBenched = fieldCandidates.filter(p => getCount(p.name, 'Off') === maxOff);
             const minCount = Math.min(...mostBenched.map(p => getCount(p.name, pos)));
             const atMin = mostBenched.filter(p => getCount(p.name, pos) === minCount);
             const plusAtMin = atMin.filter(p => p.plus[pos]);
@@ -101,13 +106,16 @@ function generateOneSchedule(players: Player[], numInnings: number): OneResult {
         }
 
         // Step 2: Fill OF (capacity 3) from unassigned players eligible for OF.
-        // Primary: prefer players who have been benched the most (equalise bench time).
-        // Secondary: among ties on Off count, round-robin on OF play count.
+        // Primary: deprioritise Off+ players so they remain available for the bench.
+        // Secondary: among ties, prefer players who have been benched the most (equalise bench time).
+        // Tertiary: round-robin on OF play count.
         // Tiebreaker: "+" players are preferred at equal counts.
         const ofPool = battingOrder.filter(p => !assigned.has(p.name) && p.eligible['OF']);
         while (ofFilled < OF_CAPACITY && ofPool.length > 0) {
-            const maxOff = Math.max(...ofPool.map(p => getCount(p.name, 'Off')));
-            const mostBenched = ofPool.filter(p => getCount(p.name, 'Off') === maxOff);
+            const nonOffPlusOf = ofPool.filter(p => !p.plus['Off']);
+            const workingOfPool = nonOffPlusOf.length > 0 ? nonOffPlusOf : ofPool;
+            const maxOff = Math.max(...workingOfPool.map(p => getCount(p.name, 'Off')));
+            const mostBenched = workingOfPool.filter(p => getCount(p.name, 'Off') === maxOff);
             const minCount = Math.min(...mostBenched.map(p => getCount(p.name, 'OF')));
             const atMin = mostBenched.filter(p => getCount(p.name, 'OF') === minCount);
             const plusAtMin = atMin.filter(p => p.plus['OF']);
@@ -137,20 +145,24 @@ function generateOneSchedule(players: Player[], numInnings: number): OneResult {
     return { ok: true, schedule, battingOrder: battingOrder.map(p => p.name) };
 }
 
-// Returns true when all present players' Off-inning counts are within 1 of each other
+// Returns true when all present non-Off+ players' Off-inning counts are within 1 of each other
 // (i.e. max - min <= 1), meaning everyone gets "0 or 1", "1 or 2", "2 or 3", etc.
-function isOffBalanced(schedule: Schedule, battingOrder: string[]): boolean {
-    if (battingOrder.length === 0) return true;
-    const offCounts = battingOrder.map(name =>
+// Off+ players are excluded because they are intentionally given more bench time.
+function isOffBalanced(schedule: Schedule, battingOrder: string[], offPlusNames: ReadonlySet<string>): boolean {
+    const balancedPlayers = battingOrder.filter(name => !offPlusNames.has(name));
+    if (balancedPlayers.length === 0) return true;
+    const offCounts = balancedPlayers.map(name =>
         schedule.reduce((n, inning) => n + (inning[name] === 'Off' ? 1 : 0), 0)
     );
     return Math.max(...offCounts) - Math.min(...offCounts) <= 1;
 }
 
 // Returns the number of (player, inning) pairs where a player has two consecutive Off innings.
-function countConsecutiveOff(schedule: Schedule, battingOrder: string[], numInnings: number): number {
+// Off+ players are excluded because consecutive bench innings are expected for them.
+function countConsecutiveOff(schedule: Schedule, battingOrder: string[], numInnings: number, offPlusNames: ReadonlySet<string>): number {
     let count = 0;
     for (const name of battingOrder) {
+        if (offPlusNames.has(name)) continue;
         for (let i = 1; i < numInnings; i++) {
             const prev = schedule[i - 1]?.[name];
             const curr = schedule[i]?.[name];
@@ -185,9 +197,12 @@ export function generateBestSchedule(
     const present = players.filter(p => p.here);
     if (present.length === 0) return null;
 
-    // Primary criterion (highest priority): Off-innings are balanced across all players
+    // Pre-compute the set of Off+ player names for use in scoring functions.
+    const offPlusNames = new Set(present.filter(p => p.plus['Off']).map(p => p.name));
+
+    // Primary criterion (highest priority): Off-innings are balanced across all non-Off+ players
     //   (max Off count − min Off count ≤ 1).  A balanced schedule beats any unbalanced one.
-    // Secondary criterion: no player has two consecutive Off innings (lower consecutive-Off count wins).
+    // Secondary criterion: no non-Off+ player has two consecutive Off innings (lower consecutive-Off count wins).
     // Tertiary criterion: fewest consecutive same-intensity innings (adjacency score).
     let bestOffBalanced = false;
     let bestConsecOff = Infinity;
@@ -202,8 +217,8 @@ export function generateBestSchedule(
         if (!result.ok) {
             failureCounts.set(result.failureMessage, (failureCounts.get(result.failureMessage) ?? 0) + 1);
         } else {
-            const offBalanced = isOffBalanced(result.schedule, result.battingOrder);
-            const consecOff = countConsecutiveOff(result.schedule, result.battingOrder, numInnings);
+            const offBalanced = isOffBalanced(result.schedule, result.battingOrder, offPlusNames);
+            const consecOff = countConsecutiveOff(result.schedule, result.battingOrder, numInnings, offPlusNames);
             const adjacency = scoreAdjacency(result.schedule, result.battingOrder, numInnings);
 
             // Lexicographic comparison: offBalanced first (true > false), then lower consecOff, then lower adjacency.

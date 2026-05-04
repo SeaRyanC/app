@@ -19,6 +19,7 @@ A browser-based game scheduling tool for Little League baseball coaches. The too
 - As a coach, "OF" is a single outfield position that can hold up to 3 players per inning; coaches decide real-time how to allocate those outfielders
 - As a coach, each position column has a paired "X+" column (e.g. "P+", "C+", "1B+"); checking a player's "X+" marks them as a priority player for that position
 - As a coach, the "X+" checkbox is disabled (and automatically cleared) when a player is not eligible for that position, since priority is meaningless without eligibility
+- As a coach, checking "Off+" for a player marks them as a bench-priority player: they will be deprioritised when filling field positions (infield and OF), so they accumulate more bench innings than players without Off+. Off+ players' bench time is not subject to the balance check, since having more bench time is the intended outcome.
 
 ### Game Configuration
 - As a coach, I can specify the number of innings to schedule (default: 7)
