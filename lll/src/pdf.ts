@@ -2,7 +2,7 @@
  * PDF generation for the Little League Lineup.
  * Produces a two-page landscape US Letter PDF:
  *   Page 1 — Player × Inning table (with IF/OF/Off summary columns)
- *   Page 2 — Position × Inning table (infield, OF, Off)
+ *   Page 2 — Position × Inning table (infield, OF slots, bench slots)
  */
 
 import PDFDocument from 'pdfkit-browserify';
@@ -109,18 +109,25 @@ function generateLineupPDF(data: LineupPDFData): Promise<Blob> {
                 y += rowH;
             });
 
+            const benchPlayersByInning = innings.map(i => {
+                const inningData = schedule[i];
+                return inningData
+                    ? players.filter(player => inningData[player] === 'Off')
+                    : [];
+            });
+            const benchRowCount = Math.max(1, ...benchPlayersByInning.map(benchPlayers => benchPlayers.length));
+
             // ── Page 2: Position × Inning ────────────────────────────────────────
             doc.addPage({ size: [PAGE_WIDTH, PAGE_HEIGHT], margin: MARGIN });
 
-            // Rows: infield positions + one row per OF slot + Off bench
+            // Rows: infield positions + one row per OF slot + one row per bench slot
             const infieldRows = FIELD_POSITIONS.filter(p => p !== 'OF');
             const tableTop2 = MARGIN;
             const posColW = Math.max(65, USABLE_W * 0.08);
             const innColW2 = (USABLE_W - posColW) / numInnings;
-            const rowCount2 = infieldRows.length + OF_CAPACITY + 1 + 1; // +1 for Off, +1 header
+            const rowCount2 = infieldRows.length + OF_CAPACITY + benchRowCount + 1; // +1 header
             const rowH2 = Math.min(40, (USABLE_H - (tableTop2 - MARGIN)) / rowCount2);
             const fontSize2 = Math.min(16, rowH2 * 0.55);
-            const smallPadding = 3;
             const colX2 = (col: number): number =>
                 MARGIN + posColW + col * innColW2;
 
@@ -156,16 +163,14 @@ function generateLineupPDF(data: LineupPDFData): Promise<Blob> {
                 }
                 y2 += rowH2;
             }
-            // Off (bench) row
-            drawCell(doc, 'B', MARGIN, y2, posColW, rowH2, 'center');
-            for (const i of innings) {
-                const inningData = schedule[i];
-                const offPlayers = inningData
-                    ? players.filter(p => inningData[p] === 'Off').join(', ')
-                    : '—';
-                drawCell(doc, offPlayers || '—', colX2(i), y2, innColW2, rowH2, 'center');
+            // Bench — one row per slot, in batting order
+            for (let slot = 0; slot < benchRowCount; slot++) {
+                drawCell(doc, 'B', MARGIN, y2, posColW, rowH2, 'center');
+                for (const i of innings) {
+                    drawCell(doc, benchPlayersByInning[i]?.[slot] ?? '—', colX2(i), y2, innColW2, rowH2, 'center');
+                }
+                y2 += rowH2;
             }
-            y2 += rowH2;
 
             doc.end();
             stream.on('finish', () => resolve(stream.toBlob('application/pdf')));

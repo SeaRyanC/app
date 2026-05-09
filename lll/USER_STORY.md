@@ -55,6 +55,7 @@ A browser-based game scheduling tool for Little League baseball coaches. The too
 ### Print
 - As a coach, I can click the printer icon button next to "Lineup" to generate a two-page US Letter landscape PDF of the current lineup
 - The first page shows the player-inning table (with batting order numbers and IF/OF/Off summary columns); the second page shows the by-position table
+- When multiple players are benched in the same inning, the PDF's second page expands the bench section into multiple `B` rows so every benched player stays readable without spilling past the two-page layout
 - The PDF opens in a new browser tab, ready to print or save
 
 ### Sharing
