@@ -141,5 +141,5 @@ All `package.json` should have a `npm run local` that runs the esbuild dev serve
 Ensure you've done the following tasks in your PR:
  [ ] Run tests BEFORE making any changes. There are no "pre-existing failures" in this repo; everything is your fault, or if not your fault, is your responsibility
  [ ] Incremented the app version
- [ ] Deployed to docs/
+ [ ] **MANDATORY: Run `npm run bundle` and commit the updated `docs/<app>/app.js` output.** Publishing is REQUIRED on every PR that changes app code. A PR that modifies source files without updating `docs/` is INCOMPLETE and BROKEN. Do not skip this step under any circumstances.
  [ ] Updated USER_STORY.md if there's a new feature. Don't do this for straightforward bug fixes (add a test instead).
