@@ -7,7 +7,8 @@ A browser-based expense tracker that displays spending data as a pivot table org
 ## User Stories
 
 ### Data Input
-- As a user, I can paste TSV (tab-separated values) transaction data into a text area
+- As a user, I can paste TSV (tab-separated values) or CSV (comma-separated values) transaction data into a text area
+- As a user, the app automatically detects whether the input uses tabs or commas as the delimiter
 - As a user, I see the app pre-populated with sample synthetic data to understand how it works
 - As a user, my data is automatically saved to localStorage and persists across page refreshes
 

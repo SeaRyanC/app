@@ -149,6 +149,47 @@ function parseDateString(dateStr: string): { year: number; month: number; day: n
   return null;
 }
 
+// Detect delimiter from the header line: prefer tab if tab count >= comma count, else comma
+function detectDelimiter(firstLine: string): '\t' | ',' {
+  const tabCount = (firstLine.match(/\t/g) ?? []).length;
+  const commaCount = (firstLine.match(/,/g) ?? []).length;
+  return tabCount >= commaCount ? '\t' : ',';
+}
+
+// Split a single CSV row, respecting double-quoted fields (RFC 4180)
+function splitCSVRow(line: string): string[] {
+  const result: string[] = [];
+  let current = '';
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i]!;
+    if (inQuotes) {
+      if (ch === '"') {
+        if (line[i + 1] === '"') {
+          // Escaped quote inside quoted field
+          current += '"';
+          i++;
+        } else {
+          inQuotes = false;
+        }
+      } else {
+        current += ch;
+      }
+    } else {
+      if (ch === '"') {
+        inQuotes = true;
+      } else if (ch === ',') {
+        result.push(current);
+        current = '';
+      } else {
+        current += ch;
+      }
+    }
+  }
+  result.push(current);
+  return result;
+}
+
 // Detect sign convention: returns true if negative numbers should be inverted to positive (expenses)
 // If equal counts or empty, returns false (no inversion) - amounts are kept as-is
 function detectSignConvention(amounts: number[]): boolean {
@@ -273,10 +314,14 @@ function parseTSV(tsv: string): Transaction[] {
   const lines = tsv.trim().split('\n');
   if (lines.length < 2) return [];
 
-  // Parse header to detect column mapping
+  // Parse header to detect column mapping and delimiter
   const headerLine = lines[0];
   if (!headerLine) return [];
-  const headers = headerLine.split('\t');
+  const delimiter = detectDelimiter(headerLine);
+  const splitRow = delimiter === '\t'
+    ? (line: string) => line.split('\t')
+    : splitCSVRow;
+  const headers = splitRow(headerLine);
   const mapping = detectColumnMapping(headers);
 
   // First pass: collect raw amounts to detect sign convention
@@ -284,7 +329,7 @@ function parseTSV(tsv: string): Transaction[] {
   for (let i = 1; i < lines.length; i++) {
     const line = lines[i];
     if (!line?.trim()) continue;
-    const cols = line.split('\t');
+    const cols = splitRow(line);
     if (mapping.amount >= 0) {
       const rawAmount = parseFloat(cols[mapping.amount] ?? '0') || 0;
       if (rawAmount !== 0) rawAmounts.push(rawAmount);
@@ -300,7 +345,7 @@ function parseTSV(tsv: string): Transaction[] {
     const line = lines[i];
     if (!line?.trim()) continue;
 
-    const cols = line.split('\t');
+    const cols = splitRow(line);
     const getCol = (idx: number) => (idx >= 0 ? cols[idx] ?? '' : '');
 
     const rawAmount = parseFloat(getCol(mapping.amount)) || 0;
@@ -482,7 +527,7 @@ function App() {
 
       <div>
         <label>
-          <strong>Paste your TSV data here:</strong>
+          <strong>Paste your TSV or CSV data here:</strong>
         </label>
         <textarea
           value={tsvData}
