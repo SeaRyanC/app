@@ -156,16 +156,21 @@ function detectDelimiter(firstLine: string): '\t' | ',' {
   return tabCount >= commaCount ? '\t' : ',';
 }
 
+// Split a TSV row on tab characters
+function splitTSVRow(line: string): string[] {
+  return line.split('\t');
+}
+
 // Split a single CSV row, respecting double-quoted fields (RFC 4180)
 function splitCSVRow(line: string): string[] {
   const result: string[] = [];
   let current = '';
   let inQuotes = false;
   for (let i = 0; i < line.length; i++) {
-    const ch = line[i]!;
+    const ch = line[i];
     if (inQuotes) {
       if (ch === '"') {
-        if (line[i + 1] === '"') {
+        if (i + 1 < line.length && line[i + 1] === '"') {
           // Escaped quote inside quoted field
           current += '"';
           i++;
@@ -318,9 +323,7 @@ function parseTSV(tsv: string): Transaction[] {
   const headerLine = lines[0];
   if (!headerLine) return [];
   const delimiter = detectDelimiter(headerLine);
-  const splitRow = delimiter === '\t'
-    ? (line: string) => line.split('\t')
-    : splitCSVRow;
+  const splitRow = delimiter === '\t' ? splitTSVRow : splitCSVRow;
   const headers = splitRow(headerLine);
   const mapping = detectColumnMapping(headers);
 
