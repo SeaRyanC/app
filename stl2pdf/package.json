@@ -1,6 +1,6 @@
 {
   "name": "stl2pdf",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "STL to PDF section viewer - view and print cross-sections of 3D STL models",
   "type": "module",
   "scripts": {

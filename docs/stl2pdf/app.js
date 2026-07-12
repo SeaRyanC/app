@@ -20266,54 +20266,148 @@ function D2(n3, t5) {
 }
 
 // src/stl-parser.ts
-function readF32(view, offset) {
-  return view.getFloat32(offset, true);
-}
-function readVec3(view, offset) {
+function makeBBox(minX, minY, minZ, maxX, maxY, maxZ) {
   return {
-    x: readF32(view, offset),
-    y: readF32(view, offset + 4),
-    z: readF32(view, offset + 8)
+    min: { x: minX, y: minY, z: minZ },
+    max: { x: maxX, y: maxY, z: maxZ },
+    center: { x: (minX + maxX) / 2, y: (minY + maxY) / 2, z: (minZ + maxZ) / 2 },
+    size: { x: maxX - minX, y: maxY - minY, z: maxZ - minZ }
   };
 }
-function parseBinarySTL(view, triangleCount) {
-  const tris = [];
+function buildMeshData(verts, count) {
+  const triMinX = new Float32Array(count), triMaxX = new Float32Array(count);
+  const triMinY = new Float32Array(count), triMaxY = new Float32Array(count);
+  const triMinZ = new Float32Array(count), triMaxZ = new Float32Array(count);
+  let minX = Infinity, minY = Infinity, minZ = Infinity;
+  let maxX = -Infinity, maxY = -Infinity, maxZ = -Infinity;
+  for (let i6 = 0; i6 < count; i6++) {
+    const b3 = i6 * 9;
+    const ax = verts[b3], ay = verts[b3 + 1], az = verts[b3 + 2];
+    const bx = verts[b3 + 3], by = verts[b3 + 4], bz = verts[b3 + 5];
+    const cx = verts[b3 + 6], cy = verts[b3 + 7], cz = verts[b3 + 8];
+    const miX = ax < bx ? ax < cx ? ax : cx : bx < cx ? bx : cx;
+    const maX = ax > bx ? ax > cx ? ax : cx : bx > cx ? bx : cx;
+    const miY = ay < by ? ay < cy ? ay : cy : by < cy ? by : cy;
+    const maY = ay > by ? ay > cy ? ay : cy : by > cy ? by : cy;
+    const miZ = az < bz ? az < cz ? az : cz : bz < cz ? bz : cz;
+    const maZ = az > bz ? az > cz ? az : cz : bz > cz ? bz : cz;
+    triMinX[i6] = miX;
+    triMaxX[i6] = maX;
+    triMinY[i6] = miY;
+    triMaxY[i6] = maY;
+    triMinZ[i6] = miZ;
+    triMaxZ[i6] = maZ;
+    if (miX < minX) minX = miX;
+    if (maX > maxX) maxX = maX;
+    if (miY < minY) minY = miY;
+    if (maY > maxY) maxY = maY;
+    if (miZ < minZ) minZ = miZ;
+    if (maZ > maxZ) maxZ = maZ;
+  }
+  const bbox = makeBBox(minX, minY, minZ, maxX, maxY, maxZ);
+  return { verts, count, triMinX, triMaxX, triMinY, triMaxY, triMinZ, triMaxZ, bbox };
+}
+function parseBinarySTL(buffer, triangleCount) {
+  const view = new DataView(buffer);
+  const verts = new Float32Array(triangleCount * 9);
+  const triMinX = new Float32Array(triangleCount), triMaxX = new Float32Array(triangleCount);
+  const triMinY = new Float32Array(triangleCount), triMaxY = new Float32Array(triangleCount);
+  const triMinZ = new Float32Array(triangleCount), triMaxZ = new Float32Array(triangleCount);
+  let minX = Infinity, minY = Infinity, minZ = Infinity;
+  let maxX = -Infinity, maxY = -Infinity, maxZ = -Infinity;
   let off = 84;
   for (let i6 = 0; i6 < triangleCount; i6++) {
     off += 12;
-    const a5 = readVec3(view, off);
-    off += 12;
-    const b3 = readVec3(view, off);
-    off += 12;
-    const c6 = readVec3(view, off);
-    off += 12;
+    const ax = view.getFloat32(off, true);
+    off += 4;
+    const ay = view.getFloat32(off, true);
+    off += 4;
+    const az = view.getFloat32(off, true);
+    off += 4;
+    const bx = view.getFloat32(off, true);
+    off += 4;
+    const by = view.getFloat32(off, true);
+    off += 4;
+    const bz = view.getFloat32(off, true);
+    off += 4;
+    const cx = view.getFloat32(off, true);
+    off += 4;
+    const cy = view.getFloat32(off, true);
+    off += 4;
+    const cz = view.getFloat32(off, true);
+    off += 4;
     off += 2;
-    tris.push({ a: a5, b: b3, c: c6 });
+    const b9 = i6 * 9;
+    verts[b9] = ax;
+    verts[b9 + 1] = ay;
+    verts[b9 + 2] = az;
+    verts[b9 + 3] = bx;
+    verts[b9 + 4] = by;
+    verts[b9 + 5] = bz;
+    verts[b9 + 6] = cx;
+    verts[b9 + 7] = cy;
+    verts[b9 + 8] = cz;
+    const miX = ax < bx ? ax < cx ? ax : cx : bx < cx ? bx : cx;
+    const maX = ax > bx ? ax > cx ? ax : cx : bx > cx ? bx : cx;
+    const miY = ay < by ? ay < cy ? ay : cy : by < cy ? by : cy;
+    const maY = ay > by ? ay > cy ? ay : cy : by > cy ? by : cy;
+    const miZ = az < bz ? az < cz ? az : cz : bz < cz ? bz : cz;
+    const maZ = az > bz ? az > cz ? az : cz : bz > cz ? bz : cz;
+    triMinX[i6] = miX;
+    triMaxX[i6] = maX;
+    triMinY[i6] = miY;
+    triMaxY[i6] = maY;
+    triMinZ[i6] = miZ;
+    triMaxZ[i6] = maZ;
+    if (miX < minX) minX = miX;
+    if (maX > maxX) maxX = maX;
+    if (miY < minY) minY = miY;
+    if (maY > maxY) maxY = maY;
+    if (miZ < minZ) minZ = miZ;
+    if (maZ > maxZ) maxZ = maZ;
   }
-  return tris;
+  const bbox = makeBBox(minX, minY, minZ, maxX, maxY, maxZ);
+  return {
+    verts,
+    count: triangleCount,
+    triMinX,
+    triMaxX,
+    triMinY,
+    triMaxY,
+    triMinZ,
+    triMaxZ,
+    bbox
+  };
 }
 function parseAsciiSTL(text2) {
-  const tris = [];
+  const raw = [];
   const facetRe = /facet\s+normal[^\n]*\n\s*outer\s+loop\s*\n([\s\S]*?)endloop/gi;
   const vertRe = /vertex\s+([-\d.eE+]+)\s+([-\d.eE+]+)\s+([-\d.eE+]+)/gi;
   let fm;
   while ((fm = facetRe.exec(text2)) !== null) {
-    const verts = [];
-    let vm;
     const inner = fm[1];
     vertRe.lastIndex = 0;
+    const pts = [];
+    let vm;
     while ((vm = vertRe.exec(inner)) !== null) {
-      verts.push({
-        x: parseFloat(vm[1]),
-        y: parseFloat(vm[2]),
-        z: parseFloat(vm[3])
-      });
+      pts.push([parseFloat(vm[1]), parseFloat(vm[2]), parseFloat(vm[3])]);
     }
-    if (verts.length === 3) {
-      tris.push({ a: verts[0], b: verts[1], c: verts[2] });
+    if (pts.length === 3) {
+      raw.push(
+        pts[0][0],
+        pts[0][1],
+        pts[0][2],
+        pts[1][0],
+        pts[1][1],
+        pts[1][2],
+        pts[2][0],
+        pts[2][1],
+        pts[2][2]
+      );
     }
   }
-  return tris;
+  const count = raw.length / 9;
+  return buildMeshData(new Float32Array(raw), count);
 }
 function parseSTL(buffer) {
   const view = new DataView(buffer);
@@ -20321,48 +20415,20 @@ function parseSTL(buffer) {
     const count2 = view.getUint32(80, true);
     const expected = 84 + count2 * 50;
     if (count2 > 0 && Math.abs(expected - buffer.byteLength) <= 4) {
-      const result = parseBinarySTL(view, count2);
-      if (result.length > 0) return result;
+      const result = parseBinarySTL(buffer, count2);
+      if (result.count > 0) return result;
     }
   }
   const text2 = new TextDecoder("utf-8", { fatal: false }).decode(buffer);
   if (/solid\s/i.test(text2.slice(0, 256))) {
     const result = parseAsciiSTL(text2);
-    if (result.length > 0) return result;
+    if (result.count > 0) return result;
   }
   const count = view.getUint32(80, true);
-  return parseBinarySTL(view, count);
+  return parseBinarySTL(buffer, count);
 }
 
 // src/geometry.ts
-function computeBBox(triangles) {
-  const min = { x: Infinity, y: Infinity, z: Infinity };
-  const max = { x: -Infinity, y: -Infinity, z: -Infinity };
-  for (const { a: a5, b: b3, c: c6 } of triangles) {
-    for (const v5 of [a5, b3, c6]) {
-      if (v5.x < min.x) min.x = v5.x;
-      if (v5.y < min.y) min.y = v5.y;
-      if (v5.z < min.z) min.z = v5.z;
-      if (v5.x > max.x) max.x = v5.x;
-      if (v5.y > max.y) max.y = v5.y;
-      if (v5.z > max.z) max.z = v5.z;
-    }
-  }
-  return {
-    min,
-    max,
-    center: {
-      x: (min.x + max.x) / 2,
-      y: (min.y + max.y) / 2,
-      z: (min.z + max.z) / 2
-    },
-    size: {
-      x: max.x - min.x,
-      y: max.y - min.y,
-      z: max.z - min.z
-    }
-  };
-}
 function projectForView(v5, dir) {
   switch (dir) {
     case "front":
@@ -20436,51 +20502,64 @@ function clamp(v5, lo, hi) {
 
 // src/section.ts
 var EPS = 1e-9;
-function lerp3(a5, b3, t5) {
-  return {
-    x: a5.x + t5 * (b3.x - a5.x),
-    y: a5.y + t5 * (b3.y - a5.y),
-    z: a5.z + t5 * (b3.z - a5.z)
-  };
-}
-function coordOf(v5, axis) {
-  return v5[axis];
-}
-function projectToSection(v5, axis) {
+function triangleSegment(verts, base, axis, value) {
+  const ax = verts[base], ay = verts[base + 1], az = verts[base + 2];
+  const bx = verts[base + 3], by = verts[base + 4], bz = verts[base + 5];
+  const cx = verts[base + 6], cy = verts[base + 7], cz = verts[base + 8];
+  let da, db, dc;
   switch (axis) {
-    case "z":
-      return { x: v5.x, y: v5.y };
     case "x":
-      return { x: v5.y, y: -v5.z };
+      da = ax - value;
+      db = bx - value;
+      dc = cx - value;
+      break;
     case "y":
-      return { x: v5.x, y: -v5.z };
+      da = ay - value;
+      db = by - value;
+      dc = cy - value;
+      break;
+    default:
+      da = az - value;
+      db = bz - value;
+      dc = cz - value;
+      break;
   }
-}
-function triangleSegment(tri, axis, value) {
-  const verts = [tri.a, tri.b, tri.c];
-  const d4 = verts.map((v5) => coordOf(v5, axis) - value);
-  const allPos = d4[0] > EPS && d4[1] > EPS && d4[2] > EPS;
-  const allNeg = d4[0] < -EPS && d4[1] < -EPS && d4[2] < -EPS;
-  if (allPos || allNeg) return null;
-  const pts = [];
-  for (let i6 = 0; i6 < 3; i6++) {
-    const j4 = (i6 + 1) % 3;
-    const di = d4[i6], dj = d4[j4];
-    const vi = verts[i6], vj = verts[j4];
-    if (Math.abs(di) <= EPS) {
-      pts.push(projectToSection(vi, axis));
-    } else if (di * dj < 0) {
-      const t5 = di / (di - dj);
-      pts.push(projectToSection(lerp3(vi, vj, t5), axis));
+  if (da > EPS && db > EPS && dc > EPS) return null;
+  if (da < -EPS && db < -EPS && dc < -EPS) return null;
+  const proj2d = (vx, vy, vz) => {
+    switch (axis) {
+      case "z":
+        return { x: vx, y: vy };
+      case "x":
+        return { x: vy, y: -vz };
+      default:
+        return { x: vx, y: -vz };
     }
+  };
+  const pts = [];
+  if (Math.abs(da) <= EPS) {
+    pts.push(proj2d(ax, ay, az));
+  } else if (da * db < 0) {
+    const t5 = da / (da - db);
+    pts.push(proj2d(ax + t5 * (bx - ax), ay + t5 * (by - ay), az + t5 * (bz - az)));
+  }
+  if (Math.abs(db) <= EPS) {
+    pts.push(proj2d(bx, by, bz));
+  } else if (db * dc < 0) {
+    const t5 = db / (db - dc);
+    pts.push(proj2d(bx + t5 * (cx - bx), by + t5 * (cy - by), bz + t5 * (cz - bz)));
+  }
+  if (Math.abs(dc) <= EPS) {
+    pts.push(proj2d(cx, cy, cz));
+  } else if (dc * da < 0) {
+    const t5 = dc / (dc - da);
+    pts.push(proj2d(cx + t5 * (ax - cx), cy + t5 * (ay - cy), cz + t5 * (az - cz)));
   }
   const unique = [];
   outer:
     for (const p5 of pts) {
       for (const q4 of unique) {
-        if (Math.abs(q4.x - p5.x) < EPS * 100 && Math.abs(q4.y - p5.y) < EPS * 100) {
-          continue outer;
-        }
+        if (Math.abs(q4.x - p5.x) < EPS * 100 && Math.abs(q4.y - p5.y) < EPS * 100) continue outer;
       }
       unique.push(p5);
     }
@@ -20531,11 +20610,28 @@ function buildContours(segments) {
   }
   return contours;
 }
-function computeSection(triangles, plane) {
+function computeSection(mesh, plane) {
   const { axis, value } = plane;
+  const { verts, count } = mesh;
+  let triMin, triMax;
+  switch (axis) {
+    case "x":
+      triMin = mesh.triMinX;
+      triMax = mesh.triMaxX;
+      break;
+    case "y":
+      triMin = mesh.triMinY;
+      triMax = mesh.triMaxY;
+      break;
+    default:
+      triMin = mesh.triMinZ;
+      triMax = mesh.triMaxZ;
+      break;
+  }
   const segments = [];
-  for (const tri of triangles) {
-    const seg = triangleSegment(tri, axis, value);
+  for (let i6 = 0; i6 < count; i6++) {
+    if (triMax[i6] < value - EPS || triMin[i6] > value + EPS) continue;
+    const seg = triangleSegment(verts, i6 * 9, axis, value);
     if (seg) segments.push(seg);
   }
   const contours = buildContours(segments);
@@ -34110,8 +34206,8 @@ function u5(e4, t5, n3, o5, i6, u6) {
 }
 
 // src/app.tsx
-var VERSION = true ? "1.0.0" : "1.0.0";
-var COMMIT_HASH = true ? "c5abfc9" : "dev";
+var VERSION = true ? "1.1.0" : "1.0.0";
+var COMMIT_HASH = true ? "f431c66" : "dev";
 function modelToCanvas(mx, my, vs, cx, cy) {
   return [
     mx * vs.zoom + cx + vs.panX,
@@ -34131,16 +34227,16 @@ function fitZoom(modelW, modelH, canvasW, canvasH) {
 }
 var INDICATOR_COLOR = "#f78166";
 var INDICATOR_HIT = 10;
-function ModelPane({ label, dir, triangles, bbox, plane, onSetPlane, onCyclePlane }) {
+function ModelPane({ label, dir, mesh, plane, onSetPlane, onCyclePlane }) {
   const canvasRef = A2(null);
   const containerRef = A2(null);
+  const bbox = mesh.bbox;
   const [vs, setVs] = d2({ zoom: 1, panX: 0, panY: 0 });
   const vsRef = A2(vs);
   vsRef.current = vs;
   const dragRef = A2(null);
   const sizeRef = A2({ w: 0, h: 0 });
-  const project = q2((v5) => projectForView(v5, dir), [dir]);
-  const modelCenter = T2(() => project(bbox.center), [bbox, project]);
+  const modelCenter = T2(() => projectForView(bbox.center, dir), [bbox, dir]);
   const modelExtent = T2(() => {
     switch (dir) {
       case "front":
@@ -34151,6 +34247,46 @@ function ModelPane({ label, dir, triangles, bbox, plane, onSetPlane, onCyclePlan
         return { w: bbox.size.x, h: bbox.size.y };
     }
   }, [bbox, dir]);
+  const wirePath = T2(() => {
+    const path = new Path2D();
+    const { verts, count } = mesh;
+    const mcx = bbox.center.x, mcy = bbox.center.y, mcz = bbox.center.z;
+    for (let i6 = 0; i6 < count; i6++) {
+      const b3 = i6 * 9;
+      let pax, pay, pbx, pby, pcx, pcy;
+      switch (dir) {
+        case "front":
+          pax = verts[b3] - mcx;
+          pay = -verts[b3 + 2] + mcz;
+          pbx = verts[b3 + 3] - mcx;
+          pby = -verts[b3 + 5] + mcz;
+          pcx = verts[b3 + 6] - mcx;
+          pcy = -verts[b3 + 8] + mcz;
+          break;
+        case "side":
+          pax = verts[b3 + 1] - mcy;
+          pay = -verts[b3 + 2] + mcz;
+          pbx = verts[b3 + 4] - mcy;
+          pby = -verts[b3 + 5] + mcz;
+          pcx = verts[b3 + 7] - mcy;
+          pcy = -verts[b3 + 8] + mcz;
+          break;
+        default:
+          pax = verts[b3] - mcx;
+          pay = verts[b3 + 1] - mcy;
+          pbx = verts[b3 + 3] - mcx;
+          pby = verts[b3 + 4] - mcy;
+          pcx = verts[b3 + 6] - mcx;
+          pcy = verts[b3 + 7] - mcy;
+          break;
+      }
+      path.moveTo(pax, pay);
+      path.lineTo(pbx, pby);
+      path.lineTo(pcx, pcy);
+      path.closePath();
+    }
+    return path;
+  }, [mesh, bbox, dir]);
   h2(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -34159,7 +34295,7 @@ function ModelPane({ label, dir, triangles, bbox, plane, onSetPlane, onCyclePlan
     const h5 = rect.height || canvas.offsetHeight;
     const z4 = fitZoom(modelExtent.w, modelExtent.h, w4, h5);
     setVs({ zoom: z4, panX: 0, panY: 0 });
-  }, [triangles, modelExtent]);
+  }, [mesh, modelExtent]);
   const centre = () => {
     const c6 = canvasRef.current;
     return c6 ? [c6.width / 2, c6.height / 2] : [200, 200];
@@ -34293,23 +34429,13 @@ function ModelPane({ label, dir, triangles, bbox, plane, onSetPlane, onCyclePlan
     const cx = W2 / 2, cy = H3 / 2;
     ctx.fillStyle = "#0d1117";
     ctx.fillRect(0, 0, W2, H3);
-    if (triangles.length === 0) return;
+    if (mesh.count === 0) return;
+    ctx.save();
     ctx.strokeStyle = "rgba(100, 160, 220, 0.25)";
-    ctx.lineWidth = 0.5;
-    ctx.beginPath();
-    for (const tri of triangles) {
-      const pa = project(tri.a);
-      const pb = project(tri.b);
-      const pc = project(tri.c);
-      const [ax, ay] = modelToCanvas(pa.x - modelCenter.x, pa.y - modelCenter.y, vs, cx, cy);
-      const [bx, by] = modelToCanvas(pb.x - modelCenter.x, pb.y - modelCenter.y, vs, cx, cy);
-      const [ccx, ccy] = modelToCanvas(pc.x - modelCenter.x, pc.y - modelCenter.y, vs, cx, cy);
-      ctx.moveTo(ax, ay);
-      ctx.lineTo(bx, by);
-      ctx.lineTo(ccx, ccy);
-      ctx.closePath();
-    }
-    ctx.stroke();
+    ctx.lineWidth = 0.5 / vs.zoom;
+    ctx.setTransform(vs.zoom, 0, 0, vs.zoom, cx + vs.panX, cy + vs.panY);
+    ctx.stroke(wirePath);
+    ctx.restore();
     const [ox, oy] = modelToCanvas(-modelCenter.x, -modelCenter.y, vs, cx, cy);
     ctx.strokeStyle = "rgba(255,255,255,0.15)";
     ctx.lineWidth = 0.5;
@@ -34352,7 +34478,7 @@ function ModelPane({ label, dir, triangles, bbox, plane, onSetPlane, onCyclePlan
         ctx.restore();
       }
     }
-  }, [triangles, bbox, plane, vs, dir, project, modelCenter]);
+  }, [mesh, wirePath, plane, vs, dir, modelCenter]);
   return /* @__PURE__ */ u5("div", { class: "pane", ref: containerRef, style: { cursor: "crosshair" }, children: [
     /* @__PURE__ */ u5("span", { class: "pane-label", children: label }),
     plane && /* @__PURE__ */ u5("span", { class: "plane-badge", children: plane.axis.toUpperCase() }),
@@ -34557,12 +34683,12 @@ function DropZone({ onLoad }) {
   const inputRef = A2(null);
   const loadBuffer = q2((buf) => {
     try {
-      const tris = parseSTL(buf);
-      if (tris.length === 0) {
+      const mesh = parseSTL(buf);
+      if (mesh.count === 0) {
         setError("No triangles found in STL file.");
         return;
       }
-      onLoad(tris);
+      onLoad(mesh);
     } catch (e4) {
       setError(`Failed to parse STL: ${e4 instanceof Error ? e4.message : String(e4)}`);
     }
@@ -34663,12 +34789,10 @@ function Footer() {
   ] });
 }
 function App() {
-  const [triangles, setTriangles] = d2(null);
-  const [bbox, setBbox] = d2(null);
+  const [mesh, setMesh] = d2(null);
   const [plane, setPlane] = d2(null);
-  const handleLoad = q2((tris) => {
-    setTriangles(tris);
-    setBbox(computeBBox(tris));
+  const handleLoad = q2((m6) => {
+    setMesh(m6);
     setPlane(null);
   }, []);
   const handleSetPlane = q2((axis, value) => {
@@ -34681,27 +34805,25 @@ function App() {
     });
   }, []);
   const section = T2(() => {
-    if (!triangles || !plane) return null;
-    return computeSection(triangles, plane);
-  }, [triangles, plane]);
+    if (!mesh || !plane) return null;
+    return computeSection(mesh, plane);
+  }, [mesh, plane]);
   return /* @__PURE__ */ u5("div", { id: "app", children: [
     /* @__PURE__ */ u5("div", { class: "header", children: [
       /* @__PURE__ */ u5("h1", { children: "\u{1F4D0} STL2PDF \u2013 Cross-Section Viewer" }),
-      triangles && /* @__PURE__ */ u5("button", { class: "btn btn-secondary", onClick: () => {
-        setTriangles(null);
-        setBbox(null);
+      mesh && /* @__PURE__ */ u5("button", { class: "btn btn-secondary", onClick: () => {
+        setMesh(null);
         setPlane(null);
       }, children: "Load another file" })
     ] }),
-    !triangles && /* @__PURE__ */ u5(DropZone, { onLoad: handleLoad }),
-    triangles && bbox && /* @__PURE__ */ u5("div", { class: "pane-grid", children: [
+    !mesh && /* @__PURE__ */ u5(DropZone, { onLoad: handleLoad }),
+    mesh && /* @__PURE__ */ u5("div", { class: "pane-grid", children: [
       /* @__PURE__ */ u5(
         ModelPane,
         {
           label: "Front (XZ)",
           dir: "front",
-          triangles,
-          bbox,
+          mesh,
           plane,
           onSetPlane: handleSetPlane,
           onCyclePlane: handleCyclePlane
@@ -34712,8 +34834,7 @@ function App() {
         {
           label: "Side (YZ)",
           dir: "side",
-          triangles,
-          bbox,
+          mesh,
           plane,
           onSetPlane: handleSetPlane,
           onCyclePlane: handleCyclePlane
@@ -34724,8 +34845,7 @@ function App() {
         {
           label: "Top (XY)",
           dir: "top",
-          triangles,
-          bbox,
+          mesh,
           plane,
           onSetPlane: handleSetPlane,
           onCyclePlane: handleCyclePlane

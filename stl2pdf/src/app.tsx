@@ -1,9 +1,8 @@
 import { render } from 'preact';
 import { useState, useEffect, useRef, useCallback, useMemo } from 'preact/hooks';
-import type { Triangle } from './stl-parser.js';
+import type { MeshData } from './stl-parser.js';
 import { parseSTL } from './stl-parser.js';
 import {
-  computeBBox,
   projectForView,
   indicatorPositionInView,
   indicatorOrientation,
@@ -12,7 +11,7 @@ import {
   planeLabel,
   clamp,
 } from './geometry.js';
-import type { Vec2, BBox3, CutPlane, ViewDir } from './geometry.js';
+import type { BBox3, CutPlane, ViewDir } from './geometry.js';
 import { computeSection } from './section.js';
 import type { SectionResult } from './section.js';
 import { generateSectionPDF } from './pdf.js';
@@ -62,8 +61,7 @@ function fitZoom(modelW: number, modelH: number, canvasW: number, canvasH: numbe
 interface ModelPaneProps {
   label: string;
   dir: ViewDir;
-  triangles: Triangle[];
-  bbox: BBox3;
+  mesh: MeshData;
   plane: CutPlane | null;
   onSetPlane: (axis: CutPlane['axis'], value: number) => void;
   onCyclePlane: () => void;
@@ -72,9 +70,11 @@ interface ModelPaneProps {
 const INDICATOR_COLOR = '#f78166';
 const INDICATOR_HIT = 10; // px tolerance for clicking indicator
 
-function ModelPane({ label, dir, triangles, bbox, plane, onSetPlane, onCyclePlane }: ModelPaneProps) {
+function ModelPane({ label, dir, mesh, plane, onSetPlane, onCyclePlane }: ModelPaneProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const bbox: BBox3 = mesh.bbox;
 
   // View state (zoom + pan)
   const [vs, setVs] = useState<ViewState>({ zoom: 1, panX: 0, panY: 0 });
@@ -94,12 +94,8 @@ function ModelPane({ label, dir, triangles, bbox, plane, onSetPlane, onCyclePlan
   // Keep track of canvas size
   const sizeRef = useRef({ w: 0, h: 0 });
 
-  // ── Project model vertex to 2D view coords (model units)
-  const project = useCallback((v: { x: number; y: number; z: number }): Vec2 =>
-    projectForView(v, dir), [dir]);
-
   // ── Determine 2D "center" of model in this view
-  const modelCenter = useMemo(() => project(bbox.center), [bbox, project]);
+  const modelCenter = useMemo(() => projectForView(bbox.center, dir), [bbox, dir]);
 
   // ── Compute 2D bounding extent for auto-fit
   const modelExtent = useMemo((): { w: number; h: number } => {
@@ -110,6 +106,41 @@ function ModelPane({ label, dir, triangles, bbox, plane, onSetPlane, onCyclePlan
     }
   }, [bbox, dir]);
 
+  // ── Pre-project all triangles into a Path2D in view-centred model coords.
+  //    Rebuilt only when the mesh or view direction changes; reused on every
+  //    pan/zoom frame by applying a canvas transform instead of re-projecting.
+  const wirePath = useMemo((): Path2D => {
+    const path = new Path2D();
+    const { verts, count } = mesh;
+    const mcx = bbox.center.x, mcy = bbox.center.y, mcz = bbox.center.z;
+    for (let i = 0; i < count; i++) {
+      const b = i * 9;
+      let pax: number, pay: number, pbx: number, pby: number, pcx: number, pcy: number;
+      switch (dir) {
+        case 'front': // project(v)=(v.x, -v.z), center=(mcx, -mcz)
+          pax = verts[b]   - mcx; pay = -(verts[b+2]) + mcz;
+          pbx = verts[b+3] - mcx; pby = -(verts[b+5]) + mcz;
+          pcx = verts[b+6] - mcx; pcy = -(verts[b+8]) + mcz;
+          break;
+        case 'side': // project(v)=(v.y, -v.z), center=(mcy, -mcz)
+          pax = verts[b+1] - mcy; pay = -(verts[b+2]) + mcz;
+          pbx = verts[b+4] - mcy; pby = -(verts[b+5]) + mcz;
+          pcx = verts[b+7] - mcy; pcy = -(verts[b+8]) + mcz;
+          break;
+        default: // top: project(v)=(v.x, v.y), center=(mcx, mcy)
+          pax = verts[b]   - mcx; pay = verts[b+1] - mcy;
+          pbx = verts[b+3] - mcx; pby = verts[b+4] - mcy;
+          pcx = verts[b+6] - mcx; pcy = verts[b+7] - mcy;
+          break;
+      }
+      path.moveTo(pax, pay);
+      path.lineTo(pbx, pby);
+      path.lineTo(pcx, pcy);
+      path.closePath();
+    }
+    return path;
+  }, [mesh, bbox, dir]);
+
   // ── Initialize zoom to fit on first render / when model changes
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -119,7 +150,7 @@ function ModelPane({ label, dir, triangles, bbox, plane, onSetPlane, onCyclePlan
     const h = rect.height || canvas.offsetHeight;
     const z = fitZoom(modelExtent.w, modelExtent.h, w, h);
     setVs({ zoom: z, panX: 0, panY: 0 });
-  }, [triangles, modelExtent]);
+  }, [mesh, modelExtent]);
 
   // ── Helpers: canvas centre
   const centre = (): [number, number] => {
@@ -280,30 +311,19 @@ function ModelPane({ label, dir, triangles, bbox, plane, onSetPlane, onCyclePlan
     ctx.fillStyle = '#0d1117';
     ctx.fillRect(0, 0, W, H);
 
-    if (triangles.length === 0) return;
+    if (mesh.count === 0) return;
 
-    // ── Draw triangle wireframe
+    // ── Draw wireframe using the cached Path2D.
+    //    Apply a canvas transform instead of re-projecting every vertex each frame;
+    //    the browser can GPU-cache the path and render it with a single matrix multiply.
+    ctx.save();
     ctx.strokeStyle = 'rgba(100, 160, 220, 0.25)';
-    ctx.lineWidth = 0.5;
-    ctx.beginPath();
+    ctx.lineWidth = 0.5 / vs.zoom; // stays ~0.5 px at any zoom level
+    ctx.setTransform(vs.zoom, 0, 0, vs.zoom, cx + vs.panX, cy + vs.panY);
+    ctx.stroke(wirePath);
+    ctx.restore(); // resets transform to identity
 
-    for (const tri of triangles) {
-      const pa = project(tri.a);
-      const pb = project(tri.b);
-      const pc = project(tri.c);
-
-      const [ax, ay] = modelToCanvas(pa.x - modelCenter.x, pa.y - modelCenter.y, vs, cx, cy);
-      const [bx, by] = modelToCanvas(pb.x - modelCenter.x, pb.y - modelCenter.y, vs, cx, cy);
-      const [ccx, ccy] = modelToCanvas(pc.x - modelCenter.x, pc.y - modelCenter.y, vs, cx, cy);
-
-      ctx.moveTo(ax, ay);
-      ctx.lineTo(bx, by);
-      ctx.lineTo(ccx, ccy);
-      ctx.closePath();
-    }
-    ctx.stroke();
-
-    // ── Draw origin cross
+    // ── Draw origin cross (pixel coords)
     const [ox, oy] = modelToCanvas(-modelCenter.x, -modelCenter.y, vs, cx, cy);
     ctx.strokeStyle = 'rgba(255,255,255,0.15)';
     ctx.lineWidth = 0.5;
@@ -349,7 +369,7 @@ function ModelPane({ label, dir, triangles, bbox, plane, onSetPlane, onCyclePlan
         ctx.restore();
       }
     }
-  }, [triangles, bbox, plane, vs, dir, project, modelCenter]);
+  }, [mesh, wirePath, plane, vs, dir, modelCenter]);
 
   return (
     <div class="pane" ref={containerRef} style={{ cursor: 'crosshair' }}>
@@ -590,7 +610,7 @@ function drawScaleBar(ctx: CanvasRenderingContext2D, zoom: number, W: number, H:
 // ─── DropZone ─────────────────────────────────────────────────────────────
 
 interface DropZoneProps {
-  onLoad: (triangles: Triangle[]) => void;
+  onLoad: (mesh: MeshData) => void;
 }
 
 function DropZone({ onLoad }: DropZoneProps) {
@@ -600,12 +620,12 @@ function DropZone({ onLoad }: DropZoneProps) {
 
   const loadBuffer = useCallback((buf: ArrayBuffer) => {
     try {
-      const tris = parseSTL(buf);
-      if (tris.length === 0) {
+      const mesh = parseSTL(buf);
+      if (mesh.count === 0) {
         setError('No triangles found in STL file.');
         return;
       }
-      onLoad(tris);
+      onLoad(mesh);
     } catch (e) {
       setError(`Failed to parse STL: ${e instanceof Error ? e.message : String(e)}`);
     }
@@ -718,13 +738,11 @@ function Footer() {
 // ─── App ──────────────────────────────────────────────────────────────────
 
 function App() {
-  const [triangles, setTriangles] = useState<Triangle[] | null>(null);
-  const [bbox, setBbox] = useState<BBox3 | null>(null);
+  const [mesh, setMesh] = useState<MeshData | null>(null);
   const [plane, setPlane] = useState<CutPlane | null>(null);
 
-  const handleLoad = useCallback((tris: Triangle[]) => {
-    setTriangles(tris);
-    setBbox(computeBBox(tris));
+  const handleLoad = useCallback((m: MeshData) => {
+    setMesh(m);
     setPlane(null);
   }, []);
 
@@ -739,32 +757,31 @@ function App() {
     });
   }, []);
 
-  // Compute section (expensive) – memoized
+  // Compute section – memoized; fast due to Float32Array + per-triangle quick reject
   const section: SectionResult | null = useMemo(() => {
-    if (!triangles || !plane) return null;
-    return computeSection(triangles, plane);
-  }, [triangles, plane]);
+    if (!mesh || !plane) return null;
+    return computeSection(mesh, plane);
+  }, [mesh, plane]);
 
   return (
     <div id="app">
       <div class="header">
         <h1>📐 STL2PDF – Cross-Section Viewer</h1>
-        {triangles && (
-          <button class="btn btn-secondary" onClick={() => { setTriangles(null); setBbox(null); setPlane(null); }}>
+        {mesh && (
+          <button class="btn btn-secondary" onClick={() => { setMesh(null); setPlane(null); }}>
             Load another file
           </button>
         )}
       </div>
 
-      {!triangles && <DropZone onLoad={handleLoad} />}
+      {!mesh && <DropZone onLoad={handleLoad} />}
 
-      {triangles && bbox && (
+      {mesh && (
         <div class="pane-grid">
           <ModelPane
             label="Front (XZ)"
             dir="front"
-            triangles={triangles}
-            bbox={bbox}
+            mesh={mesh}
             plane={plane}
             onSetPlane={handleSetPlane}
             onCyclePlane={handleCyclePlane}
@@ -772,8 +789,7 @@ function App() {
           <ModelPane
             label="Side (YZ)"
             dir="side"
-            triangles={triangles}
-            bbox={bbox}
+            mesh={mesh}
             plane={plane}
             onSetPlane={handleSetPlane}
             onCyclePlane={handleCyclePlane}
@@ -781,8 +797,7 @@ function App() {
           <ModelPane
             label="Top (XY)"
             dir="top"
-            triangles={triangles}
-            bbox={bbox}
+            mesh={mesh}
             plane={plane}
             onSetPlane={handleSetPlane}
             onCyclePlane={handleCyclePlane}

@@ -1,17 +1,10 @@
-import type { Vec3, Triangle } from './stl-parser.js';
+import type { Vec3, BBox3 } from './stl-parser.js';
 
-export type { Vec3 };
+export type { Vec3, BBox3 };
 
 export interface Vec2 {
   x: number;
   y: number;
-}
-
-export interface BBox3 {
-  min: Vec3;
-  max: Vec3;
-  center: Vec3;
-  size: Vec3;
 }
 
 export type PlaneAxis = 'x' | 'y' | 'z';
@@ -19,39 +12,6 @@ export type PlaneAxis = 'x' | 'y' | 'z';
 export interface CutPlane {
   axis: PlaneAxis;
   value: number;
-}
-
-// ─── Bounding box ──────────────────────────────────────────────────────────
-
-export function computeBBox(triangles: Triangle[]): BBox3 {
-  const min: Vec3 = { x: Infinity, y: Infinity, z: Infinity };
-  const max: Vec3 = { x: -Infinity, y: -Infinity, z: -Infinity };
-
-  for (const { a, b, c } of triangles) {
-    for (const v of [a, b, c]) {
-      if (v.x < min.x) min.x = v.x;
-      if (v.y < min.y) min.y = v.y;
-      if (v.z < min.z) min.z = v.z;
-      if (v.x > max.x) max.x = v.x;
-      if (v.y > max.y) max.y = v.y;
-      if (v.z > max.z) max.z = v.z;
-    }
-  }
-
-  return {
-    min,
-    max,
-    center: {
-      x: (min.x + max.x) / 2,
-      y: (min.y + max.y) / 2,
-      z: (min.z + max.z) / 2,
-    },
-    size: {
-      x: max.x - min.x,
-      y: max.y - min.y,
-      z: max.z - min.z,
-    },
-  };
 }
 
 // ─── View projections ──────────────────────────────────────────────────────

@@ -1,36 +1,13 @@
-import type { Vec3, Triangle } from './stl-parser.js';
+import type { MeshData } from './stl-parser.js';
 import type { Vec2, CutPlane } from './geometry.js';
 
 // ─── Triangle → segment ────────────────────────────────────────────────────
 
 const EPS = 1e-9;
 
-function lerp3(a: Vec3, b: Vec3, t: number): Vec3 {
-  return {
-    x: a.x + t * (b.x - a.x),
-    y: a.y + t * (b.y - a.y),
-    z: a.z + t * (b.z - a.z),
-  };
-}
-
-function coordOf(v: Vec3, axis: 'x' | 'y' | 'z'): number {
-  return v[axis];
-}
-
-function projectToSection(v: Vec3, axis: 'x' | 'y' | 'z'): Vec2 {
-  // We look "into" the plane from the positive axis direction.
-  // z-plane: looking down (-Z), see XY → (x, y)
-  // x-plane: looking left (-X), see YZ → (y, -z) so z is up
-  // y-plane: looking back (-Y), see XZ → (x, -z) so z is up
-  switch (axis) {
-    case 'z': return { x: v.x, y: v.y };
-    case 'x': return { x: v.y, y: -v.z };
-    case 'y': return { x: v.x, y: -v.z };
-  }
-}
-
 /**
- * Intersect one triangle with the plane (axis = value).
+ * Intersect one triangle (addressed by its base offset in the flat verts array)
+ * with the plane (axis = value).
  * Returns a [Vec2, Vec2] segment if there is a crossing, otherwise null.
  *
  * Algorithm: classify each vertex as above/on/below the plane.
@@ -40,44 +17,70 @@ function projectToSection(v: Vec3, axis: 'x' | 'y' | 'z'): Vec2 {
  * edge and guarantees at most 2 unique points per triangle.
  */
 function triangleSegment(
-  tri: Triangle,
+  verts: Float32Array,
+  base: number,             // base offset = triIdx * 9
   axis: 'x' | 'y' | 'z',
   value: number
 ): [Vec2, Vec2] | null {
-  const verts = [tri.a, tri.b, tri.c] as const;
-  const d = verts.map(v => coordOf(v, axis) - value) as [number, number, number];
+  // Extract vertex coords directly from flat buffer (cache-friendly)
+  const ax = verts[base],   ay = verts[base+1], az = verts[base+2];
+  const bx = verts[base+3], by = verts[base+4], bz = verts[base+5];
+  const cx = verts[base+6], cy = verts[base+7], cz = verts[base+8];
 
-  // Quick reject: all on same side
-  const allPos = d[0] > EPS && d[1] > EPS && d[2] > EPS;
-  const allNeg = d[0] < -EPS && d[1] < -EPS && d[2] < -EPS;
-  if (allPos || allNeg) return null;
+  // Signed distances from the plane along the cutting axis
+  let da: number, db: number, dc: number;
+  switch (axis) {
+    case 'x': da = ax - value; db = bx - value; dc = cx - value; break;
+    case 'y': da = ay - value; db = by - value; dc = cy - value; break;
+    default:  da = az - value; db = bz - value; dc = cz - value; break;
+  }
+
+  // Quick reject: all vertices on the same side
+  if (da > EPS && db > EPS && dc > EPS) return null;
+  if (da < -EPS && db < -EPS && dc < -EPS) return null;
+
+  // Project a 3D point to the 2D section coordinate system:
+  //   axis='z': looking -Z → (x, y)
+  //   axis='x': looking -X → (y, -z)
+  //   axis='y': looking -Y → (x, -z)
+  const proj2d = (vx: number, vy: number, vz: number): Vec2 => {
+    switch (axis) {
+      case 'z': return { x: vx, y: vy };
+      case 'x': return { x: vy, y: -vz };
+      default:  return { x: vx, y: -vz };
+    }
+  };
 
   const pts: Vec2[] = [];
 
-  for (let i = 0; i < 3; i++) {
-    const j = (i + 1) % 3;
-    const di = d[i], dj = d[j];
-    const vi = verts[i], vj = verts[j];
-
-    if (Math.abs(di) <= EPS) {
-      // Vertex i is on the plane – add it once (only from edge i→j, not j→k)
-      pts.push(projectToSection(vi, axis));
-    } else if (di * dj < 0) {
-      // Edge straddles the plane
-      const t = di / (di - dj);
-      pts.push(projectToSection(lerp3(vi, vj, t), axis));
-    }
-    // If dj ≈ 0 it will be added when we process edge j→k
+  // Process edge A→B
+  if (Math.abs(da) <= EPS) {
+    pts.push(proj2d(ax, ay, az));
+  } else if (da * db < 0) {
+    const t = da / (da - db);
+    pts.push(proj2d(ax + t*(bx-ax), ay + t*(by-ay), az + t*(bz-az)));
+  }
+  // Process edge B→C
+  if (Math.abs(db) <= EPS) {
+    pts.push(proj2d(bx, by, bz));
+  } else if (db * dc < 0) {
+    const t = db / (db - dc);
+    pts.push(proj2d(bx + t*(cx-bx), by + t*(cy-by), bz + t*(cz-bz)));
+  }
+  // Process edge C→A
+  if (Math.abs(dc) <= EPS) {
+    pts.push(proj2d(cx, cy, cz));
+  } else if (dc * da < 0) {
+    const t = dc / (dc - da);
+    pts.push(proj2d(cx + t*(ax-cx), cy + t*(ay-cy), cz + t*(az-cz)));
   }
 
-  // Deduplicate (floating-point identical points from coincident edges)
+  // Deduplicate (floating-point coincident endpoints from shared edges)
   const unique: Vec2[] = [];
   outer:
   for (const p of pts) {
     for (const q of unique) {
-      if (Math.abs(q.x - p.x) < EPS * 100 && Math.abs(q.y - p.y) < EPS * 100) {
-        continue outer;
-      }
+      if (Math.abs(q.x - p.x) < EPS * 100 && Math.abs(q.y - p.y) < EPS * 100) continue outer;
     }
     unique.push(p);
   }
@@ -163,16 +166,33 @@ export interface SectionResult {
 /**
  * Slice a triangle mesh with a plane (axis = value) and return the
  * closed 2D contours of the cross-section.
+ *
+ * Uses precomputed per-triangle bounding intervals to skip triangles that
+ * cannot possibly intersect the plane before running the full intersection test.
  */
 export function computeSection(
-  triangles: Triangle[],
+  mesh: MeshData,
   plane: CutPlane
 ): SectionResult {
   const { axis, value } = plane;
+  const { verts, count } = mesh;
+
+  // Select precomputed per-triangle bounds for the cutting axis
+  let triMin: Float32Array, triMax: Float32Array;
+  switch (axis) {
+    case 'x': triMin = mesh.triMinX; triMax = mesh.triMaxX; break;
+    case 'y': triMin = mesh.triMinY; triMax = mesh.triMaxY; break;
+    default:  triMin = mesh.triMinZ; triMax = mesh.triMaxZ; break;
+  }
+
   const segments: [Vec2, Vec2][] = [];
 
-  for (const tri of triangles) {
-    const seg = triangleSegment(tri, axis, value);
+  for (let i = 0; i < count; i++) {
+    // Bounding-interval quick reject: skip triangles that don't straddle the plane.
+    // This eliminates the vast majority of triangles without touching the vertex data.
+    if (triMax[i] < value - EPS || triMin[i] > value + EPS) continue;
+
+    const seg = triangleSegment(verts, i * 9, axis, value);
     if (seg) segments.push(seg);
   }
 
