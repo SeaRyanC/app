@@ -60,7 +60,7 @@ export function generateSectionPDF(section: SectionResult, plane: CutPlane): Blo
   //    Use the jsPDF chaining API: moveTo → lineTo → close → fillStrokeEvenOdd.
   doc.setFillColor(210, 210, 210);
   doc.setDrawColor(0, 0, 0);
-  doc.setLineWidth(0.4);
+  doc.setLineWidth(0.4); // 0.4 mm – jsPDF units are mm so this is always physically 0.4 mm
 
   for (const contour of contours) {
     if (contour.length < 2) continue;

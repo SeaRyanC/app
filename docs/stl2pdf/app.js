@@ -34203,7 +34203,7 @@ function u5(e4, t5, n3, o5, i6, u6) {
 
 // src/app.tsx
 var VERSION = true ? "1.2.0" : "1.0.0";
-var COMMIT_HASH = true ? "86c5b1e" : "dev";
+var COMMIT_HASH = true ? "b6e30ec" : "dev";
 function modelToCanvas(mx, my, vs, cx, cy) {
   return [
     mx * vs.zoom + cx + vs.panX,
@@ -34309,13 +34309,15 @@ function ModelPane({ label, dir, mesh, plane, onSetPlane, onCyclePlane }) {
       tris.push([pax, pay, pbx, pby, pcx, pcy, depth, r4, g3, b3]);
     }
     tris.sort((a5, b3) => a5[6] - b3[6]);
+    const OC_MAX_PX = 2048;
+    const OC_MAX_SCALE = 8;
+    const OC_PAD = 24;
     const modelW = dir === "side" ? bbox.size.y : bbox.size.x;
     const modelH = dir === "top" ? bbox.size.y : bbox.size.z;
     const maxDim = Math.max(modelW, modelH, 1);
-    const ocScale = Math.min(8, 2048 / maxDim);
-    const pad = 24;
-    const ocW = Math.ceil(modelW * ocScale) + pad * 2;
-    const ocH = Math.ceil(modelH * ocScale) + pad * 2;
+    const ocScale = Math.min(OC_MAX_SCALE, OC_MAX_PX / maxDim);
+    const ocW = Math.ceil(modelW * ocScale) + OC_PAD * 2;
+    const ocH = Math.ceil(modelH * ocScale) + OC_PAD * 2;
     const ocCx = ocW / 2, ocCy = ocH / 2;
     const oc = new OffscreenCanvas(ocW, ocH);
     const ctx2 = oc.getContext("2d");

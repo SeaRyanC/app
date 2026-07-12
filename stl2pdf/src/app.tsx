@@ -193,14 +193,17 @@ function ModelPane({ label, dir, mesh, plane, onSetPlane, onCyclePlane }: ModelP
     // Painter's algorithm: back-to-front (ascending depth = furthest first)
     tris.sort((a, b) => a[6] - b[6]);
 
-    // Offscreen canvas: scale to fit within 2048px on the longest axis
+    // Offscreen canvas: cap at OC_MAX_PX on the longest axis; at most OC_MAX_SCALE px/unit.
+    // Higher values give sharper results at high zoom but cost more memory and render time.
+    const OC_MAX_PX = 2048;
+    const OC_MAX_SCALE = 8;
+    const OC_PAD = 24; // extra pixels so triangles at the model edge aren't clipped
     const modelW = dir === 'side' ? bbox.size.y : bbox.size.x;
     const modelH = dir === 'top'  ? bbox.size.y : bbox.size.z;
     const maxDim = Math.max(modelW, modelH, 1);
-    const ocScale = Math.min(8, 2048 / maxDim);
-    const pad = 24;
-    const ocW = Math.ceil(modelW * ocScale) + pad * 2;
-    const ocH = Math.ceil(modelH * ocScale) + pad * 2;
+    const ocScale = Math.min(OC_MAX_SCALE, OC_MAX_PX / maxDim);
+    const ocW = Math.ceil(modelW * ocScale) + OC_PAD * 2;
+    const ocH = Math.ceil(modelH * ocScale) + OC_PAD * 2;
     const ocCx = ocW / 2, ocCy = ocH / 2;
 
     const oc = new OffscreenCanvas(ocW, ocH);
