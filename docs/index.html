@@ -46,8 +46,8 @@
       <!-- APP_LIST_START -->
 <div class="app-card">
 <h2><a href="csi/">CSI - Category Spending Insights</a></h2>
-<p>A simple expense tracker and pivot table viewer. Paste your transaction data in TSV format (tab-separated values) to get a monthly breakdown by spending category.</p>
-<p>The app automatically detects common column names (Date, Merchant, Category, Amount, etc.) and handles different date formats (ISO, US MM/DD/YYYY, European DD/MM/YYYY). It also detects whether negative or positive amounts represent expenses. Click on any cell in the pivot table to drill down into the individual transactions for that category and month.</p>
+<p>A simple expense tracker and pivot table viewer. Paste your transaction data in TSV (tab-separated values) or CSV (comma-separated values) format to get a monthly breakdown by spending category.</p>
+<p>The app automatically detects whether the input uses tabs or commas as the delimiter, and detects common column names (Date, Merchant, Category, Amount, etc.) and handles different date formats (ISO, US MM/DD/YYYY, European DD/MM/YYYY). It also detects whether negative or positive amounts represent expenses. Click on any cell in the pivot table to drill down into the individual transactions for that category and month.</p>
 <p>Data is persisted in localStorage, so you won't lose your work when refreshing the page. The app comes pre-populated with sample data to demonstrate its features.</p>
 </div>
 <div class="app-card">
@@ -69,6 +69,12 @@
 <div class="app-card">
 <h2><a href="ppg/">PPG - Passport Photo Generator</a></h2>
 <p>Create printable US passport photo sheets on standard photo paper. Upload a photo, adjust the crop using an interactive editor with the official face-proportion guide overlay, pick your paper size, and download a print-ready PDF with correctly sized 2″×2″ photos and cut lines—ready for any drugstore or home photo printer.</p>
+</div>
+<div class="app-card">
+<h2><a href="stl2pdf/">STL2PDF – STL Cross-Section Viewer</a></h2>
+<p>STL2PDF lets you load any `.stl` file and interactively explore cross-sections through it, then print those sections to an accurately dimensioned PDF. The app runs entirely in your browser — no file is ever uploaded to a server.</p>
+<p>Open an STL file by dragging it onto the page, clicking to browse, or pasting. The model is shown in three orthographic views — Front (XZ), Side (YZ), and Top (XY) — with Z pointing up. Click anywhere in a Front or Side view to place a cutting plane, which instantly renders the 2D cross-section in the Section Output pane. The indicator line can be dragged up or down to move the plane, and right-clicking it cycles the plane orientation through horizontal (Z), vertical-X, and vertical-Y. Every pane supports zoom (scroll wheel) and pan (right-click drag).</p>
+<p>In the Section Output pane, the cross-section is drawn engineering-drawing style: interior material shaded light gray, empty space white, and a thick black outline. When you're happy with the slice, click **Print PDF** to download an 8.5 × 11" PDF with the cross-section at true 1 : 1 millimetre scale (scaled down only if the geometry is larger than one page). A scale bar, plane label, and section dimensions are included on every sheet.</p>
 </div>
 <div class="app-card">
 <h2><a href="wsg/">WSG - Word Search Generator</a></h2>

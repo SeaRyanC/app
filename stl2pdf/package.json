@@ -1,0 +1,33 @@
+{
+  "name": "stl2pdf",
+  "version": "1.2.0",
+  "description": "STL to PDF section viewer - view and print cross-sections of 3D STL models",
+  "type": "module",
+  "scripts": {
+    "bundle": "node build.js",
+    "check": "tsc --noEmit",
+    "lint": "eslint src",
+    "local": "node dev.js"
+  },
+  "keywords": [
+    "stl",
+    "pdf",
+    "3d",
+    "section",
+    "cross-section"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@types/node": "^22.0.0",
+    "esbuild": "^0.24.0",
+    "eslint": "^9.0.0",
+    "typescript": "next",
+    "typescript-eslint": "^8.0.0"
+  },
+  "dependencies": {
+    "jspdf": "^4.2.1",
+    "preact": "^10.25.0"
+  }
+}
