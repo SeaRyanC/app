@@ -50,6 +50,16 @@ function makeBBox(
   };
 }
 
+/** Compute per-component min3(a,b,c) without Math.min (avoids variadic call overhead). */
+function min3(a: number, b: number, c: number): number {
+  return a < b ? (a < c ? a : c) : (b < c ? b : c);
+}
+
+/** Compute per-component max3(a,b,c) without Math.max (avoids variadic call overhead). */
+function max3(a: number, b: number, c: number): number {
+  return a > b ? (a > c ? a : c) : (b > c ? b : c);
+}
+
 /** Attach precomputed min/max arrays and bbox to a pre-filled verts Float32Array. */
 function buildMeshData(verts: Float32Array, count: number): MeshData {
   const triMinX = new Float32Array(count), triMaxX = new Float32Array(count);
@@ -64,12 +74,9 @@ function buildMeshData(verts: Float32Array, count: number): MeshData {
     const bx = verts[b+3], by = verts[b+4], bz = verts[b+5];
     const cx = verts[b+6], cy = verts[b+7], cz = verts[b+8];
 
-    const miX = ax < bx ? (ax < cx ? ax : cx) : (bx < cx ? bx : cx);
-    const maX = ax > bx ? (ax > cx ? ax : cx) : (bx > cx ? bx : cx);
-    const miY = ay < by ? (ay < cy ? ay : cy) : (by < cy ? by : cy);
-    const maY = ay > by ? (ay > cy ? ay : cy) : (by > cy ? by : cy);
-    const miZ = az < bz ? (az < cz ? az : cz) : (bz < cz ? bz : cz);
-    const maZ = az > bz ? (az > cz ? az : cz) : (bz > cz ? bz : cz);
+    const miX = min3(ax, bx, cx), maX = max3(ax, bx, cx);
+    const miY = min3(ay, by, cy), maY = max3(ay, by, cy);
+    const miZ = min3(az, bz, cz), maZ = max3(az, bz, cz);
 
     triMinX[i] = miX; triMaxX[i] = maX;
     triMinY[i] = miY; triMaxY[i] = maY;
@@ -114,12 +121,9 @@ function parseBinarySTL(buffer: ArrayBuffer, triangleCount: number): MeshData {
     verts[b9+3] = bx; verts[b9+4] = by; verts[b9+5] = bz;
     verts[b9+6] = cx; verts[b9+7] = cy; verts[b9+8] = cz;
 
-    const miX = ax < bx ? (ax < cx ? ax : cx) : (bx < cx ? bx : cx);
-    const maX = ax > bx ? (ax > cx ? ax : cx) : (bx > cx ? bx : cx);
-    const miY = ay < by ? (ay < cy ? ay : cy) : (by < cy ? by : cy);
-    const maY = ay > by ? (ay > cy ? ay : cy) : (by > cy ? by : cy);
-    const miZ = az < bz ? (az < cz ? az : cz) : (bz < cz ? bz : cz);
-    const maZ = az > bz ? (az > cz ? az : cz) : (bz > cz ? bz : cz);
+    const miX = min3(ax, bx, cx), maX = max3(ax, bx, cx);
+    const miY = min3(ay, by, cy), maY = max3(ay, by, cy);
+    const miZ = min3(az, bz, cz), maZ = max3(az, bz, cz);
 
     triMinX[i] = miX; triMaxX[i] = maX;
     triMinY[i] = miY; triMaxY[i] = maY;

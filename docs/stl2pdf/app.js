@@ -20274,6 +20274,12 @@ function makeBBox(minX, minY, minZ, maxX, maxY, maxZ) {
     size: { x: maxX - minX, y: maxY - minY, z: maxZ - minZ }
   };
 }
+function min3(a5, b3, c6) {
+  return a5 < b3 ? a5 < c6 ? a5 : c6 : b3 < c6 ? b3 : c6;
+}
+function max3(a5, b3, c6) {
+  return a5 > b3 ? a5 > c6 ? a5 : c6 : b3 > c6 ? b3 : c6;
+}
 function buildMeshData(verts, count) {
   const triMinX = new Float32Array(count), triMaxX = new Float32Array(count);
   const triMinY = new Float32Array(count), triMaxY = new Float32Array(count);
@@ -20285,12 +20291,9 @@ function buildMeshData(verts, count) {
     const ax = verts[b3], ay = verts[b3 + 1], az = verts[b3 + 2];
     const bx = verts[b3 + 3], by = verts[b3 + 4], bz = verts[b3 + 5];
     const cx = verts[b3 + 6], cy = verts[b3 + 7], cz = verts[b3 + 8];
-    const miX = ax < bx ? ax < cx ? ax : cx : bx < cx ? bx : cx;
-    const maX = ax > bx ? ax > cx ? ax : cx : bx > cx ? bx : cx;
-    const miY = ay < by ? ay < cy ? ay : cy : by < cy ? by : cy;
-    const maY = ay > by ? ay > cy ? ay : cy : by > cy ? by : cy;
-    const miZ = az < bz ? az < cz ? az : cz : bz < cz ? bz : cz;
-    const maZ = az > bz ? az > cz ? az : cz : bz > cz ? bz : cz;
+    const miX = min3(ax, bx, cx), maX = max3(ax, bx, cx);
+    const miY = min3(ay, by, cy), maY = max3(ay, by, cy);
+    const miZ = min3(az, bz, cz), maZ = max3(az, bz, cz);
     triMinX[i6] = miX;
     triMaxX[i6] = maX;
     triMinY[i6] = miY;
@@ -20347,12 +20350,9 @@ function parseBinarySTL(buffer, triangleCount) {
     verts[b9 + 6] = cx;
     verts[b9 + 7] = cy;
     verts[b9 + 8] = cz;
-    const miX = ax < bx ? ax < cx ? ax : cx : bx < cx ? bx : cx;
-    const maX = ax > bx ? ax > cx ? ax : cx : bx > cx ? bx : cx;
-    const miY = ay < by ? ay < cy ? ay : cy : by < cy ? by : cy;
-    const maY = ay > by ? ay > cy ? ay : cy : by > cy ? by : cy;
-    const miZ = az < bz ? az < cz ? az : cz : bz < cz ? bz : cz;
-    const maZ = az > bz ? az > cz ? az : cz : bz > cz ? bz : cz;
+    const miX = min3(ax, bx, cx), maX = max3(ax, bx, cx);
+    const miY = min3(ay, by, cy), maY = max3(ay, by, cy);
+    const miZ = min3(az, bz, cz), maZ = max3(az, bz, cz);
     triMinX[i6] = miX;
     triMaxX[i6] = maX;
     triMinY[i6] = miY;
@@ -34207,7 +34207,7 @@ function u5(e4, t5, n3, o5, i6, u6) {
 
 // src/app.tsx
 var VERSION = true ? "1.1.0" : "1.0.0";
-var COMMIT_HASH = true ? "f431c66" : "dev";
+var COMMIT_HASH = true ? "efb6303" : "dev";
 function modelToCanvas(mx, my, vs, cx, cy) {
   return [
     mx * vs.zoom + cx + vs.panX,
@@ -34432,7 +34432,7 @@ function ModelPane({ label, dir, mesh, plane, onSetPlane, onCyclePlane }) {
     if (mesh.count === 0) return;
     ctx.save();
     ctx.strokeStyle = "rgba(100, 160, 220, 0.25)";
-    ctx.lineWidth = 0.5 / vs.zoom;
+    ctx.lineWidth = 0.5;
     ctx.setTransform(vs.zoom, 0, 0, vs.zoom, cx + vs.panX, cy + vs.panY);
     ctx.stroke(wirePath);
     ctx.restore();

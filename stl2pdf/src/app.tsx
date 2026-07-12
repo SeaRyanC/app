@@ -318,7 +318,7 @@ function ModelPane({ label, dir, mesh, plane, onSetPlane, onCyclePlane }: ModelP
     //    the browser can GPU-cache the path and render it with a single matrix multiply.
     ctx.save();
     ctx.strokeStyle = 'rgba(100, 160, 220, 0.25)';
-    ctx.lineWidth = 0.5 / vs.zoom; // stays ~0.5 px at any zoom level
+    ctx.lineWidth = 0.5;
     ctx.setTransform(vs.zoom, 0, 0, vs.zoom, cx + vs.panX, cy + vs.panY);
     ctx.stroke(wirePath);
     ctx.restore(); // resets transform to identity
