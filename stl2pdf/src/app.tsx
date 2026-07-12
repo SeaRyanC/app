@@ -106,39 +106,121 @@ function ModelPane({ label, dir, mesh, plane, onSetPlane, onCyclePlane }: ModelP
     }
   }, [bbox, dir]);
 
-  // ── Pre-project all triangles into a Path2D in view-centred model coords.
-  //    Rebuilt only when the mesh or view direction changes; reused on every
-  //    pan/zoom frame by applying a canvas transform instead of re-projecting.
-  const wirePath = useMemo((): Path2D => {
-    const path = new Path2D();
+  // ── Pre-project, shade, and sort all triangles; render to OffscreenCanvas.
+  //    Rebuilt only when the mesh or view direction changes.
+  //    Pan/zoom frames just blit this cached image with drawImage (fast GPU op).
+  interface ShadedPrerender {
+    canvas: OffscreenCanvas;
+    ocCx: number;   // model-center x in offscreen pixel coords
+    ocCy: number;   // model-center y in offscreen pixel coords
+    scale: number;  // offscreen pixels per model unit
+  }
+
+  const shadedPrerender = useMemo((): ShadedPrerender | null => {
     const { verts, count } = mesh;
+    if (count === 0) return null;
+
+    // Normalised light direction in world space (from upper-right, roughly)
+    const lvx = 0.5, lvy = 0.5, lvz = 1.2;
+    const ll = Math.sqrt(lvx*lvx + lvy*lvy + lvz*lvz);
+    const lx = lvx/ll, ly = lvy/ll, lz = lvz/ll;
+
+    // Unit vector from model toward viewer for each orthographic view:
+    //   front = looking along -Y → viewer at +Y
+    //   side  = looking along -X → viewer at +X
+    //   top   = looking along -Z → viewer at +Z
+    const vdx = dir === 'side'  ? 1 : 0;
+    const vdy = dir === 'front' ? 1 : 0;
+    const vdz = dir === 'top'   ? 1 : 0;
+
     const mcx = bbox.center.x, mcy = bbox.center.y, mcz = bbox.center.z;
+
+    // Each entry: [ax,ay, bx,by, cx,cy, depth, r,g,b]
+    type TriEntry = [number,number,number,number,number,number,number,number,number,number];
+    const tris: TriEntry[] = [];
+
     for (let i = 0; i < count; i++) {
-      const b = i * 9;
-      let pax: number, pay: number, pbx: number, pby: number, pcx: number, pcy: number;
+      const o = i * 9;
+      const ax3 = verts[o],   ay3 = verts[o+1], az3 = verts[o+2];
+      const bx3 = verts[o+3], by3 = verts[o+4], bz3 = verts[o+5];
+      const cx3 = verts[o+6], cy3 = verts[o+7], cz3 = verts[o+8];
+
+      // Face normal via cross product (B-A) × (C-A)
+      const ex = bx3-ax3, ey = by3-ay3, ez = bz3-az3;
+      const fx = cx3-ax3, fy = cy3-ay3, fz = cz3-az3;
+      let nx = ey*fz - ez*fy, ny = ez*fx - ex*fz, nz = ex*fy - ey*fx;
+      const nl = Math.sqrt(nx*nx + ny*ny + nz*nz);
+      if (nl < 1e-12) continue;
+      nx /= nl; ny /= nl; nz /= nl;
+
+      // Two-sided: ensure normal points toward the viewer
+      if (nx*vdx + ny*vdy + nz*vdz < 0) { nx=-nx; ny=-ny; nz=-nz; }
+
+      // Diffuse (Lambertian) intensity with ambient term
+      const diff = Math.max(0, nx*lx + ny*ly + nz*lz);
+      const t = 0.2 + 0.8 * diff;
+
+      // Steel-blue palette: dark→light as t goes 0→1
+      const r = Math.round(55  + 145 * t);
+      const g = Math.round(70  + 110 * t);
+      const b = Math.round(90  + 100 * t);
+
+      // 2D projection (model-centre relative) and depth for painter's sort
+      let pax: number, pay: number, pbx: number, pby: number, pcx: number, pcy: number, depth: number;
       switch (dir) {
-        case 'front': // project(v)=(v.x, -v.z), center=(mcx, -mcz)
-          pax = verts[b]   - mcx; pay = -(verts[b+2]) + mcz;
-          pbx = verts[b+3] - mcx; pby = -(verts[b+5]) + mcz;
-          pcx = verts[b+6] - mcx; pcy = -(verts[b+8]) + mcz;
+        case 'front':
+          pax = ax3-mcx; pay = mcz-az3;
+          pbx = bx3-mcx; pby = mcz-bz3;
+          pcx = cx3-mcx; pcy = mcz-cz3;
+          depth = (ay3+by3+cy3)/3;   // sort by Y ascending (low Y = far)
           break;
-        case 'side': // project(v)=(v.y, -v.z), center=(mcy, -mcz)
-          pax = verts[b+1] - mcy; pay = -(verts[b+2]) + mcz;
-          pbx = verts[b+4] - mcy; pby = -(verts[b+5]) + mcz;
-          pcx = verts[b+7] - mcy; pcy = -(verts[b+8]) + mcz;
+        case 'side':
+          pax = ay3-mcy; pay = mcz-az3;
+          pbx = by3-mcy; pby = mcz-bz3;
+          pcx = cy3-mcy; pcy = mcz-cz3;
+          depth = (ax3+bx3+cx3)/3;   // sort by X ascending (low X = far)
           break;
-        default: // top: project(v)=(v.x, v.y), center=(mcx, mcy)
-          pax = verts[b]   - mcx; pay = verts[b+1] - mcy;
-          pbx = verts[b+3] - mcx; pby = verts[b+4] - mcy;
-          pcx = verts[b+6] - mcx; pcy = verts[b+7] - mcy;
-          break;
+        default: // top
+          pax = ax3-mcx; pay = ay3-mcy;
+          pbx = bx3-mcx; pby = by3-mcy;
+          pcx = cx3-mcx; pcy = cy3-mcy;
+          depth = (az3+bz3+cz3)/3;   // sort by Z ascending (low Z = far)
       }
-      path.moveTo(pax, pay);
-      path.lineTo(pbx, pby);
-      path.lineTo(pcx, pcy);
-      path.closePath();
+
+      tris.push([pax, pay, pbx, pby, pcx, pcy, depth, r, g, b]);
     }
-    return path;
+
+    // Painter's algorithm: back-to-front (ascending depth = furthest first)
+    tris.sort((a, b) => a[6] - b[6]);
+
+    // Offscreen canvas: scale to fit within 2048px on the longest axis
+    const modelW = dir === 'side' ? bbox.size.y : bbox.size.x;
+    const modelH = dir === 'top'  ? bbox.size.y : bbox.size.z;
+    const maxDim = Math.max(modelW, modelH, 1);
+    const ocScale = Math.min(8, 2048 / maxDim);
+    const pad = 24;
+    const ocW = Math.ceil(modelW * ocScale) + pad * 2;
+    const ocH = Math.ceil(modelH * ocScale) + pad * 2;
+    const ocCx = ocW / 2, ocCy = ocH / 2;
+
+    const oc = new OffscreenCanvas(ocW, ocH);
+    const ctx2 = oc.getContext('2d')!;
+
+    for (const [ax, ay, bx, by, cx, cy, , r, g, b] of tris) {
+      const color = `rgb(${r},${g},${b})`;
+      ctx2.fillStyle = color;
+      ctx2.strokeStyle = color;
+      ctx2.lineWidth = 0.5;
+      ctx2.beginPath();
+      ctx2.moveTo(ocCx + ax * ocScale, ocCy + ay * ocScale);
+      ctx2.lineTo(ocCx + bx * ocScale, ocCy + by * ocScale);
+      ctx2.lineTo(ocCx + cx * ocScale, ocCy + cy * ocScale);
+      ctx2.closePath();
+      ctx2.fill();
+      ctx2.stroke(); // thin same-colour stroke closes sub-pixel seams
+    }
+
+    return { canvas: oc, ocCx, ocCy, scale: ocScale };
   }, [mesh, bbox, dir]);
 
   // ── Initialize zoom to fit on first render / when model changes
@@ -313,15 +395,21 @@ function ModelPane({ label, dir, mesh, plane, onSetPlane, onCyclePlane }: ModelP
 
     if (mesh.count === 0) return;
 
-    // ── Draw wireframe using the cached Path2D.
-    //    Apply a canvas transform instead of re-projecting every vertex each frame;
-    //    the browser can GPU-cache the path and render it with a single matrix multiply.
-    ctx.save();
-    ctx.strokeStyle = 'rgba(100, 160, 220, 0.25)';
-    ctx.lineWidth = 0.5;
-    ctx.setTransform(vs.zoom, 0, 0, vs.zoom, cx + vs.panX, cy + vs.panY);
-    ctx.stroke(wirePath);
-    ctx.restore(); // resets transform to identity
+    // ── Blit the pre-rendered Phong-shaded OffscreenCanvas.
+    //    The offscreen canvas is in model-centre coords at `scale` px/unit.
+    //    Map it so that model (0,0) lands at canvas (cx+panX, cy+panY),
+    //    and one model unit covers vs.zoom canvas pixels.
+    if (shadedPrerender) {
+      const { canvas: oc, ocCx, ocCy, scale: ocScale } = shadedPrerender;
+      const ratio = vs.zoom / ocScale;
+      ctx.drawImage(
+        oc,
+        cx + vs.panX - ocCx * ratio,
+        cy + vs.panY - ocCy * ratio,
+        oc.width  * ratio,
+        oc.height * ratio
+      );
+    }
 
     // ── Draw origin cross (pixel coords)
     const [ox, oy] = modelToCanvas(-modelCenter.x, -modelCenter.y, vs, cx, cy);
@@ -369,7 +457,7 @@ function ModelPane({ label, dir, mesh, plane, onSetPlane, onCyclePlane }: ModelP
         ctx.restore();
       }
     }
-  }, [mesh, wirePath, plane, vs, dir, modelCenter]);
+  }, [mesh, shadedPrerender, plane, vs, dir, modelCenter]);
 
   return (
     <div class="pane" ref={containerRef} style={{ cursor: 'crosshair' }}>

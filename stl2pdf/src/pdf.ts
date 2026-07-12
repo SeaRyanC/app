@@ -56,40 +56,21 @@ export function generateSectionPDF(section: SectionResult, plane: CutPlane): Blo
   doc.setFillColor(255, 255, 255);
   doc.rect(originX, originY, drawW, drawH, 'F');
 
-  // ── Fill interior (even-odd) with light gray, then stroke outlines
-  // jsPDF doesn't natively support even-odd fill via a single command when
-  // paths span multiple closures. We emulate it by:
-  //   1. Filling all contours with light gray (winding → opaque gray interior)
-  //   2. Overdrawing "holes" with white if the mesh has inner loops
-  // For typical 3D-printed parts this is correct. For parts with through-holes,
-  // even-odd is needed. We approximate by using nonzero winding but drawing
-  // each contour area individually. Since jsPDF's SVG path API supports
-  // even-odd, we build a single compound path and use 'F*' rule.
-  //
-  // Build a compound SVG path string for all contours, then apply even-odd fill.
-  const svgPaths: string[] = [];
-  for (const contour of contours) {
-    if (contour.length < 2) continue;
-    const cmds: string[] = [];
-    for (let i = 0; i < contour.length; i++) {
-      const cmd = i === 0 ? 'M' : 'L';
-      cmds.push(`${cmd} ${px(contour[i].x).toFixed(4)} ${py(contour[i].y).toFixed(4)}`);
-    }
-    cmds.push('Z');
-    svgPaths.push(cmds.join(' '));
-  }
-
-  const compoundPath = svgPaths.join(' ');
-
-  // Draw filled area (light gray interior)
+  // ── Fill interior (even-odd) with light gray, then stroke outlines.
+  //    Use the jsPDF chaining API: moveTo → lineTo → close → fillStrokeEvenOdd.
   doc.setFillColor(210, 210, 210);
   doc.setDrawColor(0, 0, 0);
-  doc.setLineWidth(0.4 * (1 / scale)); // keep visual line width constant
+  doc.setLineWidth(0.4);
 
-  // jsPDF path() API: takes SVG path data and style
-  (doc as unknown as { path(d: string): { fill(rule?: string): void; stroke(): void; fillStroke(rule?: string): void } })
-    .path(compoundPath)
-    .fillStroke('evenodd');
+  for (const contour of contours) {
+    if (contour.length < 2) continue;
+    doc.moveTo(px(contour[0].x), py(contour[0].y));
+    for (let i = 1; i < contour.length; i++) {
+      doc.lineTo(px(contour[i].x), py(contour[i].y));
+    }
+    doc.close();
+  }
+  doc.fillStrokeEvenOdd();
 
   // ── Dimension labels
   const axisName = plane.axis.toUpperCase();

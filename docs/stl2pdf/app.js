@@ -34166,22 +34166,18 @@ function generateSectionPDF(section, plane) {
   const py = (sy) => originY + (sy - bounds.minY) * scale;
   doc.setFillColor(255, 255, 255);
   doc.rect(originX, originY, drawW, drawH, "F");
-  const svgPaths = [];
-  for (const contour of contours) {
-    if (contour.length < 2) continue;
-    const cmds = [];
-    for (let i6 = 0; i6 < contour.length; i6++) {
-      const cmd = i6 === 0 ? "M" : "L";
-      cmds.push(`${cmd} ${px(contour[i6].x).toFixed(4)} ${py(contour[i6].y).toFixed(4)}`);
-    }
-    cmds.push("Z");
-    svgPaths.push(cmds.join(" "));
-  }
-  const compoundPath = svgPaths.join(" ");
   doc.setFillColor(210, 210, 210);
   doc.setDrawColor(0, 0, 0);
-  doc.setLineWidth(0.4 * (1 / scale));
-  doc.path(compoundPath).fillStroke("evenodd");
+  doc.setLineWidth(0.4);
+  for (const contour of contours) {
+    if (contour.length < 2) continue;
+    doc.moveTo(px(contour[0].x), py(contour[0].y));
+    for (let i6 = 1; i6 < contour.length; i6++) {
+      doc.lineTo(px(contour[i6].x), py(contour[i6].y));
+    }
+    doc.close();
+  }
+  doc.fillStrokeEvenOdd();
   const axisName = plane.axis.toUpperCase();
   const labelText = `Section at ${axisName} = ${plane.value.toFixed(2)} mm   |   Width: ${secW.toFixed(1)} mm   Height: ${secH.toFixed(1)} mm` + (scale < 0.9999 ? `   |   Scale: 1:${(1 / scale).toFixed(2)}` : "   |   Scale: 1:1");
   doc.setFontSize(7);
@@ -34206,8 +34202,8 @@ function u5(e4, t5, n3, o5, i6, u6) {
 }
 
 // src/app.tsx
-var VERSION = true ? "1.1.0" : "1.0.0";
-var COMMIT_HASH = true ? "efb6303" : "dev";
+var VERSION = true ? "1.2.0" : "1.0.0";
+var COMMIT_HASH = true ? "86c5b1e" : "dev";
 function modelToCanvas(mx, my, vs, cx, cy) {
   return [
     mx * vs.zoom + cx + vs.panX,
@@ -34247,45 +34243,96 @@ function ModelPane({ label, dir, mesh, plane, onSetPlane, onCyclePlane }) {
         return { w: bbox.size.x, h: bbox.size.y };
     }
   }, [bbox, dir]);
-  const wirePath = T2(() => {
-    const path = new Path2D();
+  const shadedPrerender = T2(() => {
     const { verts, count } = mesh;
+    if (count === 0) return null;
+    const lvx = 0.5, lvy = 0.5, lvz = 1.2;
+    const ll = Math.sqrt(lvx * lvx + lvy * lvy + lvz * lvz);
+    const lx = lvx / ll, ly = lvy / ll, lz = lvz / ll;
+    const vdx = dir === "side" ? 1 : 0;
+    const vdy = dir === "front" ? 1 : 0;
+    const vdz = dir === "top" ? 1 : 0;
     const mcx = bbox.center.x, mcy = bbox.center.y, mcz = bbox.center.z;
+    const tris = [];
     for (let i6 = 0; i6 < count; i6++) {
-      const b3 = i6 * 9;
-      let pax, pay, pbx, pby, pcx, pcy;
+      const o5 = i6 * 9;
+      const ax3 = verts[o5], ay3 = verts[o5 + 1], az3 = verts[o5 + 2];
+      const bx3 = verts[o5 + 3], by3 = verts[o5 + 4], bz3 = verts[o5 + 5];
+      const cx3 = verts[o5 + 6], cy3 = verts[o5 + 7], cz3 = verts[o5 + 8];
+      const ex = bx3 - ax3, ey = by3 - ay3, ez = bz3 - az3;
+      const fx = cx3 - ax3, fy = cy3 - ay3, fz = cz3 - az3;
+      let nx = ey * fz - ez * fy, ny = ez * fx - ex * fz, nz = ex * fy - ey * fx;
+      const nl = Math.sqrt(nx * nx + ny * ny + nz * nz);
+      if (nl < 1e-12) continue;
+      nx /= nl;
+      ny /= nl;
+      nz /= nl;
+      if (nx * vdx + ny * vdy + nz * vdz < 0) {
+        nx = -nx;
+        ny = -ny;
+        nz = -nz;
+      }
+      const diff = Math.max(0, nx * lx + ny * ly + nz * lz);
+      const t5 = 0.2 + 0.8 * diff;
+      const r4 = Math.round(55 + 145 * t5);
+      const g3 = Math.round(70 + 110 * t5);
+      const b3 = Math.round(90 + 100 * t5);
+      let pax, pay, pbx, pby, pcx, pcy, depth;
       switch (dir) {
         case "front":
-          pax = verts[b3] - mcx;
-          pay = -verts[b3 + 2] + mcz;
-          pbx = verts[b3 + 3] - mcx;
-          pby = -verts[b3 + 5] + mcz;
-          pcx = verts[b3 + 6] - mcx;
-          pcy = -verts[b3 + 8] + mcz;
+          pax = ax3 - mcx;
+          pay = mcz - az3;
+          pbx = bx3 - mcx;
+          pby = mcz - bz3;
+          pcx = cx3 - mcx;
+          pcy = mcz - cz3;
+          depth = (ay3 + by3 + cy3) / 3;
           break;
         case "side":
-          pax = verts[b3 + 1] - mcy;
-          pay = -verts[b3 + 2] + mcz;
-          pbx = verts[b3 + 4] - mcy;
-          pby = -verts[b3 + 5] + mcz;
-          pcx = verts[b3 + 7] - mcy;
-          pcy = -verts[b3 + 8] + mcz;
+          pax = ay3 - mcy;
+          pay = mcz - az3;
+          pbx = by3 - mcy;
+          pby = mcz - bz3;
+          pcx = cy3 - mcy;
+          pcy = mcz - cz3;
+          depth = (ax3 + bx3 + cx3) / 3;
           break;
         default:
-          pax = verts[b3] - mcx;
-          pay = verts[b3 + 1] - mcy;
-          pbx = verts[b3 + 3] - mcx;
-          pby = verts[b3 + 4] - mcy;
-          pcx = verts[b3 + 6] - mcx;
-          pcy = verts[b3 + 7] - mcy;
-          break;
+          pax = ax3 - mcx;
+          pay = ay3 - mcy;
+          pbx = bx3 - mcx;
+          pby = by3 - mcy;
+          pcx = cx3 - mcx;
+          pcy = cy3 - mcy;
+          depth = (az3 + bz3 + cz3) / 3;
       }
-      path.moveTo(pax, pay);
-      path.lineTo(pbx, pby);
-      path.lineTo(pcx, pcy);
-      path.closePath();
+      tris.push([pax, pay, pbx, pby, pcx, pcy, depth, r4, g3, b3]);
     }
-    return path;
+    tris.sort((a5, b3) => a5[6] - b3[6]);
+    const modelW = dir === "side" ? bbox.size.y : bbox.size.x;
+    const modelH = dir === "top" ? bbox.size.y : bbox.size.z;
+    const maxDim = Math.max(modelW, modelH, 1);
+    const ocScale = Math.min(8, 2048 / maxDim);
+    const pad = 24;
+    const ocW = Math.ceil(modelW * ocScale) + pad * 2;
+    const ocH = Math.ceil(modelH * ocScale) + pad * 2;
+    const ocCx = ocW / 2, ocCy = ocH / 2;
+    const oc = new OffscreenCanvas(ocW, ocH);
+    const ctx2 = oc.getContext("2d");
+    for (const [ax, ay, bx, by, cx, cy, , r4, g3, b3] of tris) {
+      const color = `rgb(${r4},${g3},${b3})`;
+      ctx2.fillStyle = color;
+      ctx2.strokeStyle = color;
+      ctx2.lineWidth = 0.5;
+      ctx2.beginPath();
+      ctx2.moveTo(ocCx + ax * ocScale, ocCy + ay * ocScale);
+      ctx2.lineTo(ocCx + bx * ocScale, ocCy + by * ocScale);
+      ctx2.lineTo(ocCx + cx * ocScale, ocCy + cy * ocScale);
+      ctx2.closePath();
+      ctx2.fill();
+      ctx2.stroke();
+    }
+    return { canvas: oc, ocCx, ocCy, scale: ocScale };
   }, [mesh, bbox, dir]);
   h2(() => {
     const canvas = canvasRef.current;
@@ -34430,12 +34477,17 @@ function ModelPane({ label, dir, mesh, plane, onSetPlane, onCyclePlane }) {
     ctx.fillStyle = "#0d1117";
     ctx.fillRect(0, 0, W2, H3);
     if (mesh.count === 0) return;
-    ctx.save();
-    ctx.strokeStyle = "rgba(100, 160, 220, 0.25)";
-    ctx.lineWidth = 0.5;
-    ctx.setTransform(vs.zoom, 0, 0, vs.zoom, cx + vs.panX, cy + vs.panY);
-    ctx.stroke(wirePath);
-    ctx.restore();
+    if (shadedPrerender) {
+      const { canvas: oc, ocCx, ocCy, scale: ocScale } = shadedPrerender;
+      const ratio = vs.zoom / ocScale;
+      ctx.drawImage(
+        oc,
+        cx + vs.panX - ocCx * ratio,
+        cy + vs.panY - ocCy * ratio,
+        oc.width * ratio,
+        oc.height * ratio
+      );
+    }
     const [ox, oy] = modelToCanvas(-modelCenter.x, -modelCenter.y, vs, cx, cy);
     ctx.strokeStyle = "rgba(255,255,255,0.15)";
     ctx.lineWidth = 0.5;
@@ -34478,7 +34530,7 @@ function ModelPane({ label, dir, mesh, plane, onSetPlane, onCyclePlane }) {
         ctx.restore();
       }
     }
-  }, [mesh, wirePath, plane, vs, dir, modelCenter]);
+  }, [mesh, shadedPrerender, plane, vs, dir, modelCenter]);
   return /* @__PURE__ */ u5("div", { class: "pane", ref: containerRef, style: { cursor: "crosshair" }, children: [
     /* @__PURE__ */ u5("span", { class: "pane-label", children: label }),
     plane && /* @__PURE__ */ u5("span", { class: "plane-badge", children: plane.axis.toUpperCase() }),

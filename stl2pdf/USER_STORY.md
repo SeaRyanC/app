@@ -10,7 +10,7 @@ The app accepts both binary and ASCII STL formats. An error message is shown if 
 ### US-02 – Orthographic three-view display
 As a user, I want to see the model in three orthographic views — Front (XZ), Side (YZ), and Top (XY) — with Z pointing up, so I can understand the model's shape from multiple directions.
 
-Each view renders the model as a wireframe. The model is automatically fitted to the pane on load.
+Each view renders the model with Lambertian (diffuse + ambient) shading using an orthographic projection. Face normals are computed per-triangle and a fixed world-space light gives a steel-blue appearance. The model is automatically fitted to the pane on load.
 
 ### US-03 – Zoom and pan in every pane
 As a user, I want to scroll to zoom and right-click-drag to pan in any of the four panes, so I can examine any part of the model or section in detail.
