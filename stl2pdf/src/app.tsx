@@ -15,6 +15,9 @@ import type { BBox3, CutPlane, ViewDir } from './geometry.js';
 import { computeSection } from './section.js';
 import type { SectionResult } from './section.js';
 import { generateSectionPDF } from './pdf.js';
+import { makeTorus, makeSteppedShaft, makeMountingPlate } from './demo-models.js';
+import { computeSnapPoints, findNearestSnap, findCircleAtPoint, findContourAtPoint } from './measure.js';
+import type { SnapPoint } from './measure.js';
 
 declare const __VERSION__: string;
 declare const __COMMIT_HASH__: string;
@@ -65,12 +68,14 @@ interface ModelPaneProps {
   plane: CutPlane | null;
   onSetPlane: (axis: CutPlane['axis'], value: number) => void;
   onCyclePlane: () => void;
+  maxModelDim: number;  // shared initial zoom basis (max of bbox size.x/y/z)
+  showHint: boolean;    // whether to show the mouse-usage hint overlay
 }
 
 const INDICATOR_COLOR = '#f78166';
 const INDICATOR_HIT = 10; // px tolerance for clicking indicator
 
-function ModelPane({ label, dir, mesh, plane, onSetPlane, onCyclePlane }: ModelPaneProps) {
+function ModelPane({ label, dir, mesh, plane, onSetPlane, onCyclePlane, maxModelDim, showHint }: ModelPaneProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -96,15 +101,6 @@ function ModelPane({ label, dir, mesh, plane, onSetPlane, onCyclePlane }: ModelP
 
   // ── Determine 2D "center" of model in this view
   const modelCenter = useMemo(() => projectForView(bbox.center, dir), [bbox, dir]);
-
-  // ── Compute 2D bounding extent for auto-fit
-  const modelExtent = useMemo((): { w: number; h: number } => {
-    switch (dir) {
-      case 'front': return { w: bbox.size.x, h: bbox.size.z };
-      case 'side':  return { w: bbox.size.y, h: bbox.size.z };
-      case 'top':   return { w: bbox.size.x, h: bbox.size.y };
-    }
-  }, [bbox, dir]);
 
   // ── Pre-project, shade, and sort all triangles; render to OffscreenCanvas.
   //    Rebuilt only when the mesh or view direction changes.
@@ -233,9 +229,9 @@ function ModelPane({ label, dir, mesh, plane, onSetPlane, onCyclePlane }: ModelP
     const rect = canvas.getBoundingClientRect();
     const w = rect.width || canvas.offsetWidth;
     const h = rect.height || canvas.offsetHeight;
-    const z = fitZoom(modelExtent.w, modelExtent.h, w, h);
+    const z = fitZoom(maxModelDim, maxModelDim, w, h);
     setVs({ zoom: z, panX: 0, panY: 0 });
-  }, [mesh, modelExtent]);
+  }, [mesh, maxModelDim]);
 
   // ── Helpers: canvas centre
   const centre = (): [number, number] => {
@@ -475,13 +471,15 @@ function ModelPane({ label, dir, mesh, plane, onSetPlane, onCyclePlane }: ModelP
         onContextMenu={handleContextMenu}
         style={{ cursor: 'crosshair' }}
       />
-      <div class="hint">
-        Scroll: zoom &nbsp;·&nbsp; Right-drag: pan
-        <br />
-        Click: set plane &nbsp;·&nbsp; Drag indicator: move
-        <br />
-        Right-click indicator: cycle axis
-      </div>
+      {showHint && (
+        <div class="hint">
+          Scroll: zoom &nbsp;·&nbsp; Right-drag: pan
+          <br />
+          Click: set plane &nbsp;·&nbsp; Drag indicator: move
+          <br />
+          Right-click indicator: cycle axis
+        </div>
+      )}
     </div>
   );
 }
@@ -493,6 +491,61 @@ interface OutputPaneProps {
   plane: CutPlane | null;
 }
 
+type MeasureTool = 'ruler' | 'diameter' | 'autodim';
+
+interface RulerState {
+  stage: 'empty' | 'pt1_placed' | 'complete';
+  pt1: [number, number] | null;
+  pt2: [number, number] | null;
+  hoverPt: [number, number] | null;
+}
+
+interface DiameterState {
+  cx: number;
+  cy: number;
+  r: number;
+}
+
+interface AutodimState {
+  minX: number;
+  minY: number;
+  maxX: number;
+  maxY: number;
+}
+
+const EMPTY_RULER_STATE: RulerState = { stage: 'empty', pt1: null, pt2: null, hoverPt: null };
+
+const MEASURE_COLOR = '#e06c75';
+const DIM_COLOR = '#61afef';
+const SNAP_COLOR = '#98c379';
+const RULER_HIT_PX = 12; // px tolerance for grabbing an existing ruler endpoint
+const SNAP_RADIUS_PX = 10; // px tolerance for snapping to contour geometry
+
+/** Draw a small pill-shaped label (white text on a dark rounded background). */
+function drawMeasureLabel(ctx: CanvasRenderingContext2D, text: string, x: number, y: number) {
+  ctx.save();
+  ctx.font = '11px monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  const padX = 5, padY = 3;
+  const w = ctx.measureText(text).width + padX * 2;
+  const h = 14 + padY;
+  ctx.fillStyle = 'rgba(20,20,20,0.85)';
+  ctx.fillRect(x - w / 2, y - h / 2, w, h);
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText(text, x, y);
+  ctx.restore();
+}
+
+function drawDimTick(ctx: CanvasRenderingContext2D, x: number, y: number, angle: number) {
+  const len = 5;
+  const dx = Math.cos(angle) * len, dy = Math.sin(angle) * len;
+  ctx.beginPath();
+  ctx.moveTo(x - dx, y - dy);
+  ctx.lineTo(x + dx, y + dy);
+  ctx.stroke();
+}
+
 function OutputPane({ section, plane }: OutputPaneProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -502,7 +555,28 @@ function OutputPane({ section, plane }: OutputPaneProps) {
   const vsRef = useRef(vs);
   vsRef.current = vs;
 
-  const dragRef = useRef<{ startX: number; startY: number; startPanX: number; startPanY: number } | null>(null);
+  const panDragRef = useRef<{ startX: number; startY: number; startPanX: number; startPanY: number } | null>(null);
+  const rulerDragRef = useRef<'pt1' | 'pt2' | null>(null);
+
+  // Measurement tool state
+  const [activeTool, setActiveTool] = useState<MeasureTool | null>(null);
+  const [rulerState, setRulerState] = useState<RulerState>(EMPTY_RULER_STATE);
+  const [diameterState, setDiameterState] = useState<DiameterState | null>(null);
+  const [autodimState, setAutodimState] = useState<AutodimState | null>(null);
+  const [snapHover, setSnapHover] = useState<SnapPoint | null>(null);
+
+  const snapPoints = useMemo(() => {
+    if (!section?.contours) return [];
+    return computeSnapPoints(section.contours);
+  }, [section]);
+
+  const toggleTool = useCallback((tool: MeasureTool) => {
+    setActiveTool(t => (t === tool ? null : tool));
+    setRulerState(EMPTY_RULER_STATE);
+    setDiameterState(null);
+    setAutodimState(null);
+    setSnapHover(null);
+  }, []);
 
   const centre = (): [number, number] => {
     const c = canvasRef.current;
@@ -523,6 +597,11 @@ function OutputPane({ section, plane }: OutputPaneProps) {
     const next = { zoom: z, panX: 0, panY: 0 };
     vsRef.current = next;
     setVs(next);
+    setActiveTool(null);
+    setRulerState(EMPTY_RULER_STATE);
+    setDiameterState(null);
+    setAutodimState(null);
+    setSnapHover(null);
   }, [section]);
 
   const handleWheel = useCallback((e: WheelEvent) => {
@@ -545,32 +624,138 @@ function OutputPane({ section, plane }: OutputPaneProps) {
     setVs(next);
   }, []);
 
+  /** Resolve a raw section-space point to its snapped position (unless a modifier key disables snapping). */
+  const resolveSnap = useCallback((modelX: number, modelY: number, e: MouseEvent, currentVs: ViewState): [number, number] => {
+    if (e.shiftKey || e.ctrlKey || e.altKey) return [modelX, modelY];
+    const snapRadiusMM = SNAP_RADIUS_PX / currentVs.zoom;
+    const snap = findNearestSnap(modelX, modelY, snapPoints, snapRadiusMM);
+    return snap ? [snap.x, snap.y] : [modelX, modelY];
+  }, [snapPoints]);
+
+  const updateSnapHover = useCallback((modelX: number, modelY: number, e: MouseEvent, currentVs: ViewState) => {
+    if (e.shiftKey || e.ctrlKey || e.altKey) { setSnapHover(null); return; }
+    const snapRadiusMM = SNAP_RADIUS_PX / currentVs.zoom;
+    setSnapHover(findNearestSnap(modelX, modelY, snapPoints, snapRadiusMM));
+  }, [snapPoints]);
+
   const handleMouseDown = useCallback((e: MouseEvent) => {
+    const canvas = canvasRef.current!;
+    const rect = canvas.getBoundingClientRect();
+    const sx = e.clientX - rect.left;
+    const sy = e.clientY - rect.top;
+
     if (e.button === 2) {
-      dragRef.current = {
+      panDragRef.current = {
         startX: e.clientX, startY: e.clientY,
         startPanX: vsRef.current.panX, startPanY: vsRef.current.panY,
       };
+      return;
     }
-  }, []);
+
+    if (e.button !== 0 || !activeTool || !section?.bounds) return;
+
+    const currentVs = vsRef.current;
+    const [cx, cy] = centre();
+    const [mx, my] = canvasToModel(sx, sy, currentVs, cx, cy);
+    const secCx = (section.bounds.minX + section.bounds.maxX) / 2;
+    const secCy = (section.bounds.minY + section.bounds.maxY) / 2;
+    const modelX = mx + secCx, modelY = my + secCy;
+
+    if (activeTool === 'ruler') {
+      if (rulerState.stage === 'complete') {
+        const p1c = rulerState.pt1 ? modelToCanvas(rulerState.pt1[0] - secCx, rulerState.pt1[1] - secCy, currentVs, cx, cy) : null;
+        const p2c = rulerState.pt2 ? modelToCanvas(rulerState.pt2[0] - secCx, rulerState.pt2[1] - secCy, currentVs, cx, cy) : null;
+        const hitP1 = p1c !== null && Math.hypot(sx - p1c[0], sy - p1c[1]) <= RULER_HIT_PX;
+        const hitP2 = p2c !== null && Math.hypot(sx - p2c[0], sy - p2c[1]) <= RULER_HIT_PX;
+        if (hitP1) { rulerDragRef.current = 'pt1'; return; }
+        if (hitP2) { rulerDragRef.current = 'pt2'; return; }
+        setRulerState(EMPTY_RULER_STATE);
+        return;
+      }
+      const snapped = resolveSnap(modelX, modelY, e, currentVs);
+      if (rulerState.stage === 'empty') {
+        setRulerState({ stage: 'pt1_placed', pt1: snapped, pt2: null, hoverPt: snapped });
+      } else {
+        setRulerState(rs => ({ ...rs, stage: 'complete', pt2: snapped }));
+      }
+      return;
+    }
+
+    if (activeTool === 'diameter') {
+      const fit = findCircleAtPoint(modelX, modelY, section.contours);
+      setDiameterState(fit ? { cx: fit.cx, cy: fit.cy, r: fit.r } : null);
+      return;
+    }
+
+    if (activeTool === 'autodim') {
+      const idx = findContourAtPoint(modelX, modelY, section.contours);
+      if (idx < 0) { setAutodimState(null); return; }
+      const c = section.contours[idx];
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+      for (const p of c) {
+        if (p.x < minX) minX = p.x;
+        if (p.y < minY) minY = p.y;
+        if (p.x > maxX) maxX = p.x;
+        if (p.y > maxY) maxY = p.y;
+      }
+      setAutodimState({ minX, minY, maxX, maxY });
+    }
+  }, [activeTool, section, rulerState, resolveSnap]);
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
-    const drag = dragRef.current;
-    if (!drag) return;
-    const next = {
-      zoom: vsRef.current.zoom,
-      panX: drag.startPanX + (e.clientX - drag.startX),
-      panY: drag.startPanY + (e.clientY - drag.startY),
-    };
-    vsRef.current = next;
-    setVs(next);
+    const pan = panDragRef.current;
+    if (pan) {
+      const next = {
+        zoom: vsRef.current.zoom,
+        panX: pan.startPanX + (e.clientX - pan.startX),
+        panY: pan.startPanY + (e.clientY - pan.startY),
+      };
+      vsRef.current = next;
+      setVs(next);
+    }
+
+    if (!activeTool || !section?.bounds) return;
+
+    const canvas = canvasRef.current!;
+    const rect = canvas.getBoundingClientRect();
+    const sx = e.clientX - rect.left;
+    const sy = e.clientY - rect.top;
+    const currentVs = vsRef.current;
+    const [cx, cy] = centre();
+    const [mx, my] = canvasToModel(sx, sy, currentVs, cx, cy);
+    const secCx = (section.bounds.minX + section.bounds.maxX) / 2;
+    const secCy = (section.bounds.minY + section.bounds.maxY) / 2;
+    const modelX = mx + secCx, modelY = my + secCy;
+
+    if (activeTool === 'ruler' && rulerDragRef.current) {
+      const which = rulerDragRef.current;
+      const snapped = resolveSnap(modelX, modelY, e, currentVs);
+      setRulerState(rs => ({ ...rs, [which]: snapped }));
+      updateSnapHover(modelX, modelY, e, currentVs);
+      return;
+    }
+
+    if (activeTool === 'ruler' && rulerState.stage === 'pt1_placed') {
+      const snapped = resolveSnap(modelX, modelY, e, currentVs);
+      setRulerState(rs => ({ ...rs, hoverPt: snapped }));
+    }
+
+    updateSnapHover(modelX, modelY, e, currentVs);
+  }, [activeTool, section, rulerState.stage, resolveSnap, updateSnapHover]);
+
+  const handleMouseUp = useCallback(() => {
+    panDragRef.current = null;
+    rulerDragRef.current = null;
   }, []);
 
-  const handleMouseUp = useCallback(() => { dragRef.current = null; }, []);
+  const handleContextMenu = useCallback((e: MouseEvent) => {
+    e.preventDefault();
+    if (activeTool === 'ruler') setRulerState(EMPTY_RULER_STATE);
+    else if (activeTool === 'diameter') setDiameterState(null);
+    else if (activeTool === 'autodim') setAutodimState(null);
+  }, [activeTool]);
 
-  const handleContextMenu = useCallback((e: MouseEvent) => { e.preventDefault(); }, []);
-
-  // Draw section
+  // Draw section + measurement overlays
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -596,10 +781,12 @@ function OutputPane({ section, plane }: OutputPaneProps) {
     const { bounds, contours } = section;
     const secCx = (bounds.minX + bounds.maxX) / 2;
     const secCy = (bounds.minY + bounds.maxY) / 2;
+    const toCanvas = (mx: number, my: number): [number, number] =>
+      modelToCanvas(mx - secCx, my - secCy, vs, cx, cy);
 
     // White paper background (section area)
-    const bMinX = modelToCanvas(bounds.minX - secCx, bounds.minY - secCy, vs, cx, cy);
-    const bMaxX = modelToCanvas(bounds.maxX - secCx, bounds.maxY - secCy, vs, cx, cy);
+    const bMinX = toCanvas(bounds.minX, bounds.minY);
+    const bMaxX = toCanvas(bounds.maxX, bounds.maxY);
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(bMinX[0], bMinX[1], bMaxX[0] - bMinX[0], bMaxX[1] - bMinX[1]);
 
@@ -607,10 +794,10 @@ function OutputPane({ section, plane }: OutputPaneProps) {
     ctx.beginPath();
     for (const contour of contours) {
       if (contour.length < 2) continue;
-      const [fx, fy] = modelToCanvas(contour[0].x - secCx, contour[0].y - secCy, vs, cx, cy);
+      const [fx, fy] = toCanvas(contour[0].x, contour[0].y);
       ctx.moveTo(fx, fy);
       for (let i = 1; i < contour.length; i++) {
-        const [lx, ly] = modelToCanvas(contour[i].x - secCx, contour[i].y - secCy, vs, cx, cy);
+        const [lx, ly] = toCanvas(contour[i].x, contour[i].y);
         ctx.lineTo(lx, ly);
       }
       ctx.closePath();
@@ -626,7 +813,120 @@ function OutputPane({ section, plane }: OutputPaneProps) {
 
     // Scale bar (if we know we're at mm scale)
     drawScaleBar(ctx, vs.zoom, W, H);
-  }, [section, vs]);
+
+    // ── Measurement tool overlays ──────────────────────────────────────
+    if (activeTool === 'ruler') {
+      const drawDot = (p: [number, number]) => {
+        const [sx, sy] = toCanvas(p[0], p[1]);
+        ctx.beginPath();
+        ctx.arc(sx, sy, 5, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = MEASURE_COLOR;
+        ctx.stroke();
+      };
+      const drawMeasureLine = (p1: [number, number], p2: [number, number]) => {
+        const [x1, y1] = toCanvas(p1[0], p1[1]);
+        const [x2, y2] = toCanvas(p2[0], p2[1]);
+        ctx.save();
+        ctx.strokeStyle = MEASURE_COLOR;
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([5, 3]);
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+        ctx.restore();
+        const dist = Math.hypot(p2[0] - p1[0], p2[1] - p1[1]);
+        drawMeasureLabel(ctx, `${dist.toFixed(1)} mm`, (x1 + x2) / 2, (y1 + y2) / 2);
+      };
+
+      if (rulerState.pt1) drawDot(rulerState.pt1);
+      if (rulerState.pt2) drawDot(rulerState.pt2);
+
+      if (rulerState.stage === 'pt1_placed' && rulerState.pt1 && rulerState.hoverPt) {
+        drawMeasureLine(rulerState.pt1, rulerState.hoverPt);
+      } else if (rulerState.stage === 'complete' && rulerState.pt1 && rulerState.pt2) {
+        drawMeasureLine(rulerState.pt1, rulerState.pt2);
+      }
+    }
+
+    if (activeTool === 'diameter' && diameterState) {
+      const { cx: dcx, cy: dcy, r } = diameterState;
+      const [ccx, ccy] = toCanvas(dcx, dcy);
+      const rc = r * vs.zoom;
+
+      ctx.save();
+      ctx.strokeStyle = MEASURE_COLOR;
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([5, 3]);
+      ctx.beginPath();
+      ctx.arc(ccx, ccy, rc, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(ccx - rc, ccy);
+      ctx.lineTo(ccx + rc, ccy);
+      ctx.stroke();
+      ctx.restore();
+
+      const label = `⌀${(r * 2).toFixed(2)}`;
+      drawMeasureLabel(ctx, label, ccx, rc > 30 ? ccy : ccy - rc - 14);
+    }
+
+    if (activeTool === 'autodim' && autodimState) {
+      const { minX, minY, maxX, maxY } = autodimState;
+      const offsetMM = 8;
+
+      ctx.save();
+      ctx.strokeStyle = DIM_COLOR;
+      ctx.lineWidth = 1.2;
+
+      // Top horizontal dimension: width, offset above the contour
+      const dimY = minY - offsetMM;
+      const [tl0x, tl0y] = toCanvas(minX, minY);
+      const [tl1x, tl1y] = toCanvas(minX, dimY);
+      const [tr0x, tr0y] = toCanvas(maxX, minY);
+      const [tr1x, tr1y] = toCanvas(maxX, dimY);
+      ctx.beginPath();
+      ctx.moveTo(tl0x, tl0y); ctx.lineTo(tl1x, tl1y); // left extension line
+      ctx.moveTo(tr0x, tr0y); ctx.lineTo(tr1x, tr1y); // right extension line
+      ctx.moveTo(tl1x, tl1y); ctx.lineTo(tr1x, tr1y); // dimension line
+      ctx.stroke();
+      drawDimTick(ctx, tl1x, tl1y, Math.PI / 4);
+      drawDimTick(ctx, tr1x, tr1y, Math.PI / 4);
+      drawMeasureLabel(ctx, `${(maxX - minX).toFixed(1)} mm`, (tl1x + tr1x) / 2, tl1y - 12);
+
+      // Right vertical dimension: height, offset right of the contour
+      const dimX = maxX + offsetMM;
+      const [rt0x, rt0y] = toCanvas(maxX, minY);
+      const [rt1x, rt1y] = toCanvas(dimX, minY);
+      const [rb0x, rb0y] = toCanvas(maxX, maxY);
+      const [rb1x, rb1y] = toCanvas(dimX, maxY);
+      ctx.beginPath();
+      ctx.moveTo(rt0x, rt0y); ctx.lineTo(rt1x, rt1y); // top extension line
+      ctx.moveTo(rb0x, rb0y); ctx.lineTo(rb1x, rb1y); // bottom extension line
+      ctx.moveTo(rt1x, rt1y); ctx.lineTo(rb1x, rb1y); // dimension line
+      ctx.stroke();
+      drawDimTick(ctx, rt1x, rt1y, Math.PI / 4);
+      drawDimTick(ctx, rb1x, rb1y, Math.PI / 4);
+      ctx.restore();
+      drawMeasureLabel(ctx, `${(maxY - minY).toFixed(1)} mm`, rt1x + 24, (rt1y + rb1y) / 2);
+    }
+
+    // Snap indicator crosshair
+    if (activeTool && snapHover) {
+      const [scx, scy] = toCanvas(snapHover.x, snapHover.y);
+      ctx.save();
+      ctx.strokeStyle = SNAP_COLOR;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(scx - 6, scy); ctx.lineTo(scx + 6, scy);
+      ctx.moveTo(scx, scy - 6); ctx.lineTo(scx, scy + 6);
+      ctx.stroke();
+      ctx.restore();
+    }
+  }, [section, vs, activeTool, rulerState, diameterState, autodimState, snapHover]);
 
   const handlePrint = useCallback(() => {
     if (!section || !plane) return;
@@ -642,30 +942,50 @@ function OutputPane({ section, plane }: OutputPaneProps) {
   const hasSection = section && section.contours.length > 0;
 
   return (
-    <div class="pane" ref={containerRef}>
-      <span class="pane-label">Section Output</span>
-      <canvas
-        ref={canvasRef}
-        onWheel={handleWheel}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onContextMenu={handleContextMenu}
-        style={{ cursor: 'default' }}
-      />
-      {!hasSection && (
-        <div class="no-section">
-          <p>Click in a view pane to create a<br />cutting plane</p>
+    <div class="pane">
+      <div class="section-toolbar">
+        <button
+          class={`tool-btn${activeTool === 'ruler' ? ' active' : ''}`}
+          onClick={() => toggleTool('ruler')}
+          title="Distance Ruler (click twice to measure)"
+        >📏 Ruler</button>
+        <button
+          class={`tool-btn${activeTool === 'diameter' ? ' active' : ''}`}
+          onClick={() => toggleTool('diameter')}
+          title="Diameter / Circle Detector"
+        >⊙ Diameter</button>
+        <button
+          class={`tool-btn${activeTool === 'autodim' ? ' active' : ''}`}
+          onClick={() => toggleTool('autodim')}
+          title="Auto Dimensions"
+        >⬛ Auto-Dim</button>
+      </div>
+      <div class="section-canvas-wrap" ref={containerRef}>
+        <span class="pane-label">Section Output</span>
+        <canvas
+          ref={canvasRef}
+          onWheel={handleWheel}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onContextMenu={handleContextMenu}
+          style={{ cursor: activeTool ? 'crosshair' : 'default' }}
+        />
+        {!hasSection && (
+          <div class="no-section">
+            <p>Click in a view pane to create a<br />cutting plane</p>
+          </div>
+        )}
+        <div class="output-controls">
+          <button class="btn" disabled={!hasSection} onClick={handlePrint}>
+            🖨 Print PDF
+          </button>
         </div>
-      )}
-      <div class="output-controls">
-        <button class="btn" disabled={!hasSection} onClick={handlePrint}>
-          🖨 Print PDF
-        </button>
       </div>
     </div>
   );
 }
+
 
 function drawScaleBar(ctx: CanvasRenderingContext2D, zoom: number, W: number, H: number) {
   // Choose a nice round scale bar length in mm
@@ -707,19 +1027,28 @@ interface DropZoneProps {
 function DropZone({ onLoad }: DropZoneProps) {
   const [dragging, setDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const loadBuffer = useCallback((buf: ArrayBuffer) => {
-    try {
-      const mesh = parseSTL(buf);
-      if (mesh.count === 0) {
-        setError('No triangles found in STL file.');
-        return;
+    setError(null);
+    setLoading(true);
+    // Defer to a fresh task so the loading spinner has a chance to paint
+    // before the (synchronous, potentially slow) parse runs.
+    setTimeout(() => {
+      try {
+        const mesh = parseSTL(buf);
+        if (mesh.count === 0) {
+          setError('No triangles found in STL file.');
+          setLoading(false);
+          return;
+        }
+        onLoad(mesh);
+      } catch (e) {
+        setError(`Failed to parse STL: ${e instanceof Error ? e.message : String(e)}`);
+        setLoading(false);
       }
-      onLoad(mesh);
-    } catch (e) {
-      setError(`Failed to parse STL: ${e instanceof Error ? e.message : String(e)}`);
-    }
+    }, 10);
   }, [onLoad]);
 
   const handleFile = useCallback((file: File) => {
@@ -728,6 +1057,10 @@ function DropZone({ onLoad }: DropZoneProps) {
     reader.onload = () => loadBuffer(reader.result as ArrayBuffer);
     reader.onerror = () => setError('Could not read file.');
     reader.readAsArrayBuffer(file);
+  }, [loadBuffer]);
+
+  const handleDemo = useCallback((maker: () => ArrayBuffer) => {
+    loadBuffer(maker());
   }, [loadBuffer]);
 
   const handleDrop = useCallback((e: DragEvent) => {
@@ -769,26 +1102,45 @@ function DropZone({ onLoad }: DropZoneProps) {
     return () => window.removeEventListener('paste', handler);
   }, [handleFile]);
 
+  if (loading) {
+    return (
+      <div class="drop-zone-container">
+        <div class="loading-screen">
+          <div class="spinner" />
+          <p>Parsing model…</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div class="drop-zone-container">
-      <div
-        class={`drop-zone${dragging ? ' dragover' : ''}`}
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onClick={handleClick}
-      >
-        <div class="drop-zone-icon">📐</div>
-        <h2>Open an STL file</h2>
-        <p>Drag & drop, click to browse, or paste</p>
-        {error && <p style={{ color: '#ff6b6b' }}>{error}</p>}
-        <input
-          ref={inputRef}
-          type="file"
-          accept=".stl"
-          style={{ display: 'none' }}
-          onChange={handleInputChange}
-        />
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div
+          class={`drop-zone${dragging ? ' dragover' : ''}`}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onClick={handleClick}
+        >
+          <div class="drop-zone-icon">📐</div>
+          <h2>Open an STL file</h2>
+          <p>Drag & drop, click to browse, or paste</p>
+          {error && <p style={{ color: '#ff6b6b' }}>{error}</p>}
+          <input
+            ref={inputRef}
+            type="file"
+            accept=".stl"
+            style={{ display: 'none' }}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div class="demo-models">
+          <span class="demo-label">Try a demo:</span>
+          <button class="btn btn-secondary btn-sm" onClick={() => handleDemo(makeTorus)}>🔵 Torus</button>
+          <button class="btn btn-secondary btn-sm" onClick={() => handleDemo(makeSteppedShaft)}>⚙ Stepped Shaft</button>
+          <button class="btn btn-secondary btn-sm" onClick={() => handleDemo(makeMountingPlate)}>🔩 Mounting Plate</button>
+        </div>
       </div>
     </div>
   );
@@ -854,6 +1206,14 @@ function App() {
     return computeSection(mesh, plane);
   }, [mesh, plane]);
 
+  // Shared initial-zoom basis for all three model panes, so they all start
+  // at the same visual scale regardless of view direction.
+  const maxModelDim = useMemo(() => {
+    if (!mesh) return 1;
+    const { size } = mesh.bbox;
+    return Math.max(size.x, size.y, size.z);
+  }, [mesh]);
+
   return (
     <div id="app">
       <div class="header">
@@ -876,6 +1236,8 @@ function App() {
             plane={plane}
             onSetPlane={handleSetPlane}
             onCyclePlane={handleCyclePlane}
+            maxModelDim={maxModelDim}
+            showHint={false}
           />
           <ModelPane
             label="Side (YZ)"
@@ -884,6 +1246,8 @@ function App() {
             plane={plane}
             onSetPlane={handleSetPlane}
             onCyclePlane={handleCyclePlane}
+            maxModelDim={maxModelDim}
+            showHint={false}
           />
           <ModelPane
             label="Top (XY)"
@@ -892,6 +1256,8 @@ function App() {
             plane={plane}
             onSetPlane={handleSetPlane}
             onCyclePlane={handleCyclePlane}
+            maxModelDim={maxModelDim}
+            showHint={true}
           />
           <OutputPane section={section} plane={plane} />
         </div>

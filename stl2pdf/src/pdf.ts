@@ -2,90 +2,206 @@ import { jsPDF } from 'jspdf';
 import type { SectionResult } from './section.js';
 import type { CutPlane } from './geometry.js';
 
-// Letter size in mm
-const PAGE_W_MM = 215.9;
-const PAGE_H_MM = 279.4;
-const MARGIN_MM = 12;
+// Letter dimensions in mm
+const LETTER_W = 215.9;
+const LETTER_H = 279.4;
+const MARGIN = 12;
+// Reserve vertical space below the drawable area for the footer text and
+// the physical calibration bar.
+const FOOTER_RESERVE = 15;
+
+interface Orientation {
+  pageW: number;
+  pageH: number;
+  availW: number;
+  availH: number;
+  scale: number;
+  isLandscape: boolean;
+}
+
+function computeOrientation(pageW: number, pageH: number, secW: number, secH: number, isLandscape: boolean): Orientation {
+  const availW = pageW - 2 * MARGIN;
+  const availH = pageH - 2 * MARGIN - FOOTER_RESERVE;
+  // Never scale up — 1.0 means true 1mm = 1mm.
+  const scale = Math.min(1.0, availW / secW, availH / secH);
+  return { pageW, pageH, availW, availH, scale, isLandscape };
+}
 
 /**
- * Generate an 8.5×11" PDF with a to-scale cross-section.
- * The cross-section is drawn at 1 mm = 1 mm (STL units assumed to be mm).
- * The section is centered on the page; if it's larger than the printable area
- * it is uniformly scaled down to fit.
+ * Generate a to-scale (1:1 mm) PDF of a cross-section.
+ *
+ * The best-fitting orientation (portrait or landscape) is chosen. If the
+ * section fits at true 1:1 scale on a single page in that orientation, one
+ * page is produced. Otherwise the section is tiled across multiple 1:1-scale
+ * pages so the drawing is never shrunk — each tile can be taped together
+ * with its neighbors to reconstruct the full-size drawing.
  */
 export function generateSectionPDF(section: SectionResult, plane: CutPlane): Blob {
-  const doc = new jsPDF({
-    orientation: 'portrait',
-    unit: 'mm',
-    format: 'letter',
-  });
-
   const { contours, bounds } = section;
 
   if (!bounds || contours.length === 0) {
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: [LETTER_W, LETTER_H] });
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(14);
-    doc.text('No cross-section found at this plane.', PAGE_W_MM / 2, PAGE_H_MM / 2, {
-      align: 'center',
-    });
+    doc.text('No cross-section found at this plane.', LETTER_W / 2, LETTER_H / 2, { align: 'center' });
     return doc.output('blob');
   }
 
   const secW = bounds.maxX - bounds.minX;
   const secH = bounds.maxY - bounds.minY;
 
-  const availW = PAGE_W_MM - 2 * MARGIN_MM;
-  const availH = PAGE_H_MM - 2 * MARGIN_MM;
+  const portrait = computeOrientation(LETTER_W, LETTER_H, secW, secH, false);
+  const landscape = computeOrientation(LETTER_H, LETTER_W, secW, secH, true);
 
-  // Scale factor: 1.0 means 1:1 (1 mm in STL = 1 mm on paper).
-  // Scale down only if the section is larger than the available area.
-  const scale = Math.min(1.0, availW / secW, availH / secH);
+  // Choose the orientation with the larger (closer to 1:1) scale; tie-break portrait.
+  const best = landscape.scale > portrait.scale ? landscape : portrait;
 
-  const drawW = secW * scale;
-  const drawH = secH * scale;
+  const doc = new jsPDF({
+    orientation: best.isLandscape ? 'landscape' : 'portrait',
+    unit: 'mm',
+    format: [LETTER_W, LETTER_H],
+  });
 
-  // Top-left corner of the centred section on the page
-  const originX = MARGIN_MM + (availW - drawW) / 2;
-  const originY = MARGIN_MM + (availH - drawH) / 2;
+  if (best.scale >= 0.9999) {
+    drawPageTile(doc, section, plane, best, 0, 0, 1, 1);
+  } else {
+    const colCount = Math.max(1, Math.ceil(secW / best.availW));
+    const rowCount = Math.max(1, Math.ceil(secH / best.availH));
+    let first = true;
+    for (let row = 0; row < rowCount; row++) {
+      for (let col = 0; col < colCount; col++) {
+        if (!first) {
+          doc.addPage([LETTER_W, LETTER_H], best.isLandscape ? 'landscape' : 'portrait');
+        }
+        first = false;
+        drawPageTile(doc, section, plane, best, col, row, colCount, rowCount);
+      }
+    }
+  }
 
-  // Helper: convert section coords (mm) → page coords (mm)
-  const px = (sx: number): number => originX + (sx - bounds.minX) * scale;
-  const py = (sy: number): number => originY + (sy - bounds.minY) * scale;
+  return doc.output('blob');
+}
 
-  // ── Draw white background for the section area
-  doc.setFillColor(255, 255, 255);
-  doc.rect(originX, originY, drawW, drawH, 'F');
+function drawPageTile(
+  doc: jsPDF,
+  section: SectionResult,
+  plane: CutPlane,
+  orient: Orientation,
+  col: number, row: number,
+  colCount: number, rowCount: number
+): void {
+  const { contours, bounds } = section;
+  if (!bounds) return;
+  const { availW, availH, scale } = orient;
+  const secW = bounds.maxX - bounds.minX;
+  const secH = bounds.maxY - bounds.minY;
 
-  // ── Fill interior (even-odd) with light gray, then stroke outlines.
-  //    Use the jsPDF chaining API: moveTo → lineTo → close → fillStrokeEvenOdd.
+  const tiled = scale < 0.9999;
+
+  // Section-coord origin mapped to page (MARGIN, MARGIN):
+  //  - single page: center the section within the available area
+  //  - tiled: MARGIN-offset slice of the full section, per tile
+  const originX = tiled ? MARGIN - col * availW : MARGIN + (availW - secW) / 2;
+  const originY = tiled ? MARGIN - row * availH : MARGIN + (availH - secH) / 2;
+
+  const px = (sx: number): number => originX + (sx - bounds.minX);
+  const py = (sy: number): number => originY + (sy - bounds.minY);
+
+  // ── Border box around the drawable area
+  doc.setDrawColor(180, 180, 180);
+  doc.setLineWidth(0.1);
+  doc.rect(MARGIN, MARGIN, availW, availH, 'S');
+
+  // ── Clip drawing to this tile's page area, then draw only the contours
+  //    that could possibly intersect it.
+  const tileMinX = bounds.minX + col * availW;
+  const tileMaxX = tileMinX + availW;
+  const tileMinY = bounds.minY + row * availH;
+  const tileMaxY = tileMinY + availH;
+
+  doc.saveGraphicsState();
+  doc.rect(MARGIN, MARGIN, availW, availH);
+  doc.clip();
+  doc.discardPath();
+
   doc.setFillColor(210, 210, 210);
   doc.setDrawColor(0, 0, 0);
-  doc.setLineWidth(0.4); // 0.4 mm – jsPDF units are mm so this is always physically 0.4 mm
+  doc.setLineWidth(0.4);
 
+  let drewAny = false;
   for (const contour of contours) {
     if (contour.length < 2) continue;
+
+    let cMinX = Infinity, cMinY = Infinity, cMaxX = -Infinity, cMaxY = -Infinity;
+    for (const p of contour) {
+      if (p.x < cMinX) cMinX = p.x;
+      if (p.y < cMinY) cMinY = p.y;
+      if (p.x > cMaxX) cMaxX = p.x;
+      if (p.y > cMaxY) cMaxY = p.y;
+    }
+    if (cMaxX < tileMinX || cMinX > tileMaxX || cMaxY < tileMinY || cMinY > tileMaxY) continue;
+
+    drewAny = true;
     doc.moveTo(px(contour[0].x), py(contour[0].y));
     for (let i = 1; i < contour.length; i++) {
       doc.lineTo(px(contour[i].x), py(contour[i].y));
     }
     doc.close();
   }
-  doc.fillStrokeEvenOdd();
+  if (drewAny) doc.fillStrokeEvenOdd();
 
-  // ── Dimension labels
+  doc.restoreGraphicsState();
+
+  drawFooter(doc, plane, orient, secW, secH, col, row, colCount, rowCount);
+}
+
+/** Draw the footer label and a physical 25.4mm calibration bar. */
+function drawFooter(
+  doc: jsPDF,
+  plane: CutPlane,
+  orient: Orientation,
+  secW: number, secH: number,
+  col: number, row: number,
+  colCount: number, rowCount: number
+): void {
+  const { pageW, pageH } = orient;
   const axisName = plane.axis.toUpperCase();
-  const labelText = `Section at ${axisName} = ${plane.value.toFixed(2)} mm   |   `
-    + `Width: ${secW.toFixed(1)} mm   Height: ${secH.toFixed(1)} mm`
-    + (scale < 0.9999 ? `   |   Scale: 1:${(1 / scale).toFixed(2)}` : '   |   Scale: 1:1');
 
+  let labelText = `Section at ${axisName} = ${plane.value.toFixed(2)} mm   |   `
+    + `Width: ${secW.toFixed(1)} mm   Height: ${secH.toFixed(1)} mm   |   Scale: 1:1`;
+  if (colCount * rowCount > 1) {
+    labelText += `   |   Page ${col + 1}/${row + 1} of ${colCount * rowCount}`;
+  }
+
+  const textY = pageH - MARGIN - 3;
+  const textX = pageW / 2;
+
+  doc.setFont('helvetica', 'normal');
   doc.setFontSize(7);
   doc.setTextColor(100, 100, 100);
-  doc.text(labelText, PAGE_W_MM / 2, PAGE_H_MM - MARGIN_MM / 2, { align: 'center' });
+  const textWidth = doc.getTextWidth(labelText);
+  doc.text(labelText, textX, textY, { align: 'center' });
 
-  // ── Border box around printable area
-  doc.setDrawColor(180, 180, 180);
-  doc.setLineWidth(0.1);
-  doc.rect(MARGIN_MM, MARGIN_MM, availW, availH, 'S');
+  // ── Calibration bar: a physical 25.4mm reference, placed to the left of
+  //    the footer text so the printout can be verified for true 1:1 scale.
+  const barMM = 25.4;
+  const gap = 6;
+  let barRightX = textX - textWidth / 2 - gap;
+  let barLeftX = barRightX - barMM;
+  if (barLeftX < MARGIN) {
+    barLeftX = MARGIN;
+    barRightX = barLeftX + barMM;
+  }
+  const barY = textY - 6;
+  const tick = 1.5;
 
-  return doc.output('blob');
+  doc.setDrawColor(20, 20, 20);
+  doc.setLineWidth(0.5); // visually prominent (~2px) reference line
+  doc.line(barLeftX, barY, barRightX, barY);
+  doc.line(barLeftX, barY - tick, barLeftX, barY + tick);
+  doc.line(barRightX, barY - tick, barRightX, barY + tick);
+
+  doc.setFontSize(6);
+  doc.setTextColor(20, 20, 20);
+  doc.text('25.4mm', (barLeftX + barRightX) / 2, barY - tick - 1, { align: 'center' });
 }

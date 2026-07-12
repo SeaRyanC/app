@@ -20567,8 +20567,12 @@ function triangleSegment(verts, base, axis, value) {
   return [unique[0], unique[1]];
 }
 var CHAIN_PREC = 6;
+function roundCoord(n3) {
+  const r4 = Math.round(n3 * 10 ** CHAIN_PREC) / 10 ** CHAIN_PREC;
+  return r4 === 0 ? 0 : r4;
+}
 function ptKey(v5) {
-  return `${v5.x.toFixed(CHAIN_PREC)},${v5.y.toFixed(CHAIN_PREC)}`;
+  return `${roundCoord(v5.x).toFixed(CHAIN_PREC)},${roundCoord(v5.y).toFixed(CHAIN_PREC)}`;
 }
 function buildContours(segments) {
   if (segments.length === 0) return [];
@@ -34135,58 +34139,516 @@ E2.API.PDFObject = function() {
 }();
 
 // src/pdf.ts
-var PAGE_W_MM = 215.9;
-var PAGE_H_MM = 279.4;
-var MARGIN_MM = 12;
+var LETTER_W = 215.9;
+var LETTER_H = 279.4;
+var MARGIN = 12;
+var FOOTER_RESERVE = 15;
+function computeOrientation(pageW, pageH, secW, secH, isLandscape) {
+  const availW = pageW - 2 * MARGIN;
+  const availH = pageH - 2 * MARGIN - FOOTER_RESERVE;
+  const scale = Math.min(1, availW / secW, availH / secH);
+  return { pageW, pageH, availW, availH, scale, isLandscape };
+}
 function generateSectionPDF(section, plane) {
-  const doc = new E2({
-    orientation: "portrait",
-    unit: "mm",
-    format: "letter"
-  });
   const { contours, bounds } = section;
   if (!bounds || contours.length === 0) {
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(14);
-    doc.text("No cross-section found at this plane.", PAGE_W_MM / 2, PAGE_H_MM / 2, {
-      align: "center"
-    });
-    return doc.output("blob");
+    const doc2 = new E2({ orientation: "portrait", unit: "mm", format: [LETTER_W, LETTER_H] });
+    doc2.setFont("helvetica", "normal");
+    doc2.setFontSize(14);
+    doc2.text("No cross-section found at this plane.", LETTER_W / 2, LETTER_H / 2, { align: "center" });
+    return doc2.output("blob");
   }
   const secW = bounds.maxX - bounds.minX;
   const secH = bounds.maxY - bounds.minY;
-  const availW = PAGE_W_MM - 2 * MARGIN_MM;
-  const availH = PAGE_H_MM - 2 * MARGIN_MM;
-  const scale = Math.min(1, availW / secW, availH / secH);
-  const drawW = secW * scale;
-  const drawH = secH * scale;
-  const originX = MARGIN_MM + (availW - drawW) / 2;
-  const originY = MARGIN_MM + (availH - drawH) / 2;
-  const px = (sx) => originX + (sx - bounds.minX) * scale;
-  const py = (sy) => originY + (sy - bounds.minY) * scale;
-  doc.setFillColor(255, 255, 255);
-  doc.rect(originX, originY, drawW, drawH, "F");
+  const portrait = computeOrientation(LETTER_W, LETTER_H, secW, secH, false);
+  const landscape = computeOrientation(LETTER_H, LETTER_W, secW, secH, true);
+  const best = landscape.scale > portrait.scale ? landscape : portrait;
+  const doc = new E2({
+    orientation: best.isLandscape ? "landscape" : "portrait",
+    unit: "mm",
+    format: [LETTER_W, LETTER_H]
+  });
+  if (best.scale >= 0.9999) {
+    drawPageTile(doc, section, plane, best, 0, 0, 1, 1);
+  } else {
+    const colCount = Math.max(1, Math.ceil(secW / best.availW));
+    const rowCount = Math.max(1, Math.ceil(secH / best.availH));
+    let first = true;
+    for (let row = 0; row < rowCount; row++) {
+      for (let col = 0; col < colCount; col++) {
+        if (!first) {
+          doc.addPage([LETTER_W, LETTER_H], best.isLandscape ? "landscape" : "portrait");
+        }
+        first = false;
+        drawPageTile(doc, section, plane, best, col, row, colCount, rowCount);
+      }
+    }
+  }
+  return doc.output("blob");
+}
+function drawPageTile(doc, section, plane, orient, col, row, colCount, rowCount) {
+  const { contours, bounds } = section;
+  if (!bounds) return;
+  const { availW, availH, scale } = orient;
+  const secW = bounds.maxX - bounds.minX;
+  const secH = bounds.maxY - bounds.minY;
+  const tiled = scale < 0.9999;
+  const originX = tiled ? MARGIN - col * availW : MARGIN + (availW - secW) / 2;
+  const originY = tiled ? MARGIN - row * availH : MARGIN + (availH - secH) / 2;
+  const px = (sx) => originX + (sx - bounds.minX);
+  const py = (sy) => originY + (sy - bounds.minY);
+  doc.setDrawColor(180, 180, 180);
+  doc.setLineWidth(0.1);
+  doc.rect(MARGIN, MARGIN, availW, availH, "S");
+  const tileMinX = bounds.minX + col * availW;
+  const tileMaxX = tileMinX + availW;
+  const tileMinY = bounds.minY + row * availH;
+  const tileMaxY = tileMinY + availH;
+  doc.saveGraphicsState();
+  doc.rect(MARGIN, MARGIN, availW, availH);
+  doc.clip();
+  doc.discardPath();
   doc.setFillColor(210, 210, 210);
   doc.setDrawColor(0, 0, 0);
   doc.setLineWidth(0.4);
+  let drewAny = false;
   for (const contour of contours) {
     if (contour.length < 2) continue;
+    let cMinX = Infinity, cMinY = Infinity, cMaxX = -Infinity, cMaxY = -Infinity;
+    for (const p5 of contour) {
+      if (p5.x < cMinX) cMinX = p5.x;
+      if (p5.y < cMinY) cMinY = p5.y;
+      if (p5.x > cMaxX) cMaxX = p5.x;
+      if (p5.y > cMaxY) cMaxY = p5.y;
+    }
+    if (cMaxX < tileMinX || cMinX > tileMaxX || cMaxY < tileMinY || cMinY > tileMaxY) continue;
+    drewAny = true;
     doc.moveTo(px(contour[0].x), py(contour[0].y));
     for (let i6 = 1; i6 < contour.length; i6++) {
       doc.lineTo(px(contour[i6].x), py(contour[i6].y));
     }
     doc.close();
   }
-  doc.fillStrokeEvenOdd();
+  if (drewAny) doc.fillStrokeEvenOdd();
+  doc.restoreGraphicsState();
+  drawFooter(doc, plane, orient, secW, secH, col, row, colCount, rowCount);
+}
+function drawFooter(doc, plane, orient, secW, secH, col, row, colCount, rowCount) {
+  const { pageW, pageH } = orient;
   const axisName = plane.axis.toUpperCase();
-  const labelText = `Section at ${axisName} = ${plane.value.toFixed(2)} mm   |   Width: ${secW.toFixed(1)} mm   Height: ${secH.toFixed(1)} mm` + (scale < 0.9999 ? `   |   Scale: 1:${(1 / scale).toFixed(2)}` : "   |   Scale: 1:1");
+  let labelText = `Section at ${axisName} = ${plane.value.toFixed(2)} mm   |   Width: ${secW.toFixed(1)} mm   Height: ${secH.toFixed(1)} mm   |   Scale: 1:1`;
+  if (colCount * rowCount > 1) {
+    labelText += `   |   Page ${col + 1}/${row + 1} of ${colCount * rowCount}`;
+  }
+  const textY = pageH - MARGIN - 3;
+  const textX = pageW / 2;
+  doc.setFont("helvetica", "normal");
   doc.setFontSize(7);
   doc.setTextColor(100, 100, 100);
-  doc.text(labelText, PAGE_W_MM / 2, PAGE_H_MM - MARGIN_MM / 2, { align: "center" });
-  doc.setDrawColor(180, 180, 180);
-  doc.setLineWidth(0.1);
-  doc.rect(MARGIN_MM, MARGIN_MM, availW, availH, "S");
-  return doc.output("blob");
+  const textWidth = doc.getTextWidth(labelText);
+  doc.text(labelText, textX, textY, { align: "center" });
+  const barMM = 25.4;
+  const gap = 6;
+  let barRightX = textX - textWidth / 2 - gap;
+  let barLeftX = barRightX - barMM;
+  if (barLeftX < MARGIN) {
+    barLeftX = MARGIN;
+    barRightX = barLeftX + barMM;
+  }
+  const barY = textY - 6;
+  const tick = 1.5;
+  doc.setDrawColor(20, 20, 20);
+  doc.setLineWidth(0.5);
+  doc.line(barLeftX, barY, barRightX, barY);
+  doc.line(barLeftX, barY - tick, barLeftX, barY + tick);
+  doc.line(barRightX, barY - tick, barRightX, barY + tick);
+  doc.setFontSize(6);
+  doc.setTextColor(20, 20, 20);
+  doc.text("25.4mm", (barLeftX + barRightX) / 2, barY - tick - 1, { align: "center" });
+}
+
+// src/demo-models.ts
+function faceNormal(a5, b3, c6) {
+  const ux = b3[0] - a5[0], uy = b3[1] - a5[1], uz = b3[2] - a5[2];
+  const vx = c6[0] - a5[0], vy = c6[1] - a5[1], vz = c6[2] - a5[2];
+  let nx = uy * vz - uz * vy;
+  let ny = uz * vx - ux * vz;
+  let nz = ux * vy - uy * vx;
+  const len = Math.sqrt(nx * nx + ny * ny + nz * nz) || 1;
+  nx /= len;
+  ny /= len;
+  nz /= len;
+  return [nx, ny, nz];
+}
+function trianglesToBinarySTL(tris) {
+  const count = tris.length;
+  const buffer = new ArrayBuffer(84 + count * 50);
+  const view = new DataView(buffer);
+  view.setUint32(80, count, true);
+  let off = 84;
+  for (const [a5, b3, c6] of tris) {
+    const [nx, ny, nz] = faceNormal(a5, b3, c6);
+    view.setFloat32(off, nx, true);
+    off += 4;
+    view.setFloat32(off, ny, true);
+    off += 4;
+    view.setFloat32(off, nz, true);
+    off += 4;
+    view.setFloat32(off, a5[0], true);
+    off += 4;
+    view.setFloat32(off, a5[1], true);
+    off += 4;
+    view.setFloat32(off, a5[2], true);
+    off += 4;
+    view.setFloat32(off, b3[0], true);
+    off += 4;
+    view.setFloat32(off, b3[1], true);
+    off += 4;
+    view.setFloat32(off, b3[2], true);
+    off += 4;
+    view.setFloat32(off, c6[0], true);
+    off += 4;
+    view.setFloat32(off, c6[1], true);
+    off += 4;
+    view.setFloat32(off, c6[2], true);
+    off += 4;
+    view.setUint16(off, 0, true);
+    off += 2;
+  }
+  return buffer;
+}
+function addQuad(tris, p1, p22, p32, p42) {
+  tris.push([p1, p22, p32]);
+  tris.push([p1, p32, p42]);
+}
+function torusPoint(a5, b3, R3, r4) {
+  const rad = R3 + r4 * Math.cos(b3);
+  return [rad * Math.cos(a5), rad * Math.sin(a5), r4 * Math.sin(b3)];
+}
+function makeTorus() {
+  const R3 = 22, r4 = 8;
+  const NS = 36, NT = 18;
+  const tris = [];
+  const aPhase = Math.PI / NS;
+  const bPhase = Math.PI / NT;
+  for (let i6 = 0; i6 < NS; i6++) {
+    const a0 = i6 / NS * 2 * Math.PI + aPhase;
+    const a1 = (i6 + 1) / NS * 2 * Math.PI + aPhase;
+    for (let j4 = 0; j4 < NT; j4++) {
+      const b0 = j4 / NT * 2 * Math.PI + bPhase;
+      const b1 = (j4 + 1) / NT * 2 * Math.PI + bPhase;
+      const p00 = torusPoint(a0, b0, R3, r4);
+      const p10 = torusPoint(a1, b0, R3, r4);
+      const p11 = torusPoint(a1, b1, R3, r4);
+      const p01 = torusPoint(a0, b1, R3, r4);
+      addQuad(tris, p00, p10, p11, p01);
+    }
+  }
+  return trianglesToBinarySTL(tris);
+}
+function anglePhase(N4) {
+  return Math.PI / N4;
+}
+function addCylinderWall(tris, cx, cy, r4, z0, z1, N4) {
+  const phase = anglePhase(N4);
+  for (let i6 = 0; i6 < N4; i6++) {
+    const t0 = i6 / N4 * 2 * Math.PI + phase;
+    const t1 = (i6 + 1) / N4 * 2 * Math.PI + phase;
+    const p0b = [cx + r4 * Math.cos(t0), cy + r4 * Math.sin(t0), z0];
+    const p1b = [cx + r4 * Math.cos(t1), cy + r4 * Math.sin(t1), z0];
+    const p0t = [cx + r4 * Math.cos(t0), cy + r4 * Math.sin(t0), z1];
+    const p1t = [cx + r4 * Math.cos(t1), cy + r4 * Math.sin(t1), z1];
+    addQuad(tris, p0b, p1b, p1t, p0t);
+  }
+}
+function addDiskCap(tris, cx, cy, r4, z4, N4) {
+  const center = [cx, cy, z4];
+  const phase = anglePhase(N4);
+  for (let i6 = 0; i6 < N4; i6++) {
+    const t0 = i6 / N4 * 2 * Math.PI + phase;
+    const t1 = (i6 + 1) / N4 * 2 * Math.PI + phase;
+    const p0 = [cx + r4 * Math.cos(t0), cy + r4 * Math.sin(t0), z4];
+    const p1 = [cx + r4 * Math.cos(t1), cy + r4 * Math.sin(t1), z4];
+    tris.push([center, p0, p1]);
+  }
+}
+function addAnnularCap(tris, cx, cy, rOuter, rInner, z4, N4) {
+  const phase = anglePhase(N4);
+  for (let i6 = 0; i6 < N4; i6++) {
+    const t0 = i6 / N4 * 2 * Math.PI + phase;
+    const t1 = (i6 + 1) / N4 * 2 * Math.PI + phase;
+    const o0 = [cx + rOuter * Math.cos(t0), cy + rOuter * Math.sin(t0), z4];
+    const o1 = [cx + rOuter * Math.cos(t1), cy + rOuter * Math.sin(t1), z4];
+    const i0 = [cx + rInner * Math.cos(t0), cy + rInner * Math.sin(t0), z4];
+    const i1 = [cx + rInner * Math.cos(t1), cy + rInner * Math.sin(t1), z4];
+    addQuad(tris, o0, o1, i1, i0);
+  }
+}
+function makeSteppedShaft() {
+  const N4 = 32;
+  const tris = [];
+  const rBottom = 20, rMiddle = 14, rTop = 9;
+  const zBottom0 = 0, zBottom1 = 12;
+  const zMiddle1 = 30;
+  const zTop1 = 44;
+  addCylinderWall(tris, 0, 0, rBottom, zBottom0, zBottom1, N4);
+  addDiskCap(tris, 0, 0, rBottom, zBottom0, N4);
+  addAnnularCap(tris, 0, 0, rBottom, rMiddle, zBottom1, N4);
+  addCylinderWall(tris, 0, 0, rMiddle, zBottom1, zMiddle1, N4);
+  addAnnularCap(tris, 0, 0, rMiddle, rTop, zMiddle1, N4);
+  addCylinderWall(tris, 0, 0, rTop, zMiddle1, zTop1, N4);
+  addDiskCap(tris, 0, 0, rTop, zTop1, N4);
+  return trianglesToBinarySTL(tris);
+}
+function makeMountingPlate() {
+  const W2 = 80, D4 = 60, H3 = 10;
+  const tris = [];
+  const b000 = [0, 0, 0], b100 = [W2, 0, 0], b110 = [W2, D4, 0], b010 = [0, D4, 0];
+  const b001 = [0, 0, H3], b101 = [W2, 0, H3], b111 = [W2, D4, H3], b011 = [0, D4, H3];
+  addQuad(tris, b000, b100, b110, b010);
+  addQuad(tris, b001, b011, b111, b101);
+  addQuad(tris, b000, b010, b011, b001);
+  addQuad(tris, b100, b101, b111, b110);
+  addQuad(tris, b000, b001, b101, b100);
+  addQuad(tris, b010, b110, b111, b011);
+  addCylinderWall(tris, 40, 30, 12.5, 0, H3, 32);
+  return trianglesToBinarySTL(tris);
+}
+
+// src/measure.ts
+var EPS2 = 1e-9;
+function pointsClose(a5, b3, eps = 1e-6) {
+  return Math.abs(a5.x - b3.x) < eps && Math.abs(a5.y - b3.y) < eps;
+}
+function effectiveLength(contour) {
+  const n3 = contour.length;
+  if (n3 > 1 && pointsClose(contour[0], contour[n3 - 1])) return n3 - 1;
+  return n3;
+}
+function computeSnapPoints(contours) {
+  const out = [];
+  for (const contour of contours) {
+    const n3 = effectiveLength(contour);
+    if (n3 < 2) continue;
+    for (let i6 = 0; i6 < n3; i6++) {
+      const p5 = contour[i6];
+      const q4 = contour[(i6 + 1) % n3];
+      out.push({ x: p5.x, y: p5.y });
+      out.push({ x: (p5.x + q4.x) / 2, y: (p5.y + q4.y) / 2 });
+    }
+  }
+  return out;
+}
+function findNearestSnap(mx, my, snapPoints, snapRadiusMM) {
+  let best = null;
+  let bestDist = snapRadiusMM;
+  for (const p5 of snapPoints) {
+    const d4 = Math.hypot(p5.x - mx, p5.y - my);
+    if (d4 <= bestDist) {
+      bestDist = d4;
+      best = p5;
+    }
+  }
+  return best;
+}
+function onSegment(px, py, x1, y1, x22, y22) {
+  const cross = (x22 - x1) * (py - y1) - (y22 - y1) * (px - x1);
+  if (Math.abs(cross) > 1e-6) return false;
+  const dot = (px - x1) * (x22 - x1) + (py - y1) * (y22 - y1);
+  if (dot < 0) return false;
+  const lenSq = (x22 - x1) ** 2 + (y22 - y1) ** 2;
+  return dot <= lenSq;
+}
+function pointInPolygon(px, py, poly) {
+  const n3 = effectiveLength(poly);
+  if (n3 < 3) return false;
+  let inside = false;
+  for (let i6 = 0, j4 = n3 - 1; i6 < n3; j4 = i6++) {
+    const xi = poly[i6].x, yi = poly[i6].y;
+    const xj = poly[j4].x, yj = poly[j4].y;
+    if (onSegment(px, py, xi, yi, xj, yj)) return true;
+    const intersect = yi > py !== yj > py && px < (xj - xi) * (py - yi) / (yj - yi) + xi;
+    if (intersect) inside = !inside;
+  }
+  return inside;
+}
+function polygonArea(poly) {
+  const n3 = effectiveLength(poly);
+  let sum = 0;
+  for (let i6 = 0; i6 < n3; i6++) {
+    const j4 = (i6 + 1) % n3;
+    sum += poly[i6].x * poly[j4].y - poly[j4].x * poly[i6].y;
+  }
+  return sum / 2;
+}
+function findContourAtPoint(px, py, contours) {
+  let bestIdx = -1;
+  let bestArea = Infinity;
+  for (let i6 = 0; i6 < contours.length; i6++) {
+    const c6 = contours[i6];
+    if (!pointInPolygon(px, py, c6)) continue;
+    const area = Math.abs(polygonArea(c6));
+    if (area < bestArea) {
+      bestArea = area;
+      bestIdx = i6;
+    }
+  }
+  return bestIdx;
+}
+function solve3x3(rows) {
+  const A4 = rows.map((row) => row.slice());
+  for (let col = 0; col < 3; col++) {
+    let pivotRow = col;
+    let pivotVal = Math.abs(A4[col][col]);
+    for (let r4 = col + 1; r4 < 3; r4++) {
+      if (Math.abs(A4[r4][col]) > pivotVal) {
+        pivotVal = Math.abs(A4[r4][col]);
+        pivotRow = r4;
+      }
+    }
+    if (pivotVal < 1e-12) return null;
+    if (pivotRow !== col) {
+      const tmp = A4[col];
+      A4[col] = A4[pivotRow];
+      A4[pivotRow] = tmp;
+    }
+    for (let r4 = col + 1; r4 < 3; r4++) {
+      const factor = A4[r4][col] / A4[col][col];
+      for (let c6 = col; c6 < 4; c6++) A4[r4][c6] -= factor * A4[col][c6];
+    }
+  }
+  const x3 = [0, 0, 0];
+  for (let row = 2; row >= 0; row--) {
+    let sum = A4[row][3];
+    for (let c6 = row + 1; c6 < 3; c6++) sum -= A4[row][c6] * x3[c6];
+    x3[row] = sum / A4[row][row];
+  }
+  return x3;
+}
+function fitCircle(pts) {
+  const n3 = pts.length;
+  if (n3 < 3) return null;
+  let sx = 0, sy = 0, sxx = 0, syy = 0, sxy = 0;
+  let sxxx = 0, syyy = 0, sxyy = 0, sxxy = 0;
+  for (const p5 of pts) {
+    const x3 = p5.x, y5 = p5.y;
+    const xx = x3 * x3, yy = y5 * y5;
+    sx += x3;
+    sy += y5;
+    sxx += xx;
+    syy += yy;
+    sxy += x3 * y5;
+    sxxx += xx * x3;
+    syyy += yy * y5;
+    sxyy += x3 * yy;
+    sxxy += xx * y5;
+  }
+  const sol = solve3x3([
+    [sxx, sxy, sx, sxxx + sxyy],
+    [sxy, syy, sy, sxxy + syyy],
+    [sx, sy, n3, sxx + syy]
+  ]);
+  if (!sol) return null;
+  const [D4, E3, F2] = sol;
+  const cx = D4 / 2, cy = E3 / 2;
+  const r22 = cx * cx + cy * cy + F2;
+  if (!(r22 > 0)) return null;
+  const r4 = Math.sqrt(r22);
+  let se2 = 0;
+  for (const p5 of pts) {
+    const d4 = Math.hypot(p5.x - cx, p5.y - cy) - r4;
+    se2 += d4 * d4;
+  }
+  const rmsError = Math.sqrt(se2 / n3);
+  return { cx, cy, r: r4, rmsError };
+}
+function angularSpan(pts, cx, cy) {
+  if (pts.length === 0) return 0;
+  const angles = pts.map((p5) => Math.atan2(p5.y - cy, p5.x - cx));
+  angles.sort((a5, b3) => a5 - b3);
+  let maxGap = 0;
+  for (let i6 = 0; i6 < angles.length; i6++) {
+    const a0 = angles[i6];
+    const a1 = i6 + 1 < angles.length ? angles[i6 + 1] : angles[0] + 2 * Math.PI;
+    const gap = a1 - a0;
+    if (gap > maxGap) maxGap = gap;
+  }
+  const span = 2 * Math.PI - maxGap;
+  return Math.max(0, Math.min(2 * Math.PI, span));
+}
+function detectArc(px, py, contour) {
+  const n3 = effectiveLength(contour);
+  if (n3 < 5) return null;
+  const pts = contour.slice(0, n3);
+  let closestIdx = 0;
+  let closestDist = Infinity;
+  for (let i6 = 0; i6 < n3; i6++) {
+    const d4 = Math.hypot(pts[i6].x - px, pts[i6].y - py);
+    if (d4 < closestDist) {
+      closestDist = d4;
+      closestIdx = i6;
+    }
+  }
+  let bestFit = null;
+  let bestQuality = -Infinity;
+  let bestSpan = 0;
+  const maxHalf = Math.floor(n3 / 2);
+  for (let half = 2; half <= maxHalf; half++) {
+    const window2 = [];
+    for (let k4 = -half; k4 <= half; k4++) {
+      window2.push(pts[((closestIdx + k4) % n3 + n3) % n3]);
+    }
+    const fit = fitCircle(window2);
+    if (!fit || !(fit.r > EPS2)) continue;
+    const span = angularSpan(window2, fit.cx, fit.cy);
+    const quality = span / Math.PI * (1 - fit.rmsError / fit.r);
+    if (quality > bestQuality) {
+      bestQuality = quality;
+      bestFit = fit;
+      bestSpan = span;
+    }
+  }
+  if (bestFit && bestQuality > 0.3 && bestSpan >= Math.PI / 2) {
+    return bestFit;
+  }
+  return null;
+}
+function findCircleAtPoint(px, py, contours) {
+  let bestFull = null;
+  let bestFullDist = Infinity;
+  for (const contour of contours) {
+    const n3 = effectiveLength(contour);
+    if (n3 < 5) continue;
+    const pts = contour.slice(0, n3);
+    const fit = fitCircle(pts);
+    if (!fit || !(fit.r > EPS2)) continue;
+    if (fit.rmsError / fit.r > 0.05) continue;
+    let minPtDist = Infinity;
+    for (const p5 of pts) {
+      const d4 = Math.hypot(p5.x - px, p5.y - py);
+      if (d4 < minPtDist) minPtDist = d4;
+    }
+    const distToCenter = Math.hypot(px - fit.cx, py - fit.cy);
+    const distToCircle = Math.abs(distToCenter - fit.r);
+    const proximity = Math.min(minPtDist, distToCircle);
+    if (proximity < fit.r * 0.5 && proximity < bestFullDist) {
+      bestFullDist = proximity;
+      bestFull = fit;
+    }
+  }
+  if (bestFull) return bestFull;
+  let bestArc = null;
+  let bestArcDist = Infinity;
+  for (const contour of contours) {
+    const arc = detectArc(px, py, contour);
+    if (!arc) continue;
+    const d4 = Math.hypot(px - arc.cx, py - arc.cy);
+    if (d4 < bestArcDist) {
+      bestArcDist = d4;
+      bestArc = arc;
+    }
+  }
+  return bestArc;
 }
 
 // node_modules/preact/jsx-runtime/dist/jsxRuntime.module.js
@@ -34202,8 +34664,8 @@ function u5(e4, t5, n3, o5, i6, u6) {
 }
 
 // src/app.tsx
-var VERSION = true ? "1.2.0" : "1.0.0";
-var COMMIT_HASH = true ? "b6e30ec" : "dev";
+var VERSION = true ? "2.0.0" : "1.0.0";
+var COMMIT_HASH = true ? "1e27099" : "dev";
 function modelToCanvas(mx, my, vs, cx, cy) {
   return [
     mx * vs.zoom + cx + vs.panX,
@@ -34223,7 +34685,7 @@ function fitZoom(modelW, modelH, canvasW, canvasH) {
 }
 var INDICATOR_COLOR = "#f78166";
 var INDICATOR_HIT = 10;
-function ModelPane({ label, dir, mesh, plane, onSetPlane, onCyclePlane }) {
+function ModelPane({ label, dir, mesh, plane, onSetPlane, onCyclePlane, maxModelDim, showHint }) {
   const canvasRef = A2(null);
   const containerRef = A2(null);
   const bbox = mesh.bbox;
@@ -34233,16 +34695,6 @@ function ModelPane({ label, dir, mesh, plane, onSetPlane, onCyclePlane }) {
   const dragRef = A2(null);
   const sizeRef = A2({ w: 0, h: 0 });
   const modelCenter = T2(() => projectForView(bbox.center, dir), [bbox, dir]);
-  const modelExtent = T2(() => {
-    switch (dir) {
-      case "front":
-        return { w: bbox.size.x, h: bbox.size.z };
-      case "side":
-        return { w: bbox.size.y, h: bbox.size.z };
-      case "top":
-        return { w: bbox.size.x, h: bbox.size.y };
-    }
-  }, [bbox, dir]);
   const shadedPrerender = T2(() => {
     const { verts, count } = mesh;
     if (count === 0) return null;
@@ -34342,9 +34794,9 @@ function ModelPane({ label, dir, mesh, plane, onSetPlane, onCyclePlane }) {
     const rect = canvas.getBoundingClientRect();
     const w4 = rect.width || canvas.offsetWidth;
     const h5 = rect.height || canvas.offsetHeight;
-    const z4 = fitZoom(modelExtent.w, modelExtent.h, w4, h5);
+    const z4 = fitZoom(maxModelDim, maxModelDim, w4, h5);
     setVs({ zoom: z4, panX: 0, panY: 0 });
-  }, [mesh, modelExtent]);
+  }, [mesh, maxModelDim]);
   const centre = () => {
     const c6 = canvasRef.current;
     return c6 ? [c6.width / 2, c6.height / 2] : [200, 200];
@@ -34548,7 +35000,7 @@ function ModelPane({ label, dir, mesh, plane, onSetPlane, onCyclePlane }) {
         style: { cursor: "crosshair" }
       }
     ),
-    /* @__PURE__ */ u5("div", { class: "hint", children: [
+    showHint && /* @__PURE__ */ u5("div", { class: "hint", children: [
       "Scroll: zoom \xA0\xB7\xA0 Right-drag: pan",
       /* @__PURE__ */ u5("br", {}),
       "Click: set plane \xA0\xB7\xA0 Drag indicator: move",
@@ -34557,13 +35009,58 @@ function ModelPane({ label, dir, mesh, plane, onSetPlane, onCyclePlane }) {
     ] })
   ] });
 }
+var EMPTY_RULER_STATE = { stage: "empty", pt1: null, pt2: null, hoverPt: null };
+var MEASURE_COLOR = "#e06c75";
+var DIM_COLOR = "#61afef";
+var SNAP_COLOR = "#98c379";
+var RULER_HIT_PX = 12;
+var SNAP_RADIUS_PX = 10;
+function drawMeasureLabel(ctx, text2, x3, y5) {
+  ctx.save();
+  ctx.font = "11px monospace";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  const padX = 5, padY = 3;
+  const w4 = ctx.measureText(text2).width + padX * 2;
+  const h5 = 14 + padY;
+  ctx.fillStyle = "rgba(20,20,20,0.85)";
+  ctx.fillRect(x3 - w4 / 2, y5 - h5 / 2, w4, h5);
+  ctx.fillStyle = "#ffffff";
+  ctx.fillText(text2, x3, y5);
+  ctx.restore();
+}
+function drawDimTick(ctx, x3, y5, angle) {
+  const len = 5;
+  const dx = Math.cos(angle) * len, dy = Math.sin(angle) * len;
+  ctx.beginPath();
+  ctx.moveTo(x3 - dx, y5 - dy);
+  ctx.lineTo(x3 + dx, y5 + dy);
+  ctx.stroke();
+}
 function OutputPane({ section, plane }) {
   const canvasRef = A2(null);
   const containerRef = A2(null);
   const [vs, setVs] = d2({ zoom: 1, panX: 0, panY: 0 });
   const vsRef = A2(vs);
   vsRef.current = vs;
-  const dragRef = A2(null);
+  const panDragRef = A2(null);
+  const rulerDragRef = A2(null);
+  const [activeTool, setActiveTool] = d2(null);
+  const [rulerState, setRulerState] = d2(EMPTY_RULER_STATE);
+  const [diameterState, setDiameterState] = d2(null);
+  const [autodimState, setAutodimState] = d2(null);
+  const [snapHover, setSnapHover] = d2(null);
+  const snapPoints = T2(() => {
+    if (!section?.contours) return [];
+    return computeSnapPoints(section.contours);
+  }, [section]);
+  const toggleTool = q2((tool) => {
+    setActiveTool((t5) => t5 === tool ? null : tool);
+    setRulerState(EMPTY_RULER_STATE);
+    setDiameterState(null);
+    setAutodimState(null);
+    setSnapHover(null);
+  }, []);
   const centre = () => {
     const c6 = canvasRef.current;
     return c6 ? [c6.width / 2, c6.height / 2] : [200, 200];
@@ -34581,6 +35078,11 @@ function OutputPane({ section, plane }) {
     const next = { zoom: z4, panX: 0, panY: 0 };
     vsRef.current = next;
     setVs(next);
+    setActiveTool(null);
+    setRulerState(EMPTY_RULER_STATE);
+    setDiameterState(null);
+    setAutodimState(null);
+    setSnapHover(null);
   }, [section]);
   const handleWheel = q2((e4) => {
     e4.preventDefault();
@@ -34601,33 +35103,133 @@ function OutputPane({ section, plane }) {
     vsRef.current = next;
     setVs(next);
   }, []);
+  const resolveSnap = q2((modelX, modelY, e4, currentVs) => {
+    if (e4.shiftKey || e4.ctrlKey || e4.altKey) return [modelX, modelY];
+    const snapRadiusMM = SNAP_RADIUS_PX / currentVs.zoom;
+    const snap = findNearestSnap(modelX, modelY, snapPoints, snapRadiusMM);
+    return snap ? [snap.x, snap.y] : [modelX, modelY];
+  }, [snapPoints]);
+  const updateSnapHover = q2((modelX, modelY, e4, currentVs) => {
+    if (e4.shiftKey || e4.ctrlKey || e4.altKey) {
+      setSnapHover(null);
+      return;
+    }
+    const snapRadiusMM = SNAP_RADIUS_PX / currentVs.zoom;
+    setSnapHover(findNearestSnap(modelX, modelY, snapPoints, snapRadiusMM));
+  }, [snapPoints]);
   const handleMouseDown = q2((e4) => {
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const sx = e4.clientX - rect.left;
+    const sy = e4.clientY - rect.top;
     if (e4.button === 2) {
-      dragRef.current = {
+      panDragRef.current = {
         startX: e4.clientX,
         startY: e4.clientY,
         startPanX: vsRef.current.panX,
         startPanY: vsRef.current.panY
       };
+      return;
     }
-  }, []);
+    if (e4.button !== 0 || !activeTool || !section?.bounds) return;
+    const currentVs = vsRef.current;
+    const [cx, cy] = centre();
+    const [mx, my] = canvasToModel(sx, sy, currentVs, cx, cy);
+    const secCx = (section.bounds.minX + section.bounds.maxX) / 2;
+    const secCy = (section.bounds.minY + section.bounds.maxY) / 2;
+    const modelX = mx + secCx, modelY = my + secCy;
+    if (activeTool === "ruler") {
+      if (rulerState.stage === "complete") {
+        const p1c = rulerState.pt1 ? modelToCanvas(rulerState.pt1[0] - secCx, rulerState.pt1[1] - secCy, currentVs, cx, cy) : null;
+        const p2c = rulerState.pt2 ? modelToCanvas(rulerState.pt2[0] - secCx, rulerState.pt2[1] - secCy, currentVs, cx, cy) : null;
+        const hitP1 = p1c !== null && Math.hypot(sx - p1c[0], sy - p1c[1]) <= RULER_HIT_PX;
+        const hitP2 = p2c !== null && Math.hypot(sx - p2c[0], sy - p2c[1]) <= RULER_HIT_PX;
+        if (hitP1) {
+          rulerDragRef.current = "pt1";
+          return;
+        }
+        if (hitP2) {
+          rulerDragRef.current = "pt2";
+          return;
+        }
+        setRulerState(EMPTY_RULER_STATE);
+        return;
+      }
+      const snapped = resolveSnap(modelX, modelY, e4, currentVs);
+      if (rulerState.stage === "empty") {
+        setRulerState({ stage: "pt1_placed", pt1: snapped, pt2: null, hoverPt: snapped });
+      } else {
+        setRulerState((rs) => ({ ...rs, stage: "complete", pt2: snapped }));
+      }
+      return;
+    }
+    if (activeTool === "diameter") {
+      const fit = findCircleAtPoint(modelX, modelY, section.contours);
+      setDiameterState(fit ? { cx: fit.cx, cy: fit.cy, r: fit.r } : null);
+      return;
+    }
+    if (activeTool === "autodim") {
+      const idx = findContourAtPoint(modelX, modelY, section.contours);
+      if (idx < 0) {
+        setAutodimState(null);
+        return;
+      }
+      const c6 = section.contours[idx];
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+      for (const p5 of c6) {
+        if (p5.x < minX) minX = p5.x;
+        if (p5.y < minY) minY = p5.y;
+        if (p5.x > maxX) maxX = p5.x;
+        if (p5.y > maxY) maxY = p5.y;
+      }
+      setAutodimState({ minX, minY, maxX, maxY });
+    }
+  }, [activeTool, section, rulerState, resolveSnap]);
   const handleMouseMove = q2((e4) => {
-    const drag = dragRef.current;
-    if (!drag) return;
-    const next = {
-      zoom: vsRef.current.zoom,
-      panX: drag.startPanX + (e4.clientX - drag.startX),
-      panY: drag.startPanY + (e4.clientY - drag.startY)
-    };
-    vsRef.current = next;
-    setVs(next);
-  }, []);
+    const pan = panDragRef.current;
+    if (pan) {
+      const next = {
+        zoom: vsRef.current.zoom,
+        panX: pan.startPanX + (e4.clientX - pan.startX),
+        panY: pan.startPanY + (e4.clientY - pan.startY)
+      };
+      vsRef.current = next;
+      setVs(next);
+    }
+    if (!activeTool || !section?.bounds) return;
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const sx = e4.clientX - rect.left;
+    const sy = e4.clientY - rect.top;
+    const currentVs = vsRef.current;
+    const [cx, cy] = centre();
+    const [mx, my] = canvasToModel(sx, sy, currentVs, cx, cy);
+    const secCx = (section.bounds.minX + section.bounds.maxX) / 2;
+    const secCy = (section.bounds.minY + section.bounds.maxY) / 2;
+    const modelX = mx + secCx, modelY = my + secCy;
+    if (activeTool === "ruler" && rulerDragRef.current) {
+      const which = rulerDragRef.current;
+      const snapped = resolveSnap(modelX, modelY, e4, currentVs);
+      setRulerState((rs) => ({ ...rs, [which]: snapped }));
+      updateSnapHover(modelX, modelY, e4, currentVs);
+      return;
+    }
+    if (activeTool === "ruler" && rulerState.stage === "pt1_placed") {
+      const snapped = resolveSnap(modelX, modelY, e4, currentVs);
+      setRulerState((rs) => ({ ...rs, hoverPt: snapped }));
+    }
+    updateSnapHover(modelX, modelY, e4, currentVs);
+  }, [activeTool, section, rulerState.stage, resolveSnap, updateSnapHover]);
   const handleMouseUp = q2(() => {
-    dragRef.current = null;
+    panDragRef.current = null;
+    rulerDragRef.current = null;
   }, []);
   const handleContextMenu = q2((e4) => {
     e4.preventDefault();
-  }, []);
+    if (activeTool === "ruler") setRulerState(EMPTY_RULER_STATE);
+    else if (activeTool === "diameter") setDiameterState(null);
+    else if (activeTool === "autodim") setAutodimState(null);
+  }, [activeTool]);
   h2(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -34648,17 +35250,18 @@ function OutputPane({ section, plane }) {
     const { bounds, contours } = section;
     const secCx = (bounds.minX + bounds.maxX) / 2;
     const secCy = (bounds.minY + bounds.maxY) / 2;
-    const bMinX = modelToCanvas(bounds.minX - secCx, bounds.minY - secCy, vs, cx, cy);
-    const bMaxX = modelToCanvas(bounds.maxX - secCx, bounds.maxY - secCy, vs, cx, cy);
+    const toCanvas = (mx, my) => modelToCanvas(mx - secCx, my - secCy, vs, cx, cy);
+    const bMinX = toCanvas(bounds.minX, bounds.minY);
+    const bMaxX = toCanvas(bounds.maxX, bounds.maxY);
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(bMinX[0], bMinX[1], bMaxX[0] - bMinX[0], bMaxX[1] - bMinX[1]);
     ctx.beginPath();
     for (const contour of contours) {
       if (contour.length < 2) continue;
-      const [fx, fy] = modelToCanvas(contour[0].x - secCx, contour[0].y - secCy, vs, cx, cy);
+      const [fx, fy] = toCanvas(contour[0].x, contour[0].y);
       ctx.moveTo(fx, fy);
       for (let i6 = 1; i6 < contour.length; i6++) {
-        const [lx, ly] = modelToCanvas(contour[i6].x - secCx, contour[i6].y - secCy, vs, cx, cy);
+        const [lx, ly] = toCanvas(contour[i6].x, contour[i6].y);
         ctx.lineTo(lx, ly);
       }
       ctx.closePath();
@@ -34669,7 +35272,113 @@ function OutputPane({ section, plane }) {
     ctx.lineWidth = Math.max(1.5, vs.zoom * 0.03);
     ctx.stroke();
     drawScaleBar(ctx, vs.zoom, W2, H3);
-  }, [section, vs]);
+    if (activeTool === "ruler") {
+      const drawDot = (p5) => {
+        const [sx, sy] = toCanvas(p5[0], p5[1]);
+        ctx.beginPath();
+        ctx.arc(sx, sy, 5, 0, Math.PI * 2);
+        ctx.fillStyle = "#ffffff";
+        ctx.fill();
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = MEASURE_COLOR;
+        ctx.stroke();
+      };
+      const drawMeasureLine = (p1, p22) => {
+        const [x1, y1] = toCanvas(p1[0], p1[1]);
+        const [x22, y22] = toCanvas(p22[0], p22[1]);
+        ctx.save();
+        ctx.strokeStyle = MEASURE_COLOR;
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([5, 3]);
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x22, y22);
+        ctx.stroke();
+        ctx.restore();
+        const dist = Math.hypot(p22[0] - p1[0], p22[1] - p1[1]);
+        drawMeasureLabel(ctx, `${dist.toFixed(1)} mm`, (x1 + x22) / 2, (y1 + y22) / 2);
+      };
+      if (rulerState.pt1) drawDot(rulerState.pt1);
+      if (rulerState.pt2) drawDot(rulerState.pt2);
+      if (rulerState.stage === "pt1_placed" && rulerState.pt1 && rulerState.hoverPt) {
+        drawMeasureLine(rulerState.pt1, rulerState.hoverPt);
+      } else if (rulerState.stage === "complete" && rulerState.pt1 && rulerState.pt2) {
+        drawMeasureLine(rulerState.pt1, rulerState.pt2);
+      }
+    }
+    if (activeTool === "diameter" && diameterState) {
+      const { cx: dcx, cy: dcy, r: r4 } = diameterState;
+      const [ccx, ccy] = toCanvas(dcx, dcy);
+      const rc = r4 * vs.zoom;
+      ctx.save();
+      ctx.strokeStyle = MEASURE_COLOR;
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([5, 3]);
+      ctx.beginPath();
+      ctx.arc(ccx, ccy, rc, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(ccx - rc, ccy);
+      ctx.lineTo(ccx + rc, ccy);
+      ctx.stroke();
+      ctx.restore();
+      const label = `\u2300${(r4 * 2).toFixed(2)}`;
+      drawMeasureLabel(ctx, label, ccx, rc > 30 ? ccy : ccy - rc - 14);
+    }
+    if (activeTool === "autodim" && autodimState) {
+      const { minX, minY, maxX, maxY } = autodimState;
+      const offsetMM = 8;
+      ctx.save();
+      ctx.strokeStyle = DIM_COLOR;
+      ctx.lineWidth = 1.2;
+      const dimY = minY - offsetMM;
+      const [tl0x, tl0y] = toCanvas(minX, minY);
+      const [tl1x, tl1y] = toCanvas(minX, dimY);
+      const [tr0x, tr0y] = toCanvas(maxX, minY);
+      const [tr1x, tr1y] = toCanvas(maxX, dimY);
+      ctx.beginPath();
+      ctx.moveTo(tl0x, tl0y);
+      ctx.lineTo(tl1x, tl1y);
+      ctx.moveTo(tr0x, tr0y);
+      ctx.lineTo(tr1x, tr1y);
+      ctx.moveTo(tl1x, tl1y);
+      ctx.lineTo(tr1x, tr1y);
+      ctx.stroke();
+      drawDimTick(ctx, tl1x, tl1y, Math.PI / 4);
+      drawDimTick(ctx, tr1x, tr1y, Math.PI / 4);
+      drawMeasureLabel(ctx, `${(maxX - minX).toFixed(1)} mm`, (tl1x + tr1x) / 2, tl1y - 12);
+      const dimX = maxX + offsetMM;
+      const [rt0x, rt0y] = toCanvas(maxX, minY);
+      const [rt1x, rt1y] = toCanvas(dimX, minY);
+      const [rb0x, rb0y] = toCanvas(maxX, maxY);
+      const [rb1x, rb1y] = toCanvas(dimX, maxY);
+      ctx.beginPath();
+      ctx.moveTo(rt0x, rt0y);
+      ctx.lineTo(rt1x, rt1y);
+      ctx.moveTo(rb0x, rb0y);
+      ctx.lineTo(rb1x, rb1y);
+      ctx.moveTo(rt1x, rt1y);
+      ctx.lineTo(rb1x, rb1y);
+      ctx.stroke();
+      drawDimTick(ctx, rt1x, rt1y, Math.PI / 4);
+      drawDimTick(ctx, rb1x, rb1y, Math.PI / 4);
+      ctx.restore();
+      drawMeasureLabel(ctx, `${(maxY - minY).toFixed(1)} mm`, rt1x + 24, (rt1y + rb1y) / 2);
+    }
+    if (activeTool && snapHover) {
+      const [scx, scy] = toCanvas(snapHover.x, snapHover.y);
+      ctx.save();
+      ctx.strokeStyle = SNAP_COLOR;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(scx - 6, scy);
+      ctx.lineTo(scx + 6, scy);
+      ctx.moveTo(scx, scy - 6);
+      ctx.lineTo(scx, scy + 6);
+      ctx.stroke();
+      ctx.restore();
+    }
+  }, [section, vs, activeTool, rulerState, diameterState, autodimState, snapHover]);
   const handlePrint = q2(() => {
     if (!section || !plane) return;
     const blob = generateSectionPDF(section, plane);
@@ -34681,26 +35390,57 @@ function OutputPane({ section, plane }) {
     setTimeout(() => URL.revokeObjectURL(url), 5e3);
   }, [section, plane]);
   const hasSection = section && section.contours.length > 0;
-  return /* @__PURE__ */ u5("div", { class: "pane", ref: containerRef, children: [
-    /* @__PURE__ */ u5("span", { class: "pane-label", children: "Section Output" }),
-    /* @__PURE__ */ u5(
-      "canvas",
-      {
-        ref: canvasRef,
-        onWheel: handleWheel,
-        onMouseDown: handleMouseDown,
-        onMouseMove: handleMouseMove,
-        onMouseUp: handleMouseUp,
-        onContextMenu: handleContextMenu,
-        style: { cursor: "default" }
-      }
-    ),
-    !hasSection && /* @__PURE__ */ u5("div", { class: "no-section", children: /* @__PURE__ */ u5("p", { children: [
-      "Click in a view pane to create a",
-      /* @__PURE__ */ u5("br", {}),
-      "cutting plane"
-    ] }) }),
-    /* @__PURE__ */ u5("div", { class: "output-controls", children: /* @__PURE__ */ u5("button", { class: "btn", disabled: !hasSection, onClick: handlePrint, children: "\u{1F5A8} Print PDF" }) })
+  return /* @__PURE__ */ u5("div", { class: "pane", children: [
+    /* @__PURE__ */ u5("div", { class: "section-toolbar", children: [
+      /* @__PURE__ */ u5(
+        "button",
+        {
+          class: `tool-btn${activeTool === "ruler" ? " active" : ""}`,
+          onClick: () => toggleTool("ruler"),
+          title: "Distance Ruler (click twice to measure)",
+          children: "\u{1F4CF} Ruler"
+        }
+      ),
+      /* @__PURE__ */ u5(
+        "button",
+        {
+          class: `tool-btn${activeTool === "diameter" ? " active" : ""}`,
+          onClick: () => toggleTool("diameter"),
+          title: "Diameter / Circle Detector",
+          children: "\u2299 Diameter"
+        }
+      ),
+      /* @__PURE__ */ u5(
+        "button",
+        {
+          class: `tool-btn${activeTool === "autodim" ? " active" : ""}`,
+          onClick: () => toggleTool("autodim"),
+          title: "Auto Dimensions",
+          children: "\u2B1B Auto-Dim"
+        }
+      )
+    ] }),
+    /* @__PURE__ */ u5("div", { class: "section-canvas-wrap", ref: containerRef, children: [
+      /* @__PURE__ */ u5("span", { class: "pane-label", children: "Section Output" }),
+      /* @__PURE__ */ u5(
+        "canvas",
+        {
+          ref: canvasRef,
+          onWheel: handleWheel,
+          onMouseDown: handleMouseDown,
+          onMouseMove: handleMouseMove,
+          onMouseUp: handleMouseUp,
+          onContextMenu: handleContextMenu,
+          style: { cursor: activeTool ? "crosshair" : "default" }
+        }
+      ),
+      !hasSection && /* @__PURE__ */ u5("div", { class: "no-section", children: /* @__PURE__ */ u5("p", { children: [
+        "Click in a view pane to create a",
+        /* @__PURE__ */ u5("br", {}),
+        "cutting plane"
+      ] }) }),
+      /* @__PURE__ */ u5("div", { class: "output-controls", children: /* @__PURE__ */ u5("button", { class: "btn", disabled: !hasSection, onClick: handlePrint, children: "\u{1F5A8} Print PDF" }) })
+    ] })
   ] });
 }
 function drawScaleBar(ctx, zoom, W2, H3) {
@@ -34734,18 +35474,25 @@ function drawScaleBar(ctx, zoom, W2, H3) {
 function DropZone({ onLoad }) {
   const [dragging, setDragging] = d2(false);
   const [error, setError] = d2(null);
+  const [loading, setLoading] = d2(false);
   const inputRef = A2(null);
   const loadBuffer = q2((buf) => {
-    try {
-      const mesh = parseSTL(buf);
-      if (mesh.count === 0) {
-        setError("No triangles found in STL file.");
-        return;
+    setError(null);
+    setLoading(true);
+    setTimeout(() => {
+      try {
+        const mesh = parseSTL(buf);
+        if (mesh.count === 0) {
+          setError("No triangles found in STL file.");
+          setLoading(false);
+          return;
+        }
+        onLoad(mesh);
+      } catch (e4) {
+        setError(`Failed to parse STL: ${e4 instanceof Error ? e4.message : String(e4)}`);
+        setLoading(false);
       }
-      onLoad(mesh);
-    } catch (e4) {
-      setError(`Failed to parse STL: ${e4 instanceof Error ? e4.message : String(e4)}`);
-    }
+    }, 10);
   }, [onLoad]);
   const handleFile = q2((file) => {
     setError(null);
@@ -34753,6 +35500,9 @@ function DropZone({ onLoad }) {
     reader.onload = () => loadBuffer(reader.result);
     reader.onerror = () => setError("Could not read file.");
     reader.readAsArrayBuffer(file);
+  }, [loadBuffer]);
+  const handleDemo = q2((maker) => {
+    loadBuffer(maker());
   }, [loadBuffer]);
   const handleDrop = q2((e4) => {
     e4.preventDefault();
@@ -34789,32 +35539,46 @@ function DropZone({ onLoad }) {
     window.addEventListener("paste", handler);
     return () => window.removeEventListener("paste", handler);
   }, [handleFile]);
-  return /* @__PURE__ */ u5("div", { class: "drop-zone-container", children: /* @__PURE__ */ u5(
-    "div",
-    {
-      class: `drop-zone${dragging ? " dragover" : ""}`,
-      onDrop: handleDrop,
-      onDragOver: handleDragOver,
-      onDragLeave: handleDragLeave,
-      onClick: handleClick,
-      children: [
-        /* @__PURE__ */ u5("div", { class: "drop-zone-icon", children: "\u{1F4D0}" }),
-        /* @__PURE__ */ u5("h2", { children: "Open an STL file" }),
-        /* @__PURE__ */ u5("p", { children: "Drag & drop, click to browse, or paste" }),
-        error && /* @__PURE__ */ u5("p", { style: { color: "#ff6b6b" }, children: error }),
-        /* @__PURE__ */ u5(
-          "input",
-          {
-            ref: inputRef,
-            type: "file",
-            accept: ".stl",
-            style: { display: "none" },
-            onChange: handleInputChange
-          }
-        )
-      ]
-    }
-  ) });
+  if (loading) {
+    return /* @__PURE__ */ u5("div", { class: "drop-zone-container", children: /* @__PURE__ */ u5("div", { class: "loading-screen", children: [
+      /* @__PURE__ */ u5("div", { class: "spinner" }),
+      /* @__PURE__ */ u5("p", { children: "Parsing model\u2026" })
+    ] }) });
+  }
+  return /* @__PURE__ */ u5("div", { class: "drop-zone-container", children: /* @__PURE__ */ u5("div", { style: { display: "flex", flexDirection: "column", alignItems: "center" }, children: [
+    /* @__PURE__ */ u5(
+      "div",
+      {
+        class: `drop-zone${dragging ? " dragover" : ""}`,
+        onDrop: handleDrop,
+        onDragOver: handleDragOver,
+        onDragLeave: handleDragLeave,
+        onClick: handleClick,
+        children: [
+          /* @__PURE__ */ u5("div", { class: "drop-zone-icon", children: "\u{1F4D0}" }),
+          /* @__PURE__ */ u5("h2", { children: "Open an STL file" }),
+          /* @__PURE__ */ u5("p", { children: "Drag & drop, click to browse, or paste" }),
+          error && /* @__PURE__ */ u5("p", { style: { color: "#ff6b6b" }, children: error }),
+          /* @__PURE__ */ u5(
+            "input",
+            {
+              ref: inputRef,
+              type: "file",
+              accept: ".stl",
+              style: { display: "none" },
+              onChange: handleInputChange
+            }
+          )
+        ]
+      }
+    ),
+    /* @__PURE__ */ u5("div", { class: "demo-models", children: [
+      /* @__PURE__ */ u5("span", { class: "demo-label", children: "Try a demo:" }),
+      /* @__PURE__ */ u5("button", { class: "btn btn-secondary btn-sm", onClick: () => handleDemo(makeTorus), children: "\u{1F535} Torus" }),
+      /* @__PURE__ */ u5("button", { class: "btn btn-secondary btn-sm", onClick: () => handleDemo(makeSteppedShaft), children: "\u2699 Stepped Shaft" }),
+      /* @__PURE__ */ u5("button", { class: "btn btn-secondary btn-sm", onClick: () => handleDemo(makeMountingPlate), children: "\u{1F529} Mounting Plate" })
+    ] })
+  ] }) });
 }
 function Footer() {
   return /* @__PURE__ */ u5("footer", { class: "footer", children: [
@@ -34862,6 +35626,11 @@ function App() {
     if (!mesh || !plane) return null;
     return computeSection(mesh, plane);
   }, [mesh, plane]);
+  const maxModelDim = T2(() => {
+    if (!mesh) return 1;
+    const { size } = mesh.bbox;
+    return Math.max(size.x, size.y, size.z);
+  }, [mesh]);
   return /* @__PURE__ */ u5("div", { id: "app", children: [
     /* @__PURE__ */ u5("div", { class: "header", children: [
       /* @__PURE__ */ u5("h1", { children: "\u{1F4D0} STL2PDF \u2013 Cross-Section Viewer" }),
@@ -34880,7 +35649,9 @@ function App() {
           mesh,
           plane,
           onSetPlane: handleSetPlane,
-          onCyclePlane: handleCyclePlane
+          onCyclePlane: handleCyclePlane,
+          maxModelDim,
+          showHint: false
         }
       ),
       /* @__PURE__ */ u5(
@@ -34891,7 +35662,9 @@ function App() {
           mesh,
           plane,
           onSetPlane: handleSetPlane,
-          onCyclePlane: handleCyclePlane
+          onCyclePlane: handleCyclePlane,
+          maxModelDim,
+          showHint: false
         }
       ),
       /* @__PURE__ */ u5(
@@ -34902,7 +35675,9 @@ function App() {
           mesh,
           plane,
           onSetPlane: handleSetPlane,
-          onCyclePlane: handleCyclePlane
+          onCyclePlane: handleCyclePlane,
+          maxModelDim,
+          showHint: true
         }
       ),
       /* @__PURE__ */ u5(OutputPane, { section, plane })

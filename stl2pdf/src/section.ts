@@ -93,8 +93,20 @@ function triangleSegment(
 
 const CHAIN_PREC = 6; // decimal places for endpoint keys
 
+/**
+ * Round to CHAIN_PREC decimal places and normalize -0 to 0.
+ * Without this, a coordinate that's a hair below zero (e.g. -3e-15, common
+ * where a revolved surface's 0/2π seam doesn't land on an exact float) would
+ * key as "-0.000000" while its counterpart on the other side of the seam
+ * keys as "0.000000", silently breaking the contour chain into fragments.
+ */
+function roundCoord(n: number): number {
+  const r = Math.round(n * 10 ** CHAIN_PREC) / 10 ** CHAIN_PREC;
+  return r === 0 ? 0 : r;
+}
+
 function ptKey(v: Vec2): string {
-  return `${v.x.toFixed(CHAIN_PREC)},${v.y.toFixed(CHAIN_PREC)}`;
+  return `${roundCoord(v.x).toFixed(CHAIN_PREC)},${roundCoord(v.y).toFixed(CHAIN_PREC)}`;
 }
 
 /**
