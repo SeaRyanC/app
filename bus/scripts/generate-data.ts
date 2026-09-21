@@ -14,6 +14,7 @@ interface Prototype {
 }
 
 interface RawData {
+  [key: string]: Record<string, Prototype>;
   item: Record<string, Prototype>;
   fluid: Record<string, Prototype>;
   recipe: Record<string, Prototype>;
@@ -113,20 +114,47 @@ async function copyIcon(id: string, kind: 'item' | 'fluid', prototype: Prototype
   return '';
 }
 
-const materials: Material[] = [];
+const materialPrototypes = new Map<string, { prototype: Prototype; kind: 'item' | 'fluid' }>();
 for (const [id, prototype] of Object.entries(data.item)) {
-  if (!isSelectableMaterial(id)) continue;
-  const icon = await copyIcon(id, 'item', prototype);
-  if (!icon) continue;
-  const spaceAge = iconSource(prototype)?.startsWith('__space-age__');
-  materials.push({ id, name: displayName(id), kind: 'item', icon, ...(spaceAge ? { spaceAge: true } : {}) });
+  materialPrototypes.set(id, { prototype, kind: 'item' });
 }
 for (const [id, prototype] of Object.entries(data.fluid)) {
+  materialPrototypes.set(id, { prototype, kind: 'fluid' });
+}
+
+// Recipes may consume craftable prototypes that Factorio stores outside the
+// item/fluid collections, such as ammo, capsules, modules, and tools. Include
+// those referenced materials so ingredients are not silently dropped.
+const recipeMaterialIds = new Set<string>();
+for (const prototype of Object.values(data.recipe)) {
+  const entries = [
+    ...(Array.isArray(prototype.ingredients) ? prototype.ingredients : []),
+    ...(Array.isArray(prototype.results) ? prototype.results : []),
+    ...(Array.isArray(prototype.products) ? prototype.products : []),
+  ];
+  for (const entry of entries) {
+    if (entry.name) recipeMaterialIds.add(entry.name);
+  }
+}
+for (const id of recipeMaterialIds) {
+  if (materialPrototypes.has(id)) continue;
+  for (const [collectionName, collection] of Object.entries(data)) {
+    if (collectionName === 'item' || collectionName === 'fluid' || collectionName === 'recipe') continue;
+    const prototype = collection[id];
+    if (prototype) {
+      materialPrototypes.set(id, { prototype, kind: 'item' });
+      break;
+    }
+  }
+}
+
+const materials: Material[] = [];
+for (const [id, { prototype, kind }] of materialPrototypes) {
   if (!isSelectableMaterial(id)) continue;
-  const icon = await copyIcon(id, 'fluid', prototype);
+  const icon = await copyIcon(id, kind, prototype);
   if (!icon) continue;
   const spaceAge = iconSource(prototype)?.startsWith('__space-age__');
-  materials.push({ id, name: displayName(id), kind: 'fluid', icon, ...(spaceAge ? { spaceAge: true } : {}) });
+  materials.push({ id, name: displayName(id), kind, icon, ...(spaceAge ? { spaceAge: true } : {}) });
 }
 
 const materialIds = new Set(materials.map(material => material.id));

@@ -412,22 +412,10 @@ export const materials: Material[] = [
     "icon": "icons/chemical-science-pack.png"
   },
   {
-    "id": "grenade",
-    "name": "Grenade",
-    "kind": "item",
-    "icon": "icons/grenade.png"
-  },
-  {
     "id": "military-science-pack",
     "name": "Military science pack",
     "kind": "item",
     "icon": "icons/military-science-pack.png"
-  },
-  {
-    "id": "piercing-rounds-magazine",
-    "name": "Piercing rounds magazine",
-    "kind": "item",
-    "icon": "icons/piercing-rounds-magazine.png"
   },
   {
     "id": "production-science-pack",
@@ -1701,10 +1689,676 @@ export const materials: Material[] = [
     "kind": "fluid",
     "icon": "icons/fluid/fusion-plasma.png",
     "spaceAge": true
+  },
+  {
+    "id": "speed-module",
+    "name": "Speed module",
+    "kind": "item",
+    "icon": "icons/speed-module.png"
+  },
+  {
+    "id": "speed-module-2",
+    "name": "Speed module 2",
+    "kind": "item",
+    "icon": "icons/speed-module-2.png"
+  },
+  {
+    "id": "speed-module-3",
+    "name": "Speed module 3",
+    "kind": "item",
+    "icon": "icons/speed-module-3.png"
+  },
+  {
+    "id": "productivity-module",
+    "name": "Productivity module",
+    "kind": "item",
+    "icon": "icons/productivity-module.png"
+  },
+  {
+    "id": "productivity-module-2",
+    "name": "Productivity module 2",
+    "kind": "item",
+    "icon": "icons/productivity-module-2.png"
+  },
+  {
+    "id": "productivity-module-3",
+    "name": "Productivity module 3",
+    "kind": "item",
+    "icon": "icons/productivity-module-3.png"
+  },
+  {
+    "id": "efficiency-module",
+    "name": "Efficiency module",
+    "kind": "item",
+    "icon": "icons/efficiency-module.png"
+  },
+  {
+    "id": "efficiency-module-2",
+    "name": "Efficiency module 2",
+    "kind": "item",
+    "icon": "icons/efficiency-module-2.png"
+  },
+  {
+    "id": "efficiency-module-3",
+    "name": "Efficiency module 3",
+    "kind": "item",
+    "icon": "icons/efficiency-module-3.png"
+  },
+  {
+    "id": "pistol",
+    "name": "Pistol",
+    "kind": "item",
+    "icon": "icons/pistol.png"
+  },
+  {
+    "id": "submachine-gun",
+    "name": "Submachine gun",
+    "kind": "item",
+    "icon": "icons/submachine-gun.png"
+  },
+  {
+    "id": "firearm-magazine",
+    "name": "Firearm magazine",
+    "kind": "item",
+    "icon": "icons/firearm-magazine.png"
+  },
+  {
+    "id": "light-armor",
+    "name": "Light armor",
+    "kind": "item",
+    "icon": "icons/light-armor.png"
+  },
+  {
+    "id": "repair-pack",
+    "name": "Repair pack",
+    "kind": "item",
+    "icon": "icons/repair-pack.png"
+  },
+  {
+    "id": "car",
+    "name": "Car",
+    "kind": "item",
+    "icon": "icons/car.png"
+  },
+  {
+    "id": "shotgun",
+    "name": "Shotgun",
+    "kind": "item",
+    "icon": "icons/shotgun.png"
+  },
+  {
+    "id": "shotgun-shell",
+    "name": "Shotgun shells",
+    "kind": "item",
+    "icon": "icons/shotgun-shell.png"
+  },
+  {
+    "id": "piercing-rounds-magazine",
+    "name": "Piercing rounds magazine",
+    "kind": "item",
+    "icon": "icons/piercing-rounds-magazine.png"
+  },
+  {
+    "id": "grenade",
+    "name": "Grenade",
+    "kind": "item",
+    "icon": "icons/grenade.png"
+  },
+  {
+    "id": "heavy-armor",
+    "name": "Heavy armor",
+    "kind": "item",
+    "icon": "icons/heavy-armor.png"
+  },
+  {
+    "id": "rail",
+    "name": "Rail",
+    "kind": "item",
+    "icon": "icons/rail.png"
+  },
+  {
+    "id": "locomotive",
+    "name": "Locomotive",
+    "kind": "item",
+    "icon": "icons/locomotive.png"
+  },
+  {
+    "id": "cargo-wagon",
+    "name": "Cargo wagon",
+    "kind": "item",
+    "icon": "icons/cargo-wagon.png"
+  },
+  {
+    "id": "poison-capsule",
+    "name": "Poison capsule",
+    "kind": "item",
+    "icon": "icons/poison-capsule.png"
+  },
+  {
+    "id": "slowdown-capsule",
+    "name": "Slowdown capsule",
+    "kind": "item",
+    "icon": "icons/slowdown-capsule.png"
+  },
+  {
+    "id": "cluster-grenade",
+    "name": "Cluster grenade",
+    "kind": "item",
+    "icon": "icons/cluster-grenade.png"
+  },
+  {
+    "id": "defender-capsule",
+    "name": "Defender capsule",
+    "kind": "item",
+    "icon": "icons/defender-capsule.png"
+  },
+  {
+    "id": "distractor-capsule",
+    "name": "Distractor capsule",
+    "kind": "item",
+    "icon": "icons/distractor-capsule.png"
+  },
+  {
+    "id": "destroyer-capsule",
+    "name": "Destroyer capsule",
+    "kind": "item",
+    "icon": "icons/destroyer-capsule.png"
+  },
+  {
+    "id": "cliff-explosives",
+    "name": "Cliff explosives",
+    "kind": "item",
+    "icon": "icons/cliff-explosives.png"
+  },
+  {
+    "id": "uranium-rounds-magazine",
+    "name": "Uranium rounds magazine",
+    "kind": "item",
+    "icon": "icons/uranium-rounds-magazine.png"
+  },
+  {
+    "id": "rocket",
+    "name": "Rocket",
+    "kind": "item",
+    "icon": "icons/rocket.png"
+  },
+  {
+    "id": "explosive-rocket",
+    "name": "Explosive rocket",
+    "kind": "item",
+    "icon": "icons/explosive-rocket.png"
+  },
+  {
+    "id": "atomic-bomb",
+    "name": "Atomic bomb",
+    "kind": "item",
+    "icon": "icons/atomic-bomb.png"
+  },
+  {
+    "id": "piercing-shotgun-shell",
+    "name": "Piercing shotgun shells",
+    "kind": "item",
+    "icon": "icons/piercing-shotgun-shell.png"
+  },
+  {
+    "id": "cannon-shell",
+    "name": "Cannon shell",
+    "kind": "item",
+    "icon": "icons/cannon-shell.png"
+  },
+  {
+    "id": "explosive-cannon-shell",
+    "name": "Explosive cannon shell",
+    "kind": "item",
+    "icon": "icons/explosive-cannon-shell.png"
+  },
+  {
+    "id": "uranium-cannon-shell",
+    "name": "Uranium cannon shell",
+    "kind": "item",
+    "icon": "icons/uranium-cannon-shell.png"
+  },
+  {
+    "id": "explosive-uranium-cannon-shell",
+    "name": "Explosive uranium cannon shell",
+    "kind": "item",
+    "icon": "icons/explosive-uranium-cannon-shell.png"
+  },
+  {
+    "id": "artillery-shell",
+    "name": "Artillery shell",
+    "kind": "item",
+    "icon": "icons/artillery-shell.png"
+  },
+  {
+    "id": "flamethrower-ammo",
+    "name": "Flamethrower ammo",
+    "kind": "item",
+    "icon": "icons/flamethrower-ammo.png"
+  },
+  {
+    "id": "tank",
+    "name": "Tank",
+    "kind": "item",
+    "icon": "icons/tank.png"
+  },
+  {
+    "id": "raw-fish",
+    "name": "Raw fish",
+    "kind": "item",
+    "icon": "icons/raw-fish.png"
+  },
+  {
+    "id": "spidertron",
+    "name": "Spidertron",
+    "kind": "item",
+    "icon": "icons/spidertron.png"
+  },
+  {
+    "id": "fluid-wagon",
+    "name": "Fluid wagon",
+    "kind": "item",
+    "icon": "icons/fluid-wagon.png"
+  },
+  {
+    "id": "artillery-wagon",
+    "name": "Artillery wagon",
+    "kind": "item",
+    "icon": "icons/artillery-wagon.png"
+  },
+  {
+    "id": "modular-armor",
+    "name": "Modular armor",
+    "kind": "item",
+    "icon": "icons/modular-armor.png"
+  },
+  {
+    "id": "power-armor",
+    "name": "Power armor",
+    "kind": "item",
+    "icon": "icons/power-armor.png"
+  },
+  {
+    "id": "power-armor-mk2",
+    "name": "Power armor MK2",
+    "kind": "item",
+    "icon": "icons/power-armor-mk2.png"
+  },
+  {
+    "id": "flamethrower",
+    "name": "Flamethrower",
+    "kind": "item",
+    "icon": "icons/flamethrower.png"
+  },
+  {
+    "id": "rocket-launcher",
+    "name": "Rocket launcher",
+    "kind": "item",
+    "icon": "icons/rocket-launcher.png"
+  },
+  {
+    "id": "combat-shotgun",
+    "name": "Combat shotgun",
+    "kind": "item",
+    "icon": "icons/combat-shotgun.png"
+  },
+  {
+    "id": "rail-ramp",
+    "name": "Rail ramp",
+    "kind": "item",
+    "icon": "icons/rail-ramp.png"
+  },
+  {
+    "id": "quality-module",
+    "name": "Quality module",
+    "kind": "item",
+    "icon": "icons/quality-module.png"
+  },
+  {
+    "id": "quality-module-2",
+    "name": "Quality module 2",
+    "kind": "item",
+    "icon": "icons/quality-module-2.png"
+  },
+  {
+    "id": "quality-module-3",
+    "name": "Quality module 3",
+    "kind": "item",
+    "icon": "icons/quality-module-3.png"
+  },
+  {
+    "id": "yumako",
+    "name": "Yumako",
+    "kind": "item",
+    "icon": "icons/yumako.png",
+    "spaceAge": true
+  },
+  {
+    "id": "yumako-mash",
+    "name": "Yumako mash",
+    "kind": "item",
+    "icon": "icons/yumako-mash.png",
+    "spaceAge": true
+  },
+  {
+    "id": "jellynut",
+    "name": "Jellynut",
+    "kind": "item",
+    "icon": "icons/jellynut.png",
+    "spaceAge": true
+  },
+  {
+    "id": "jelly",
+    "name": "Jelly",
+    "kind": "item",
+    "icon": "icons/jelly.png",
+    "spaceAge": true
+  },
+  {
+    "id": "bioflux",
+    "name": "Bioflux",
+    "kind": "item",
+    "icon": "icons/bioflux.png",
+    "spaceAge": true
+  },
+  {
+    "id": "space-platform-starter-pack",
+    "name": "Space platform starter pack",
+    "kind": "item",
+    "icon": "icons/space-platform-starter-pack.png",
+    "spaceAge": true
+  },
+  {
+    "id": "mech-armor",
+    "name": "Mech armor",
+    "kind": "item",
+    "icon": "icons/mech-armor.png",
+    "spaceAge": true
+  },
+  {
+    "id": "railgun",
+    "name": "Railgun",
+    "kind": "item",
+    "icon": "icons/railgun.png",
+    "spaceAge": true
+  },
+  {
+    "id": "railgun-ammo",
+    "name": "Railgun ammo",
+    "kind": "item",
+    "icon": "icons/railgun-ammo.png",
+    "spaceAge": true
+  },
+  {
+    "id": "capture-robot-rocket",
+    "name": "Capture bot rocket",
+    "kind": "item",
+    "icon": "icons/capture-robot-rocket.png",
+    "spaceAge": true
+  },
+  {
+    "id": "teslagun",
+    "name": "Tesla gun",
+    "kind": "item",
+    "icon": "icons/teslagun.png",
+    "spaceAge": true
+  },
+  {
+    "id": "tesla-ammo",
+    "name": "Tesla ammo",
+    "kind": "item",
+    "icon": "icons/tesla-ammo.png",
+    "spaceAge": true
+  },
+  {
+    "id": "blueprint",
+    "name": "Blueprint",
+    "kind": "item",
+    "icon": "icons/blueprint.png"
+  },
+  {
+    "id": "blueprint-book",
+    "name": "Blueprint book",
+    "kind": "item",
+    "icon": "icons/blueprint-book.png"
+  },
+  {
+    "id": "deconstruction-planner",
+    "name": "Deconstruction planner",
+    "kind": "item",
+    "icon": "icons/deconstruction-planner.png"
+  },
+  {
+    "id": "selection-tool",
+    "name": "Selection tool",
+    "kind": "item",
+    "icon": "icons/selection-tool.png"
+  },
+  {
+    "id": "upgrade-planner",
+    "name": "Upgrade planner",
+    "kind": "item",
+    "icon": "icons/upgrade-planner.png"
   }
 ];
 
 export const recipes: Recipe[] = [
+  {
+    "id": "speed-module",
+    "name": "Speed module",
+    "outputs": [
+      {
+        "material": "speed-module",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "advanced-circuit",
+        "amount": 5
+      },
+      {
+        "material": "electronic-circuit",
+        "amount": 5
+      }
+    ]
+  },
+  {
+    "id": "speed-module-2",
+    "name": "Speed module 2",
+    "outputs": [
+      {
+        "material": "speed-module-2",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "speed-module",
+        "amount": 4
+      },
+      {
+        "material": "advanced-circuit",
+        "amount": 5
+      },
+      {
+        "material": "processing-unit",
+        "amount": 5
+      }
+    ]
+  },
+  {
+    "id": "speed-module-3",
+    "name": "Speed module 3",
+    "outputs": [
+      {
+        "material": "speed-module-3",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "speed-module-2",
+        "amount": 4
+      },
+      {
+        "material": "advanced-circuit",
+        "amount": 5
+      },
+      {
+        "material": "processing-unit",
+        "amount": 5
+      },
+      {
+        "material": "tungsten-carbide",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "productivity-module",
+    "name": "Productivity module",
+    "outputs": [
+      {
+        "material": "productivity-module",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "advanced-circuit",
+        "amount": 5
+      },
+      {
+        "material": "electronic-circuit",
+        "amount": 5
+      }
+    ]
+  },
+  {
+    "id": "productivity-module-2",
+    "name": "Productivity module 2",
+    "outputs": [
+      {
+        "material": "productivity-module-2",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "productivity-module",
+        "amount": 4
+      },
+      {
+        "material": "advanced-circuit",
+        "amount": 5
+      },
+      {
+        "material": "processing-unit",
+        "amount": 5
+      }
+    ]
+  },
+  {
+    "id": "productivity-module-3",
+    "name": "Productivity module 3",
+    "outputs": [
+      {
+        "material": "productivity-module-3",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "productivity-module-2",
+        "amount": 4
+      },
+      {
+        "material": "advanced-circuit",
+        "amount": 5
+      },
+      {
+        "material": "processing-unit",
+        "amount": 5
+      },
+      {
+        "material": "biter-egg",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "efficiency-module",
+    "name": "Efficiency module",
+    "outputs": [
+      {
+        "material": "efficiency-module",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "advanced-circuit",
+        "amount": 5
+      },
+      {
+        "material": "electronic-circuit",
+        "amount": 5
+      }
+    ]
+  },
+  {
+    "id": "efficiency-module-2",
+    "name": "Efficiency module 2",
+    "outputs": [
+      {
+        "material": "efficiency-module-2",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "efficiency-module",
+        "amount": 4
+      },
+      {
+        "material": "advanced-circuit",
+        "amount": 5
+      },
+      {
+        "material": "processing-unit",
+        "amount": 5
+      }
+    ]
+  },
+  {
+    "id": "efficiency-module-3",
+    "name": "Efficiency module 3",
+    "outputs": [
+      {
+        "material": "efficiency-module-3",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "efficiency-module-2",
+        "amount": 4
+      },
+      {
+        "material": "advanced-circuit",
+        "amount": 5
+      },
+      {
+        "material": "processing-unit",
+        "amount": 5
+      },
+      {
+        "material": "spoilage",
+        "amount": 5
+      }
+    ]
+  },
   {
     "id": "bulk-inserter",
     "name": "Bulk inserter",
@@ -2782,6 +3436,82 @@ export const recipes: Recipe[] = [
     ]
   },
   {
+    "id": "pistol",
+    "name": "Pistol",
+    "outputs": [
+      {
+        "material": "pistol",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "copper-plate",
+        "amount": 5
+      },
+      {
+        "material": "iron-plate",
+        "amount": 5
+      }
+    ]
+  },
+  {
+    "id": "submachine-gun",
+    "name": "Submachine gun",
+    "outputs": [
+      {
+        "material": "submachine-gun",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "iron-gear-wheel",
+        "amount": 10
+      },
+      {
+        "material": "copper-plate",
+        "amount": 5
+      },
+      {
+        "material": "iron-plate",
+        "amount": 10
+      }
+    ]
+  },
+  {
+    "id": "firearm-magazine",
+    "name": "Firearm magazine",
+    "outputs": [
+      {
+        "material": "firearm-magazine",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "iron-plate",
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "id": "light-armor",
+    "name": "Light armor",
+    "outputs": [
+      {
+        "material": "light-armor",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "iron-plate",
+        "amount": 40
+      }
+    ]
+  },
+  {
     "id": "radar",
     "name": "Radar",
     "outputs": [
@@ -2870,6 +3600,26 @@ export const recipes: Recipe[] = [
       {
         "material": "iron-plate",
         "amount": 9
+      }
+    ]
+  },
+  {
+    "id": "repair-pack",
+    "name": "Repair pack",
+    "outputs": [
+      {
+        "material": "repair-pack",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "electronic-circuit",
+        "amount": 2
+      },
+      {
+        "material": "iron-gear-wheel",
+        "amount": 2
       }
     ]
   },
@@ -3058,6 +3808,30 @@ export const recipes: Recipe[] = [
     ]
   },
   {
+    "id": "car",
+    "name": "Car",
+    "outputs": [
+      {
+        "material": "car",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "engine-unit",
+        "amount": 8
+      },
+      {
+        "material": "iron-plate",
+        "amount": 20
+      },
+      {
+        "material": "steel-plate",
+        "amount": 5
+      }
+    ]
+  },
+  {
     "id": "engine-unit",
     "name": "Engine unit",
     "outputs": [
@@ -3146,6 +3920,98 @@ export const recipes: Recipe[] = [
     ]
   },
   {
+    "id": "shotgun",
+    "name": "Shotgun",
+    "outputs": [
+      {
+        "material": "shotgun",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "iron-plate",
+        "amount": 15
+      },
+      {
+        "material": "iron-gear-wheel",
+        "amount": 5
+      },
+      {
+        "material": "copper-plate",
+        "amount": 10
+      },
+      {
+        "material": "wood",
+        "amount": 5
+      }
+    ]
+  },
+  {
+    "id": "shotgun-shell",
+    "name": "Shotgun shells",
+    "outputs": [
+      {
+        "material": "shotgun-shell",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "copper-plate",
+        "amount": 2
+      },
+      {
+        "material": "iron-plate",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "piercing-rounds-magazine",
+    "name": "Piercing rounds magazine",
+    "outputs": [
+      {
+        "material": "piercing-rounds-magazine",
+        "amount": 2
+      }
+    ],
+    "inputs": [
+      {
+        "material": "firearm-magazine",
+        "amount": 2
+      },
+      {
+        "material": "steel-plate",
+        "amount": 1
+      },
+      {
+        "material": "copper-plate",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "grenade",
+    "name": "Grenade",
+    "outputs": [
+      {
+        "material": "grenade",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "iron-plate",
+        "amount": 5
+      },
+      {
+        "material": "coal",
+        "amount": 10
+      }
+    ]
+  },
+  {
     "id": "steel-furnace",
     "name": "Steel furnace",
     "outputs": [
@@ -3186,6 +4052,26 @@ export const recipes: Recipe[] = [
       {
         "material": "electronic-circuit",
         "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "heavy-armor",
+    "name": "Heavy armor",
+    "outputs": [
+      {
+        "material": "heavy-armor",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "copper-plate",
+        "amount": 100
+      },
+      {
+        "material": "steel-plate",
+        "amount": 50
       }
     ]
   },
@@ -3390,6 +4276,78 @@ export const recipes: Recipe[] = [
       {
         "material": "copper-plate",
         "amount": 5
+      }
+    ]
+  },
+  {
+    "id": "rail",
+    "name": "Rail",
+    "outputs": [
+      {
+        "material": "rail",
+        "amount": 2
+      }
+    ],
+    "inputs": [
+      {
+        "material": "stone",
+        "amount": 1
+      },
+      {
+        "material": "iron-stick",
+        "amount": 1
+      },
+      {
+        "material": "steel-plate",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "locomotive",
+    "name": "Locomotive",
+    "outputs": [
+      {
+        "material": "locomotive",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "engine-unit",
+        "amount": 20
+      },
+      {
+        "material": "electronic-circuit",
+        "amount": 10
+      },
+      {
+        "material": "steel-plate",
+        "amount": 30
+      }
+    ]
+  },
+  {
+    "id": "cargo-wagon",
+    "name": "Cargo wagon",
+    "outputs": [
+      {
+        "material": "cargo-wagon",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "iron-gear-wheel",
+        "amount": 10
+      },
+      {
+        "material": "iron-plate",
+        "amount": 20
+      },
+      {
+        "material": "steel-plate",
+        "amount": 20
       }
     ]
   },
@@ -3658,6 +4616,418 @@ export const recipes: Recipe[] = [
     ]
   },
   {
+    "id": "poison-capsule",
+    "name": "Poison capsule",
+    "outputs": [
+      {
+        "material": "poison-capsule",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "steel-plate",
+        "amount": 3
+      },
+      {
+        "material": "electronic-circuit",
+        "amount": 3
+      },
+      {
+        "material": "coal",
+        "amount": 10
+      }
+    ]
+  },
+  {
+    "id": "slowdown-capsule",
+    "name": "Slowdown capsule",
+    "outputs": [
+      {
+        "material": "slowdown-capsule",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "steel-plate",
+        "amount": 2
+      },
+      {
+        "material": "electronic-circuit",
+        "amount": 2
+      },
+      {
+        "material": "coal",
+        "amount": 5
+      }
+    ]
+  },
+  {
+    "id": "cluster-grenade",
+    "name": "Cluster grenade",
+    "outputs": [
+      {
+        "material": "cluster-grenade",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "grenade",
+        "amount": 7
+      },
+      {
+        "material": "explosives",
+        "amount": 5
+      },
+      {
+        "material": "steel-plate",
+        "amount": 5
+      }
+    ]
+  },
+  {
+    "id": "defender-capsule",
+    "name": "Defender capsule",
+    "outputs": [
+      {
+        "material": "defender-capsule",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "piercing-rounds-magazine",
+        "amount": 3
+      },
+      {
+        "material": "electronic-circuit",
+        "amount": 3
+      },
+      {
+        "material": "iron-gear-wheel",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "distractor-capsule",
+    "name": "Distractor capsule",
+    "outputs": [
+      {
+        "material": "distractor-capsule",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "defender-capsule",
+        "amount": 4
+      },
+      {
+        "material": "advanced-circuit",
+        "amount": 3
+      }
+    ]
+  },
+  {
+    "id": "destroyer-capsule",
+    "name": "Destroyer capsule",
+    "outputs": [
+      {
+        "material": "destroyer-capsule",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "distractor-capsule",
+        "amount": 4
+      },
+      {
+        "material": "steel-plate",
+        "amount": 4
+      },
+      {
+        "material": "processing-unit",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "cliff-explosives",
+    "name": "Cliff explosives",
+    "outputs": [
+      {
+        "material": "cliff-explosives",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "explosives",
+        "amount": 10
+      },
+      {
+        "material": "calcite",
+        "amount": 10
+      },
+      {
+        "material": "grenade",
+        "amount": 1
+      },
+      {
+        "material": "barrel",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "uranium-rounds-magazine",
+    "name": "Uranium rounds magazine",
+    "outputs": [
+      {
+        "material": "uranium-rounds-magazine",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "piercing-rounds-magazine",
+        "amount": 1
+      },
+      {
+        "material": "uranium-238",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "rocket",
+    "name": "Rocket",
+    "outputs": [
+      {
+        "material": "rocket",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "explosives",
+        "amount": 1
+      },
+      {
+        "material": "iron-plate",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "explosive-rocket",
+    "name": "Explosive rocket",
+    "outputs": [
+      {
+        "material": "explosive-rocket",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "rocket",
+        "amount": 1
+      },
+      {
+        "material": "explosives",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "atomic-bomb",
+    "name": "Atomic bomb",
+    "outputs": [
+      {
+        "material": "atomic-bomb",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "processing-unit",
+        "amount": 10
+      },
+      {
+        "material": "explosives",
+        "amount": 10
+      },
+      {
+        "material": "uranium-235",
+        "amount": 100
+      }
+    ]
+  },
+  {
+    "id": "piercing-shotgun-shell",
+    "name": "Piercing shotgun shells",
+    "outputs": [
+      {
+        "material": "piercing-shotgun-shell",
+        "amount": 2
+      }
+    ],
+    "inputs": [
+      {
+        "material": "shotgun-shell",
+        "amount": 2
+      },
+      {
+        "material": "copper-plate",
+        "amount": 2
+      },
+      {
+        "material": "steel-plate",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "cannon-shell",
+    "name": "Cannon shell",
+    "outputs": [
+      {
+        "material": "cannon-shell",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "steel-plate",
+        "amount": 2
+      },
+      {
+        "material": "plastic-bar",
+        "amount": 2
+      },
+      {
+        "material": "explosives",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "explosive-cannon-shell",
+    "name": "Explosive cannon shell",
+    "outputs": [
+      {
+        "material": "explosive-cannon-shell",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "steel-plate",
+        "amount": 2
+      },
+      {
+        "material": "plastic-bar",
+        "amount": 2
+      },
+      {
+        "material": "explosives",
+        "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "uranium-cannon-shell",
+    "name": "Uranium cannon shell",
+    "outputs": [
+      {
+        "material": "uranium-cannon-shell",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "cannon-shell",
+        "amount": 1
+      },
+      {
+        "material": "uranium-238",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "explosive-uranium-cannon-shell",
+    "name": "Explosive uranium cannon shell",
+    "outputs": [
+      {
+        "material": "explosive-uranium-cannon-shell",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "explosive-cannon-shell",
+        "amount": 1
+      },
+      {
+        "material": "uranium-238",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "artillery-shell",
+    "name": "Artillery shell",
+    "outputs": [
+      {
+        "material": "artillery-shell",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "radar",
+        "amount": 1
+      },
+      {
+        "material": "calcite",
+        "amount": 1
+      },
+      {
+        "material": "tungsten-plate",
+        "amount": 4
+      },
+      {
+        "material": "explosives",
+        "amount": 8
+      }
+    ]
+  },
+  {
+    "id": "flamethrower-ammo",
+    "name": "Flamethrower ammo",
+    "outputs": [
+      {
+        "material": "flamethrower-ammo",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "steel-plate",
+        "amount": 5
+      },
+      {
+        "material": "crude-oil",
+        "amount": 100
+      }
+    ]
+  },
+  {
     "id": "express-transport-belt",
     "name": "Express transport belt",
     "outputs": [
@@ -3694,6 +5064,226 @@ export const recipes: Recipe[] = [
       {
         "material": "assembling-machine-2",
         "amount": 2
+      },
+      {
+        "material": "speed-module",
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "id": "tank",
+    "name": "Tank",
+    "outputs": [
+      {
+        "material": "tank",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "engine-unit",
+        "amount": 32
+      },
+      {
+        "material": "steel-plate",
+        "amount": 50
+      },
+      {
+        "material": "iron-gear-wheel",
+        "amount": 15
+      },
+      {
+        "material": "advanced-circuit",
+        "amount": 10
+      }
+    ]
+  },
+  {
+    "id": "spidertron",
+    "name": "Spidertron",
+    "outputs": [
+      {
+        "material": "spidertron",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "exoskeleton-equipment",
+        "amount": 4
+      },
+      {
+        "material": "fission-reactor-equipment",
+        "amount": 2
+      },
+      {
+        "material": "rocket-turret",
+        "amount": 1
+      },
+      {
+        "material": "radar",
+        "amount": 2
+      },
+      {
+        "material": "raw-fish",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "fluid-wagon",
+    "name": "Fluid wagon",
+    "outputs": [
+      {
+        "material": "fluid-wagon",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "iron-gear-wheel",
+        "amount": 10
+      },
+      {
+        "material": "steel-plate",
+        "amount": 16
+      },
+      {
+        "material": "pipe",
+        "amount": 8
+      },
+      {
+        "material": "storage-tank",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "artillery-wagon",
+    "name": "Artillery wagon",
+    "outputs": [
+      {
+        "material": "artillery-wagon",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "engine-unit",
+        "amount": 60
+      },
+      {
+        "material": "tungsten-plate",
+        "amount": 60
+      },
+      {
+        "material": "refined-concrete",
+        "amount": 60
+      },
+      {
+        "material": "iron-gear-wheel",
+        "amount": 40
+      },
+      {
+        "material": "processing-unit",
+        "amount": 10
+      }
+    ]
+  },
+  {
+    "id": "modular-armor",
+    "name": "Modular armor",
+    "outputs": [
+      {
+        "material": "modular-armor",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "advanced-circuit",
+        "amount": 30
+      },
+      {
+        "material": "steel-plate",
+        "amount": 50
+      }
+    ]
+  },
+  {
+    "id": "power-armor",
+    "name": "Power armor",
+    "outputs": [
+      {
+        "material": "power-armor",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "processing-unit",
+        "amount": 40
+      },
+      {
+        "material": "electric-engine-unit",
+        "amount": 20
+      },
+      {
+        "material": "steel-plate",
+        "amount": 40
+      }
+    ]
+  },
+  {
+    "id": "power-armor-mk2",
+    "name": "Power armor MK2",
+    "outputs": [
+      {
+        "material": "power-armor-mk2",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "efficiency-module",
+        "amount": 100
+      },
+      {
+        "material": "speed-module",
+        "amount": 100
+      },
+      {
+        "material": "processing-unit",
+        "amount": 60
+      },
+      {
+        "material": "electric-engine-unit",
+        "amount": 40
+      },
+      {
+        "material": "low-density-structure",
+        "amount": 30
+      }
+    ]
+  },
+  {
+    "id": "flamethrower",
+    "name": "Flamethrower",
+    "outputs": [
+      {
+        "material": "flamethrower",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "steel-plate",
+        "amount": 5
+      },
+      {
+        "material": "iron-gear-wheel",
+        "amount": 10
       }
     ]
   },
@@ -3714,6 +5304,58 @@ export const recipes: Recipe[] = [
       {
         "material": "explosives",
         "amount": 2
+      }
+    ]
+  },
+  {
+    "id": "rocket-launcher",
+    "name": "Rocket launcher",
+    "outputs": [
+      {
+        "material": "rocket-launcher",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "iron-plate",
+        "amount": 5
+      },
+      {
+        "material": "iron-gear-wheel",
+        "amount": 5
+      },
+      {
+        "material": "electronic-circuit",
+        "amount": 5
+      }
+    ]
+  },
+  {
+    "id": "combat-shotgun",
+    "name": "Combat shotgun",
+    "outputs": [
+      {
+        "material": "combat-shotgun",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "steel-plate",
+        "amount": 15
+      },
+      {
+        "material": "iron-gear-wheel",
+        "amount": 5
+      },
+      {
+        "material": "copper-plate",
+        "amount": 10
+      },
+      {
+        "material": "wood",
+        "amount": 10
       }
     ]
   },
@@ -3752,11 +5394,11 @@ export const recipes: Recipe[] = [
     ],
     "inputs": [
       {
-        "material": "grenade",
+        "material": "piercing-rounds-magazine",
         "amount": 1
       },
       {
-        "material": "piercing-rounds-magazine",
+        "material": "grenade",
         "amount": 1
       },
       {
@@ -3778,6 +5420,14 @@ export const recipes: Recipe[] = [
       {
         "material": "electric-furnace",
         "amount": 1
+      },
+      {
+        "material": "productivity-module",
+        "amount": 1
+      },
+      {
+        "material": "rail",
+        "amount": 30
       }
     ]
   },
@@ -4831,6 +6481,30 @@ export const recipes: Recipe[] = [
     ]
   },
   {
+    "id": "rail-ramp",
+    "name": "Rail ramp",
+    "outputs": [
+      {
+        "material": "rail-ramp",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "refined-concrete",
+        "amount": 100
+      },
+      {
+        "material": "rail",
+        "amount": 8
+      },
+      {
+        "material": "steel-plate",
+        "amount": 10
+      }
+    ]
+  },
+  {
     "id": "recycler",
     "name": "Recycler",
     "outputs": [
@@ -4855,6 +6529,78 @@ export const recipes: Recipe[] = [
       {
         "material": "concrete",
         "amount": 20
+      }
+    ]
+  },
+  {
+    "id": "quality-module",
+    "name": "Quality module",
+    "outputs": [
+      {
+        "material": "quality-module",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "electronic-circuit",
+        "amount": 5
+      },
+      {
+        "material": "advanced-circuit",
+        "amount": 5
+      }
+    ]
+  },
+  {
+    "id": "quality-module-2",
+    "name": "Quality module 2",
+    "outputs": [
+      {
+        "material": "quality-module-2",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "quality-module",
+        "amount": 4
+      },
+      {
+        "material": "advanced-circuit",
+        "amount": 5
+      },
+      {
+        "material": "processing-unit",
+        "amount": 5
+      }
+    ]
+  },
+  {
+    "id": "quality-module-3",
+    "name": "Quality module 3",
+    "outputs": [
+      {
+        "material": "quality-module-3",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "quality-module-2",
+        "amount": 4
+      },
+      {
+        "material": "advanced-circuit",
+        "amount": 5
+      },
+      {
+        "material": "processing-unit",
+        "amount": 5
+      },
+      {
+        "material": "superconductor",
+        "amount": 1
       }
     ]
   },
@@ -4884,6 +6630,69 @@ export const recipes: Recipe[] = [
     "alternate": true
   },
   {
+    "id": "yumako-processing",
+    "name": "Yumako processing",
+    "outputs": [
+      {
+        "material": "yumako-seed",
+        "amount": 1
+      },
+      {
+        "material": "yumako-mash",
+        "amount": 2
+      }
+    ],
+    "inputs": [
+      {
+        "material": "yumako",
+        "amount": 1
+      }
+    ],
+    "spaceAge": true
+  },
+  {
+    "id": "jellynut-processing",
+    "name": "Jellynut processing",
+    "outputs": [
+      {
+        "material": "jellynut-seed",
+        "amount": 1
+      },
+      {
+        "material": "jelly",
+        "amount": 4
+      }
+    ],
+    "inputs": [
+      {
+        "material": "jellynut",
+        "amount": 1
+      }
+    ],
+    "spaceAge": true
+  },
+  {
+    "id": "copper-bacteria",
+    "name": "Copper bacteria",
+    "outputs": [
+      {
+        "material": "copper-bacteria",
+        "amount": 1
+      },
+      {
+        "material": "spoilage",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "yumako-mash",
+        "amount": 3
+      }
+    ],
+    "spaceAge": true
+  },
+  {
     "id": "copper-bacteria-cultivation",
     "name": "Copper bacteria cultivation",
     "outputs": [
@@ -4896,6 +6705,32 @@ export const recipes: Recipe[] = [
       {
         "material": "copper-bacteria",
         "amount": 1
+      },
+      {
+        "material": "bioflux",
+        "amount": 1
+      }
+    ],
+    "alternate": true,
+    "spaceAge": true
+  },
+  {
+    "id": "iron-bacteria",
+    "name": "Iron bacteria",
+    "outputs": [
+      {
+        "material": "iron-bacteria",
+        "amount": 1
+      },
+      {
+        "material": "spoilage",
+        "amount": 4
+      }
+    ],
+    "inputs": [
+      {
+        "material": "jelly",
+        "amount": 6
       }
     ],
     "spaceAge": true
@@ -4913,8 +6748,13 @@ export const recipes: Recipe[] = [
       {
         "material": "iron-bacteria",
         "amount": 1
+      },
+      {
+        "material": "bioflux",
+        "amount": 1
       }
     ],
+    "alternate": true,
     "spaceAge": true
   },
   {
@@ -5051,6 +6891,42 @@ export const recipes: Recipe[] = [
     "spaceAge": true
   },
   {
+    "id": "nutrients-from-yumako-mash",
+    "name": "Nutrients from yumako mash",
+    "outputs": [
+      {
+        "material": "nutrients",
+        "amount": 6
+      }
+    ],
+    "inputs": [
+      {
+        "material": "yumako-mash",
+        "amount": 4
+      }
+    ],
+    "alternate": true,
+    "spaceAge": true
+  },
+  {
+    "id": "nutrients-from-bioflux",
+    "name": "Nutrients from bioflux",
+    "outputs": [
+      {
+        "material": "nutrients",
+        "amount": 40
+      }
+    ],
+    "inputs": [
+      {
+        "material": "bioflux",
+        "amount": 5
+      }
+    ],
+    "alternate": true,
+    "spaceAge": true
+  },
+  {
     "id": "pentapod-egg",
     "name": "Pentapod egg",
     "outputs": [
@@ -5088,6 +6964,55 @@ export const recipes: Recipe[] = [
       {
         "material": "water",
         "amount": 30
+      },
+      {
+        "material": "jelly",
+        "amount": 30
+      },
+      {
+        "material": "bioflux",
+        "amount": 2
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "bioflux",
+    "name": "Bioflux",
+    "outputs": [
+      {
+        "material": "bioflux",
+        "amount": 4
+      }
+    ],
+    "inputs": [
+      {
+        "material": "yumako-mash",
+        "amount": 15
+      },
+      {
+        "material": "jelly",
+        "amount": 12
+      }
+    ]
+  },
+  {
+    "id": "bioplastic",
+    "name": "Bioplastic",
+    "outputs": [
+      {
+        "material": "plastic-bar",
+        "amount": 3
+      }
+    ],
+    "inputs": [
+      {
+        "material": "bioflux",
+        "amount": 1
+      },
+      {
+        "material": "yumako-mash",
+        "amount": 4
       }
     ],
     "alternate": true
@@ -5105,6 +7030,27 @@ export const recipes: Recipe[] = [
       {
         "material": "spoilage",
         "amount": 5
+      },
+      {
+        "material": "bioflux",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "biolubricant",
+    "name": "Biolubricant",
+    "outputs": [
+      {
+        "material": "lubricant",
+        "amount": 20
+      }
+    ],
+    "inputs": [
+      {
+        "material": "jelly",
+        "amount": 60
       }
     ],
     "alternate": true
@@ -5119,6 +7065,10 @@ export const recipes: Recipe[] = [
       }
     ],
     "inputs": [
+      {
+        "material": "yumako-mash",
+        "amount": 10
+      },
       {
         "material": "carbon",
         "amount": 1
@@ -5210,6 +7160,10 @@ export const recipes: Recipe[] = [
       {
         "material": "carbon-fiber",
         "amount": 2
+      },
+      {
+        "material": "jelly",
+        "amount": 10
       }
     ],
     "spaceAge": true
@@ -5224,6 +7178,10 @@ export const recipes: Recipe[] = [
       }
     ],
     "inputs": [
+      {
+        "material": "rocket-launcher",
+        "amount": 4
+      },
       {
         "material": "processing-unit",
         "amount": 4
@@ -5300,6 +7258,30 @@ export const recipes: Recipe[] = [
       {
         "material": "electronic-circuit",
         "amount": 5
+      }
+    ]
+  },
+  {
+    "id": "space-platform-starter-pack",
+    "name": "Space platform starter pack",
+    "outputs": [
+      {
+        "material": "space-platform-starter-pack",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "space-platform-foundation",
+        "amount": 60
+      },
+      {
+        "material": "steel-plate",
+        "amount": 20
+      },
+      {
+        "material": "processing-unit",
+        "amount": 20
       }
     ]
   },
@@ -5491,6 +7473,10 @@ export const recipes: Recipe[] = [
       }
     ],
     "inputs": [
+      {
+        "material": "bioflux",
+        "amount": 1
+      },
       {
         "material": "pentapod-egg",
         "amount": 1
@@ -6428,6 +8414,66 @@ export const recipes: Recipe[] = [
     "spaceAge": true
   },
   {
+    "id": "mech-armor",
+    "name": "Mech armor",
+    "outputs": [
+      {
+        "material": "mech-armor",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "power-armor-mk2",
+        "amount": 1
+      },
+      {
+        "material": "holmium-plate",
+        "amount": 200
+      },
+      {
+        "material": "processing-unit",
+        "amount": 100
+      },
+      {
+        "material": "superconductor",
+        "amount": 50
+      },
+      {
+        "material": "supercapacitor",
+        "amount": 50
+      }
+    ]
+  },
+  {
+    "id": "railgun",
+    "name": "Railgun",
+    "outputs": [
+      {
+        "material": "railgun",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "tungsten-plate",
+        "amount": 10
+      },
+      {
+        "material": "superconductor",
+        "amount": 10
+      },
+      {
+        "material": "quantum-processor",
+        "amount": 20
+      },
+      {
+        "material": "fluoroketone-cold",
+        "amount": 10
+      }
+    ]
+  },
+  {
     "id": "railgun-turret",
     "name": "Railgun turret",
     "outputs": [
@@ -6459,6 +8505,30 @@ export const recipes: Recipe[] = [
       }
     ],
     "spaceAge": true
+  },
+  {
+    "id": "railgun-ammo",
+    "name": "Railgun ammo",
+    "outputs": [
+      {
+        "material": "railgun-ammo",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "steel-plate",
+        "amount": 5
+      },
+      {
+        "material": "copper-cable",
+        "amount": 10
+      },
+      {
+        "material": "explosives",
+        "amount": 2
+      }
+    ]
   },
   {
     "id": "agricultural-tower",
@@ -6565,6 +8635,34 @@ export const recipes: Recipe[] = [
     ]
   },
   {
+    "id": "capture-robot-rocket",
+    "name": "Capture bot rocket",
+    "outputs": [
+      {
+        "material": "capture-robot-rocket",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "flying-robot-frame",
+        "amount": 1
+      },
+      {
+        "material": "steel-plate",
+        "amount": 2
+      },
+      {
+        "material": "bioflux",
+        "amount": 20
+      },
+      {
+        "material": "processing-unit",
+        "amount": 2
+      }
+    ]
+  },
+  {
     "id": "biolab",
     "name": "Biolab",
     "outputs": [
@@ -6585,6 +8683,10 @@ export const recipes: Recipe[] = [
       {
         "material": "refined-concrete",
         "amount": 25
+      },
+      {
+        "material": "capture-robot-rocket",
+        "amount": 2
       },
       {
         "material": "uranium-235",
@@ -6608,6 +8710,10 @@ export const recipes: Recipe[] = [
         "amount": 10
       },
       {
+        "material": "capture-robot-rocket",
+        "amount": 1
+      },
+      {
         "material": "uranium-235",
         "amount": 15
       },
@@ -6616,6 +8722,48 @@ export const recipes: Recipe[] = [
         "amount": 100
       }
     ],
+    "spaceAge": true
+  },
+  {
+    "id": "fish-breeding",
+    "name": "Fish breeding",
+    "outputs": [
+      {
+        "material": "raw-fish",
+        "amount": 3
+      }
+    ],
+    "inputs": [
+      {
+        "material": "raw-fish",
+        "amount": 2
+      },
+      {
+        "material": "nutrients",
+        "amount": 100
+      },
+      {
+        "material": "water",
+        "amount": 100
+      }
+    ]
+  },
+  {
+    "id": "nutrients-from-fish",
+    "name": "Nutrients from fish",
+    "outputs": [
+      {
+        "material": "nutrients",
+        "amount": 20
+      }
+    ],
+    "inputs": [
+      {
+        "material": "raw-fish",
+        "amount": 1
+      }
+    ],
+    "alternate": true,
     "spaceAge": true
   },
   {
@@ -6908,6 +9056,34 @@ export const recipes: Recipe[] = [
     "spaceAge": true
   },
   {
+    "id": "teslagun",
+    "name": "Tesla gun",
+    "outputs": [
+      {
+        "material": "teslagun",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "holmium-plate",
+        "amount": 10
+      },
+      {
+        "material": "superconductor",
+        "amount": 10
+      },
+      {
+        "material": "plastic-bar",
+        "amount": 30
+      },
+      {
+        "material": "electrolyte",
+        "amount": 100
+      }
+    ]
+  },
+  {
     "id": "tesla-turret",
     "name": "Tesla turret",
     "outputs": [
@@ -6917,6 +9093,10 @@ export const recipes: Recipe[] = [
       }
     ],
     "inputs": [
+      {
+        "material": "teslagun",
+        "amount": 1
+      },
       {
         "material": "supercapacitor",
         "amount": 10
@@ -6935,6 +9115,30 @@ export const recipes: Recipe[] = [
       }
     ],
     "spaceAge": true
+  },
+  {
+    "id": "tesla-ammo",
+    "name": "Tesla ammo",
+    "outputs": [
+      {
+        "material": "tesla-ammo",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "supercapacitor",
+        "amount": 1
+      },
+      {
+        "material": "plastic-bar",
+        "amount": 1
+      },
+      {
+        "material": "electrolyte",
+        "amount": 10
+      }
+    ]
   },
   {
     "id": "heating-tower",
@@ -7756,6 +9960,231 @@ export const recipes: Recipe[] = [
     "inputs": [
       {
         "material": "fluoroketone-hot-barrel",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "speed-module-recycling",
+    "name": "Speed module recycling",
+    "outputs": [
+      {
+        "material": "advanced-circuit",
+        "amount": 1
+      },
+      {
+        "material": "electronic-circuit",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "speed-module",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "speed-module-2-recycling",
+    "name": "Speed module 2 recycling",
+    "outputs": [
+      {
+        "material": "speed-module",
+        "amount": 1
+      },
+      {
+        "material": "advanced-circuit",
+        "amount": 1
+      },
+      {
+        "material": "processing-unit",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "speed-module-2",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "speed-module-3-recycling",
+    "name": "Speed module 3 recycling",
+    "outputs": [
+      {
+        "material": "speed-module-2",
+        "amount": 1
+      },
+      {
+        "material": "advanced-circuit",
+        "amount": 1
+      },
+      {
+        "material": "processing-unit",
+        "amount": 1
+      },
+      {
+        "material": "tungsten-carbide",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "speed-module-3",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "productivity-module-recycling",
+    "name": "Productivity module recycling",
+    "outputs": [
+      {
+        "material": "advanced-circuit",
+        "amount": 1
+      },
+      {
+        "material": "electronic-circuit",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "productivity-module",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "productivity-module-2-recycling",
+    "name": "Productivity module 2 recycling",
+    "outputs": [
+      {
+        "material": "productivity-module",
+        "amount": 1
+      },
+      {
+        "material": "advanced-circuit",
+        "amount": 1
+      },
+      {
+        "material": "processing-unit",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "productivity-module-2",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "productivity-module-3-recycling",
+    "name": "Productivity module 3 recycling",
+    "outputs": [
+      {
+        "material": "productivity-module-2",
+        "amount": 1
+      },
+      {
+        "material": "advanced-circuit",
+        "amount": 1
+      },
+      {
+        "material": "processing-unit",
+        "amount": 1
+      },
+      {
+        "material": "biter-egg",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "productivity-module-3",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "efficiency-module-recycling",
+    "name": "Efficiency module recycling",
+    "outputs": [
+      {
+        "material": "advanced-circuit",
+        "amount": 1
+      },
+      {
+        "material": "electronic-circuit",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "efficiency-module",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "efficiency-module-2-recycling",
+    "name": "Efficiency module 2 recycling",
+    "outputs": [
+      {
+        "material": "efficiency-module",
+        "amount": 1
+      },
+      {
+        "material": "advanced-circuit",
+        "amount": 1
+      },
+      {
+        "material": "processing-unit",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "efficiency-module-2",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "efficiency-module-3-recycling",
+    "name": "Efficiency module 3 recycling",
+    "outputs": [
+      {
+        "material": "efficiency-module-2",
+        "amount": 1
+      },
+      {
+        "material": "advanced-circuit",
+        "amount": 1
+      },
+      {
+        "material": "processing-unit",
+        "amount": 1
+      },
+      {
+        "material": "spoilage",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "efficiency-module-3",
         "amount": 1
       }
     ],
@@ -8627,6 +11056,65 @@ export const recipes: Recipe[] = [
     "alternate": true
   },
   {
+    "id": "submachine-gun-recycling",
+    "name": "Submachine gun recycling",
+    "outputs": [
+      {
+        "material": "iron-gear-wheel",
+        "amount": 2
+      },
+      {
+        "material": "copper-plate",
+        "amount": 1
+      },
+      {
+        "material": "iron-plate",
+        "amount": 2
+      }
+    ],
+    "inputs": [
+      {
+        "material": "submachine-gun",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "firearm-magazine-recycling",
+    "name": "Firearm magazine recycling",
+    "outputs": [
+      {
+        "material": "iron-plate",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "firearm-magazine",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "light-armor-recycling",
+    "name": "Light armor recycling",
+    "outputs": [
+      {
+        "material": "iron-plate",
+        "amount": 10
+      }
+    ],
+    "inputs": [
+      {
+        "material": "light-armor",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
     "id": "radar-recycling",
     "name": "Radar recycling",
     "outputs": [
@@ -8717,6 +11205,27 @@ export const recipes: Recipe[] = [
     "inputs": [
       {
         "material": "assembling-machine-1",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "repair-pack-recycling",
+    "name": "Repair pack recycling",
+    "outputs": [
+      {
+        "material": "electronic-circuit",
+        "amount": 0
+      },
+      {
+        "material": "iron-gear-wheel",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "repair-pack",
         "amount": 1
       }
     ],
@@ -8873,6 +11382,31 @@ export const recipes: Recipe[] = [
     "alternate": true
   },
   {
+    "id": "car-recycling",
+    "name": "Car recycling",
+    "outputs": [
+      {
+        "material": "engine-unit",
+        "amount": 2
+      },
+      {
+        "material": "iron-plate",
+        "amount": 5
+      },
+      {
+        "material": "steel-plate",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "car",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
     "id": "engine-unit-recycling",
     "name": "Engine unit recycling",
     "outputs": [
@@ -8965,6 +11499,102 @@ export const recipes: Recipe[] = [
     "alternate": true
   },
   {
+    "id": "shotgun-recycling",
+    "name": "Shotgun recycling",
+    "outputs": [
+      {
+        "material": "iron-plate",
+        "amount": 3
+      },
+      {
+        "material": "iron-gear-wheel",
+        "amount": 1
+      },
+      {
+        "material": "copper-plate",
+        "amount": 2
+      },
+      {
+        "material": "wood",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "shotgun",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "shotgun-shell-recycling",
+    "name": "Shotgun shells recycling",
+    "outputs": [
+      {
+        "material": "copper-plate",
+        "amount": 0
+      },
+      {
+        "material": "iron-plate",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "shotgun-shell",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "piercing-rounds-magazine-recycling",
+    "name": "Piercing rounds magazine recycling",
+    "outputs": [
+      {
+        "material": "firearm-magazine",
+        "amount": 0
+      },
+      {
+        "material": "steel-plate",
+        "amount": 0
+      },
+      {
+        "material": "copper-plate",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "piercing-rounds-magazine",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "grenade-recycling",
+    "name": "Grenade recycling",
+    "outputs": [
+      {
+        "material": "iron-plate",
+        "amount": 1
+      },
+      {
+        "material": "coal",
+        "amount": 2
+      }
+    ],
+    "inputs": [
+      {
+        "material": "grenade",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
     "id": "steel-furnace-recycling",
     "name": "Steel furnace recycling",
     "outputs": [
@@ -9005,6 +11635,27 @@ export const recipes: Recipe[] = [
     "inputs": [
       {
         "material": "gate",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "heavy-armor-recycling",
+    "name": "Heavy armor recycling",
+    "outputs": [
+      {
+        "material": "copper-plate",
+        "amount": 25
+      },
+      {
+        "material": "steel-plate",
+        "amount": 12
+      }
+    ],
+    "inputs": [
+      {
+        "material": "heavy-armor",
         "amount": 1
       }
     ],
@@ -9206,6 +11857,81 @@ export const recipes: Recipe[] = [
     "inputs": [
       {
         "material": "solar-panel",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "rail-recycling",
+    "name": "Rail recycling",
+    "outputs": [
+      {
+        "material": "stone",
+        "amount": 0
+      },
+      {
+        "material": "iron-stick",
+        "amount": 0
+      },
+      {
+        "material": "steel-plate",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "rail",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "locomotive-recycling",
+    "name": "Locomotive recycling",
+    "outputs": [
+      {
+        "material": "engine-unit",
+        "amount": 5
+      },
+      {
+        "material": "electronic-circuit",
+        "amount": 2
+      },
+      {
+        "material": "steel-plate",
+        "amount": 7
+      }
+    ],
+    "inputs": [
+      {
+        "material": "locomotive",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "cargo-wagon-recycling",
+    "name": "Cargo wagon recycling",
+    "outputs": [
+      {
+        "material": "iron-gear-wheel",
+        "amount": 2
+      },
+      {
+        "material": "iron-plate",
+        "amount": 5
+      },
+      {
+        "material": "steel-plate",
+        "amount": 5
+      }
+    ],
+    "inputs": [
+      {
+        "material": "cargo-wagon",
         "amount": 1
       }
     ],
@@ -9421,6 +12147,415 @@ export const recipes: Recipe[] = [
     "alternate": true
   },
   {
+    "id": "poison-capsule-recycling",
+    "name": "Poison capsule recycling",
+    "outputs": [
+      {
+        "material": "steel-plate",
+        "amount": 0
+      },
+      {
+        "material": "electronic-circuit",
+        "amount": 0
+      },
+      {
+        "material": "coal",
+        "amount": 2
+      }
+    ],
+    "inputs": [
+      {
+        "material": "poison-capsule",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "slowdown-capsule-recycling",
+    "name": "Slowdown capsule recycling",
+    "outputs": [
+      {
+        "material": "steel-plate",
+        "amount": 0
+      },
+      {
+        "material": "electronic-circuit",
+        "amount": 0
+      },
+      {
+        "material": "coal",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "slowdown-capsule",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "cluster-grenade-recycling",
+    "name": "Cluster grenade recycling",
+    "outputs": [
+      {
+        "material": "grenade",
+        "amount": 1
+      },
+      {
+        "material": "explosives",
+        "amount": 1
+      },
+      {
+        "material": "steel-plate",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "cluster-grenade",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "defender-capsule-recycling",
+    "name": "Defender capsule recycling",
+    "outputs": [
+      {
+        "material": "piercing-rounds-magazine",
+        "amount": 0
+      },
+      {
+        "material": "electronic-circuit",
+        "amount": 0
+      },
+      {
+        "material": "iron-gear-wheel",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "defender-capsule",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "distractor-capsule-recycling",
+    "name": "Distractor capsule recycling",
+    "outputs": [
+      {
+        "material": "defender-capsule",
+        "amount": 1
+      },
+      {
+        "material": "advanced-circuit",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "distractor-capsule",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "destroyer-capsule-recycling",
+    "name": "Destroyer capsule recycling",
+    "outputs": [
+      {
+        "material": "distractor-capsule",
+        "amount": 1
+      },
+      {
+        "material": "steel-plate",
+        "amount": 1
+      },
+      {
+        "material": "processing-unit",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "destroyer-capsule",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "cliff-explosives-recycling",
+    "name": "Cliff explosives recycling",
+    "outputs": [
+      {
+        "material": "explosives",
+        "amount": 2
+      },
+      {
+        "material": "calcite",
+        "amount": 2
+      },
+      {
+        "material": "grenade",
+        "amount": 0
+      },
+      {
+        "material": "barrel",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "cliff-explosives",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "uranium-rounds-magazine-recycling",
+    "name": "Uranium rounds magazine recycling",
+    "outputs": [
+      {
+        "material": "piercing-rounds-magazine",
+        "amount": 0
+      },
+      {
+        "material": "uranium-238",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "uranium-rounds-magazine",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "rocket-recycling",
+    "name": "Rocket recycling",
+    "outputs": [
+      {
+        "material": "explosives",
+        "amount": 0
+      },
+      {
+        "material": "iron-plate",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "rocket",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "explosive-rocket-recycling",
+    "name": "Explosive rocket recycling",
+    "outputs": [
+      {
+        "material": "rocket",
+        "amount": 0
+      },
+      {
+        "material": "explosives",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "explosive-rocket",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "atomic-bomb-recycling",
+    "name": "Atomic bomb recycling",
+    "outputs": [
+      {
+        "material": "processing-unit",
+        "amount": 2
+      },
+      {
+        "material": "explosives",
+        "amount": 2
+      },
+      {
+        "material": "uranium-235",
+        "amount": 25
+      }
+    ],
+    "inputs": [
+      {
+        "material": "atomic-bomb",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "piercing-shotgun-shell-recycling",
+    "name": "Piercing shotgun shells recycling",
+    "outputs": [
+      {
+        "material": "shotgun-shell",
+        "amount": 0
+      },
+      {
+        "material": "copper-plate",
+        "amount": 0
+      },
+      {
+        "material": "steel-plate",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "piercing-shotgun-shell",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "cannon-shell-recycling",
+    "name": "Cannon shell recycling",
+    "outputs": [
+      {
+        "material": "steel-plate",
+        "amount": 0
+      },
+      {
+        "material": "plastic-bar",
+        "amount": 0
+      },
+      {
+        "material": "explosives",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "cannon-shell",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "explosive-cannon-shell-recycling",
+    "name": "Explosive cannon shell recycling",
+    "outputs": [
+      {
+        "material": "steel-plate",
+        "amount": 0
+      },
+      {
+        "material": "plastic-bar",
+        "amount": 0
+      },
+      {
+        "material": "explosives",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "explosive-cannon-shell",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "uranium-cannon-shell-recycling",
+    "name": "Uranium cannon shell recycling",
+    "outputs": [
+      {
+        "material": "cannon-shell",
+        "amount": 0
+      },
+      {
+        "material": "uranium-238",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "uranium-cannon-shell",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "explosive-uranium-cannon-shell-recycling",
+    "name": "Explosive uranium cannon shell recycling",
+    "outputs": [
+      {
+        "material": "explosive-cannon-shell",
+        "amount": 0
+      },
+      {
+        "material": "uranium-238",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "explosive-uranium-cannon-shell",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "artillery-shell-recycling",
+    "name": "Artillery shell recycling",
+    "outputs": [
+      {
+        "material": "radar",
+        "amount": 0
+      },
+      {
+        "material": "calcite",
+        "amount": 0
+      },
+      {
+        "material": "tungsten-plate",
+        "amount": 1
+      },
+      {
+        "material": "explosives",
+        "amount": 2
+      }
+    ],
+    "inputs": [
+      {
+        "material": "artillery-shell",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
     "id": "express-transport-belt-recycling",
     "name": "Express transport belt recycling",
     "outputs": [
@@ -9448,11 +12583,239 @@ export const recipes: Recipe[] = [
       {
         "material": "assembling-machine-2",
         "amount": 0
+      },
+      {
+        "material": "speed-module",
+        "amount": 1
       }
     ],
     "inputs": [
       {
         "material": "assembling-machine-3",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "tank-recycling",
+    "name": "Tank recycling",
+    "outputs": [
+      {
+        "material": "engine-unit",
+        "amount": 8
+      },
+      {
+        "material": "steel-plate",
+        "amount": 12
+      },
+      {
+        "material": "iron-gear-wheel",
+        "amount": 3
+      },
+      {
+        "material": "advanced-circuit",
+        "amount": 2
+      }
+    ],
+    "inputs": [
+      {
+        "material": "tank",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "spidertron-recycling",
+    "name": "Spidertron recycling",
+    "outputs": [
+      {
+        "material": "exoskeleton-equipment",
+        "amount": 1
+      },
+      {
+        "material": "fission-reactor-equipment",
+        "amount": 0
+      },
+      {
+        "material": "rocket-turret",
+        "amount": 0
+      },
+      {
+        "material": "radar",
+        "amount": 0
+      },
+      {
+        "material": "raw-fish",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "spidertron",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "fluid-wagon-recycling",
+    "name": "Fluid wagon recycling",
+    "outputs": [
+      {
+        "material": "iron-gear-wheel",
+        "amount": 2
+      },
+      {
+        "material": "steel-plate",
+        "amount": 4
+      },
+      {
+        "material": "pipe",
+        "amount": 2
+      },
+      {
+        "material": "storage-tank",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "fluid-wagon",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "artillery-wagon-recycling",
+    "name": "Artillery wagon recycling",
+    "outputs": [
+      {
+        "material": "engine-unit",
+        "amount": 15
+      },
+      {
+        "material": "tungsten-plate",
+        "amount": 15
+      },
+      {
+        "material": "refined-concrete",
+        "amount": 15
+      },
+      {
+        "material": "iron-gear-wheel",
+        "amount": 10
+      },
+      {
+        "material": "processing-unit",
+        "amount": 2
+      }
+    ],
+    "inputs": [
+      {
+        "material": "artillery-wagon",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "modular-armor-recycling",
+    "name": "Modular armor recycling",
+    "outputs": [
+      {
+        "material": "advanced-circuit",
+        "amount": 7
+      },
+      {
+        "material": "steel-plate",
+        "amount": 12
+      }
+    ],
+    "inputs": [
+      {
+        "material": "modular-armor",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "power-armor-recycling",
+    "name": "Power armor recycling",
+    "outputs": [
+      {
+        "material": "processing-unit",
+        "amount": 10
+      },
+      {
+        "material": "electric-engine-unit",
+        "amount": 5
+      },
+      {
+        "material": "steel-plate",
+        "amount": 10
+      }
+    ],
+    "inputs": [
+      {
+        "material": "power-armor",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "power-armor-mk2-recycling",
+    "name": "Power armor MK2 recycling",
+    "outputs": [
+      {
+        "material": "efficiency-module",
+        "amount": 25
+      },
+      {
+        "material": "speed-module",
+        "amount": 25
+      },
+      {
+        "material": "processing-unit",
+        "amount": 15
+      },
+      {
+        "material": "electric-engine-unit",
+        "amount": 10
+      },
+      {
+        "material": "low-density-structure",
+        "amount": 7
+      }
+    ],
+    "inputs": [
+      {
+        "material": "power-armor-mk2",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "flamethrower-recycling",
+    "name": "Flamethrower recycling",
+    "outputs": [
+      {
+        "material": "steel-plate",
+        "amount": 1
+      },
+      {
+        "material": "iron-gear-wheel",
+        "amount": 2
+      }
+    ],
+    "inputs": [
+      {
+        "material": "flamethrower",
         "amount": 1
       }
     ],
@@ -9474,6 +12837,60 @@ export const recipes: Recipe[] = [
     "inputs": [
       {
         "material": "land-mine",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "rocket-launcher-recycling",
+    "name": "Rocket launcher recycling",
+    "outputs": [
+      {
+        "material": "iron-plate",
+        "amount": 1
+      },
+      {
+        "material": "iron-gear-wheel",
+        "amount": 1
+      },
+      {
+        "material": "electronic-circuit",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "rocket-launcher",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "combat-shotgun-recycling",
+    "name": "Combat shotgun recycling",
+    "outputs": [
+      {
+        "material": "steel-plate",
+        "amount": 3
+      },
+      {
+        "material": "iron-gear-wheel",
+        "amount": 1
+      },
+      {
+        "material": "copper-plate",
+        "amount": 2
+      },
+      {
+        "material": "wood",
+        "amount": 2
+      }
+    ],
+    "inputs": [
+      {
+        "material": "combat-shotgun",
         "amount": 1
       }
     ],
@@ -10385,6 +13802,31 @@ export const recipes: Recipe[] = [
     "alternate": true
   },
   {
+    "id": "rail-ramp-recycling",
+    "name": "Rail ramp recycling",
+    "outputs": [
+      {
+        "material": "refined-concrete",
+        "amount": 25
+      },
+      {
+        "material": "rail",
+        "amount": 2
+      },
+      {
+        "material": "steel-plate",
+        "amount": 2
+      }
+    ],
+    "inputs": [
+      {
+        "material": "rail-ramp",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
     "id": "recycler-recycling",
     "name": "Recycler recycling",
     "outputs": [
@@ -10414,6 +13856,81 @@ export const recipes: Recipe[] = [
     "alternate": true
   },
   {
+    "id": "quality-module-recycling",
+    "name": "Quality module recycling",
+    "outputs": [
+      {
+        "material": "electronic-circuit",
+        "amount": 1
+      },
+      {
+        "material": "advanced-circuit",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "quality-module",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "quality-module-2-recycling",
+    "name": "Quality module 2 recycling",
+    "outputs": [
+      {
+        "material": "quality-module",
+        "amount": 1
+      },
+      {
+        "material": "advanced-circuit",
+        "amount": 1
+      },
+      {
+        "material": "processing-unit",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "quality-module-2",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "quality-module-3-recycling",
+    "name": "Quality module 3 recycling",
+    "outputs": [
+      {
+        "material": "quality-module-2",
+        "amount": 1
+      },
+      {
+        "material": "advanced-circuit",
+        "amount": 1
+      },
+      {
+        "material": "processing-unit",
+        "amount": 1
+      },
+      {
+        "material": "superconductor",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "quality-module-3",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
     "id": "artificial-yumako-soil-recycling",
     "name": "Artificial yumako soil recycling",
     "outputs": [
@@ -10436,6 +13953,7 @@ export const recipes: Recipe[] = [
         "amount": 1
       }
     ],
+    "alternate": true,
     "spaceAge": true
   },
   {
@@ -10491,6 +14009,7 @@ export const recipes: Recipe[] = [
         "amount": 1
       }
     ],
+    "alternate": true,
     "spaceAge": true
   },
   {
@@ -10618,6 +14137,10 @@ export const recipes: Recipe[] = [
       {
         "material": "carbon-fiber",
         "amount": 0
+      },
+      {
+        "material": "jelly",
+        "amount": 2
       }
     ],
     "inputs": [
@@ -10632,6 +14155,10 @@ export const recipes: Recipe[] = [
     "id": "rocket-turret-recycling",
     "name": "Rocket turret recycling",
     "outputs": [
+      {
+        "material": "rocket-launcher",
+        "amount": 1
+      },
       {
         "material": "processing-unit",
         "amount": 1
@@ -10719,6 +14246,32 @@ export const recipes: Recipe[] = [
       }
     ],
     "alternate": true
+  },
+  {
+    "id": "space-platform-starter-pack-recycling",
+    "name": "Space platform starter pack recycling",
+    "outputs": [
+      {
+        "material": "space-platform-foundation",
+        "amount": 15
+      },
+      {
+        "material": "steel-plate",
+        "amount": 5
+      },
+      {
+        "material": "processing-unit",
+        "amount": 5
+      }
+    ],
+    "inputs": [
+      {
+        "material": "space-platform-starter-pack",
+        "amount": 1
+      }
+    ],
+    "alternate": true,
+    "spaceAge": true
   },
   {
     "id": "cargo-bay-recycling",
@@ -11001,6 +14554,65 @@ export const recipes: Recipe[] = [
     "alternate": true
   },
   {
+    "id": "mech-armor-recycling",
+    "name": "Mech armor recycling",
+    "outputs": [
+      {
+        "material": "power-armor-mk2",
+        "amount": 0
+      },
+      {
+        "material": "holmium-plate",
+        "amount": 50
+      },
+      {
+        "material": "processing-unit",
+        "amount": 25
+      },
+      {
+        "material": "superconductor",
+        "amount": 12
+      },
+      {
+        "material": "supercapacitor",
+        "amount": 12
+      }
+    ],
+    "inputs": [
+      {
+        "material": "mech-armor",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "railgun-recycling",
+    "name": "Railgun recycling",
+    "outputs": [
+      {
+        "material": "tungsten-plate",
+        "amount": 2
+      },
+      {
+        "material": "superconductor",
+        "amount": 2
+      },
+      {
+        "material": "quantum-processor",
+        "amount": 5
+      }
+    ],
+    "inputs": [
+      {
+        "material": "railgun",
+        "amount": 1
+      }
+    ],
+    "alternate": true,
+    "spaceAge": true
+  },
+  {
     "id": "railgun-turret-recycling",
     "name": "Railgun turret recycling",
     "outputs": [
@@ -11029,6 +14641,31 @@ export const recipes: Recipe[] = [
     ],
     "alternate": true,
     "spaceAge": true
+  },
+  {
+    "id": "railgun-ammo-recycling",
+    "name": "Railgun ammo recycling",
+    "outputs": [
+      {
+        "material": "steel-plate",
+        "amount": 1
+      },
+      {
+        "material": "copper-cable",
+        "amount": 2
+      },
+      {
+        "material": "explosives",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "railgun-ammo",
+        "amount": 1
+      }
+    ],
+    "alternate": true
   },
   {
     "id": "agricultural-tower-recycling",
@@ -11092,6 +14729,35 @@ export const recipes: Recipe[] = [
     ],
     "alternate": true,
     "spaceAge": true
+  },
+  {
+    "id": "capture-robot-rocket-recycling",
+    "name": "Capture bot rocket recycling",
+    "outputs": [
+      {
+        "material": "flying-robot-frame",
+        "amount": 0
+      },
+      {
+        "material": "steel-plate",
+        "amount": 0
+      },
+      {
+        "material": "bioflux",
+        "amount": 5
+      },
+      {
+        "material": "processing-unit",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "capture-robot-rocket",
+        "amount": 1
+      }
+    ],
+    "alternate": true
   },
   {
     "id": "lightning-rod-recycling",
@@ -11205,9 +14871,39 @@ export const recipes: Recipe[] = [
     "spaceAge": true
   },
   {
+    "id": "teslagun-recycling",
+    "name": "Tesla gun recycling",
+    "outputs": [
+      {
+        "material": "holmium-plate",
+        "amount": 2
+      },
+      {
+        "material": "superconductor",
+        "amount": 2
+      },
+      {
+        "material": "plastic-bar",
+        "amount": 7
+      }
+    ],
+    "inputs": [
+      {
+        "material": "teslagun",
+        "amount": 1
+      }
+    ],
+    "alternate": true,
+    "spaceAge": true
+  },
+  {
     "id": "tesla-turret-recycling",
     "name": "Tesla turret recycling",
     "outputs": [
+      {
+        "material": "teslagun",
+        "amount": 0
+      },
       {
         "material": "supercapacitor",
         "amount": 2
@@ -11224,6 +14920,27 @@ export const recipes: Recipe[] = [
     "inputs": [
       {
         "material": "tesla-turret",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "tesla-ammo-recycling",
+    "name": "Tesla ammo recycling",
+    "outputs": [
+      {
+        "material": "supercapacitor",
+        "amount": 0
+      },
+      {
+        "material": "plastic-bar",
+        "amount": 0
+      }
+    ],
+    "inputs": [
+      {
+        "material": "tesla-ammo",
         "amount": 1
       }
     ],
@@ -11603,6 +15320,186 @@ export const recipes: Recipe[] = [
     "inputs": [
       {
         "material": "fluoroketone-hot-barrel",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "flamethrower-ammo-recycling",
+    "name": "Flamethrower ammo recycling",
+    "outputs": [
+      {
+        "material": "flamethrower-ammo",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "flamethrower-ammo",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "blueprint-recycling",
+    "name": "Blueprint recycling",
+    "outputs": [
+      {
+        "material": "blueprint",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "blueprint",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "blueprint-book-recycling",
+    "name": "Blueprint book recycling",
+    "outputs": [
+      {
+        "material": "blueprint-book",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "blueprint-book",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "raw-fish-recycling",
+    "name": "Raw fish recycling",
+    "outputs": [
+      {
+        "material": "raw-fish",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "raw-fish",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "yumako-recycling",
+    "name": "Yumako recycling",
+    "outputs": [
+      {
+        "material": "yumako",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "yumako",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "jellynut-recycling",
+    "name": "Jellynut recycling",
+    "outputs": [
+      {
+        "material": "jellynut",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "jellynut",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "yumako-mash-recycling",
+    "name": "Yumako mash recycling",
+    "outputs": [
+      {
+        "material": "yumako-mash",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "yumako-mash",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "jelly-recycling",
+    "name": "Jelly recycling",
+    "outputs": [
+      {
+        "material": "jelly",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "jelly",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "bioflux-recycling",
+    "name": "Bioflux recycling",
+    "outputs": [
+      {
+        "material": "bioflux",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "bioflux",
+        "amount": 1
+      }
+    ],
+    "alternate": true
+  },
+  {
+    "id": "deconstruction-planner-recycling",
+    "name": "Deconstruction planner recycling",
+    "outputs": [
+      {
+        "material": "deconstruction-planner",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "deconstruction-planner",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "pistol-recycling",
+    "name": "Pistol recycling",
+    "outputs": [
+      {
+        "material": "pistol",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "pistol",
         "amount": 1
       }
     ],
@@ -12890,6 +16787,38 @@ export const recipes: Recipe[] = [
     ],
     "alternate": true,
     "spaceAge": true
+  },
+  {
+    "id": "selection-tool-recycling",
+    "name": "Selection tool recycling",
+    "outputs": [
+      {
+        "material": "selection-tool",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "selection-tool",
+        "amount": 1
+      }
+    ]
+  },
+  {
+    "id": "upgrade-planner-recycling",
+    "name": "Upgrade planner recycling",
+    "outputs": [
+      {
+        "material": "upgrade-planner",
+        "amount": 1
+      }
+    ],
+    "inputs": [
+      {
+        "material": "upgrade-planner",
+        "amount": 1
+      }
+    ]
   }
 ];
 

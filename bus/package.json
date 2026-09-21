@@ -1,6 +1,6 @@
 {
   "name": "bus",
-  "version": "1.0.33",
+  "version": "1.0.34",
   "type": "module",
   "description": "Factorio Space Age bus planner",
   "main": "src/index.tsx",

@@ -14,3 +14,7 @@
   of "what inputs should this station default to" -- there is intentionally no recipe-selection UI
   anymore; the recipe is only used to pre-check bus-input lanes on station creation and to show a
   read-only reference list in the station popup.
+- Recipe materials must not be limited to Factorio's `item` and `fluid` prototype collections.
+  Ammo, capsules, modules, tools, and other craftable prototype categories can appear as recipe
+  inputs; `scripts/generate-data.ts` adds every recipe-referenced prototype to the catalog before
+  building recipes, preventing ingredients from being silently discarded.
