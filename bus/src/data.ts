@@ -412,10 +412,22 @@ export const materials: Material[] = [
     "icon": "icons/chemical-science-pack.png"
   },
   {
+    "id": "grenade",
+    "name": "Grenade",
+    "kind": "item",
+    "icon": "icons/grenade.png"
+  },
+  {
     "id": "military-science-pack",
     "name": "Military science pack",
     "kind": "item",
     "icon": "icons/military-science-pack.png"
+  },
+  {
+    "id": "piercing-rounds-magazine",
+    "name": "Piercing rounds magazine",
+    "kind": "item",
+    "icon": "icons/piercing-rounds-magazine.png"
   },
   {
     "id": "production-science-pack",
@@ -3739,6 +3751,14 @@ export const recipes: Recipe[] = [
       }
     ],
     "inputs": [
+      {
+        "material": "grenade",
+        "amount": 1
+      },
+      {
+        "material": "piercing-rounds-magazine",
+        "amount": 1
+      },
       {
         "material": "stone-wall",
         "amount": 2
