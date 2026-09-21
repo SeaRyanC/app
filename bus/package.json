@@ -1,6 +1,6 @@
 {
   "name": "bus",
-  "version": "1.0.35",
+  "version": "1.0.36",
   "type": "module",
   "description": "Factorio Space Age bus planner",
   "main": "src/index.tsx",
@@ -9,7 +9,7 @@
     "generate:data": "node --experimental-strip-types scripts/generate-data.ts",
     "check": "tsc --noEmit",
     "lint": "eslint src/",
-    "local": "esbuild src/index.tsx --bundle --servedir=. --outdir=../docs/bus --sourcemap --jsx=automatic --jsx-import-source=preact"
+    "local": "node --experimental-strip-types scripts/dev.ts"
   },
   "dependencies": {
     "preact": "^10.28.2"
