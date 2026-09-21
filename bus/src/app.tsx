@@ -2,7 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import type { FunctionComponent } from 'preact';
 import { materialById, materials, recipesForMaterial, type Material } from './data';
 
-const VERSION = '1.0.36';
+const VERSION = '1.0.37';
 const COMMIT_HASH = 'dev';
 const STORAGE_KEY = 'factorio-bus-planner';
 const MAX_HISTORY = 60;
