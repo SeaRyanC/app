@@ -91,13 +91,15 @@ h1, h2, h3, p { margin-top: 0; }
 .recipe-info h3 { color: var(--faint); font: .65rem 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .1em; }
 .recipe-inputs { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .5rem; }
 .recipe-input { display: flex; align-items: center; gap: .3rem; padding: .3rem .5rem; background: var(--panel-light); border: 1px solid var(--line); border-radius: 5px; font-size: .68rem; color: var(--muted); }
-.input-source { display: block; margin: .5rem 0 .75rem; }
-.input-source-choice { display: flex; align-items: center; gap: .35rem; margin-top: .25rem; color: var(--muted); font-size: .6rem; }
-.input-source-choice input { accent-color: var(--cyan); }
 .lane-inputs { margin-top: 1.3rem; padding-top: 1rem; border-top: 1px solid var(--line); }
 .lane-inputs h3 { color: var(--faint); font: .65rem 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .1em; }
-.lane-inputs .input-source { display: flex; justify-content: space-between; align-items: center; margin: .55rem 0; color: var(--ink); font-size: .7rem; }
-.lane-inputs .input-source-choice { margin-top: 0; }
+.lane-input-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(58px, 1fr)); gap: .45rem; max-height: min(42vh, 360px); overflow-y: auto; padding: .2rem; }
+.lane-input-cell { position: relative; display: flex; flex-direction: column; align-items: center; gap: .25rem; min-width: 0; padding: .4rem .2rem .3rem; border: 1px solid var(--line); border-radius: 5px; background: #0e1822; color: var(--muted); cursor: pointer; text-align: center; }
+.lane-input-cell:hover { border-color: var(--cyan); color: var(--ink); }
+.lane-input-cell:has(input:checked) { border-color: var(--cyan); background: #12303a; color: var(--ink); }
+.lane-input-cell input { position: absolute; top: .25rem; right: .25rem; margin: 0; accent-color: var(--cyan); }
+.lane-input-cell .material-icon { width: 30px; height: 30px; margin-top: .25rem; }
+.lane-input-name { width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .58rem; line-height: 1.1; }
 .modal-help { clear: both; color: var(--muted); font-size: .75rem; line-height: 1.5; margin: 1rem 0 0; }
 .remove-button { margin-top: 1.4rem; border: 1px solid #854a42; color: #ed9c8b; background: transparent; border-radius: 4px; padding: .5rem .7rem; cursor: pointer; font-size: .7rem; }
 .notice { position: fixed; right: 1.5rem; bottom: 4.5rem; background: var(--cyan); color: #07141a; padding: .65rem .9rem; border-radius: 4px; font-size: .75rem; box-shadow: 0 5px 20px #0008; }

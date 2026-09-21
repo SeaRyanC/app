@@ -2,7 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import type { FunctionComponent } from 'preact';
 import { materialById, materials, recipesForMaterial, type Material } from './data';
 
-const VERSION = '1.0.34';
+const VERSION = '1.0.35';
 const COMMIT_HASH = 'dev';
 const STORAGE_KEY = 'factorio-bus-planner';
 const MAX_HISTORY = 60;
@@ -400,15 +400,25 @@ export const App: FunctionComponent = () => {
             )}
             <div class="lane-inputs">
               <h3>Bus inputs</h3>
-              {plan.lanes.length > 0 ? plan.lanes.map(lane => (
-                <label class="input-source" key={lane.id}>
-                  <span>{materialName(lane.material)}</span>
-                  <span class="input-source-choice">
-                    <input type="checkbox" checked={pullsLaneFromBus(selectedStation, lane.id)} onChange={event => setLaneSource(lane.id, (event.currentTarget as HTMLInputElement).checked)} />
-                    <span>Pull from this lane</span>
-                  </span>
-                </label>
-              )) : <p class="modal-help">Add lanes to the bus, then choose which ones this station consumes.</p>}
+              {plan.lanes.length > 0 ? (
+                <div class="lane-input-grid">
+                  {plan.lanes.map(lane => {
+                    const name = materialName(lane.material);
+                    return (
+                      <label class="lane-input-cell" key={lane.id} title={`${name}: ${pullsLaneFromBus(selectedStation, lane.id) ? 'pulling from bus' : 'not pulled'}`}>
+                        <input
+                          type="checkbox"
+                          checked={pullsLaneFromBus(selectedStation, lane.id)}
+                          onChange={event => setLaneSource(lane.id, (event.currentTarget as HTMLInputElement).checked)}
+                          aria-label={`Pull ${name} from this lane`}
+                        />
+                        <MaterialIcon material={materialById.get(lane.material)} />
+                        <span class="lane-input-name">{name}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              ) : <p class="modal-help">Add lanes to the bus, then choose which ones this station consumes.</p>}
             </div>
             <button class="remove-button" onClick={removeSelectedStation}>Dismantle station</button>
           </section>
