@@ -1,0 +1,25 @@
+{
+  "name": "bus",
+  "version": "1.0.32",
+  "type": "module",
+  "description": "Factorio Space Age bus planner",
+  "main": "src/index.tsx",
+  "scripts": {
+    "bundle": "esbuild src/index.tsx --bundle --outfile=../docs/bus/app.js --minify --sourcemap --jsx=automatic --jsx-import-source=preact",
+    "generate:data": "node --experimental-strip-types scripts/generate-data.ts",
+    "check": "tsc --noEmit",
+    "lint": "eslint src/",
+    "local": "esbuild src/index.tsx --bundle --servedir=. --outdir=../docs/bus --sourcemap --jsx=automatic --jsx-import-source=preact"
+  },
+  "dependencies": {
+    "preact": "^10.28.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.27.0",
+    "@types/node": "^25.0.3",
+    "esbuild": "^0.27.2",
+    "eslint": "^9.27.0",
+    "typescript": "^6.0.0-dev.20260920",
+    "typescript-eslint": "^8.32.1"
+  }
+}
