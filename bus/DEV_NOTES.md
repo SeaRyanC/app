@@ -26,3 +26,6 @@
   the descending lane above the consuming station. If an origin output feeds only pulls below it,
   that output is also counterflow, so it renders dashed and downward with no green upward spine or
   arrow.
+- Collapsed lane columns are absolutely positioned within `.lane-column-group` and must explicitly
+  use `width: 100%`; otherwise the normal lane column's `width: 0` flex sizing places their spine
+  anchors at the group edge instead of its center.

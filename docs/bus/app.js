@@ -17225,7 +17225,7 @@
   }
 
   // src/app.tsx
-  var VERSION = "1.3.2";
+  var VERSION = "1.3.3";
   var COMMIT_HASH = "dev";
   var STORAGE_KEY = "factorio-bus-planner";
   var MAX_HISTORY = 60;
