@@ -2,7 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import type { FunctionComponent } from 'preact';
 import { materialById, materials, recipesForMaterial, type Material } from './data';
 
-const VERSION = '1.0.46';
+const VERSION = '1.3.2';
 const COMMIT_HASH = 'dev';
 const STORAGE_KEY = 'factorio-bus-planner';
 const MAX_HISTORY = 60;
@@ -85,15 +85,25 @@ interface LaneSpan {
 function laneTapSpan(plan: Plan, lane: Lane): LaneSpan | null {
   let first: number | null = null;
   let last: number | null = null;
+  const origin = laneOrigin(plan, lane.material);
+  const originOnlyCounterflows = laneOnlyCounterflowsFromOrigin(plan, lane, origin);
   plan.stations.forEach((station, index) => {
-    if (station.material !== lane.material && !pullsLaneFromBus(station, lane.id)) return;
-    first = first === null ? index : Math.min(first, index);
-    last = last === null ? index : Math.max(last, index);
+    const endpointPositions: number[] = [];
+    if (station.material === lane.material) {
+      endpointPositions.push(index + (originOnlyCounterflows && index === origin ? .25 : -.25));
+    }
+    if (pullsLaneFromBus(station, lane.id)) {
+      endpointPositions.push(index + (origin !== null && index > origin ? -.25 : .25));
+    }
+    for (const endpoint of endpointPositions) {
+      first = first === null ? endpoint : Math.min(first, endpoint);
+      last = last === null ? endpoint : Math.max(last, endpoint);
+    }
   });
   if (first === null || last === null) return null;
   // Lanes without a producing station visibly enter from the bottom of the
   // planner, so they overlap every other no-origin lane at that boundary.
-  return { first, last: laneOrigin(plan, lane.material) === null ? plan.stations.length : last };
+  return { first, last: origin === null ? plan.stations.length + .5 : last };
 }
 
 function spansOverlap(first: LaneSpan | null, second: LaneSpan | null): boolean {
@@ -101,17 +111,48 @@ function spansOverlap(first: LaneSpan | null, second: LaneSpan | null): boolean 
   return first.first <= second.last && second.first <= first.last;
 }
 
+function soleLaneSide(plan: Plan, lane: Lane): Station['side'] | null {
+  let side: Station['side'] | null = null;
+  for (const station of plan.stations) {
+    if (station.material !== lane.material && !pullsLaneFromBus(station, lane.id)) continue;
+    if (side && side !== station.side) return null;
+    side = station.side;
+  }
+  return side;
+}
+
 function collapseLaneGroups(plan: Plan): Lane[][] {
-  return plan.lanes.reduce<Lane[][]>((groups, lane) => {
-    const previousGroup = groups.at(-1);
-    const span = laneTapSpan(plan, lane);
-    if (previousGroup && previousGroup.every(previousLane => !spansOverlap(span, laneTapSpan(plan, previousLane)))) {
-      previousGroup.push(lane);
-    } else {
-      groups.push([lane]);
+  const columns = plan.lanes.map(lane => [lane]);
+  let moved = true;
+
+  while (moved) {
+    moved = false;
+    const candidates = columns
+      .flatMap((column, columnIndex) => column.map(lane => ({ lane, columnIndex, side: soleLaneSide(plan, lane) })))
+      .filter((candidate): candidate is { lane: Lane; columnIndex: number; side: Station['side'] } => candidate.side !== null)
+      .sort((first, second) => first.side === second.side
+        ? first.side === 'left' ? first.columnIndex - second.columnIndex : second.columnIndex - first.columnIndex
+        : first.side === 'left' ? -1 : 1);
+
+    for (const { lane, columnIndex, side } of candidates) {
+      const sourceColumn = columns[columnIndex];
+      if (!sourceColumn?.includes(lane)) continue;
+      const targetIndexes = side === 'left'
+        ? Array.from({ length: columnIndex }, (_, index) => index)
+        : Array.from({ length: columns.length - columnIndex - 1 }, (_, index) => columns.length - index - 1);
+      const targetIndex = targetIndexes.find(index => columns[index]?.every(targetLane => !spansOverlap(laneTapSpan(plan, lane), laneTapSpan(plan, targetLane))));
+      if (targetIndex === undefined) continue;
+
+      const targetColumn = columns[targetIndex]!;
+      sourceColumn.splice(sourceColumn.indexOf(lane), 1);
+      targetColumn.push(lane);
+      if (sourceColumn.length === 0) columns.splice(columnIndex, 1);
+      moved = true;
+      break;
     }
-    return groups;
-  }, []);
+  }
+
+  return columns;
 }
 
 function MaterialIcon({ material, size = 'medium' }: { material: Material | undefined; size?: 'small' | 'medium' }) {
@@ -161,6 +202,7 @@ export const App: FunctionComponent = () => {
   const [future, setFuture] = useState<Plan[]>([]);
   const [search, setSearch] = useState('');
   const [selectedStationId, setSelectedStationId] = useState<string | null>(null);
+  const [highlightedStationId, setHighlightedStationId] = useState<string | null>(null);
   const [collapseView, setCollapseView] = useState(false);
   const [notice, setNotice] = useState('');
   const stageRef = useRef<HTMLDivElement>(null);
@@ -176,6 +218,7 @@ export const App: FunctionComponent = () => {
     if (element) laneSpineRefs.current.set(laneId, element);
     else laneSpineRefs.current.delete(laneId);
   }, []);
+  const setHoveredStation = useCallback((stationId: string | null) => setHighlightedStationId(stationId), []);
 
   const filteredMaterials = useMemo(() => {
     const needle = search.trim().toLowerCase();
@@ -418,7 +461,7 @@ export const App: FunctionComponent = () => {
             <div class="station-bay left-bay">
               <div class="bay-label">◂ stations</div>
               {plan.stations.map((station, index) => station.side === 'left' ? (
-                <StationCard key={station.id} station={station} index={index} isFirst={index === 0} isLast={index === plan.stations.length - 1} selected={selectedStationId === station.id} onSelect={setSelectedStationId} onDragStart={onDragStart} onDrop={handleDrop} onToggleSide={toggleStationSide} onMove={moveStation} portRef={element => registerStationPort(station.id, element)} editingDisabled={collapseView} />
+                <StationCard key={station.id} station={station} index={index} isFirst={index === 0} isLast={index === plan.stations.length - 1} selected={selectedStationId === station.id} onSelect={setSelectedStationId} onHover={setHoveredStation} onDragStart={onDragStart} onDrop={handleDrop} onToggleSide={toggleStationSide} onMove={moveStation} portRef={element => registerStationPort(station.id, element)} editingDisabled={collapseView} />
               ) : <div key={station.id} class="station-spacer" />)}
             </div>
             <div
@@ -443,10 +486,10 @@ export const App: FunctionComponent = () => {
             <div class="station-bay right-bay">
               <div class="bay-label">stations ▸</div>
               {plan.stations.map((station, index) => station.side === 'right' ? (
-                <StationCard key={station.id} station={station} index={index} isFirst={index === 0} isLast={index === plan.stations.length - 1} selected={selectedStationId === station.id} onSelect={setSelectedStationId} onDragStart={onDragStart} onDrop={handleDrop} onToggleSide={toggleStationSide} onMove={moveStation} portRef={element => registerStationPort(station.id, element)} editingDisabled={collapseView} />
+                <StationCard key={station.id} station={station} index={index} isFirst={index === 0} isLast={index === plan.stations.length - 1} selected={selectedStationId === station.id} onSelect={setSelectedStationId} onHover={setHoveredStation} onDragStart={onDragStart} onDrop={handleDrop} onToggleSide={toggleStationSide} onMove={moveStation} portRef={element => registerStationPort(station.id, element)} editingDisabled={collapseView} />
               ) : <div key={station.id} class="station-spacer" />)}
             </div>
-            <BeltOverlay plan={plan} stageRef={stageRef} stationPortRefs={stationPortRefs} laneSpineRefs={laneSpineRefs} collapseView={collapseView} inSituLaneIds={inSituLaneIds} />
+            <BeltOverlay plan={plan} stageRef={stageRef} stationPortRefs={stationPortRefs} laneSpineRefs={laneSpineRefs} collapseView={collapseView} inSituLaneIds={inSituLaneIds} highlightedStationId={highlightedStationId} />
             </div>
             <div
               class="add-station-row"
@@ -549,6 +592,7 @@ interface BeltOverlayProps {
   laneSpineRefs: { current: Map<string, HTMLSpanElement> };
   collapseView: boolean;
   inSituLaneIds: ReadonlySet<string>;
+  highlightedStationId: string | null;
 }
 
 // One fixed elbow radius everywhere -- never variable, never zero. Every
@@ -672,7 +716,191 @@ function connectorPath(start: Point, rowOffset: number, laneX: number, kind: Con
   return d;
 }
 
-function BeltOverlay({ plan, stageRef, stationPortRefs, laneSpineRefs, collapseView, inSituLaneIds }: BeltOverlayProps) {
+interface LaneRangeResult {
+  laneRanges: Map<string, LaneMetrics>;
+  laneCounterflow: Set<string>;
+}
+
+function connectorRowRank(connector: LogicalConnector): number {
+  if (connector.kind === 'output') return connector.counterflow ? 3 : 0;
+  return connector.counterflow ? 1 : 2;
+}
+
+function groupConnectorsByStation(connectors: LogicalConnector[]): Map<string, LogicalConnector[]> {
+  const byStation = new Map<string, LogicalConnector[]>();
+  for (const connector of connectors) {
+    const list = byStation.get(connector.stationId) ?? [];
+    list.push(connector);
+    byStation.set(connector.stationId, list);
+  }
+  return byStation;
+}
+
+function buildTapOffsets(byStation: Map<string, LogicalConnector[]>, layout: MeasuredLayout): Map<string, number> {
+  const tapOffsets = new Map<string, number>();
+  for (const [stationId, list] of byStation) {
+    const stationPort = layout.stationPorts.get(stationId);
+    if (!stationPort) continue;
+    const ordered = [...list].sort((first, second) => {
+      const rankDifference = connectorRowRank(first) - connectorRowRank(second);
+      if (rankDifference !== 0) return rankDifference;
+      const firstLane = layout.laneSpines.get(first.laneId);
+      const secondLane = layout.laneSpines.get(second.laneId);
+      return Math.abs((firstLane?.x ?? stationPort.x) - stationPort.x) - Math.abs((secondLane?.x ?? stationPort.x) - stationPort.x);
+    });
+    const count = ordered.length;
+
+    ordered.forEach((connector, index) => {
+      tapOffsets.set(connector.id, (index - (count - 1) / 2) * TAP_SPACING);
+    });
+  }
+  return tapOffsets;
+}
+
+function buildLaneRanges(plan: Plan, layout: MeasuredLayout, connectors: LogicalConnector[], tapOffsets: Map<string, number>): LaneRangeResult {
+  const laneRanges = new Map<string, LaneMetrics>();
+  const laneCounterflow = new Set<string>();
+  for (const lane of plan.lanes) {
+    const metrics = layout.laneSpines.get(lane.id);
+    if (!metrics) continue;
+    const originIndex = laneOrigin(plan, lane.material);
+    const laneConnectors = connectors.filter(connector => connector.laneId === lane.id);
+    const tapEndpoints = laneConnectors.flatMap(connector => {
+      const port = layout.stationPorts.get(connector.stationId);
+      if (!port) return [];
+      const offset = tapOffsets.get(connector.id) ?? 0;
+      return [port.y + offset + connectorVerticalDirection(connector.kind, connector.counterflow) * ELBOW_RADIUS];
+    });
+    if (tapEndpoints.length === 0) continue;
+
+    let bottom = metrics.bottom;
+    let top = Math.min(...tapEndpoints);
+    if (originIndex !== null) {
+      const originStation = plan.stations[originIndex];
+      const originPort = originStation ? layout.stationPorts.get(originStation.id) : undefined;
+      let originY: number | null = null;
+      if (originStation && originPort) {
+        const offset = tapOffsets.get(`${originStation.id}:output:${lane.id}`) ?? 0;
+        const originConnector = laneConnectors.find(connector => connector.id === `${originStation.id}:output:${lane.id}`);
+        originY = originPort.y + offset + connectorVerticalDirection('output', originConnector?.counterflow ?? false) * ELBOW_RADIUS;
+        bottom = originY;
+        top = Math.min(top, originY);
+      }
+      const counterflowBottom = laneConnectors
+        .filter(connector => connector.counterflow)
+        .map(connector => {
+          const port = layout.stationPorts.get(connector.stationId);
+          if (!port) return null;
+          const offset = tapOffsets.get(connector.id) ?? 0;
+          return port.y + offset + connectorVerticalDirection(connector.kind, connector.counterflow) * ELBOW_RADIUS;
+        })
+        .filter((endpoint): endpoint is number => endpoint !== null)
+        .reduce<number | null>((lowest, endpoint) => lowest === null ? endpoint : Math.max(lowest, endpoint), null);
+      if (counterflowBottom !== null && counterflowBottom > bottom) {
+        bottom = counterflowBottom;
+        laneCounterflow.add(lane.id);
+      }
+    }
+    laneRanges.set(lane.id, { x: metrics.x, top, bottom });
+  }
+  return { laneRanges, laneCounterflow };
+}
+
+function tapCrossingCount(layout: MeasuredLayout, connectors: LogicalConnector[], tapOffsets: Map<string, number>, laneRanges: Map<string, LaneMetrics>): number {
+  let crossings = 0;
+  for (const connector of connectors) {
+    const stationPort = layout.stationPorts.get(connector.stationId);
+    const laneSpine = layout.laneSpines.get(connector.laneId);
+    if (!stationPort || !laneSpine) continue;
+    const rowY = stationPort.y + (tapOffsets.get(connector.id) ?? 0);
+    const lo = Math.min(stationPort.x, laneSpine.x);
+    const hi = Math.max(stationPort.x, laneSpine.x);
+    for (const [laneId, range] of laneRanges) {
+      if (laneId === connector.laneId) continue;
+      if (range.x <= lo || range.x >= hi) continue;
+      if (rowY < range.top || rowY > range.bottom) continue;
+      crossings += 1;
+    }
+  }
+  return crossings;
+}
+
+function optimizeInputTapRows(plan: Plan, layout: MeasuredLayout, connectors: LogicalConnector[], byStation: Map<string, LogicalConnector[]>, tapOffsets: Map<string, number>): Map<string, number> {
+  const optimizedOffsets = new Map(tapOffsets);
+  for (const list of byStation.values()) {
+    let ordered = [...list].sort((first, second) => (optimizedOffsets.get(first.id) ?? 0) - (optimizedOffsets.get(second.id) ?? 0));
+    for (const counterflow of [true, false]) {
+      const slots = ordered
+        .map((connector, index) => ({ connector, index }))
+        .filter(({ connector }) => connector.kind === 'input' && connector.counterflow === counterflow);
+      if (slots.length < 2) continue;
+
+      const slotOffsets = slots.map(({ connector }) => optimizedOffsets.get(connector.id) ?? 0);
+      const stationPort = layout.stationPorts.get(slots[0]!.connector.stationId);
+      const scoreOrder = (candidateOrder: LogicalConnector[]) => {
+        const candidateOffsets = new Map(optimizedOffsets);
+        candidateOrder.forEach((connector, index) => candidateOffsets.set(connector.id, slotOffsets[index]!));
+        const { laneRanges } = buildLaneRanges(plan, layout, connectors, candidateOffsets);
+        const crossings = tapCrossingCount(layout, connectors, candidateOffsets, laneRanges);
+        const proximity = candidateOrder.reduce((total, connector, index) => {
+          const laneX = layout.laneSpines.get(connector.laneId)?.x ?? stationPort?.x ?? 0;
+          const rowPriority = counterflow ? candidateOrder.length - 1 - index : index;
+          return total + Math.abs(laneX - (stationPort?.x ?? 0)) * rowPriority;
+        }, 0);
+        return { crossings, proximity };
+      };
+      const isBetterScore = (candidate: ReturnType<typeof scoreOrder>, current: ReturnType<typeof scoreOrder>) =>
+        candidate.crossings < current.crossings
+        || (candidate.crossings === current.crossings && candidate.proximity < current.proximity);
+
+      let bestOrder = slots.map(({ connector }) => connector);
+      let bestScore = scoreOrder(bestOrder);
+      if (bestOrder.length <= 7) {
+        const permutation = [...bestOrder];
+        const evaluatePermutations = (start: number) => {
+          if (start === permutation.length) {
+            const score = scoreOrder(permutation);
+            if (isBetterScore(score, bestScore)) {
+              bestScore = score;
+              bestOrder = [...permutation];
+            }
+            return;
+          }
+          for (let index = start; index < permutation.length; index += 1) {
+            [permutation[start], permutation[index]] = [permutation[index]!, permutation[start]!];
+            evaluatePermutations(start + 1);
+            [permutation[start], permutation[index]] = [permutation[index]!, permutation[start]!];
+          }
+        };
+        evaluatePermutations(0);
+      } else {
+        let improved = true;
+        while (improved) {
+          improved = false;
+          for (let first = 0; first < bestOrder.length && !improved; first += 1) {
+            for (let second = first + 1; second < bestOrder.length; second += 1) {
+              const candidate = [...bestOrder];
+              [candidate[first], candidate[second]] = [candidate[second]!, candidate[first]!];
+              const score = scoreOrder(candidate);
+              if (isBetterScore(score, bestScore)) {
+                bestOrder = candidate;
+                bestScore = score;
+                improved = true;
+                break;
+              }
+            }
+          }
+        }
+      }
+
+      bestOrder.forEach((connector, index) => optimizedOffsets.set(connector.id, slotOffsets[index]!));
+      ordered = [...list].sort((first, second) => (optimizedOffsets.get(first.id) ?? 0) - (optimizedOffsets.get(second.id) ?? 0));
+    }
+  }
+  return optimizedOffsets;
+}
+
+function BeltOverlay({ plan, stageRef, stationPortRefs, laneSpineRefs, collapseView, inSituLaneIds, highlightedStationId }: BeltOverlayProps) {
   const [layout, setLayout] = useState<MeasuredLayout | null>(null);
   const connectors = useMemo(() => buildLogicalConnectors(plan), [plan]);
 
@@ -743,82 +971,28 @@ function BeltOverlay({ plan, stageRef, stationPortRefs, laneSpineRefs, collapseV
 
   if (!layout || plan.lanes.length === 0) return null;
 
-  // Multiple connectors from the same station are stacked into distinct rows
-  // around its center, nearest lane first, so their horizontal runs don't
-  // cross each other more than necessary.
-  const tapOffsets = new Map<string, number>();
-  const byStation = new Map<string, LogicalConnector[]>();
-  for (const connector of connectors) {
-    const list = byStation.get(connector.stationId) ?? [];
-    list.push(connector);
-    byStation.set(connector.stationId, list);
+  const byStation = groupConnectorsByStation(connectors);
+  let tapOffsets = buildTapOffsets(byStation, layout);
+  for (let pass = 0; pass < 2; pass += 1) {
+    tapOffsets = optimizeInputTapRows(plan, layout, connectors, byStation, tapOffsets);
   }
-  for (const [stationId, list] of byStation) {
-    const stationPort = layout.stationPorts.get(stationId);
-    if (!stationPort) continue;
-    const withDistance = list.map(connector => {
-      const laneSpine = layout.laneSpines.get(connector.laneId);
-      return { connector, dx: laneSpine ? Math.abs(laneSpine.x - stationPort.x) : 0 };
-    });
-    withDistance.sort((a, b) => {
-      const aIsCounterflowOnlyOutput = a.connector.kind === 'output' && a.connector.counterflow;
-      const bIsCounterflowOnlyOutput = b.connector.kind === 'output' && b.connector.counterflow;
-      if (aIsCounterflowOnlyOutput !== bIsCounterflowOnlyOutput) return aIsCounterflowOnlyOutput ? 1 : -1;
-      return a.dx - b.dx;
-    });
-    const count = withDistance.length;
-    withDistance.forEach(({ connector }, i) => {
-      tapOffsets.set(connector.id, (i - (count - 1) / 2) * TAP_SPACING);
-    });
-  }
-
-  // Each lane begins at its lowest producer and ends at its topmost tap,
-  // avoiding a misleading line that continues indefinitely above the plan.
-  const laneRanges = new Map<string, LaneMetrics>();
-  const laneCounterflow = new Set<string>();
-  for (const lane of plan.lanes) {
-    const metrics = layout.laneSpines.get(lane.id);
-    if (!metrics) continue;
-    const originIndex = laneOrigin(plan, lane.material);
-    const laneConnectors = connectors.filter(connector => connector.laneId === lane.id);
-    const tapEndpoints = laneConnectors.flatMap(connector => {
-      const port = layout.stationPorts.get(connector.stationId);
-      if (!port) return [];
-      const offset = tapOffsets.get(connector.id) ?? 0;
-      return [port.y + offset + connectorVerticalDirection(connector.kind, connector.counterflow) * ELBOW_RADIUS];
-    });
-    if (tapEndpoints.length === 0) continue;
-
-    let bottom = metrics.bottom;
-    let top = Math.min(...tapEndpoints);
-    if (originIndex !== null) {
-      const originStation = plan.stations[originIndex];
-      const originPort = originStation ? layout.stationPorts.get(originStation.id) : undefined;
-      let originY: number | null = null;
-      if (originStation && originPort) {
-        const offset = tapOffsets.get(`${originStation.id}:output:${lane.id}`) ?? 0;
-        const originConnector = laneConnectors.find(connector => connector.id === `${originStation.id}:output:${lane.id}`);
-        originY = originPort.y + offset + connectorVerticalDirection('output', originConnector?.counterflow ?? false) * ELBOW_RADIUS;
-        bottom = originY;
-        top = Math.min(top, originY);
-      }
-      const counterflowBottom = laneConnectors
-        .filter(connector => connector.counterflow)
-        .map(connector => {
-          const port = layout.stationPorts.get(connector.stationId);
-          if (!port) return null;
-          const offset = tapOffsets.get(connector.id) ?? 0;
-          return port.y + offset + connectorVerticalDirection(connector.kind, connector.counterflow) * ELBOW_RADIUS;
-        })
-        .filter((endpoint): endpoint is number => endpoint !== null)
-        .reduce<number | null>((lowest, endpoint) => lowest === null ? endpoint : Math.max(lowest, endpoint), null);
-      if (counterflowBottom !== null && counterflowBottom > bottom) {
-        bottom = counterflowBottom;
-        laneCounterflow.add(lane.id);
-      }
-    }
-    laneRanges.set(lane.id, { x: metrics.x, top, bottom });
-  }
+  const laneRangeResult = buildLaneRanges(plan, layout, connectors, tapOffsets);
+  const { laneRanges, laneCounterflow } = laneRangeResult;
+  const highlightedStation = plan.stations.find(station => station.id === highlightedStationId);
+  const highlightedLaneIds = new Set(highlightedStation?.busInputs ?? []);
+  const highlightedMaterials = [...new Set(
+    plan.lanes
+      .filter(lane => highlightedLaneIds.has(lane.id))
+      .map(lane => lane.material),
+  )].sort();
+  const highlightedMaterialColors = new Map(
+    highlightedMaterials.map((material, index) => [material, `hsl(${Math.round(index * 360 / highlightedMaterials.length)} 84% 62%)`]),
+  );
+  const highlightedLaneColors = new Map(
+    plan.lanes
+      .filter(lane => highlightedLaneIds.has(lane.id))
+      .map(lane => [lane.id, highlightedMaterialColors.get(lane.material)!]),
+  );
 
   // Lane spines: solid from the origin station up to the top; if a station
   // below the origin still pulls from this lane (counterflow), extend a
@@ -836,7 +1010,6 @@ function BeltOverlay({ plan, stageRef, stationPortRefs, laneSpineRefs, collapseV
       ? originPort.y + originOffset + connectorVerticalDirection('output', originConnector?.counterflow ?? false) * ELBOW_RADIUS
       : range.bottom;
     const hasUpwardSpine = range.top < originY;
-
     return (
       <g key={lane.id}>
         {hasUpwardSpine && <line class="lane-spine" x1={range.x} y1={originY} x2={range.x} y2={range.top} />}
@@ -846,6 +1019,25 @@ function BeltOverlay({ plan, stageRef, stationPortRefs, laneSpineRefs, collapseV
         {hasUpwardSpine && <polygon class="lane-arrowhead" points={`${range.x - 6},${range.top + 11} ${range.x + 6},${range.top + 11} ${range.x},${range.top}`} />}
       </g>
     );
+  });
+  const highlightedLaneSegments = plan.lanes.map(lane => {
+    const highlightColor = highlightedLaneColors.get(lane.id);
+    const laneSpine = layout.laneSpines.get(lane.id);
+    const targetConnector = connectors.find(connector => connector.stationId === highlightedStationId && connector.laneId === lane.id && connector.kind === 'input');
+    if (!highlightColor || !laneSpine || !targetConnector) return null;
+
+    const targetPort = layout.stationPorts.get(targetConnector.stationId);
+    if (!targetPort) return null;
+    const targetY = targetPort.y + (tapOffsets.get(targetConnector.id) ?? 0) + connectorVerticalDirection(targetConnector.kind, targetConnector.counterflow) * ELBOW_RADIUS;
+    const originIndex = laneOrigin(plan, lane.material);
+    const originStation = originIndex === null ? undefined : plan.stations[originIndex];
+    const originPort = originStation ? layout.stationPorts.get(originStation.id) : undefined;
+    const originConnector = originStation ? connectors.find(connector => connector.id === `${originStation.id}:output:${lane.id}`) : undefined;
+    const originY = originPort
+      ? originPort.y + (tapOffsets.get(originConnector?.id ?? '') ?? 0) + connectorVerticalDirection('output', originConnector?.counterflow ?? false) * ELBOW_RADIUS
+      : laneSpine.bottom;
+
+    return <line key={lane.id} class={`lane-spine highlighted ${targetConnector.counterflow ? 'counterflow' : ''}`} style={`--highlight-color: ${highlightColor};`} x1={laneSpine.x} y1={originY} x2={laneSpine.x} y2={targetY} />;
   });
   const collapsedLaneIndicators = plan.lanes.map(lane => {
     if (!inSituLaneIds.has(lane.id)) return null;
@@ -875,6 +1067,7 @@ function BeltOverlay({ plan, stageRef, stationPortRefs, laneSpineRefs, collapseV
       viewBox={`0 0 ${layout.width} ${layout.height}`}
     >
       {laneSpineElements}
+      {highlightedLaneSegments}
       {connectors.map(connector => {
         const stationPort = layout.stationPorts.get(connector.stationId);
         const laneSpine = layout.laneSpines.get(connector.laneId);
@@ -894,7 +1087,12 @@ function BeltOverlay({ plan, stageRef, stationPortRefs, laneSpineRefs, collapseV
 
         const path = connectorPath(stationPort, rowOffset, laneSpine.x, connector.kind, connector.counterflow, hopXs);
 
-        return <path key={connector.id} class={`connector ${connector.kind} ${connector.counterflow ? 'counterflow' : ''}`} d={path} />;
+        const originIndex = laneOrigin(plan, plan.lanes.find(lane => lane.id === connector.laneId)?.material ?? '');
+        const originStation = originIndex === null ? undefined : plan.stations[originIndex];
+        const isHighlightedInput = connector.stationId === highlightedStationId && connector.kind === 'input';
+        const isHighlightedOrigin = connector.kind === 'output' && connector.stationId === originStation?.id;
+        const highlightColor = isHighlightedInput || isHighlightedOrigin ? highlightedLaneColors.get(connector.laneId) : undefined;
+        return <path key={connector.id} class={`connector ${connector.kind} ${connector.counterflow ? 'counterflow' : ''} ${highlightColor ? 'highlighted' : ''}`} style={highlightColor ? `--highlight-color: ${highlightColor};` : undefined} d={path} />;
       })}
       {collapsedLaneIndicators}
     </svg>
@@ -909,6 +1107,7 @@ interface StationCardProps {
   isLast: boolean;
   selected: boolean;
   onSelect: (id: string) => void;
+  onHover: (id: string | null) => void;
   onDragStart: (payload: DragPayload) => void;
   onDrop: (target: string, event: DragEvent) => void;
   onToggleSide: (id: string) => void;
@@ -917,13 +1116,15 @@ interface StationCardProps {
   editingDisabled: boolean;
 }
 
-function StationCard({ station, index, isFirst, isLast, selected, onSelect, onDragStart, onDrop, onToggleSide, onMove, portRef, editingDisabled }: StationCardProps) {
+function StationCard({ station, index, isFirst, isLast, selected, onSelect, onHover, onDragStart, onDrop, onToggleSide, onMove, portRef, editingDisabled }: StationCardProps) {
   return (
     <div
       class={`station-card ${selected ? 'selected' : ''}`}
       role="button"
       tabIndex={editingDisabled ? -1 : 0}
       draggable={!editingDisabled}
+      onPointerEnter={() => onHover(station.id)}
+      onPointerLeave={() => onHover(null)}
       onClick={() => { if (!editingDisabled) onSelect(station.id); }}
       onKeyDown={event => { if (!editingDisabled && (event.key === 'Enter' || event.key === ' ')) onSelect(station.id); }}
       onDragStart={() => { if (!editingDisabled) onDragStart({ kind: 'station', id: station.id }); }}
