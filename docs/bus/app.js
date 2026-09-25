@@ -1,2 +1,18051 @@
-"use strict";(()=>{var oe,S,De,ft,$,Ee,Fe,Ie,ge,ee,Q,He,he,ye,fe,ht,ne={},ie=[],bt=/acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i,ue=Array.isArray;function j(e,t){for(var a in t)e[a]=t[a];return e}function be(e){e&&e.parentNode&&e.parentNode.removeChild(e)}function kt(e,t,a){var i,o,r,p={};for(r in t)r=="key"?i=t[r]:r=="ref"?o=t[r]:p[r]=t[r];if(arguments.length>2&&(p.children=arguments.length>3?oe.call(arguments,2):a),typeof e=="function"&&e.defaultProps!=null)for(r in e.defaultProps)p[r]===void 0&&(p[r]=e.defaultProps[r]);return te(e,p,i,o,null)}function te(e,t,a,i,o){var r={type:e,props:t,key:a,ref:i,__k:null,__:null,__b:0,__e:null,__c:null,constructor:void 0,__v:o??++De,__i:-1,__u:0};return o==null&&S.vnode!=null&&S.vnode(r),r}function O(e){return e.children}function ae(e,t){this.props=e,this.context=t}function N(e,t){if(t==null)return e.__?N(e.__,e.__i+1):null;for(var a;t<e.__k.length;t++)if((a=e.__k[t])!=null&&a.__e!=null)return a.__e;return typeof e.type=="function"?N(e):null}function _t(e){if(e.__P&&e.__d){var t=e.__v,a=t.__e,i=[],o=[],r=j({},t);r.__v=t.__v+1,S.vnode&&S.vnode(r),ke(e.__P,r,t,e.__n,e.__P.namespaceURI,32&t.__u?[a]:null,i,a??N(t),!!(32&t.__u),o),r.__v=t.__v,r.__.__k[r.__i]=r,Oe(i,r,o),t.__e=t.__=null,r.__e!=a&&Be(r)}}function Be(e){if((e=e.__)!=null&&e.__c!=null)return e.__e=e.__c.base=null,e.__k.some(function(t){if(t!=null&&t.__e!=null)return e.__e=e.__c.base=t.__e}),Be(e)}function Te(e){(!e.__d&&(e.__d=!0)&&$.push(e)&&!re.__r++||Ee!=S.debounceRendering)&&((Ee=S.debounceRendering)||Fe)(re)}function re(){try{for(var e,t=1;$.length;)$.length>t&&$.sort(Ie),e=$.shift(),t=$.length,_t(e)}finally{$.length=re.__r=0}}function je(e,t,a,i,o,r,p,c,d,m,h){var k,n,s,f,v,w,_=i&&i.__k||ie,g=t.length;for(d=vt(a,t,_,d,g),k=0;k<g;k++)(s=a.__k[k])!=null&&(n=s.__i!=-1&&_[s.__i]||ne,s.__i=k,w=ke(e,s,n,o,r,p,c,d,m,h),f=s.__e,s.ref&&n.ref!=s.ref&&(n.ref&&_e(n.ref,null,s),h.push(s.ref,s.__c||f,s)),v==null&&f!=null&&(v=f),4&s.__u?(d=ze(s,d,e),n.__e&&(n.__e=null)):typeof s.type=="function"&&w!==void 0?d=w:f&&(d=f.nextSibling),s.__u&=-7);return a.__e=v,d}function vt(e,t,a,i,o){var r,p,c,d,m,h=a.length,k=h,n=0;for(e.__k=new Array(o),r=0;r<o;r++)(p=t[r])!=null&&typeof p!="boolean"&&typeof p!="function"?(typeof p=="string"||typeof p=="number"||typeof p=="bigint"||p.constructor==String?p=e.__k[r]=te(null,p,null,null,null):ue(p)?p=e.__k[r]=te(O,{children:p},null,null,null):p.constructor===void 0&&p.__b>0?p=e.__k[r]=te(p.type,p.props,p.key,p.ref?p.ref:null,p.__v):e.__k[r]=p,d=r+n,p.__=e,p.__b=e.__b+1,c=null,(m=p.__i=wt(p,a,d,k))!=-1&&(k--,(c=a[m])&&(c.__u|=2)),c==null||c.__v==null?(m==-1&&(o>h?n--:o<h&&n++),typeof p.type!="function"&&(p.__u|=4)):m!=d&&(m==d-1?n--:m==d+1?n++:(m>d?n--:n++,p.__u|=4))):e.__k[r]=null;if(k)for(r=0;r<h;r++)(c=a[r])!=null&&(2&c.__u)==0&&(c.__e==i&&(i=N(c)),Ne(c,c));return i}function ze(e,t,a){var i,o;if(typeof e.type=="function"){for(i=e.__k,o=0;i&&o<i.length;o++)i[o]&&(i[o].__=e,t=ze(i[o],t,a));return t}e.__e!=t&&(t&&e.type&&!t.parentNode&&(t=N(e)),t=a.insertBefore(e.__e,t||null));do t=t&&t.nextSibling;while(t!=null&&t.nodeType==8);return t}function wt(e,t,a,i){var o,r,p,c=e.key,d=e.type,m=t[a],h=m!=null&&(2&m.__u)==0;if(m===null&&c==null||h&&c==m.key&&d==m.type)return a;if(i>(h?1:0)){for(o=a-1,r=a+1;o>=0||r<t.length;)if((m=t[p=o>=0?o--:r++])!=null&&(2&m.__u)==0&&c==m.key&&d==m.type)return p}return-1}function Me(e,t,a){t[0]=="-"?e.setProperty(t,a??""):e[t]=a==null?"":typeof a!="number"||bt.test(t)?a:a+"px"}function X(e,t,a,i,o){var r,p;e:if(t=="style")if(typeof a=="string")e.style.cssText=a;else{if(typeof i=="string"&&(e.style.cssText=i=""),i)for(t in i)a&&t in a||Me(e.style,t,"");if(a)for(t in a)i&&a[t]==i[t]||Me(e.style,t,a[t])}else if(t[0]=="o"&&t[1]=="n")r=t!=(t=t.replace(He,"$1")),p=t.toLowerCase(),t=p in e||t=="onFocusOut"||t=="onFocusIn"?p.slice(2):t.slice(2),e.l||(e.l={}),e.l[t+r]=a,a?i?a[Q]=i[Q]:(a[Q]=he,e.addEventListener(t,r?fe:ye,r)):e.removeEventListener(t,r?fe:ye,r);else{if(o=="http://www.w3.org/2000/svg")t=t.replace(/xlink(H|:h)/,"h").replace(/sName$/,"s");else if(t!="width"&&t!="height"&&t!="href"&&t!="list"&&t!="form"&&t!="tabIndex"&&t!="download"&&t!="rowSpan"&&t!="colSpan"&&t!="role"&&t!="popover"&&t in e)try{e[t]=a??"";break e}catch{}typeof a=="function"||(a==null||a===!1&&t[4]!="-"?e.removeAttribute(t):e.setAttribute(t,t=="popover"&&a==1?"":a))}}function Re(e){return function(t){if(this.l){var a=this.l[t.type+e];if(t[ee]==null)t[ee]=he++;else if(t[ee]<a[Q])return;return a(S.event?S.event(t):t)}}}function ke(e,t,a,i,o,r,p,c,d,m){var h,k,n,s,f,v,w,_,g,x,A,M,L,z,F,I,q=t.type;if(t.constructor!==void 0)return null;128&a.__u&&(d=!!(32&a.__u),r=[c=t.__e=a.__e]),(h=S.__b)&&h(t);e:if(typeof q=="function"){k=p.length;try{if(g=t.props,x=q.prototype&&q.prototype.render,A=(h=q.contextType)&&i[h.__c],M=h?A?A.props.value:h.__:i,a.__c?_=(n=t.__c=a.__c).__=n.__E:(x?t.__c=n=new q(g,M):(t.__c=n=new ae(g,M),n.constructor=q,n.render=xt),A&&A.sub(n),n.state||(n.state={}),n.__n=i,s=n.__d=!0,n.__h=[],n._sb=[]),x&&n.__s==null&&(n.__s=n.state),x&&q.getDerivedStateFromProps!=null&&(n.__s==n.state&&(n.__s=j({},n.__s)),j(n.__s,q.getDerivedStateFromProps(g,n.__s))),f=n.props,v=n.state,n.__v=t,s)x&&q.getDerivedStateFromProps==null&&n.componentWillMount!=null&&n.componentWillMount(),x&&n.componentDidMount!=null&&n.__h.push(n.componentDidMount);else{if(x&&q.getDerivedStateFromProps==null&&g!==f&&n.componentWillReceiveProps!=null&&n.componentWillReceiveProps(g,M),t.__v==a.__v||!n.__e&&n.shouldComponentUpdate!=null&&n.shouldComponentUpdate(g,n.__s,M)===!1){t.__v!=a.__v&&(n.props=g,n.state=n.__s,n.__d=!1),t.__e=a.__e,t.__k=a.__k,t.__k.some(function(E){E&&(E.__=t)}),ie.push.apply(n.__h,n._sb),n._sb=[],n.__h.length&&p.push(n),c=N(a);break e}n.componentWillUpdate!=null&&n.componentWillUpdate(g,n.__s,M),x&&n.componentDidUpdate!=null&&n.__h.push(function(){n.componentDidUpdate(f,v,w)})}if(n.context=M,n.props=g,n.__P=e,n.__e=!1,L=S.__r,z=0,x)n.state=n.__s,n.__d=!1,L&&L(t),h=n.render(n.props,n.state,n.context),ie.push.apply(n.__h,n._sb),n._sb=[];else do n.__d=!1,L&&L(t),h=n.render(n.props,n.state,n.context),n.state=n.__s;while(n.__d&&++z<25);n.state=n.__s,n.getChildContext!=null&&(i=j(j({},i),n.getChildContext())),x&&!s&&n.getSnapshotBeforeUpdate!=null&&(w=n.getSnapshotBeforeUpdate(f,v)),F=h!=null&&h.type===O&&h.key==null?Ue(h.props.children):h,c=je(e,ue(F)?F:[F],t,a,i,o,r,p,c,d,m),n.base=t.__e,t.__u&=-161,n.__h.length&&p.push(n),_&&(n.__E=n.__=null)}catch(E){if(p.length=k,t.__v=null,d||r!=null){if(E.then){for(t.__u|=d?160:128;c&&c.nodeType==8&&c.nextSibling;)c=c.nextSibling;r!=null&&(r[r.indexOf(c)]=null),t.__e=c}else if(r!=null)for(I=r.length;I--;)be(r[I])}else t.__e=a.__e;t.__k==null&&(t.__k=a.__k||[]),E.then||$e(t),S.__e(E,t,a)}}else r==null&&t.__v==a.__v?(t.__k=a.__k,t.__e=a.__e):c=t.__e=At(a.__e,t,a,i,o,r,p,d,m);return(h=S.diffed)&&h(t),128&t.__u?void 0:c}function $e(e){e&&(e.__c&&(e.__c.__e=!0),e.__k&&e.__k.some($e))}function Oe(e,t,a){for(var i=0;i<a.length;i++)_e(a[i],a[++i],a[++i]);S.__c&&S.__c(t,e),e.some(function(o){try{e=o.__h,o.__h=[],e.some(function(r){r.call(o)})}catch(r){S.__e(r,o.__v)}})}function Ue(e){return typeof e!="object"||e==null||e.__b>0?e:ue(e)?e.map(Ue):e.constructor!==void 0?null:j({},e)}function At(e,t,a,i,o,r,p,c,d){var m,h,k,n,s,f,v,w=a.props||ne,_=t.props,g=t.type;if(g=="svg"?o="http://www.w3.org/2000/svg":g=="math"?o="http://www.w3.org/1998/Math/MathML":o||(o="http://www.w3.org/1999/xhtml"),r!=null){for(m=0;m<r.length;m++)if((s=r[m])&&"setAttribute"in s==!!g&&(g?s.localName==g:s.nodeType==3)){e=s,r[m]=null;break}}if(e==null){if(g==null)return document.createTextNode(_);e=document.createElementNS(o,g,_.is&&_),c&&(S.__m&&S.__m(t,r),c=!1),r=null}if(g==null)w===_||c&&e.data==_||(e.data=_);else{if(r=g=="textarea"&&_.defaultValue!=null?null:r&&oe.call(e.childNodes),!c&&r!=null)for(w={},m=0;m<e.attributes.length;m++)w[(s=e.attributes[m]).name]=s.value;for(m in w)s=w[m],m=="dangerouslySetInnerHTML"?k=s:m=="children"||m in _||m=="value"&&"defaultValue"in _||m=="checked"&&"defaultChecked"in _||X(e,m,null,s,o);for(m in _)s=_[m],m=="children"?n=s:m=="dangerouslySetInnerHTML"?h=s:m=="value"?f=s:m=="checked"?v=s:c&&typeof s!="function"||w[m]===s||X(e,m,s,w[m],o);if(h)c||k&&(h.__html==k.__html||h.__html==e.innerHTML)||(e.innerHTML=h.__html),t.__k=[];else if(k&&(e.innerHTML=""),je(t.type=="template"?e.content:e,ue(n)?n:[n],t,a,i,g=="foreignObject"?"http://www.w3.org/1999/xhtml":o,r,p,r?r[0]:a.__k&&N(a,0),c,d),r!=null)for(m=r.length;m--;)be(r[m]);c&&g!="textarea"||(m="value",g=="progress"&&f==null?e.removeAttribute("value"):f!=null&&(f!==e[m]||g=="progress"&&!f||g=="option"&&f!=w[m])&&X(e,m,f,w[m],o),m="checked",v!=null&&v!=e[m]&&X(e,m,v,w[m],o))}return e}function _e(e,t,a){try{if(typeof e=="function"){var i=typeof e.__u=="function";i&&e.__u(),i&&t==null||(e.__u=e(t))}else e.current=t}catch(o){S.__e(o,a)}}function Ne(e,t,a){var i,o;if(S.unmount&&S.unmount(e),(i=e.ref)&&(i.current&&i.current!=e.__e||_e(i,null,t)),(i=e.__c)!=null){if(i.componentWillUnmount)try{i.componentWillUnmount()}catch(r){S.__e(r,t)}i.base=i.__P=i.__n=null}if(i=e.__k)for(o=0;o<i.length;o++)i[o]&&Ne(i[o],t,a||typeof e.type!="function");a||be(e.__e),e.__c=e.__=e.__e=void 0}function xt(e,t,a){return this.constructor(e,a)}function We(e,t,a){var i,o,r,p;t==document&&(t=document.documentElement),S.__&&S.__(e,t),o=(i=typeof a=="function")?null:a&&a.__k||t.__k,r=[],p=[],ke(t,e=(!i&&a||t).__k=kt(O,null,[e]),o||ne,ne,t.namespaceURI,!i&&a?[a]:o?null:t.firstChild?oe.call(t.childNodes):null,r,!i&&a?a:o?o.__e:t.firstChild,i,p),Oe(r,e,p),e.props.children=null}oe=ie.slice,S={__e:function(e,t,a,i){for(var o,r,p;t=t.__;)if((o=t.__c)&&!o.__)try{if((r=o.constructor)&&r.getDerivedStateFromError!=null&&(o.setState(r.getDerivedStateFromError(e)),p=o.__d),o.componentDidCatch!=null&&(o.componentDidCatch(e,i||{}),p=o.__d),p)return o.__E=o}catch(c){e=c}throw e}},De=0,ft=function(e){return e!=null&&e.constructor===void 0},ae.prototype.setState=function(e,t){var a;a=this.__s!=null&&this.__s!=this.state?this.__s:this.__s=j({},this.state),typeof e=="function"&&(e=e(j({},a),this.props)),e&&j(a,e),e!=null&&this.__v&&(t&&this._sb.push(t),Te(this))},ae.prototype.forceUpdate=function(e){this.__v&&(this.__e=!0,e&&this.__h.push(e),Te(this))},ae.prototype.render=O,$=[],Fe=typeof Promise=="function"?Promise.prototype.then.bind(Promise.resolve()):setTimeout,Ie=function(e,t){return e.__v.__b-t.__v.__b},re.__r=0,ge=Math.random().toString(8),ee="__d"+ge,Q="__a"+ge,He=/(PointerCapture)$|Capture$/i,he=0,ye=Re(!1),fe=Re(!0),ht=0;var K,C,ve,Ke,J=0,et=[],P=S,Ge=P.__b,Ye=P.__r,Qe=P.diffed,Je=P.__c,Ve=P.unmount,Ze=P.__;function me(e,t){P.__h&&P.__h(C,e,J||t),J=0;var a=C.__H||(C.__H={__:[],__h:[]});return e>=a.__.length&&a.__.push({}),a.__[e]}function U(e){return J=1,St(at,e)}function St(e,t,a){var i=me(K++,2);if(i.t=e,!i.__c&&(i.__=[a?a(t):at(void 0,t),function(c){var d=i.__N?i.__N[0]:i.__[0],m=i.t(d,c);d!==m&&(i.__N=[m,i.__[1]],i.__c.setState({}))}],i.__c=C,!C.__f)){var o=function(c,d,m){if(!i.__c.__H)return!0;var h=!1,k=i.__c.props!==c;if(i.__c.__H.__.some(function(s){if(s.__N){h=!0;var f=s.__[0];s.__=s.__N,s.__N=void 0,f!==s.__[0]&&(k=!0)}}),r){var n=r.call(this,c,d,m);return h?n||k:n}return!h||k};C.__f=!0;var r=C.shouldComponentUpdate,p=C.componentWillUpdate;C.componentWillUpdate=function(c,d,m){if(this.__e){var h=r;r=void 0,o(c,d,m),r=h}p&&p.call(this,c,d,m)},C.shouldComponentUpdate=o}return i.__N||i.__}function Ae(e,t){var a=me(K++,3);!P.__s&&xe(a.__H,t)&&(a.__=e,a.u=t,C.__H.__h.push(a))}function tt(e,t){var a=me(K++,4);!P.__s&&xe(a.__H,t)&&(a.__=e,a.u=t,C.__h.push(a))}function ce(e){return J=5,V(function(){return{current:e}},[])}function V(e,t){var a=me(K++,7);return xe(a.__H,t)&&(a.__=e(),a.__H=t,a.__h=e),a.__}function T(e,t){return J=8,V(function(){return e},t)}function Ct(){for(var e;e=et.shift();){var t=e.__H;if(e.__P&&t)try{t.__h.some(le),t.__h.some(we),t.__h=[]}catch(a){t.__h=[],P.__e(a,e.__v)}}}P.__b=function(e){C=null,Ge&&Ge(e)},P.__=function(e,t){e&&t.__k&&t.__k.__m&&(e.__m=t.__k.__m),Ze&&Ze(e,t)},P.__r=function(e){Ye&&Ye(e),K=0;var t=(C=e.__c).__H;t&&(ve===C?(t.__h=[],C.__h=[],t.__.some(function(a){a.__N&&(a.__=a.__N),a.u=a.__N=void 0})):(t.__h.some(le),t.__h.some(we),t.__h=[],K=0)),ve=C},P.diffed=function(e){Qe&&Qe(e);var t=e.__c;t&&t.__H&&(t.__H.__h.length&&(et.push(t)!==1&&Ke===P.requestAnimationFrame||((Ke=P.requestAnimationFrame)||Pt)(Ct)),t.__H.__.some(function(a){a.u&&(a.__H=a.u,a.u=void 0)})),ve=C=null},P.__c=function(e,t){t.some(function(a){try{a.__h.some(le),a.__h=a.__h.filter(function(i){return!i.__||we(i)})}catch(i){t.some(function(o){o.__h&&(o.__h=[])}),t=[],P.__e(i,a.__v)}}),Je&&Je(e,t)},P.unmount=function(e){Ve&&Ve(e);var t,a=e.__c;a&&a.__H&&(a.__H.__.some(function(i){try{le(i)}catch(o){t=o}}),a.__H=void 0,t&&P.__e(t,a.__v))};var Xe=typeof requestAnimationFrame=="function";function Pt(e){var t,a=function(){clearTimeout(i),Xe&&cancelAnimationFrame(t),setTimeout(e)},i=setTimeout(a,35);Xe&&(t=requestAnimationFrame(a))}function le(e){var t=C,a=e.__c;typeof a=="function"&&(e.__c=void 0,a()),C=t}function we(e){var t=C;e.__c=e.__(),C=t}function xe(e,t){return!e||e.length!==t.length||t.some(function(a,i){return a!==e[i]})}function at(e,t){return typeof t=="function"?t(e):t}var Se=[{id:"stone-brick",name:"Stone brick",kind:"item",icon:"icons/stone-brick.png"},{id:"wood",name:"Wood",kind:"item",icon:"icons/wood.png"},{id:"coal",name:"Coal",kind:"item",icon:"icons/coal.png"},{id:"stone",name:"Stone",kind:"item",icon:"icons/stone.png"},{id:"iron-ore",name:"Iron ore",kind:"item",icon:"icons/iron-ore.png"},{id:"copper-ore",name:"Copper ore",kind:"item",icon:"icons/copper-ore.png"},{id:"iron-plate",name:"Iron plate",kind:"item",icon:"icons/iron-plate.png"},{id:"copper-plate",name:"Copper plate",kind:"item",icon:"icons/copper-plate.png"},{id:"copper-cable",name:"Copper cable",kind:"item",icon:"icons/copper-cable.png"},{id:"iron-stick",name:"Iron stick",kind:"item",icon:"icons/iron-stick.png"},{id:"iron-gear-wheel",name:"Iron gear wheel",kind:"item",icon:"icons/iron-gear-wheel.png"},{id:"electronic-circuit",name:"Electronic circuit",kind:"item",icon:"icons/electronic-circuit.png"},{id:"wooden-chest",name:"Wooden chest",kind:"item",icon:"icons/wooden-chest.png"},{id:"stone-furnace",name:"Stone furnace",kind:"item",icon:"icons/stone-furnace.png"},{id:"burner-mining-drill",name:"Burner mining drill",kind:"item",icon:"icons/burner-mining-drill.png"},{id:"electric-mining-drill",name:"Electric mining drill",kind:"item",icon:"icons/electric-mining-drill.png"},{id:"burner-inserter",name:"Burner inserter",kind:"item",icon:"icons/burner-inserter.png"},{id:"inserter",name:"Inserter",kind:"item",icon:"icons/inserter.png"},{id:"fast-inserter",name:"Fast inserter",kind:"item",icon:"icons/fast-inserter.png"},{id:"long-handed-inserter",name:"Long-handed inserter",kind:"item",icon:"icons/long-handed-inserter.png"},{id:"offshore-pump",name:"Offshore pump",kind:"item",icon:"icons/offshore-pump.png"},{id:"pipe",name:"Pipe",kind:"item",icon:"icons/pipe.png"},{id:"boiler",name:"Boiler",kind:"item",icon:"icons/boiler.png"},{id:"steam-engine",name:"Steam engine",kind:"item",icon:"icons/steam-engine.png"},{id:"small-electric-pole",name:"Small electric pole",kind:"item",icon:"icons/small-electric-pole.png"},{id:"radar",name:"Radar",kind:"item",icon:"icons/radar.png"},{id:"small-lamp",name:"Lamp",kind:"item",icon:"icons/small-lamp.png"},{id:"pipe-to-ground",name:"Pipe to ground",kind:"item",icon:"icons/pipe-to-ground.png"},{id:"assembling-machine-1",name:"Assembling machine 1",kind:"item",icon:"icons/assembling-machine-1.png"},{id:"assembling-machine-2",name:"Assembling machine 2",kind:"item",icon:"icons/assembling-machine-2.png"},{id:"red-wire",name:"Red wire",kind:"item",icon:"icons/red-wire.png"},{id:"green-wire",name:"Green wire",kind:"item",icon:"icons/green-wire.png"},{id:"copper-wire",name:"Copper wire",kind:"item",icon:"icons/copper-wire.png"},{id:"stone-wall",name:"Wall",kind:"item",icon:"icons/stone-wall.png"},{id:"lab",name:"Lab",kind:"item",icon:"icons/lab.png"},{id:"automation-science-pack",name:"Automation science pack",kind:"item",icon:"icons/automation-science-pack.png"},{id:"logistic-science-pack",name:"Logistic science pack",kind:"item",icon:"icons/logistic-science-pack.png"},{id:"steel-plate",name:"Steel plate",kind:"item",icon:"icons/steel-plate.png"},{id:"engine-unit",name:"Engine unit",kind:"item",icon:"icons/engine-unit.png"},{id:"electric-furnace",name:"Electric furnace",kind:"item",icon:"icons/electric-furnace.png"},{id:"solid-fuel",name:"Solid fuel",kind:"item",icon:"icons/solid-fuel.png"},{id:"rocket-fuel",name:"Rocket fuel",kind:"item",icon:"icons/rocket-fuel.png"},{id:"iron-chest",name:"Iron chest",kind:"item",icon:"icons/iron-chest.png"},{id:"big-electric-pole",name:"Big electric pole",kind:"item",icon:"icons/big-electric-pole.png"},{id:"medium-electric-pole",name:"Medium electric pole",kind:"item",icon:"icons/medium-electric-pole.png"},{id:"steel-furnace",name:"Steel furnace",kind:"item",icon:"icons/steel-furnace.png"},{id:"gate",name:"Gate",kind:"item",icon:"icons/gate.png"},{id:"steel-chest",name:"Steel chest",kind:"item",icon:"icons/steel-chest.png"},{id:"solar-panel",name:"Solar panel",kind:"item",icon:"icons/solar-panel.png"},{id:"train-stop",name:"Train stop",kind:"item",icon:"icons/train-stop.png"},{id:"rail-signal",name:"Rail signal",kind:"item",icon:"icons/rail-signal.png"},{id:"rail-chain-signal",name:"Rail chain signal",kind:"item",icon:"icons/rail-chain-signal.png"},{id:"concrete",name:"Concrete",kind:"item",icon:"icons/concrete.png"},{id:"refined-concrete",name:"Refined concrete",kind:"item",icon:"icons/refined-concrete.png"},{id:"hazard-concrete",name:"Hazard concrete",kind:"item",icon:"icons/hazard-concrete.png"},{id:"refined-hazard-concrete",name:"Refined hazard concrete",kind:"item",icon:"icons/refined-hazard-concrete.png"},{id:"landfill",name:"Landfill",kind:"item",icon:"icons/landfill.png"},{id:"accumulator",name:"Accumulator",kind:"item",icon:"icons/accumulator.png"},{id:"uranium-ore",name:"Uranium ore",kind:"item",icon:"icons/uranium-ore.png"},{id:"transport-belt",name:"Transport belt",kind:"item",icon:"icons/transport-belt.png"},{id:"fast-transport-belt",name:"Fast transport belt",kind:"item",icon:"icons/fast-transport-belt.png"},{id:"express-transport-belt",name:"Express transport belt",kind:"item",icon:"icons/express-transport-belt.png"},{id:"bulk-inserter",name:"Bulk inserter",kind:"item",icon:"icons/bulk-inserter.png"},{id:"assembling-machine-3",name:"Assembling machine 3",kind:"item",icon:"icons/assembling-machine-3.png"},{id:"chemical-science-pack",name:"Chemical science pack",kind:"item",icon:"icons/chemical-science-pack.png"},{id:"military-science-pack",name:"Military science pack",kind:"item",icon:"icons/military-science-pack.png"},{id:"production-science-pack",name:"Production science pack",kind:"item",icon:"icons/production-science-pack.png"},{id:"utility-science-pack",name:"Utility science pack",kind:"item",icon:"icons/utility-science-pack.png"},{id:"space-science-pack",name:"Space science pack",kind:"item",icon:"icons/space-science-pack.png"},{id:"underground-belt",name:"Underground belt",kind:"item",icon:"icons/underground-belt.png"},{id:"fast-underground-belt",name:"Fast underground belt",kind:"item",icon:"icons/fast-underground-belt.png"},{id:"express-underground-belt",name:"Express underground belt",kind:"item",icon:"icons/express-underground-belt.png"},{id:"splitter",name:"Splitter",kind:"item",icon:"icons/splitter.png"},{id:"lane-splitter",name:"Lane splitter",kind:"item",icon:"icons/lane-splitter.png"},{id:"fast-splitter",name:"Fast splitter",kind:"item",icon:"icons/fast-splitter.png"},{id:"express-splitter",name:"Express splitter",kind:"item",icon:"icons/express-splitter.png"},{id:"loader",name:"Loader",kind:"item",icon:"icons/loader.png"},{id:"fast-loader",name:"Fast loader",kind:"item",icon:"icons/fast-loader.png"},{id:"express-loader",name:"Express loader",kind:"item",icon:"icons/express-loader.png"},{id:"advanced-circuit",name:"Advanced circuit",kind:"item",icon:"icons/advanced-circuit.png"},{id:"processing-unit",name:"Processing unit",kind:"item",icon:"icons/processing-unit.png"},{id:"logistic-robot",name:"Logistic robot",kind:"item",icon:"icons/logistic-robot.png"},{id:"construction-robot",name:"Construction robot",kind:"item",icon:"icons/construction-robot.png"},{id:"passive-provider-chest",name:"Passive provider chest",kind:"item",icon:"icons/passive-provider-chest.png"},{id:"active-provider-chest",name:"Active provider chest",kind:"item",icon:"icons/active-provider-chest.png"},{id:"storage-chest",name:"Storage chest",kind:"item",icon:"icons/storage-chest.png"},{id:"buffer-chest",name:"Buffer chest",kind:"item",icon:"icons/buffer-chest.png"},{id:"requester-chest",name:"Requester chest",kind:"item",icon:"icons/requester-chest.png"},{id:"rocket-silo",name:"Rocket silo",kind:"item",icon:"icons/rocket-silo.png"},{id:"cargo-landing-pad",name:"Cargo landing pad",kind:"item",icon:"icons/cargo-landing-pad.png"},{id:"roboport",name:"Roboport",kind:"item",icon:"icons/roboport.png"},{id:"coin",name:"Coin",kind:"item",icon:"icons/coin.png"},{id:"substation",name:"Substation",kind:"item",icon:"icons/substation.png"},{id:"beacon",name:"Beacon",kind:"item",icon:"icons/beacon.png"},{id:"storage-tank",name:"Storage tank",kind:"item",icon:"icons/storage-tank.png"},{id:"pump",name:"Pump",kind:"item",icon:"icons/pump.png"},{id:"pumpjack",name:"Pumpjack",kind:"item",icon:"icons/pumpjack.png"},{id:"oil-refinery",name:"Oil refinery",kind:"item",icon:"icons/oil-refinery.png"},{id:"chemical-plant",name:"Chemical plant",kind:"item",icon:"icons/chemical-plant.png"},{id:"sulfur",name:"Sulfur",kind:"item",icon:"icons/sulfur.png"},{id:"barrel",name:"Barrel",kind:"item",icon:"icons/barrel.png"},{id:"plastic-bar",name:"Plastic bar",kind:"item",icon:"icons/plastic-bar.png"},{id:"electric-engine-unit",name:"Electric engine unit",kind:"item",icon:"icons/electric-engine-unit.png"},{id:"explosives",name:"Explosives",kind:"item",icon:"icons/explosives.png"},{id:"battery",name:"Battery",kind:"item",icon:"icons/battery.png"},{id:"flying-robot-frame",name:"Flying robot frame",kind:"item",icon:"icons/flying-robot-frame.png"},{id:"low-density-structure",name:"Low density structure",kind:"item",icon:"icons/low-density-structure.png"},{id:"nuclear-fuel",name:"Nuclear fuel",kind:"item",icon:"icons/nuclear-fuel.png"},{id:"rocket-part",name:"Rocket part",kind:"item",icon:"icons/rocket-part.png"},{id:"electric-energy-interface",name:"Electric energy interface",kind:"item",icon:"icons/electric-energy-interface.png"},{id:"heat-interface",name:"Heat interface",kind:"item",icon:"icons/heat-interface.png"},{id:"nuclear-reactor",name:"Nuclear reactor",kind:"item",icon:"icons/nuclear-reactor.png"},{id:"uranium-235",name:"Uranium-235",kind:"item",icon:"icons/uranium-235.png"},{id:"uranium-238",name:"Uranium-238",kind:"item",icon:"icons/uranium-238.png"},{id:"centrifuge",name:"Centrifuge",kind:"item",icon:"icons/centrifuge.png"},{id:"uranium-fuel-cell",name:"Uranium fuel cell",kind:"item",icon:"icons/uranium-fuel-cell.png"},{id:"depleted-uranium-fuel-cell",name:"Depleted uranium fuel cell",kind:"item",icon:"icons/depleted-uranium-fuel-cell.png"},{id:"heat-exchanger",name:"Heat exchanger",kind:"item",icon:"icons/heat-exchanger.png"},{id:"steam-turbine",name:"Steam turbine",kind:"item",icon:"icons/steam-turbine.png"},{id:"heat-pipe",name:"Heat pipe",kind:"item",icon:"icons/heat-pipe.png"},{id:"simple-entity-with-force",name:"Simple entity with force",kind:"item",icon:"icons/simple-entity-with-force.png"},{id:"simple-entity-with-owner",name:"Simple entity with owner",kind:"item",icon:"icons/simple-entity-with-owner.png"},{id:"infinity-chest",name:"Infinity chest",kind:"item",icon:"icons/infinity-chest.png"},{id:"infinity-cargo-wagon",name:"Infinity cargo wagon",kind:"item",icon:"icons/infinity-cargo-wagon.png"},{id:"infinity-pipe",name:"Infinity pipe",kind:"item",icon:"icons/infinity-pipe.png"},{id:"burner-generator",name:"Burner generator",kind:"item",icon:"icons/burner-generator.png"},{id:"linked-chest",name:"Linked chest",kind:"item",icon:"icons/linked-chest.png"},{id:"proxy-container",name:"Proxy container",kind:"item",icon:"icons/proxy-container.png"},{id:"bottomless-chest",name:"Bottomless chest",kind:"item",icon:"icons/bottomless-chest.png"},{id:"linked-belt",name:"Linked belt",kind:"item",icon:"icons/linked-belt.png"},{id:"one-way-valve",name:"One-way valve",kind:"item",icon:"icons/one-way-valve.png"},{id:"overflow-valve",name:"Overflow valve",kind:"item",icon:"icons/overflow-valve.png"},{id:"top-up-valve",name:"Top-up valve",kind:"item",icon:"icons/top-up-valve.png"},{id:"land-mine",name:"Land mine",kind:"item",icon:"icons/land-mine.png"},{id:"solar-panel-equipment",name:"Portable solar panel",kind:"item",icon:"icons/solar-panel-equipment.png"},{id:"fission-reactor-equipment",name:"Portable fission reactor",kind:"item",icon:"icons/fission-reactor-equipment.png"},{id:"electric-energy-interface-equipment",name:"Electric energy interface equipment",kind:"item",icon:"icons/electric-energy-interface-equipment.png"},{id:"battery-equipment",name:"Personal battery",kind:"item",icon:"icons/battery-equipment.png"},{id:"battery-mk2-equipment",name:"Personal battery MK2",kind:"item",icon:"icons/battery-mk2-equipment.png"},{id:"belt-immunity-equipment",name:"Belt immunity equipment",kind:"item",icon:"icons/belt-immunity-equipment.png"},{id:"exoskeleton-equipment",name:"Exoskeleton",kind:"item",icon:"icons/exoskeleton-equipment.png"},{id:"personal-roboport-equipment",name:"Personal roboport",kind:"item",icon:"icons/personal-roboport-equipment.png"},{id:"personal-roboport-mk2-equipment",name:"Personal roboport MK2",kind:"item",icon:"icons/personal-roboport-mk2-equipment.png"},{id:"night-vision-equipment",name:"Nightvision",kind:"item",icon:"icons/night-vision-equipment.png"},{id:"energy-shield-equipment",name:"Energy shield",kind:"item",icon:"icons/energy-shield-equipment.png"},{id:"energy-shield-mk2-equipment",name:"Energy shield MK2",kind:"item",icon:"icons/energy-shield-mk2-equipment.png"},{id:"personal-laser-defense-equipment",name:"Personal laser defense",kind:"item",icon:"icons/personal-laser-defense-equipment.png"},{id:"discharge-defense-equipment",name:"Discharge defense",kind:"item",icon:"icons/discharge-defense-equipment.png"},{id:"gun-turret",name:"Gun turret",kind:"item",icon:"icons/gun-turret.png"},{id:"laser-turret",name:"Laser turret",kind:"item",icon:"icons/laser-turret.png"},{id:"flamethrower-turret",name:"Flamethrower turret",kind:"item",icon:"icons/flamethrower-turret.png"},{id:"artillery-turret",name:"Artillery turret",kind:"item",icon:"icons/artillery-turret.png"},{id:"arithmetic-combinator",name:"Arithmetic combinator",kind:"item",icon:"icons/arithmetic-combinator.png"},{id:"decider-combinator",name:"Decider combinator",kind:"item",icon:"icons/decider-combinator.png"},{id:"constant-combinator",name:"Constant combinator",kind:"item",icon:"icons/constant-combinator.png"},{id:"selector-combinator",name:"Selector combinator",kind:"item",icon:"icons/selector-combinator.png"},{id:"power-switch",name:"Power switch",kind:"item",icon:"icons/power-switch.png"},{id:"programmable-speaker",name:"Programmable speaker",kind:"item",icon:"icons/programmable-speaker.png"},{id:"display-panel",name:"Display panel",kind:"item",icon:"icons/display-panel.png"},{id:"science",name:"Science",kind:"item",icon:"icons/science.png"},{id:"rail-support",name:"Rail support",kind:"item",icon:"icons/rail-support.png"},{id:"recycler",name:"Recycler",kind:"item",icon:"icons/recycler.png"},{id:"space-platform-foundation",name:"Space platform foundation",kind:"item",icon:"icons/space-platform-foundation.png",spaceAge:!0},{id:"metallurgic-science-pack",name:"Metallurgic science pack",kind:"item",icon:"icons/metallurgic-science-pack.png",spaceAge:!0},{id:"agricultural-science-pack",name:"Agricultural science pack",kind:"item",icon:"icons/agricultural-science-pack.png",spaceAge:!0},{id:"electromagnetic-science-pack",name:"Electromagnetic science pack",kind:"item",icon:"icons/electromagnetic-science-pack.png",spaceAge:!0},{id:"cryogenic-science-pack",name:"Cryogenic science pack",kind:"item",icon:"icons/cryogenic-science-pack.png",spaceAge:!0},{id:"promethium-science-pack",name:"Promethium science pack",kind:"item",icon:"icons/promethium-science-pack.png",spaceAge:!0},{id:"turbo-transport-belt",name:"Turbo transport belt",kind:"item",icon:"icons/turbo-transport-belt.png",spaceAge:!0},{id:"turbo-underground-belt",name:"Turbo underground belt",kind:"item",icon:"icons/turbo-underground-belt.png",spaceAge:!0},{id:"turbo-splitter",name:"Turbo splitter",kind:"item",icon:"icons/turbo-splitter.png",spaceAge:!0},{id:"turbo-loader",name:"Turbo loader",kind:"item",icon:"icons/turbo-loader.png",spaceAge:!0},{id:"toolbelt-equipment",name:"Toolbelt equipment",kind:"item",icon:"icons/toolbelt-equipment.png",spaceAge:!0},{id:"battery-mk3-equipment",name:"Personal battery MK3",kind:"item",icon:"icons/battery-mk3-equipment.png",spaceAge:!0},{id:"cargo-bay",name:"Cargo bay",kind:"item",icon:"icons/cargo-bay.png",spaceAge:!0},{id:"landing-pad-unloading-bay",name:"Landing pad unloading bay",kind:"item",icon:"icons/landing-pad-unloading-bay.png",spaceAge:!0},{id:"metallic-asteroid-chunk",name:"Metallic asteroid chunk",kind:"item",icon:"icons/metallic-asteroid-chunk.png",spaceAge:!0},{id:"carbonic-asteroid-chunk",name:"Carbonic asteroid chunk",kind:"item",icon:"icons/carbonic-asteroid-chunk.png",spaceAge:!0},{id:"oxide-asteroid-chunk",name:"Oxide asteroid chunk",kind:"item",icon:"icons/oxide-asteroid-chunk.png",spaceAge:!0},{id:"promethium-asteroid-chunk",name:"Promethium asteroid chunk",kind:"item",icon:"icons/promethium-asteroid-chunk.png",spaceAge:!0},{id:"asteroid-collector",name:"Asteroid collector",kind:"item",icon:"icons/asteroid-collector.png",spaceAge:!0},{id:"crusher",name:"Crusher",kind:"item",icon:"icons/crusher.png",spaceAge:!0},{id:"thruster",name:"Thruster",kind:"item",icon:"icons/thruster.png",spaceAge:!0},{id:"ice",name:"Ice",kind:"item",icon:"icons/ice.png",spaceAge:!0},{id:"carbon",name:"Carbon",kind:"item",icon:"icons/carbon.png",spaceAge:!0},{id:"calcite",name:"Calcite",kind:"item",icon:"icons/calcite.png",spaceAge:!0},{id:"tungsten-ore",name:"Tungsten ore",kind:"item",icon:"icons/tungsten-ore.png",spaceAge:!0},{id:"tungsten-plate",name:"Tungsten plate",kind:"item",icon:"icons/tungsten-plate.png",spaceAge:!0},{id:"big-mining-drill",name:"Big mining drill",kind:"item",icon:"icons/big-mining-drill.png",spaceAge:!0},{id:"tungsten-carbide",name:"Tungsten carbide",kind:"item",icon:"icons/tungsten-carbide.png",spaceAge:!0},{id:"foundry",name:"Foundry",kind:"item",icon:"icons/foundry.png",spaceAge:!0},{id:"railgun-turret",name:"Railgun turret",kind:"item",icon:"icons/railgun-turret.png",spaceAge:!0},{id:"copper-bacteria",name:"Copper bacteria",kind:"item",icon:"icons/copper-bacteria.png",spaceAge:!0},{id:"iron-bacteria",name:"Iron bacteria",kind:"item",icon:"icons/iron-bacteria.png",spaceAge:!0},{id:"yumako-seed",name:"Yumako seed",kind:"item",icon:"icons/yumako-seed.png",spaceAge:!0},{id:"jellynut-seed",name:"Jellynut seed",kind:"item",icon:"icons/jellynut-seed.png",spaceAge:!0},{id:"nutrients",name:"Nutrients",kind:"item",icon:"icons/nutrients.png",spaceAge:!0},{id:"artificial-yumako-soil",name:"Artificial yumako soil",kind:"item",icon:"icons/artificial-yumako-soil.png",spaceAge:!0},{id:"overgrowth-yumako-soil",name:"Overgrowth yumako soil",kind:"item",icon:"icons/overgrowth-yumako-soil.png",spaceAge:!0},{id:"artificial-jellynut-soil",name:"Artificial jellynut soil",kind:"item",icon:"icons/artificial-jellynut-soil.png",spaceAge:!0},{id:"overgrowth-jellynut-soil",name:"Overgrowth jellynut soil",kind:"item",icon:"icons/overgrowth-jellynut-soil.png",spaceAge:!0},{id:"agricultural-tower",name:"Agricultural tower",kind:"item",icon:"icons/agricultural-tower.png",spaceAge:!0},{id:"biochamber",name:"Biochamber",kind:"item",icon:"icons/biochamber.png",spaceAge:!0},{id:"biolab",name:"Biolab",kind:"item",icon:"icons/biolab.png",spaceAge:!0},{id:"captive-biter-spawner",name:"Captive biter spawner",kind:"item",icon:"icons/captive-biter-spawner.png",spaceAge:!0},{id:"biter-egg",name:"Biter egg",kind:"item",icon:"icons/biter-egg.png",spaceAge:!0},{id:"pentapod-egg",name:"Pentapod egg",kind:"item",icon:"icons/pentapod-egg.png",spaceAge:!0},{id:"carbon-fiber",name:"Carbon fiber",kind:"item",icon:"icons/carbon-fiber.png",spaceAge:!0},{id:"stack-inserter",name:"Stack inserter",kind:"item",icon:"icons/stack-inserter.png",spaceAge:!0},{id:"rocket-turret",name:"Rocket turret",kind:"item",icon:"icons/rocket-turret.png",spaceAge:!0},{id:"holmium-ore",name:"Holmium ore",kind:"item",icon:"icons/holmium-ore.png",spaceAge:!0},{id:"holmium-plate",name:"Holmium plate",kind:"item",icon:"icons/holmium-plate.png",spaceAge:!0},{id:"lithium",name:"Lithium",kind:"item",icon:"icons/lithium.png",spaceAge:!0},{id:"lithium-plate",name:"Lithium plate",kind:"item",icon:"icons/lithium-plate.png",spaceAge:!0},{id:"scrap",name:"Scrap",kind:"item",icon:"icons/scrap.png",spaceAge:!0},{id:"lightning-rod",name:"Lightning rod",kind:"item",icon:"icons/lightning-rod.png",spaceAge:!0},{id:"lightning-collector",name:"Lightning collector",kind:"item",icon:"icons/lightning-collector.png",spaceAge:!0},{id:"heating-tower",name:"Heating tower",kind:"item",icon:"icons/heating-tower.png",spaceAge:!0},{id:"electromagnetic-plant",name:"Electromagnetic plant",kind:"item",icon:"icons/electromagnetic-plant.png",spaceAge:!0},{id:"superconductor",name:"Superconductor",kind:"item",icon:"icons/superconductor.png",spaceAge:!0},{id:"supercapacitor",name:"Supercapacitor",kind:"item",icon:"icons/supercapacitor.png",spaceAge:!0},{id:"tesla-turret",name:"Tesla turret",kind:"item",icon:"icons/tesla-turret.png",spaceAge:!0},{id:"quantum-processor",name:"Quantum processor",kind:"item",icon:"icons/quantum-processor.png",spaceAge:!0},{id:"fusion-reactor-equipment",name:"Portable fusion reactor",kind:"item",icon:"icons/fusion-reactor-equipment.png",spaceAge:!0},{id:"fusion-power-cell",name:"Fusion power cell",kind:"item",icon:"icons/fusion-power-cell.png",spaceAge:!0},{id:"fusion-reactor",name:"Fusion reactor",kind:"item",icon:"icons/fusion-reactor.png",spaceAge:!0},{id:"fusion-generator",name:"Fusion generator",kind:"item",icon:"icons/fusion-generator.png",spaceAge:!0},{id:"cryogenic-plant",name:"Cryogenic plant",kind:"item",icon:"icons/cryogenic-plant.png",spaceAge:!0},{id:"spoilage",name:"Spoilage",kind:"item",icon:"icons/spoilage.png",spaceAge:!0},{id:"ice-platform",name:"Ice platform",kind:"item",icon:"icons/ice-platform.png",spaceAge:!0},{id:"foundation",name:"Foundation",kind:"item",icon:"icons/foundation.png",spaceAge:!0},{id:"space-platform-hub",name:"Space platform hub",kind:"item",icon:"icons/space-platform-hub.png",spaceAge:!0},{id:"tree-seed",name:"Tree seed",kind:"item",icon:"icons/tree-seed.png",spaceAge:!0},{id:"water-barrel",name:"Water barrel",kind:"item",icon:"icons/water-barrel.png"},{id:"sulfuric-acid-barrel",name:"Sulfuric acid barrel",kind:"item",icon:"icons/sulfuric-acid-barrel.png"},{id:"crude-oil-barrel",name:"Crude oil barrel",kind:"item",icon:"icons/crude-oil-barrel.png"},{id:"heavy-oil-barrel",name:"Heavy oil barrel",kind:"item",icon:"icons/heavy-oil-barrel.png"},{id:"light-oil-barrel",name:"Light oil barrel",kind:"item",icon:"icons/light-oil-barrel.png"},{id:"petroleum-gas-barrel",name:"Petroleum gas barrel",kind:"item",icon:"icons/petroleum-gas-barrel.png"},{id:"lubricant-barrel",name:"Lubricant barrel",kind:"item",icon:"icons/lubricant-barrel.png"},{id:"fluoroketone-cold-barrel",name:"Fluoroketone (Cold) barrel",kind:"item",icon:"icons/fluoroketone-cold-barrel.png"},{id:"fluoroketone-hot-barrel",name:"Fluoroketone (Hot) barrel",kind:"item",icon:"icons/fluoroketone-hot-barrel.png"},{id:"water",name:"Water",kind:"fluid",icon:"icons/fluid/water.png"},{id:"steam",name:"Steam",kind:"fluid",icon:"icons/fluid/steam.png"},{id:"sulfuric-acid",name:"Sulfuric Acid",kind:"fluid",icon:"icons/fluid/sulfuric-acid.png"},{id:"crude-oil",name:"Crude Oil",kind:"fluid",icon:"icons/fluid/crude-oil.png"},{id:"heavy-oil",name:"Heavy Oil",kind:"fluid",icon:"icons/fluid/heavy-oil.png"},{id:"light-oil",name:"Light Oil",kind:"fluid",icon:"icons/fluid/light-oil.png"},{id:"petroleum-gas",name:"Petroleum Gas",kind:"fluid",icon:"icons/fluid/petroleum-gas.png"},{id:"lubricant",name:"Lubricant",kind:"fluid",icon:"icons/fluid/lubricant.png"},{id:"ammoniacal-solution",name:"Ammoniacal Solution",kind:"fluid",icon:"icons/fluid/ammoniacal-solution.png",spaceAge:!0},{id:"ammonia",name:"Ammonia",kind:"fluid",icon:"icons/fluid/ammonia.png",spaceAge:!0},{id:"fluorine",name:"Fluorine",kind:"fluid",icon:"icons/fluid/fluorine.png",spaceAge:!0},{id:"fluoroketone-cold",name:"Fluoroketone Cold",kind:"fluid",icon:"icons/fluid/fluoroketone-cold.png",spaceAge:!0},{id:"fluoroketone-hot",name:"Fluoroketone Hot",kind:"fluid",icon:"icons/fluid/fluoroketone-hot.png",spaceAge:!0},{id:"holmium-solution",name:"Holmium Solution",kind:"fluid",icon:"icons/fluid/holmium-solution.png",spaceAge:!0},{id:"electrolyte",name:"Electrolyte",kind:"fluid",icon:"icons/fluid/electrolyte.png",spaceAge:!0},{id:"lithium-brine",name:"Lithium Brine",kind:"fluid",icon:"icons/fluid/lithium-brine.png",spaceAge:!0},{id:"lava",name:"Lava",kind:"fluid",icon:"icons/fluid/lava.png",spaceAge:!0},{id:"molten-iron",name:"Molten Iron",kind:"fluid",icon:"icons/fluid/molten-iron.png",spaceAge:!0},{id:"molten-copper",name:"Molten Copper",kind:"fluid",icon:"icons/fluid/molten-copper.png",spaceAge:!0},{id:"thruster-fuel",name:"Thruster Fuel",kind:"fluid",icon:"icons/fluid/thruster-fuel.png",spaceAge:!0},{id:"thruster-oxidizer",name:"Thruster Oxidizer",kind:"fluid",icon:"icons/fluid/thruster-oxidizer.png",spaceAge:!0},{id:"fusion-plasma",name:"Fusion Plasma",kind:"fluid",icon:"icons/fluid/fusion-plasma.png",spaceAge:!0},{id:"speed-module",name:"Speed module",kind:"item",icon:"icons/speed-module.png"},{id:"speed-module-2",name:"Speed module 2",kind:"item",icon:"icons/speed-module-2.png"},{id:"speed-module-3",name:"Speed module 3",kind:"item",icon:"icons/speed-module-3.png"},{id:"productivity-module",name:"Productivity module",kind:"item",icon:"icons/productivity-module.png"},{id:"productivity-module-2",name:"Productivity module 2",kind:"item",icon:"icons/productivity-module-2.png"},{id:"productivity-module-3",name:"Productivity module 3",kind:"item",icon:"icons/productivity-module-3.png"},{id:"efficiency-module",name:"Efficiency module",kind:"item",icon:"icons/efficiency-module.png"},{id:"efficiency-module-2",name:"Efficiency module 2",kind:"item",icon:"icons/efficiency-module-2.png"},{id:"efficiency-module-3",name:"Efficiency module 3",kind:"item",icon:"icons/efficiency-module-3.png"},{id:"pistol",name:"Pistol",kind:"item",icon:"icons/pistol.png"},{id:"submachine-gun",name:"Submachine gun",kind:"item",icon:"icons/submachine-gun.png"},{id:"firearm-magazine",name:"Firearm magazine",kind:"item",icon:"icons/firearm-magazine.png"},{id:"light-armor",name:"Light armor",kind:"item",icon:"icons/light-armor.png"},{id:"repair-pack",name:"Repair pack",kind:"item",icon:"icons/repair-pack.png"},{id:"car",name:"Car",kind:"item",icon:"icons/car.png"},{id:"shotgun",name:"Shotgun",kind:"item",icon:"icons/shotgun.png"},{id:"shotgun-shell",name:"Shotgun shells",kind:"item",icon:"icons/shotgun-shell.png"},{id:"piercing-rounds-magazine",name:"Piercing rounds magazine",kind:"item",icon:"icons/piercing-rounds-magazine.png"},{id:"grenade",name:"Grenade",kind:"item",icon:"icons/grenade.png"},{id:"heavy-armor",name:"Heavy armor",kind:"item",icon:"icons/heavy-armor.png"},{id:"rail",name:"Rail",kind:"item",icon:"icons/rail.png"},{id:"locomotive",name:"Locomotive",kind:"item",icon:"icons/locomotive.png"},{id:"cargo-wagon",name:"Cargo wagon",kind:"item",icon:"icons/cargo-wagon.png"},{id:"poison-capsule",name:"Poison capsule",kind:"item",icon:"icons/poison-capsule.png"},{id:"slowdown-capsule",name:"Slowdown capsule",kind:"item",icon:"icons/slowdown-capsule.png"},{id:"cluster-grenade",name:"Cluster grenade",kind:"item",icon:"icons/cluster-grenade.png"},{id:"defender-capsule",name:"Defender capsule",kind:"item",icon:"icons/defender-capsule.png"},{id:"distractor-capsule",name:"Distractor capsule",kind:"item",icon:"icons/distractor-capsule.png"},{id:"destroyer-capsule",name:"Destroyer capsule",kind:"item",icon:"icons/destroyer-capsule.png"},{id:"cliff-explosives",name:"Cliff explosives",kind:"item",icon:"icons/cliff-explosives.png"},{id:"uranium-rounds-magazine",name:"Uranium rounds magazine",kind:"item",icon:"icons/uranium-rounds-magazine.png"},{id:"rocket",name:"Rocket",kind:"item",icon:"icons/rocket.png"},{id:"explosive-rocket",name:"Explosive rocket",kind:"item",icon:"icons/explosive-rocket.png"},{id:"atomic-bomb",name:"Atomic bomb",kind:"item",icon:"icons/atomic-bomb.png"},{id:"piercing-shotgun-shell",name:"Piercing shotgun shells",kind:"item",icon:"icons/piercing-shotgun-shell.png"},{id:"cannon-shell",name:"Cannon shell",kind:"item",icon:"icons/cannon-shell.png"},{id:"explosive-cannon-shell",name:"Explosive cannon shell",kind:"item",icon:"icons/explosive-cannon-shell.png"},{id:"uranium-cannon-shell",name:"Uranium cannon shell",kind:"item",icon:"icons/uranium-cannon-shell.png"},{id:"explosive-uranium-cannon-shell",name:"Explosive uranium cannon shell",kind:"item",icon:"icons/explosive-uranium-cannon-shell.png"},{id:"artillery-shell",name:"Artillery shell",kind:"item",icon:"icons/artillery-shell.png"},{id:"flamethrower-ammo",name:"Flamethrower ammo",kind:"item",icon:"icons/flamethrower-ammo.png"},{id:"tank",name:"Tank",kind:"item",icon:"icons/tank.png"},{id:"raw-fish",name:"Raw fish",kind:"item",icon:"icons/raw-fish.png"},{id:"spidertron",name:"Spidertron",kind:"item",icon:"icons/spidertron.png"},{id:"fluid-wagon",name:"Fluid wagon",kind:"item",icon:"icons/fluid-wagon.png"},{id:"artillery-wagon",name:"Artillery wagon",kind:"item",icon:"icons/artillery-wagon.png"},{id:"modular-armor",name:"Modular armor",kind:"item",icon:"icons/modular-armor.png"},{id:"power-armor",name:"Power armor",kind:"item",icon:"icons/power-armor.png"},{id:"power-armor-mk2",name:"Power armor MK2",kind:"item",icon:"icons/power-armor-mk2.png"},{id:"flamethrower",name:"Flamethrower",kind:"item",icon:"icons/flamethrower.png"},{id:"rocket-launcher",name:"Rocket launcher",kind:"item",icon:"icons/rocket-launcher.png"},{id:"combat-shotgun",name:"Combat shotgun",kind:"item",icon:"icons/combat-shotgun.png"},{id:"rail-ramp",name:"Rail ramp",kind:"item",icon:"icons/rail-ramp.png"},{id:"quality-module",name:"Quality module",kind:"item",icon:"icons/quality-module.png"},{id:"quality-module-2",name:"Quality module 2",kind:"item",icon:"icons/quality-module-2.png"},{id:"quality-module-3",name:"Quality module 3",kind:"item",icon:"icons/quality-module-3.png"},{id:"yumako",name:"Yumako",kind:"item",icon:"icons/yumako.png",spaceAge:!0},{id:"yumako-mash",name:"Yumako mash",kind:"item",icon:"icons/yumako-mash.png",spaceAge:!0},{id:"jellynut",name:"Jellynut",kind:"item",icon:"icons/jellynut.png",spaceAge:!0},{id:"jelly",name:"Jelly",kind:"item",icon:"icons/jelly.png",spaceAge:!0},{id:"bioflux",name:"Bioflux",kind:"item",icon:"icons/bioflux.png",spaceAge:!0},{id:"space-platform-starter-pack",name:"Space platform starter pack",kind:"item",icon:"icons/space-platform-starter-pack.png",spaceAge:!0},{id:"mech-armor",name:"Mech armor",kind:"item",icon:"icons/mech-armor.png",spaceAge:!0},{id:"railgun",name:"Railgun",kind:"item",icon:"icons/railgun.png",spaceAge:!0},{id:"railgun-ammo",name:"Railgun ammo",kind:"item",icon:"icons/railgun-ammo.png",spaceAge:!0},{id:"capture-robot-rocket",name:"Capture bot rocket",kind:"item",icon:"icons/capture-robot-rocket.png",spaceAge:!0},{id:"teslagun",name:"Tesla gun",kind:"item",icon:"icons/teslagun.png",spaceAge:!0},{id:"tesla-ammo",name:"Tesla ammo",kind:"item",icon:"icons/tesla-ammo.png",spaceAge:!0},{id:"blueprint",name:"Blueprint",kind:"item",icon:"icons/blueprint.png"},{id:"blueprint-book",name:"Blueprint book",kind:"item",icon:"icons/blueprint-book.png"},{id:"deconstruction-planner",name:"Deconstruction planner",kind:"item",icon:"icons/deconstruction-planner.png"},{id:"selection-tool",name:"Selection tool",kind:"item",icon:"icons/selection-tool.png"},{id:"upgrade-planner",name:"Upgrade planner",kind:"item",icon:"icons/upgrade-planner.png"}],qt=[{id:"speed-module",name:"Speed module",outputs:[{material:"speed-module",amount:1}],inputs:[{material:"advanced-circuit",amount:5},{material:"electronic-circuit",amount:5}]},{id:"speed-module-2",name:"Speed module 2",outputs:[{material:"speed-module-2",amount:1}],inputs:[{material:"speed-module",amount:4},{material:"advanced-circuit",amount:5},{material:"processing-unit",amount:5}]},{id:"speed-module-3",name:"Speed module 3",outputs:[{material:"speed-module-3",amount:1}],inputs:[{material:"speed-module-2",amount:4},{material:"advanced-circuit",amount:5},{material:"processing-unit",amount:5},{material:"tungsten-carbide",amount:1}]},{id:"productivity-module",name:"Productivity module",outputs:[{material:"productivity-module",amount:1}],inputs:[{material:"advanced-circuit",amount:5},{material:"electronic-circuit",amount:5}]},{id:"productivity-module-2",name:"Productivity module 2",outputs:[{material:"productivity-module-2",amount:1}],inputs:[{material:"productivity-module",amount:4},{material:"advanced-circuit",amount:5},{material:"processing-unit",amount:5}]},{id:"productivity-module-3",name:"Productivity module 3",outputs:[{material:"productivity-module-3",amount:1}],inputs:[{material:"productivity-module-2",amount:4},{material:"advanced-circuit",amount:5},{material:"processing-unit",amount:5},{material:"biter-egg",amount:1}]},{id:"efficiency-module",name:"Efficiency module",outputs:[{material:"efficiency-module",amount:1}],inputs:[{material:"advanced-circuit",amount:5},{material:"electronic-circuit",amount:5}]},{id:"efficiency-module-2",name:"Efficiency module 2",outputs:[{material:"efficiency-module-2",amount:1}],inputs:[{material:"efficiency-module",amount:4},{material:"advanced-circuit",amount:5},{material:"processing-unit",amount:5}]},{id:"efficiency-module-3",name:"Efficiency module 3",outputs:[{material:"efficiency-module-3",amount:1}],inputs:[{material:"efficiency-module-2",amount:4},{material:"advanced-circuit",amount:5},{material:"processing-unit",amount:5},{material:"spoilage",amount:5}]},{id:"bulk-inserter",name:"Bulk inserter",outputs:[{material:"bulk-inserter",amount:1}],inputs:[{material:"iron-gear-wheel",amount:15},{material:"electronic-circuit",amount:15},{material:"advanced-circuit",amount:1},{material:"fast-inserter",amount:1}]},{id:"basic-oil-processing",name:"Basic oil processing",outputs:[{material:"petroleum-gas",amount:45}],inputs:[{material:"crude-oil",amount:100}]},{id:"advanced-oil-processing",name:"Advanced oil processing",outputs:[{material:"heavy-oil",amount:25},{material:"light-oil",amount:45},{material:"petroleum-gas",amount:55}],inputs:[{material:"water",amount:50},{material:"crude-oil",amount:100}]},{id:"coal-liquefaction",name:"Coal liquefaction",outputs:[{material:"heavy-oil",amount:90},{material:"light-oil",amount:20},{material:"petroleum-gas",amount:10}],inputs:[{material:"coal",amount:10},{material:"heavy-oil",amount:25},{material:"steam",amount:50}],alternate:!0},{id:"heavy-oil-cracking",name:"Heavy oil cracking to light oil",outputs:[{material:"light-oil",amount:30}],inputs:[{material:"water",amount:30},{material:"heavy-oil",amount:40}]},{id:"light-oil-cracking",name:"Light oil cracking to petroleum gas",outputs:[{material:"petroleum-gas",amount:20}],inputs:[{material:"water",amount:30},{material:"light-oil",amount:30}],alternate:!0},{id:"sulfuric-acid",name:"Sulfuric acid",outputs:[{material:"sulfuric-acid",amount:50}],inputs:[{material:"sulfur",amount:5},{material:"iron-plate",amount:1},{material:"water",amount:100}]},{id:"plastic-bar",name:"Plastic bar",outputs:[{material:"plastic-bar",amount:2}],inputs:[{material:"petroleum-gas",amount:20},{material:"coal",amount:1}]},{id:"solid-fuel-from-light-oil",name:"Solid fuel from light oil",outputs:[{material:"solid-fuel",amount:1}],inputs:[{material:"light-oil",amount:10}]},{id:"solid-fuel-from-petroleum-gas",name:"Solid fuel from petroleum gas",outputs:[{material:"solid-fuel",amount:1}],inputs:[{material:"petroleum-gas",amount:20}],alternate:!0},{id:"solid-fuel-from-heavy-oil",name:"Solid fuel from heavy oil",outputs:[{material:"solid-fuel",amount:1}],inputs:[{material:"heavy-oil",amount:20}],alternate:!0},{id:"sulfur",name:"Sulfur",outputs:[{material:"sulfur",amount:2}],inputs:[{material:"water",amount:30},{material:"petroleum-gas",amount:30}]},{id:"lubricant",name:"Lubricant",outputs:[{material:"lubricant",amount:10}],inputs:[{material:"heavy-oil",amount:10}]},{id:"barrel",name:"Barrel",outputs:[{material:"barrel",amount:1}],inputs:[{material:"steel-plate",amount:1}]},{id:"night-vision-equipment",name:"Nightvision",outputs:[{material:"night-vision-equipment",amount:1}],inputs:[{material:"advanced-circuit",amount:5},{material:"steel-plate",amount:10}]},{id:"belt-immunity-equipment",name:"Belt immunity equipment",outputs:[{material:"belt-immunity-equipment",amount:1}],inputs:[{material:"advanced-circuit",amount:5},{material:"steel-plate",amount:10}]},{id:"energy-shield-equipment",name:"Energy shield",outputs:[{material:"energy-shield-equipment",amount:1}],inputs:[{material:"advanced-circuit",amount:5},{material:"steel-plate",amount:10}]},{id:"energy-shield-mk2-equipment",name:"Energy shield MK2",outputs:[{material:"energy-shield-mk2-equipment",amount:1}],inputs:[{material:"energy-shield-equipment",amount:10},{material:"processing-unit",amount:5},{material:"low-density-structure",amount:5}]},{id:"battery-equipment",name:"Personal battery",outputs:[{material:"battery-equipment",amount:1}],inputs:[{material:"battery",amount:5},{material:"steel-plate",amount:10}]},{id:"battery-mk2-equipment",name:"Personal battery MK2",outputs:[{material:"battery-mk2-equipment",amount:1}],inputs:[{material:"battery-equipment",amount:10},{material:"processing-unit",amount:15},{material:"low-density-structure",amount:5}]},{id:"solar-panel-equipment",name:"Portable solar panel",outputs:[{material:"solar-panel-equipment",amount:1}],inputs:[{material:"solar-panel",amount:1},{material:"advanced-circuit",amount:2},{material:"steel-plate",amount:5}]},{id:"fission-reactor-equipment",name:"Portable fission reactor",outputs:[{material:"fission-reactor-equipment",amount:1}],inputs:[{material:"processing-unit",amount:200},{material:"low-density-structure",amount:50},{material:"uranium-fuel-cell",amount:4}]},{id:"personal-laser-defense-equipment",name:"Personal laser defense",outputs:[{material:"personal-laser-defense-equipment",amount:1}],inputs:[{material:"processing-unit",amount:20},{material:"low-density-structure",amount:5},{material:"laser-turret",amount:5}]},{id:"discharge-defense-equipment",name:"Discharge defense",outputs:[{material:"discharge-defense-equipment",amount:1}],inputs:[{material:"processing-unit",amount:5},{material:"steel-plate",amount:20},{material:"laser-turret",amount:10}]},{id:"exoskeleton-equipment",name:"Exoskeleton",outputs:[{material:"exoskeleton-equipment",amount:1}],inputs:[{material:"processing-unit",amount:10},{material:"electric-engine-unit",amount:30},{material:"steel-plate",amount:20}]},{id:"personal-roboport-equipment",name:"Personal roboport",outputs:[{material:"personal-roboport-equipment",amount:1}],inputs:[{material:"advanced-circuit",amount:10},{material:"iron-gear-wheel",amount:40},{material:"steel-plate",amount:20},{material:"battery",amount:45}]},{id:"personal-roboport-mk2-equipment",name:"Personal roboport MK2",outputs:[{material:"personal-roboport-mk2-equipment",amount:1}],inputs:[{material:"personal-roboport-equipment",amount:5},{material:"processing-unit",amount:50},{material:"superconductor",amount:50}]},{id:"laser-turret",name:"Laser turret",outputs:[{material:"laser-turret",amount:1}],inputs:[{material:"steel-plate",amount:20},{material:"electronic-circuit",amount:20},{material:"battery",amount:12}]},{id:"flamethrower-turret",name:"Flamethrower turret",outputs:[{material:"flamethrower-turret",amount:1}],inputs:[{material:"steel-plate",amount:30},{material:"iron-gear-wheel",amount:15},{material:"pipe",amount:10},{material:"engine-unit",amount:5}]},{id:"artillery-turret",name:"Artillery turret",outputs:[{material:"artillery-turret",amount:1}],inputs:[{material:"tungsten-plate",amount:60},{material:"refined-concrete",amount:60},{material:"iron-gear-wheel",amount:40},{material:"processing-unit",amount:10}]},{id:"gun-turret",name:"Gun turret",outputs:[{material:"gun-turret",amount:1}],inputs:[{material:"iron-gear-wheel",amount:10},{material:"copper-plate",amount:10},{material:"iron-plate",amount:20}]},{id:"wooden-chest",name:"Wooden chest",outputs:[{material:"wooden-chest",amount:1}],inputs:[{material:"wood",amount:2}]},{id:"display-panel",name:"Display panel",outputs:[{material:"display-panel",amount:1}],inputs:[{material:"iron-plate",amount:1},{material:"electronic-circuit",amount:1}]},{id:"iron-stick",name:"Iron stick",outputs:[{material:"iron-stick",amount:2}],inputs:[{material:"iron-plate",amount:1}]},{id:"stone-furnace",name:"Stone furnace",outputs:[{material:"stone-furnace",amount:1}],inputs:[{material:"stone",amount:5}]},{id:"boiler",name:"Boiler",outputs:[{material:"boiler",amount:1}],inputs:[{material:"stone-furnace",amount:1},{material:"pipe",amount:4}]},{id:"steam-engine",name:"Steam engine",outputs:[{material:"steam-engine",amount:1}],inputs:[{material:"iron-gear-wheel",amount:8},{material:"pipe",amount:5},{material:"iron-plate",amount:10}]},{id:"iron-gear-wheel",name:"Iron gear wheel",outputs:[{material:"iron-gear-wheel",amount:1}],inputs:[{material:"iron-plate",amount:2}]},{id:"electronic-circuit",name:"Electronic circuit",outputs:[{material:"electronic-circuit",amount:1}],inputs:[{material:"iron-plate",amount:1},{material:"copper-cable",amount:3}]},{id:"transport-belt",name:"Transport belt",outputs:[{material:"transport-belt",amount:2}],inputs:[{material:"iron-plate",amount:1},{material:"iron-gear-wheel",amount:1}]},{id:"electric-mining-drill",name:"Electric mining drill",outputs:[{material:"electric-mining-drill",amount:1}],inputs:[{material:"electronic-circuit",amount:3},{material:"iron-gear-wheel",amount:5},{material:"iron-plate",amount:10}]},{id:"burner-mining-drill",name:"Burner mining drill",outputs:[{material:"burner-mining-drill",amount:1}],inputs:[{material:"iron-gear-wheel",amount:3},{material:"stone-furnace",amount:1},{material:"iron-plate",amount:3}]},{id:"inserter",name:"Inserter",outputs:[{material:"inserter",amount:1}],inputs:[{material:"electronic-circuit",amount:1},{material:"iron-gear-wheel",amount:1},{material:"iron-plate",amount:1}]},{id:"fast-inserter",name:"Fast inserter",outputs:[{material:"fast-inserter",amount:1}],inputs:[{material:"electronic-circuit",amount:2},{material:"iron-plate",amount:2},{material:"inserter",amount:1}]},{id:"long-handed-inserter",name:"Long-handed inserter",outputs:[{material:"long-handed-inserter",amount:1}],inputs:[{material:"iron-gear-wheel",amount:1},{material:"iron-plate",amount:1},{material:"inserter",amount:1}]},{id:"burner-inserter",name:"Burner inserter",outputs:[{material:"burner-inserter",amount:1}],inputs:[{material:"iron-plate",amount:1},{material:"iron-gear-wheel",amount:1}]},{id:"pipe",name:"Pipe",outputs:[{material:"pipe",amount:1}],inputs:[{material:"iron-plate",amount:1}]},{id:"offshore-pump",name:"Offshore pump",outputs:[{material:"offshore-pump",amount:1}],inputs:[{material:"pipe",amount:3},{material:"iron-gear-wheel",amount:2}]},{id:"copper-cable",name:"Copper cable",outputs:[{material:"copper-cable",amount:2}],inputs:[{material:"copper-plate",amount:1}]},{id:"small-electric-pole",name:"Small electric pole",outputs:[{material:"small-electric-pole",amount:2}],inputs:[{material:"wood",amount:1},{material:"copper-cable",amount:2}]},{id:"pistol",name:"Pistol",outputs:[{material:"pistol",amount:1}],inputs:[{material:"copper-plate",amount:5},{material:"iron-plate",amount:5}]},{id:"submachine-gun",name:"Submachine gun",outputs:[{material:"submachine-gun",amount:1}],inputs:[{material:"iron-gear-wheel",amount:10},{material:"copper-plate",amount:5},{material:"iron-plate",amount:10}]},{id:"firearm-magazine",name:"Firearm magazine",outputs:[{material:"firearm-magazine",amount:1}],inputs:[{material:"iron-plate",amount:4}]},{id:"light-armor",name:"Light armor",outputs:[{material:"light-armor",amount:1}],inputs:[{material:"iron-plate",amount:40}]},{id:"radar",name:"Radar",outputs:[{material:"radar",amount:1}],inputs:[{material:"electronic-circuit",amount:5},{material:"iron-gear-wheel",amount:5},{material:"iron-plate",amount:10}]},{id:"small-lamp",name:"Lamp",outputs:[{material:"small-lamp",amount:1}],inputs:[{material:"electronic-circuit",amount:1},{material:"copper-cable",amount:3},{material:"iron-plate",amount:1}]},{id:"pipe-to-ground",name:"Pipe to ground",outputs:[{material:"pipe-to-ground",amount:2}],inputs:[{material:"pipe",amount:10},{material:"iron-plate",amount:5}]},{id:"assembling-machine-1",name:"Assembling machine 1",outputs:[{material:"assembling-machine-1",amount:1}],inputs:[{material:"electronic-circuit",amount:3},{material:"iron-gear-wheel",amount:5},{material:"iron-plate",amount:9}]},{id:"repair-pack",name:"Repair pack",outputs:[{material:"repair-pack",amount:1}],inputs:[{material:"electronic-circuit",amount:2},{material:"iron-gear-wheel",amount:2}]},{id:"automation-science-pack",name:"Automation science pack",outputs:[{material:"automation-science-pack",amount:1}],inputs:[{material:"copper-plate",amount:1},{material:"iron-gear-wheel",amount:1}]},{id:"logistic-science-pack",name:"Logistic science pack",outputs:[{material:"logistic-science-pack",amount:1}],inputs:[{material:"inserter",amount:1},{material:"transport-belt",amount:1}]},{id:"lab",name:"Lab",outputs:[{material:"lab",amount:1}],inputs:[{material:"electronic-circuit",amount:10},{material:"iron-gear-wheel",amount:10},{material:"transport-belt",amount:4}]},{id:"stone-wall",name:"Wall",outputs:[{material:"stone-wall",amount:1}],inputs:[{material:"stone-brick",amount:5}]},{id:"assembling-machine-2",name:"Assembling machine 2",outputs:[{material:"assembling-machine-2",amount:1}],inputs:[{material:"steel-plate",amount:2},{material:"electronic-circuit",amount:3},{material:"iron-gear-wheel",amount:5},{material:"assembling-machine-1",amount:1}]},{id:"splitter",name:"Splitter",outputs:[{material:"splitter",amount:1}],inputs:[{material:"electronic-circuit",amount:5},{material:"iron-plate",amount:5},{material:"transport-belt",amount:4}]},{id:"underground-belt",name:"Underground belt",outputs:[{material:"underground-belt",amount:2}],inputs:[{material:"iron-plate",amount:10},{material:"transport-belt",amount:5}]},{id:"loader",name:"Loader",outputs:[{material:"loader",amount:1}],inputs:[{material:"inserter",amount:5},{material:"electronic-circuit",amount:5},{material:"iron-gear-wheel",amount:5},{material:"iron-plate",amount:5},{material:"transport-belt",amount:5}]},{id:"car",name:"Car",outputs:[{material:"car",amount:1}],inputs:[{material:"engine-unit",amount:8},{material:"iron-plate",amount:20},{material:"steel-plate",amount:5}]},{id:"engine-unit",name:"Engine unit",outputs:[{material:"engine-unit",amount:1}],inputs:[{material:"steel-plate",amount:1},{material:"iron-gear-wheel",amount:1},{material:"pipe",amount:2}]},{id:"iron-chest",name:"Iron chest",outputs:[{material:"iron-chest",amount:1}],inputs:[{material:"iron-plate",amount:8}]},{id:"big-electric-pole",name:"Big electric pole",outputs:[{material:"big-electric-pole",amount:1}],inputs:[{material:"iron-stick",amount:8},{material:"steel-plate",amount:5},{material:"copper-cable",amount:4}]},{id:"medium-electric-pole",name:"Medium electric pole",outputs:[{material:"medium-electric-pole",amount:1}],inputs:[{material:"iron-stick",amount:4},{material:"steel-plate",amount:2},{material:"copper-cable",amount:2}]},{id:"shotgun",name:"Shotgun",outputs:[{material:"shotgun",amount:1}],inputs:[{material:"iron-plate",amount:15},{material:"iron-gear-wheel",amount:5},{material:"copper-plate",amount:10},{material:"wood",amount:5}]},{id:"shotgun-shell",name:"Shotgun shells",outputs:[{material:"shotgun-shell",amount:1}],inputs:[{material:"copper-plate",amount:2},{material:"iron-plate",amount:2}]},{id:"piercing-rounds-magazine",name:"Piercing rounds magazine",outputs:[{material:"piercing-rounds-magazine",amount:2}],inputs:[{material:"firearm-magazine",amount:2},{material:"steel-plate",amount:1},{material:"copper-plate",amount:2}]},{id:"grenade",name:"Grenade",outputs:[{material:"grenade",amount:1}],inputs:[{material:"iron-plate",amount:5},{material:"coal",amount:10}]},{id:"steel-furnace",name:"Steel furnace",outputs:[{material:"steel-furnace",amount:1}],inputs:[{material:"steel-plate",amount:6},{material:"stone-brick",amount:10}]},{id:"gate",name:"Gate",outputs:[{material:"gate",amount:1}],inputs:[{material:"stone-wall",amount:1},{material:"steel-plate",amount:2},{material:"electronic-circuit",amount:2}]},{id:"heavy-armor",name:"Heavy armor",outputs:[{material:"heavy-armor",amount:1}],inputs:[{material:"copper-plate",amount:100},{material:"steel-plate",amount:50}]},{id:"steel-chest",name:"Steel chest",outputs:[{material:"steel-chest",amount:1}],inputs:[{material:"steel-plate",amount:8}]},{id:"fast-underground-belt",name:"Fast underground belt",outputs:[{material:"fast-underground-belt",amount:2}],inputs:[{material:"iron-gear-wheel",amount:40},{material:"underground-belt",amount:2}]},{id:"fast-splitter",name:"Fast splitter",outputs:[{material:"fast-splitter",amount:1}],inputs:[{material:"splitter",amount:1},{material:"iron-gear-wheel",amount:10},{material:"electronic-circuit",amount:10}]},{id:"concrete",name:"Concrete",outputs:[{material:"concrete",amount:10}],inputs:[{material:"stone-brick",amount:5},{material:"iron-ore",amount:1},{material:"water",amount:100}]},{id:"hazard-concrete",name:"Hazard concrete",outputs:[{material:"hazard-concrete",amount:10}],inputs:[{material:"concrete",amount:10}]},{id:"refined-concrete",name:"Refined concrete",outputs:[{material:"refined-concrete",amount:10}],inputs:[{material:"concrete",amount:20},{material:"iron-stick",amount:8},{material:"steel-plate",amount:1},{material:"water",amount:100}]},{id:"refined-hazard-concrete",name:"Refined hazard concrete",outputs:[{material:"refined-hazard-concrete",amount:10}],inputs:[{material:"refined-concrete",amount:10}]},{id:"landfill",name:"Landfill",outputs:[{material:"landfill",amount:1}],inputs:[{material:"stone",amount:50}]},{id:"fast-transport-belt",name:"Fast transport belt",outputs:[{material:"fast-transport-belt",amount:1}],inputs:[{material:"iron-gear-wheel",amount:5},{material:"transport-belt",amount:1}]},{id:"solar-panel",name:"Solar panel",outputs:[{material:"solar-panel",amount:1}],inputs:[{material:"steel-plate",amount:5},{material:"electronic-circuit",amount:15},{material:"copper-plate",amount:5}]},{id:"rail",name:"Rail",outputs:[{material:"rail",amount:2}],inputs:[{material:"stone",amount:1},{material:"iron-stick",amount:1},{material:"steel-plate",amount:1}]},{id:"locomotive",name:"Locomotive",outputs:[{material:"locomotive",amount:1}],inputs:[{material:"engine-unit",amount:20},{material:"electronic-circuit",amount:10},{material:"steel-plate",amount:30}]},{id:"cargo-wagon",name:"Cargo wagon",outputs:[{material:"cargo-wagon",amount:1}],inputs:[{material:"iron-gear-wheel",amount:10},{material:"iron-plate",amount:20},{material:"steel-plate",amount:20}]},{id:"rail-signal",name:"Rail signal",outputs:[{material:"rail-signal",amount:1}],inputs:[{material:"electronic-circuit",amount:1},{material:"iron-plate",amount:5}]},{id:"rail-chain-signal",name:"Rail chain signal",outputs:[{material:"rail-chain-signal",amount:1}],inputs:[{material:"electronic-circuit",amount:1},{material:"iron-plate",amount:5}]},{id:"train-stop",name:"Train stop",outputs:[{material:"train-stop",amount:1}],inputs:[{material:"electronic-circuit",amount:5},{material:"iron-plate",amount:6},{material:"iron-stick",amount:6},{material:"steel-plate",amount:3}]},{id:"copper-plate",name:"Copper plate",outputs:[{material:"copper-plate",amount:1}],inputs:[{material:"copper-ore",amount:1}]},{id:"iron-plate",name:"Iron plate",outputs:[{material:"iron-plate",amount:1}],inputs:[{material:"iron-ore",amount:1}]},{id:"stone-brick",name:"Stone brick",outputs:[{material:"stone-brick",amount:1}],inputs:[{material:"stone",amount:2}]},{id:"steel-plate",name:"Steel plate",outputs:[{material:"steel-plate",amount:1}],inputs:[{material:"iron-plate",amount:5}]},{id:"arithmetic-combinator",name:"Arithmetic combinator",outputs:[{material:"arithmetic-combinator",amount:1}],inputs:[{material:"copper-cable",amount:5},{material:"electronic-circuit",amount:5}]},{id:"decider-combinator",name:"Decider combinator",outputs:[{material:"decider-combinator",amount:1}],inputs:[{material:"copper-cable",amount:5},{material:"electronic-circuit",amount:5}]},{id:"constant-combinator",name:"Constant combinator",outputs:[{material:"constant-combinator",amount:1}],inputs:[{material:"copper-cable",amount:5},{material:"electronic-circuit",amount:2}]},{id:"selector-combinator",name:"Selector combinator",outputs:[{material:"selector-combinator",amount:1}],inputs:[{material:"advanced-circuit",amount:2},{material:"decider-combinator",amount:5}]},{id:"power-switch",name:"Power switch",outputs:[{material:"power-switch",amount:1}],inputs:[{material:"iron-plate",amount:5},{material:"copper-cable",amount:5},{material:"electronic-circuit",amount:2}]},{id:"programmable-speaker",name:"Programmable speaker",outputs:[{material:"programmable-speaker",amount:1}],inputs:[{material:"iron-plate",amount:3},{material:"iron-stick",amount:4},{material:"copper-cable",amount:5},{material:"electronic-circuit",amount:4}]},{id:"poison-capsule",name:"Poison capsule",outputs:[{material:"poison-capsule",amount:1}],inputs:[{material:"steel-plate",amount:3},{material:"electronic-circuit",amount:3},{material:"coal",amount:10}]},{id:"slowdown-capsule",name:"Slowdown capsule",outputs:[{material:"slowdown-capsule",amount:1}],inputs:[{material:"steel-plate",amount:2},{material:"electronic-circuit",amount:2},{material:"coal",amount:5}]},{id:"cluster-grenade",name:"Cluster grenade",outputs:[{material:"cluster-grenade",amount:1}],inputs:[{material:"grenade",amount:7},{material:"explosives",amount:5},{material:"steel-plate",amount:5}]},{id:"defender-capsule",name:"Defender capsule",outputs:[{material:"defender-capsule",amount:1}],inputs:[{material:"piercing-rounds-magazine",amount:3},{material:"electronic-circuit",amount:3},{material:"iron-gear-wheel",amount:3}]},{id:"distractor-capsule",name:"Distractor capsule",outputs:[{material:"distractor-capsule",amount:1}],inputs:[{material:"defender-capsule",amount:4},{material:"advanced-circuit",amount:3}]},{id:"destroyer-capsule",name:"Destroyer capsule",outputs:[{material:"destroyer-capsule",amount:1}],inputs:[{material:"distractor-capsule",amount:4},{material:"steel-plate",amount:4},{material:"processing-unit",amount:1}]},{id:"cliff-explosives",name:"Cliff explosives",outputs:[{material:"cliff-explosives",amount:1}],inputs:[{material:"explosives",amount:10},{material:"calcite",amount:10},{material:"grenade",amount:1},{material:"barrel",amount:1}]},{id:"uranium-rounds-magazine",name:"Uranium rounds magazine",outputs:[{material:"uranium-rounds-magazine",amount:1}],inputs:[{material:"piercing-rounds-magazine",amount:1},{material:"uranium-238",amount:1}]},{id:"rocket",name:"Rocket",outputs:[{material:"rocket",amount:1}],inputs:[{material:"explosives",amount:1},{material:"iron-plate",amount:2}]},{id:"explosive-rocket",name:"Explosive rocket",outputs:[{material:"explosive-rocket",amount:1}],inputs:[{material:"rocket",amount:1},{material:"explosives",amount:2}]},{id:"atomic-bomb",name:"Atomic bomb",outputs:[{material:"atomic-bomb",amount:1}],inputs:[{material:"processing-unit",amount:10},{material:"explosives",amount:10},{material:"uranium-235",amount:100}]},{id:"piercing-shotgun-shell",name:"Piercing shotgun shells",outputs:[{material:"piercing-shotgun-shell",amount:2}],inputs:[{material:"shotgun-shell",amount:2},{material:"copper-plate",amount:2},{material:"steel-plate",amount:1}]},{id:"cannon-shell",name:"Cannon shell",outputs:[{material:"cannon-shell",amount:1}],inputs:[{material:"steel-plate",amount:2},{material:"plastic-bar",amount:2},{material:"explosives",amount:1}]},{id:"explosive-cannon-shell",name:"Explosive cannon shell",outputs:[{material:"explosive-cannon-shell",amount:1}],inputs:[{material:"steel-plate",amount:2},{material:"plastic-bar",amount:2},{material:"explosives",amount:2}]},{id:"uranium-cannon-shell",name:"Uranium cannon shell",outputs:[{material:"uranium-cannon-shell",amount:1}],inputs:[{material:"cannon-shell",amount:1},{material:"uranium-238",amount:1}]},{id:"explosive-uranium-cannon-shell",name:"Explosive uranium cannon shell",outputs:[{material:"explosive-uranium-cannon-shell",amount:1}],inputs:[{material:"explosive-cannon-shell",amount:1},{material:"uranium-238",amount:1}]},{id:"artillery-shell",name:"Artillery shell",outputs:[{material:"artillery-shell",amount:1}],inputs:[{material:"radar",amount:1},{material:"calcite",amount:1},{material:"tungsten-plate",amount:4},{material:"explosives",amount:8}]},{id:"flamethrower-ammo",name:"Flamethrower ammo",outputs:[{material:"flamethrower-ammo",amount:1}],inputs:[{material:"steel-plate",amount:5},{material:"crude-oil",amount:100}]},{id:"express-transport-belt",name:"Express transport belt",outputs:[{material:"express-transport-belt",amount:1}],inputs:[{material:"iron-gear-wheel",amount:10},{material:"fast-transport-belt",amount:1},{material:"lubricant",amount:20}]},{id:"assembling-machine-3",name:"Assembling machine 3",outputs:[{material:"assembling-machine-3",amount:1}],inputs:[{material:"assembling-machine-2",amount:2},{material:"speed-module",amount:4}]},{id:"tank",name:"Tank",outputs:[{material:"tank",amount:1}],inputs:[{material:"engine-unit",amount:32},{material:"steel-plate",amount:50},{material:"iron-gear-wheel",amount:15},{material:"advanced-circuit",amount:10}]},{id:"spidertron",name:"Spidertron",outputs:[{material:"spidertron",amount:1}],inputs:[{material:"exoskeleton-equipment",amount:4},{material:"fission-reactor-equipment",amount:2},{material:"rocket-turret",amount:1},{material:"radar",amount:2},{material:"raw-fish",amount:1}]},{id:"fluid-wagon",name:"Fluid wagon",outputs:[{material:"fluid-wagon",amount:1}],inputs:[{material:"iron-gear-wheel",amount:10},{material:"steel-plate",amount:16},{material:"pipe",amount:8},{material:"storage-tank",amount:1}]},{id:"artillery-wagon",name:"Artillery wagon",outputs:[{material:"artillery-wagon",amount:1}],inputs:[{material:"engine-unit",amount:60},{material:"tungsten-plate",amount:60},{material:"refined-concrete",amount:60},{material:"iron-gear-wheel",amount:40},{material:"processing-unit",amount:10}]},{id:"modular-armor",name:"Modular armor",outputs:[{material:"modular-armor",amount:1}],inputs:[{material:"advanced-circuit",amount:30},{material:"steel-plate",amount:50}]},{id:"power-armor",name:"Power armor",outputs:[{material:"power-armor",amount:1}],inputs:[{material:"processing-unit",amount:40},{material:"electric-engine-unit",amount:20},{material:"steel-plate",amount:40}]},{id:"power-armor-mk2",name:"Power armor MK2",outputs:[{material:"power-armor-mk2",amount:1}],inputs:[{material:"efficiency-module",amount:100},{material:"speed-module",amount:100},{material:"processing-unit",amount:60},{material:"electric-engine-unit",amount:40},{material:"low-density-structure",amount:30}]},{id:"flamethrower",name:"Flamethrower",outputs:[{material:"flamethrower",amount:1}],inputs:[{material:"steel-plate",amount:5},{material:"iron-gear-wheel",amount:10}]},{id:"land-mine",name:"Land mine",outputs:[{material:"land-mine",amount:4}],inputs:[{material:"steel-plate",amount:1},{material:"explosives",amount:2}]},{id:"rocket-launcher",name:"Rocket launcher",outputs:[{material:"rocket-launcher",amount:1}],inputs:[{material:"iron-plate",amount:5},{material:"iron-gear-wheel",amount:5},{material:"electronic-circuit",amount:5}]},{id:"combat-shotgun",name:"Combat shotgun",outputs:[{material:"combat-shotgun",amount:1}],inputs:[{material:"steel-plate",amount:15},{material:"iron-gear-wheel",amount:5},{material:"copper-plate",amount:10},{material:"wood",amount:10}]},{id:"chemical-science-pack",name:"Chemical science pack",outputs:[{material:"chemical-science-pack",amount:2}],inputs:[{material:"engine-unit",amount:2},{material:"advanced-circuit",amount:3},{material:"sulfur",amount:1}]},{id:"military-science-pack",name:"Military science pack",outputs:[{material:"military-science-pack",amount:2}],inputs:[{material:"piercing-rounds-magazine",amount:1},{material:"grenade",amount:1},{material:"stone-wall",amount:2}]},{id:"production-science-pack",name:"Production science pack",outputs:[{material:"production-science-pack",amount:3}],inputs:[{material:"electric-furnace",amount:1},{material:"productivity-module",amount:1},{material:"rail",amount:30}]},{id:"utility-science-pack",name:"Utility science pack",outputs:[{material:"utility-science-pack",amount:3}],inputs:[{material:"low-density-structure",amount:3},{material:"processing-unit",amount:2},{material:"flying-robot-frame",amount:1}]},{id:"express-underground-belt",name:"Express underground belt",outputs:[{material:"express-underground-belt",amount:2}],inputs:[{material:"iron-gear-wheel",amount:80},{material:"fast-underground-belt",amount:2},{material:"lubricant",amount:40}]},{id:"fast-loader",name:"Fast loader",outputs:[{material:"fast-loader",amount:1}],inputs:[{material:"fast-transport-belt",amount:5},{material:"loader",amount:1}]},{id:"express-loader",name:"Express loader",outputs:[{material:"express-loader",amount:1}],inputs:[{material:"express-transport-belt",amount:5},{material:"fast-loader",amount:1}]},{id:"express-splitter",name:"Express splitter",outputs:[{material:"express-splitter",amount:1}],inputs:[{material:"fast-splitter",amount:1},{material:"iron-gear-wheel",amount:10},{material:"advanced-circuit",amount:10},{material:"lubricant",amount:80}]},{id:"advanced-circuit",name:"Advanced circuit",outputs:[{material:"advanced-circuit",amount:1}],inputs:[{material:"electronic-circuit",amount:2},{material:"plastic-bar",amount:2},{material:"copper-cable",amount:4}]},{id:"processing-unit",name:"Processing unit",outputs:[{material:"processing-unit",amount:1}],inputs:[{material:"electronic-circuit",amount:20},{material:"advanced-circuit",amount:2},{material:"sulfuric-acid",amount:5}]},{id:"logistic-robot",name:"Logistic robot",outputs:[{material:"logistic-robot",amount:1}],inputs:[{material:"flying-robot-frame",amount:1},{material:"advanced-circuit",amount:2}]},{id:"construction-robot",name:"Construction robot",outputs:[{material:"construction-robot",amount:1}],inputs:[{material:"flying-robot-frame",amount:1},{material:"electronic-circuit",amount:2}]},{id:"passive-provider-chest",name:"Passive provider chest",outputs:[{material:"passive-provider-chest",amount:1}],inputs:[{material:"steel-chest",amount:1},{material:"electronic-circuit",amount:3},{material:"advanced-circuit",amount:1}]},{id:"active-provider-chest",name:"Active provider chest",outputs:[{material:"active-provider-chest",amount:1}],inputs:[{material:"steel-chest",amount:1},{material:"electronic-circuit",amount:3},{material:"advanced-circuit",amount:1}]},{id:"storage-chest",name:"Storage chest",outputs:[{material:"storage-chest",amount:1}],inputs:[{material:"steel-chest",amount:1},{material:"electronic-circuit",amount:3},{material:"advanced-circuit",amount:1}]},{id:"buffer-chest",name:"Buffer chest",outputs:[{material:"buffer-chest",amount:1}],inputs:[{material:"steel-chest",amount:1},{material:"electronic-circuit",amount:3},{material:"advanced-circuit",amount:1}]},{id:"requester-chest",name:"Requester chest",outputs:[{material:"requester-chest",amount:1}],inputs:[{material:"steel-chest",amount:1},{material:"electronic-circuit",amount:3},{material:"advanced-circuit",amount:1}]},{id:"rocket-silo",name:"Rocket silo",outputs:[{material:"rocket-silo",amount:1}],inputs:[{material:"steel-plate",amount:1e3},{material:"concrete",amount:1e3},{material:"pipe",amount:100},{material:"processing-unit",amount:200},{material:"electric-engine-unit",amount:200}]},{id:"cargo-landing-pad",name:"Cargo landing pad",outputs:[{material:"cargo-landing-pad",amount:1}],inputs:[{material:"concrete",amount:200},{material:"steel-plate",amount:25},{material:"processing-unit",amount:10}]},{id:"roboport",name:"Roboport",outputs:[{material:"roboport",amount:1}],inputs:[{material:"steel-plate",amount:45},{material:"iron-gear-wheel",amount:45},{material:"advanced-circuit",amount:45}]},{id:"substation",name:"Substation",outputs:[{material:"substation",amount:1}],inputs:[{material:"steel-plate",amount:10},{material:"advanced-circuit",amount:5},{material:"copper-cable",amount:6}]},{id:"accumulator",name:"Accumulator",outputs:[{material:"accumulator",amount:1}],inputs:[{material:"iron-plate",amount:2},{material:"battery",amount:5}]},{id:"electric-furnace",name:"Electric furnace",outputs:[{material:"electric-furnace",amount:1}],inputs:[{material:"steel-plate",amount:10},{material:"advanced-circuit",amount:5},{material:"stone-brick",amount:10}]},{id:"beacon",name:"Beacon",outputs:[{material:"beacon",amount:1}],inputs:[{material:"electronic-circuit",amount:20},{material:"advanced-circuit",amount:20},{material:"steel-plate",amount:10},{material:"copper-cable",amount:10}]},{id:"pumpjack",name:"Pumpjack",outputs:[{material:"pumpjack",amount:1}],inputs:[{material:"steel-plate",amount:5},{material:"iron-gear-wheel",amount:10},{material:"electronic-circuit",amount:5},{material:"pipe",amount:10}]},{id:"oil-refinery",name:"Oil refinery",outputs:[{material:"oil-refinery",amount:1}],inputs:[{material:"steel-plate",amount:15},{material:"iron-gear-wheel",amount:10},{material:"stone-brick",amount:10},{material:"electronic-circuit",amount:10},{material:"pipe",amount:10}]},{id:"electric-engine-unit",name:"Electric engine unit",outputs:[{material:"electric-engine-unit",amount:1}],inputs:[{material:"engine-unit",amount:1},{material:"lubricant",amount:15},{material:"electronic-circuit",amount:2}]},{id:"flying-robot-frame",name:"Flying robot frame",outputs:[{material:"flying-robot-frame",amount:1}],inputs:[{material:"electric-engine-unit",amount:1},{material:"battery",amount:2},{material:"steel-plate",amount:1},{material:"electronic-circuit",amount:3}]},{id:"explosives",name:"Explosives",outputs:[{material:"explosives",amount:2}],inputs:[{material:"sulfur",amount:1},{material:"coal",amount:1},{material:"water",amount:10}]},{id:"battery",name:"Battery",outputs:[{material:"battery",amount:1}],inputs:[{material:"sulfuric-acid",amount:20},{material:"iron-plate",amount:1},{material:"copper-plate",amount:1}]},{id:"storage-tank",name:"Storage tank",outputs:[{material:"storage-tank",amount:1}],inputs:[{material:"iron-plate",amount:20},{material:"steel-plate",amount:5}]},{id:"pump",name:"Pump",outputs:[{material:"pump",amount:1}],inputs:[{material:"engine-unit",amount:1},{material:"steel-plate",amount:1},{material:"pipe",amount:1}]},{id:"chemical-plant",name:"Chemical plant",outputs:[{material:"chemical-plant",amount:1}],inputs:[{material:"steel-plate",amount:5},{material:"iron-gear-wheel",amount:5},{material:"electronic-circuit",amount:5},{material:"pipe",amount:5}]},{id:"low-density-structure",name:"Low density structure",outputs:[{material:"low-density-structure",amount:1}],inputs:[{material:"steel-plate",amount:2},{material:"copper-plate",amount:20},{material:"plastic-bar",amount:5}]},{id:"rocket-fuel",name:"Rocket fuel",outputs:[{material:"rocket-fuel",amount:1}],inputs:[{material:"solid-fuel",amount:10},{material:"light-oil",amount:10}]},{id:"rocket-part",name:"Rocket part",outputs:[{material:"rocket-part",amount:1}],inputs:[{material:"processing-unit",amount:1},{material:"low-density-structure",amount:1},{material:"rocket-fuel",amount:1}]},{id:"nuclear-reactor",name:"Nuclear reactor",outputs:[{material:"nuclear-reactor",amount:1}],inputs:[{material:"concrete",amount:500},{material:"steel-plate",amount:500},{material:"advanced-circuit",amount:500},{material:"copper-plate",amount:500}]},{id:"centrifuge",name:"Centrifuge",outputs:[{material:"centrifuge",amount:1}],inputs:[{material:"concrete",amount:100},{material:"steel-plate",amount:50},{material:"advanced-circuit",amount:100},{material:"iron-gear-wheel",amount:100}]},{id:"uranium-processing",name:"Uranium processing",outputs:[{material:"uranium-235",amount:1},{material:"uranium-238",amount:1}],inputs:[{material:"uranium-ore",amount:10}]},{id:"kovarex-enrichment-process",name:"Kovarex enrichment process",outputs:[{material:"uranium-235",amount:41},{material:"uranium-238",amount:2}],inputs:[{material:"uranium-235",amount:40},{material:"uranium-238",amount:5}],alternate:!0},{id:"nuclear-fuel",name:"Nuclear fuel",outputs:[{material:"nuclear-fuel",amount:1}],inputs:[{material:"uranium-235",amount:1},{material:"rocket-fuel",amount:1}]},{id:"nuclear-fuel-reprocessing",name:"Nuclear fuel reprocessing",outputs:[{material:"uranium-238",amount:3}],inputs:[{material:"depleted-uranium-fuel-cell",amount:5}]},{id:"uranium-fuel-cell",name:"Uranium fuel cell",outputs:[{material:"uranium-fuel-cell",amount:10}],inputs:[{material:"iron-plate",amount:10},{material:"uranium-235",amount:1},{material:"uranium-238",amount:19}]},{id:"heat-exchanger",name:"Heat exchanger",outputs:[{material:"heat-exchanger",amount:1}],inputs:[{material:"steel-plate",amount:10},{material:"copper-plate",amount:100},{material:"pipe",amount:10}]},{id:"heat-pipe",name:"Heat pipe",outputs:[{material:"heat-pipe",amount:1}],inputs:[{material:"steel-plate",amount:10},{material:"copper-plate",amount:20}]},{id:"steam-turbine",name:"Steam turbine",outputs:[{material:"steam-turbine",amount:1}],inputs:[{material:"iron-gear-wheel",amount:50},{material:"copper-plate",amount:50},{material:"pipe",amount:20}]},{id:"rail-support",name:"Rail support",outputs:[{material:"rail-support",amount:1}],inputs:[{material:"refined-concrete",amount:20},{material:"steel-plate",amount:10}]},{id:"rail-ramp",name:"Rail ramp",outputs:[{material:"rail-ramp",amount:1}],inputs:[{material:"refined-concrete",amount:100},{material:"rail",amount:8},{material:"steel-plate",amount:10}]},{id:"recycler",name:"Recycler",outputs:[{material:"recycler",amount:1}],inputs:[{material:"processing-unit",amount:6},{material:"steel-plate",amount:20},{material:"iron-gear-wheel",amount:40},{material:"concrete",amount:20}]},{id:"quality-module",name:"Quality module",outputs:[{material:"quality-module",amount:1}],inputs:[{material:"electronic-circuit",amount:5},{material:"advanced-circuit",amount:5}]},{id:"quality-module-2",name:"Quality module 2",outputs:[{material:"quality-module-2",amount:1}],inputs:[{material:"quality-module",amount:4},{material:"advanced-circuit",amount:5},{material:"processing-unit",amount:5}]},{id:"quality-module-3",name:"Quality module 3",outputs:[{material:"quality-module-3",amount:1}],inputs:[{material:"quality-module-2",amount:4},{material:"advanced-circuit",amount:5},{material:"processing-unit",amount:5},{material:"superconductor",amount:1}]},{id:"simple-coal-liquefaction",name:"Simple coal liquefaction",outputs:[{material:"heavy-oil",amount:50}],inputs:[{material:"coal",amount:10},{material:"calcite",amount:2},{material:"sulfuric-acid",amount:25}],alternate:!0},{id:"yumako-processing",name:"Yumako processing",outputs:[{material:"yumako-seed",amount:1},{material:"yumako-mash",amount:2}],inputs:[{material:"yumako",amount:1}],spaceAge:!0},{id:"jellynut-processing",name:"Jellynut processing",outputs:[{material:"jellynut-seed",amount:1},{material:"jelly",amount:4}],inputs:[{material:"jellynut",amount:1}],spaceAge:!0},{id:"copper-bacteria",name:"Copper bacteria",outputs:[{material:"copper-bacteria",amount:1},{material:"spoilage",amount:1}],inputs:[{material:"yumako-mash",amount:3}],spaceAge:!0},{id:"copper-bacteria-cultivation",name:"Copper bacteria cultivation",outputs:[{material:"copper-bacteria",amount:4}],inputs:[{material:"copper-bacteria",amount:1},{material:"bioflux",amount:1}],alternate:!0,spaceAge:!0},{id:"iron-bacteria",name:"Iron bacteria",outputs:[{material:"iron-bacteria",amount:1},{material:"spoilage",amount:4}],inputs:[{material:"jelly",amount:6}],spaceAge:!0},{id:"iron-bacteria-cultivation",name:"Iron bacteria cultivation",outputs:[{material:"iron-bacteria",amount:4}],inputs:[{material:"iron-bacteria",amount:1},{material:"bioflux",amount:1}],alternate:!0,spaceAge:!0},{id:"artificial-yumako-soil",name:"Artificial yumako soil",outputs:[{material:"artificial-yumako-soil",amount:10}],inputs:[{material:"yumako-seed",amount:2},{material:"nutrients",amount:50},{material:"landfill",amount:5}],spaceAge:!0},{id:"overgrowth-yumako-soil",name:"Overgrowth yumako soil",outputs:[{material:"overgrowth-yumako-soil",amount:1}],inputs:[{material:"artificial-yumako-soil",amount:2},{material:"yumako-seed",amount:5},{material:"biter-egg",amount:10},{material:"spoilage",amount:50},{material:"water",amount:100}],spaceAge:!0},{id:"artificial-jellynut-soil",name:"Artificial jellynut soil",outputs:[{material:"artificial-jellynut-soil",amount:10}],inputs:[{material:"jellynut-seed",amount:2},{material:"nutrients",amount:50},{material:"landfill",amount:5}],spaceAge:!0},{id:"overgrowth-jellynut-soil",name:"Overgrowth jellynut soil",outputs:[{material:"overgrowth-jellynut-soil",amount:1}],inputs:[{material:"artificial-jellynut-soil",amount:2},{material:"jellynut-seed",amount:5},{material:"biter-egg",amount:10},{material:"spoilage",amount:50},{material:"water",amount:100}],spaceAge:!0},{id:"nutrients-from-spoilage",name:"Nutrients from spoilage",outputs:[{material:"nutrients",amount:1}],inputs:[{material:"spoilage",amount:10}],spaceAge:!0},{id:"nutrients-from-yumako-mash",name:"Nutrients from yumako mash",outputs:[{material:"nutrients",amount:6}],inputs:[{material:"yumako-mash",amount:4}],alternate:!0,spaceAge:!0},{id:"nutrients-from-bioflux",name:"Nutrients from bioflux",outputs:[{material:"nutrients",amount:40}],inputs:[{material:"bioflux",amount:5}],alternate:!0,spaceAge:!0},{id:"pentapod-egg",name:"Pentapod egg",outputs:[{material:"pentapod-egg",amount:2}],inputs:[{material:"pentapod-egg",amount:1},{material:"nutrients",amount:30},{material:"water",amount:60}],spaceAge:!0},{id:"rocket-fuel-from-jelly",name:"Rocket fuel from jelly",outputs:[{material:"rocket-fuel",amount:1}],inputs:[{material:"water",amount:30},{material:"jelly",amount:30},{material:"bioflux",amount:2}],alternate:!0},{id:"bioflux",name:"Bioflux",outputs:[{material:"bioflux",amount:4}],inputs:[{material:"yumako-mash",amount:15},{material:"jelly",amount:12}]},{id:"bioplastic",name:"Bioplastic",outputs:[{material:"plastic-bar",amount:3}],inputs:[{material:"bioflux",amount:1},{material:"yumako-mash",amount:4}],alternate:!0},{id:"biosulfur",name:"Biosulfur",outputs:[{material:"sulfur",amount:2}],inputs:[{material:"spoilage",amount:5},{material:"bioflux",amount:1}],alternate:!0},{id:"biolubricant",name:"Biolubricant",outputs:[{material:"lubricant",amount:20}],inputs:[{material:"jelly",amount:60}],alternate:!0},{id:"carbon-fiber",name:"Carbon fiber",outputs:[{material:"carbon-fiber",amount:1}],inputs:[{material:"yumako-mash",amount:10},{material:"carbon",amount:1}],spaceAge:!0},{id:"toolbelt-equipment",name:"Toolbelt equipment",outputs:[{material:"toolbelt-equipment",amount:1}],inputs:[{material:"advanced-circuit",amount:3},{material:"carbon-fiber",amount:10}],spaceAge:!0},{id:"battery-mk3-equipment",name:"Personal battery MK3",outputs:[{material:"battery-mk3-equipment",amount:1}],inputs:[{material:"battery-mk2-equipment",amount:5},{material:"supercapacitor",amount:10}],spaceAge:!0},{id:"space-platform-foundation",name:"Space platform foundation",outputs:[{material:"space-platform-foundation",amount:1}],inputs:[{material:"steel-plate",amount:20},{material:"copper-cable",amount:20}],spaceAge:!0},{id:"stack-inserter",name:"Stack inserter",outputs:[{material:"stack-inserter",amount:1}],inputs:[{material:"bulk-inserter",amount:1},{material:"processing-unit",amount:1},{material:"carbon-fiber",amount:2},{material:"jelly",amount:10}],spaceAge:!0},{id:"rocket-turret",name:"Rocket turret",outputs:[{material:"rocket-turret",amount:1}],inputs:[{material:"rocket-launcher",amount:4},{material:"processing-unit",amount:4},{material:"carbon-fiber",amount:20},{material:"steel-plate",amount:20},{material:"iron-gear-wheel",amount:20}],spaceAge:!0},{id:"infinity-chest",name:"Infinity chest",outputs:[{material:"infinity-chest",amount:1}],inputs:[{material:"steel-chest",amount:1},{material:"electronic-circuit",amount:5}]},{id:"infinity-pipe",name:"Infinity pipe",outputs:[{material:"infinity-pipe",amount:1}],inputs:[{material:"pipe",amount:1},{material:"electronic-circuit",amount:5}]},{id:"heat-interface",name:"Heat interface",outputs:[{material:"heat-interface",amount:1}],inputs:[{material:"heat-pipe",amount:1},{material:"electronic-circuit",amount:5}]},{id:"space-platform-starter-pack",name:"Space platform starter pack",outputs:[{material:"space-platform-starter-pack",amount:1}],inputs:[{material:"space-platform-foundation",amount:60},{material:"steel-plate",amount:20},{material:"processing-unit",amount:20}]},{id:"cargo-bay",name:"Cargo bay",outputs:[{material:"cargo-bay",amount:1}],inputs:[{material:"steel-plate",amount:20},{material:"low-density-structure",amount:20},{material:"processing-unit",amount:5}],spaceAge:!0},{id:"landing-pad-unloading-bay",name:"Landing pad unloading bay",outputs:[{material:"landing-pad-unloading-bay",amount:1}],inputs:[{material:"cargo-bay",amount:1},{material:"steel-chest",amount:4},{material:"electric-engine-unit",amount:15},{material:"processing-unit",amount:8}],spaceAge:!0},{id:"asteroid-collector",name:"Asteroid collector",outputs:[{material:"asteroid-collector",amount:1}],inputs:[{material:"low-density-structure",amount:20},{material:"electric-engine-unit",amount:8},{material:"processing-unit",amount:5}],spaceAge:!0},{id:"crusher",name:"Crusher",outputs:[{material:"crusher",amount:1}],inputs:[{material:"low-density-structure",amount:20},{material:"steel-plate",amount:10},{material:"electric-engine-unit",amount:10}],spaceAge:!0},{id:"thruster",name:"Thruster",outputs:[{material:"thruster",amount:1}],inputs:[{material:"steel-plate",amount:10},{material:"processing-unit",amount:10},{material:"electric-engine-unit",amount:5}],spaceAge:!0},{id:"space-science-pack",name:"Space science pack",outputs:[{material:"space-science-pack",amount:5}],inputs:[{material:"iron-plate",amount:2},{material:"carbon",amount:1},{material:"ice",amount:1}]},{id:"metallurgic-science-pack",name:"Metallurgic science pack",outputs:[{material:"metallurgic-science-pack",amount:1}],inputs:[{material:"tungsten-carbide",amount:3},{material:"tungsten-plate",amount:2},{material:"molten-copper",amount:200}],spaceAge:!0},{id:"agricultural-science-pack",name:"Agricultural science pack",outputs:[{material:"agricultural-science-pack",amount:1}],inputs:[{material:"bioflux",amount:1},{material:"pentapod-egg",amount:1}],spaceAge:!0},{id:"electromagnetic-science-pack",name:"Electromagnetic science pack",outputs:[{material:"electromagnetic-science-pack",amount:1}],inputs:[{material:"supercapacitor",amount:1},{material:"accumulator",amount:1},{material:"electrolyte",amount:25},{material:"holmium-solution",amount:25}],spaceAge:!0},{id:"cryogenic-science-pack",name:"Cryogenic science pack",outputs:[{material:"cryogenic-science-pack",amount:1},{material:"fluoroketone-hot",amount:3}],inputs:[{material:"ice",amount:3},{material:"lithium-plate",amount:1},{material:"fluoroketone-cold",amount:6}],spaceAge:!0},{id:"metallic-asteroid-crushing",name:"Metallic asteroid crushing",outputs:[{material:"iron-ore",amount:20},{material:"metallic-asteroid-chunk",amount:1}],inputs:[{material:"metallic-asteroid-chunk",amount:1}]},{id:"carbonic-asteroid-crushing",name:"Carbonic asteroid crushing",outputs:[{material:"carbon",amount:10},{material:"carbonic-asteroid-chunk",amount:1}],inputs:[{material:"carbonic-asteroid-chunk",amount:1}],spaceAge:!0},{id:"oxide-asteroid-crushing",name:"Oxide asteroid crushing",outputs:[{material:"ice",amount:5},{material:"oxide-asteroid-chunk",amount:1}],inputs:[{material:"oxide-asteroid-chunk",amount:1}],spaceAge:!0},{id:"advanced-metallic-asteroid-crushing",name:"Advanced metallic asteroid crushing",outputs:[{material:"iron-ore",amount:10},{material:"copper-ore",amount:4},{material:"metallic-asteroid-chunk",amount:1}],inputs:[{material:"metallic-asteroid-chunk",amount:1}],alternate:!0},{id:"advanced-carbonic-asteroid-crushing",name:"Advanced carbonic asteroid crushing",outputs:[{material:"carbon",amount:5},{material:"sulfur",amount:2},{material:"carbonic-asteroid-chunk",amount:1}],inputs:[{material:"carbonic-asteroid-chunk",amount:1}],alternate:!0,spaceAge:!0},{id:"advanced-oxide-asteroid-crushing",name:"Advanced oxide asteroid crushing",outputs:[{material:"ice",amount:3},{material:"calcite",amount:2},{material:"oxide-asteroid-chunk",amount:1}],inputs:[{material:"oxide-asteroid-chunk",amount:1}],alternate:!0,spaceAge:!0},{id:"metallic-asteroid-reprocessing",name:"Metallic asteroid reprocessing",outputs:[{material:"metallic-asteroid-chunk",amount:1},{material:"carbonic-asteroid-chunk",amount:1},{material:"oxide-asteroid-chunk",amount:1}],inputs:[{material:"metallic-asteroid-chunk",amount:1}],spaceAge:!0},{id:"carbonic-asteroid-reprocessing",name:"Carbonic asteroid reprocessing",outputs:[{material:"carbonic-asteroid-chunk",amount:1},{material:"metallic-asteroid-chunk",amount:1},{material:"oxide-asteroid-chunk",amount:1}],inputs:[{material:"carbonic-asteroid-chunk",amount:1}],spaceAge:!0},{id:"oxide-asteroid-reprocessing",name:"Oxide asteroid reprocessing",outputs:[{material:"oxide-asteroid-chunk",amount:1},{material:"metallic-asteroid-chunk",amount:1},{material:"carbonic-asteroid-chunk",amount:1}],inputs:[{material:"oxide-asteroid-chunk",amount:1}],spaceAge:!0},{id:"thruster-fuel",name:"Thruster fuel",outputs:[{material:"thruster-fuel",amount:75}],inputs:[{material:"carbon",amount:2},{material:"water",amount:10}]},{id:"thruster-oxidizer",name:"Thruster oxidizer",outputs:[{material:"thruster-oxidizer",amount:75}],inputs:[{material:"iron-ore",amount:2},{material:"water",amount:10}]},{id:"ice-melting",name:"Ice melting",outputs:[{material:"water",amount:20}],inputs:[{material:"ice",amount:1}]},{id:"advanced-thruster-fuel",name:"Advanced thruster fuel",outputs:[{material:"thruster-fuel",amount:1500}],inputs:[{material:"carbon",amount:2},{material:"calcite",amount:1},{material:"water",amount:100}],alternate:!0},{id:"advanced-thruster-oxidizer",name:"Advanced thruster oxidizer",outputs:[{material:"thruster-oxidizer",amount:1500}],inputs:[{material:"iron-ore",amount:2},{material:"calcite",amount:1},{material:"water",amount:100}],alternate:!0},{id:"acid-neutralisation",name:"Acid neutralisation",outputs:[{material:"steam",amount:1e3}],inputs:[{material:"calcite",amount:1},{material:"sulfuric-acid",amount:100}]},{id:"steam-condensation",name:"Steam condensation",outputs:[{material:"water",amount:90}],inputs:[{material:"steam",amount:1e3}],alternate:!0},{id:"carbon",name:"Carbon",outputs:[{material:"carbon",amount:1}],inputs:[{material:"coal",amount:2},{material:"sulfuric-acid",amount:20}],alternate:!0,spaceAge:!0},{id:"tungsten-carbide",name:"Tungsten carbide",outputs:[{material:"tungsten-carbide",amount:1}],inputs:[{material:"tungsten-ore",amount:2},{material:"sulfuric-acid",amount:10},{material:"carbon",amount:1}],spaceAge:!0},{id:"foundry",name:"Foundry",outputs:[{material:"foundry",amount:1}],inputs:[{material:"tungsten-carbide",amount:50},{material:"steel-plate",amount:50},{material:"electronic-circuit",amount:30},{material:"refined-concrete",amount:20},{material:"lubricant",amount:20}],spaceAge:!0},{id:"molten-iron-from-lava",name:"Molten iron from lava",outputs:[{material:"molten-iron",amount:250},{material:"stone",amount:10}],inputs:[{material:"lava",amount:500},{material:"calcite",amount:1}]},{id:"molten-copper-from-lava",name:"Molten copper from lava",outputs:[{material:"molten-copper",amount:250},{material:"stone",amount:15}],inputs:[{material:"lava",amount:500},{material:"calcite",amount:1}]},{id:"iron-ore-melting",name:"Iron ore melting",outputs:[{material:"molten-iron",amount:500}],inputs:[{material:"iron-ore",amount:50},{material:"calcite",amount:1}],alternate:!0},{id:"copper-ore-melting",name:"Copper ore melting",outputs:[{material:"molten-copper",amount:500}],inputs:[{material:"copper-ore",amount:50},{material:"calcite",amount:1}],alternate:!0},{id:"casting-iron",name:"Casting iron",outputs:[{material:"iron-plate",amount:2}],inputs:[{material:"molten-iron",amount:20}],alternate:!0},{id:"casting-steel",name:"Casting steel",outputs:[{material:"steel-plate",amount:1}],inputs:[{material:"molten-iron",amount:30}],alternate:!0},{id:"casting-copper",name:"Casting copper",outputs:[{material:"copper-plate",amount:2}],inputs:[{material:"molten-copper",amount:20}],alternate:!0},{id:"casting-iron-gear-wheel",name:"Casting iron gear wheel",outputs:[{material:"iron-gear-wheel",amount:1}],inputs:[{material:"molten-iron",amount:10}],alternate:!0},{id:"casting-iron-stick",name:"Casting iron stick",outputs:[{material:"iron-stick",amount:4}],inputs:[{material:"molten-iron",amount:20}],alternate:!0},{id:"casting-pipe",name:"Casting pipe",outputs:[{material:"pipe",amount:1}],inputs:[{material:"molten-iron",amount:10}],alternate:!0},{id:"casting-pipe-to-ground",name:"Casting pipe to ground",outputs:[{material:"pipe-to-ground",amount:2}],inputs:[{material:"molten-iron",amount:50},{material:"pipe",amount:10}],alternate:!0},{id:"casting-low-density-structure",name:"Casting low density structure",outputs:[{material:"low-density-structure",amount:1}],inputs:[{material:"molten-iron",amount:80},{material:"molten-copper",amount:250},{material:"plastic-bar",amount:5}],alternate:!0},{id:"concrete-from-molten-iron",name:"Concrete from molten iron",outputs:[{material:"concrete",amount:10}],inputs:[{material:"molten-iron",amount:20},{material:"water",amount:100},{material:"stone-brick",amount:5}],alternate:!0},{id:"casting-copper-cable",name:"Casting copper cable",outputs:[{material:"copper-cable",amount:2}],inputs:[{material:"molten-copper",amount:5}],alternate:!0},{id:"tungsten-plate",name:"Tungsten plate",outputs:[{material:"tungsten-plate",amount:1}],inputs:[{material:"tungsten-ore",amount:4},{material:"molten-iron",amount:10}],spaceAge:!0},{id:"turbo-transport-belt",name:"Turbo transport belt",outputs:[{material:"turbo-transport-belt",amount:1}],inputs:[{material:"tungsten-plate",amount:5},{material:"express-transport-belt",amount:1},{material:"lubricant",amount:20}],spaceAge:!0},{id:"turbo-underground-belt",name:"Turbo underground belt",outputs:[{material:"turbo-underground-belt",amount:2}],inputs:[{material:"tungsten-plate",amount:40},{material:"express-underground-belt",amount:2},{material:"lubricant",amount:40}],spaceAge:!0},{id:"turbo-splitter",name:"Turbo splitter",outputs:[{material:"turbo-splitter",amount:1}],inputs:[{material:"express-splitter",amount:1},{material:"tungsten-plate",amount:15},{material:"processing-unit",amount:2},{material:"lubricant",amount:80}],spaceAge:!0},{id:"turbo-loader",name:"Turbo loader",outputs:[{material:"turbo-loader",amount:1}],inputs:[{material:"turbo-transport-belt",amount:5},{material:"express-loader",amount:1}],spaceAge:!0},{id:"big-mining-drill",name:"Big mining drill",outputs:[{material:"big-mining-drill",amount:1}],inputs:[{material:"electric-mining-drill",amount:1},{material:"molten-iron",amount:200},{material:"tungsten-carbide",amount:20},{material:"electric-engine-unit",amount:10},{material:"advanced-circuit",amount:10}],spaceAge:!0},{id:"mech-armor",name:"Mech armor",outputs:[{material:"mech-armor",amount:1}],inputs:[{material:"power-armor-mk2",amount:1},{material:"holmium-plate",amount:200},{material:"processing-unit",amount:100},{material:"superconductor",amount:50},{material:"supercapacitor",amount:50}]},{id:"railgun",name:"Railgun",outputs:[{material:"railgun",amount:1}],inputs:[{material:"tungsten-plate",amount:10},{material:"superconductor",amount:10},{material:"quantum-processor",amount:20},{material:"fluoroketone-cold",amount:10}]},{id:"railgun-turret",name:"Railgun turret",outputs:[{material:"railgun-turret",amount:1}],inputs:[{material:"quantum-processor",amount:100},{material:"tungsten-plate",amount:30},{material:"superconductor",amount:50},{material:"carbon-fiber",amount:20},{material:"fluoroketone-cold",amount:100}],spaceAge:!0},{id:"railgun-ammo",name:"Railgun ammo",outputs:[{material:"railgun-ammo",amount:1}],inputs:[{material:"steel-plate",amount:5},{material:"copper-cable",amount:10},{material:"explosives",amount:2}]},{id:"agricultural-tower",name:"Agricultural tower",outputs:[{material:"agricultural-tower",amount:1}],inputs:[{material:"steel-plate",amount:10},{material:"electronic-circuit",amount:3},{material:"spoilage",amount:20},{material:"landfill",amount:1}],spaceAge:!0},{id:"biochamber",name:"Biochamber",outputs:[{material:"biochamber",amount:1}],inputs:[{material:"nutrients",amount:5},{material:"pentapod-egg",amount:1},{material:"iron-plate",amount:20},{material:"electronic-circuit",amount:5},{material:"landfill",amount:1}],spaceAge:!0},{id:"burnt-spoilage",name:"Burnt spoilage",outputs:[{material:"carbon",amount:1}],inputs:[{material:"spoilage",amount:6}],alternate:!0,spaceAge:!0},{id:"coal-synthesis",name:"Coal synthesis",outputs:[{material:"coal",amount:1}],inputs:[{material:"carbon",amount:5},{material:"sulfur",amount:1},{material:"water",amount:10}]},{id:"capture-robot-rocket",name:"Capture bot rocket",outputs:[{material:"capture-robot-rocket",amount:1}],inputs:[{material:"flying-robot-frame",amount:1},{material:"steel-plate",amount:2},{material:"bioflux",amount:20},{material:"processing-unit",amount:2}]},{id:"biolab",name:"Biolab",outputs:[{material:"biolab",amount:1}],inputs:[{material:"lab",amount:1},{material:"biter-egg",amount:10},{material:"refined-concrete",amount:25},{material:"capture-robot-rocket",amount:2},{material:"uranium-235",amount:3}],spaceAge:!0},{id:"captive-biter-spawner",name:"Captive biter spawner",outputs:[{material:"captive-biter-spawner",amount:1}],inputs:[{material:"biter-egg",amount:10},{material:"capture-robot-rocket",amount:1},{material:"uranium-235",amount:15},{material:"fluoroketone-cold",amount:100}],spaceAge:!0},{id:"fish-breeding",name:"Fish breeding",outputs:[{material:"raw-fish",amount:3}],inputs:[{material:"raw-fish",amount:2},{material:"nutrients",amount:100},{material:"water",amount:100}]},{id:"nutrients-from-fish",name:"Nutrients from fish",outputs:[{material:"nutrients",amount:20}],inputs:[{material:"raw-fish",amount:1}],alternate:!0,spaceAge:!0},{id:"nutrients-from-biter-egg",name:"Nutrients from biter egg",outputs:[{material:"nutrients",amount:20}],inputs:[{material:"biter-egg",amount:1}],alternate:!0,spaceAge:!0},{id:"scrap-recycling",name:"Scrap recycling",outputs:[{material:"iron-gear-wheel",amount:1},{material:"solid-fuel",amount:1},{material:"concrete",amount:1},{material:"ice",amount:1},{material:"steel-plate",amount:1},{material:"battery",amount:1},{material:"stone",amount:1},{material:"advanced-circuit",amount:1},{material:"copper-cable",amount:1},{material:"processing-unit",amount:1},{material:"low-density-structure",amount:1},{material:"holmium-ore",amount:1}],inputs:[{material:"scrap",amount:1}],alternate:!0},{id:"lightning-rod",name:"Lightning rod",outputs:[{material:"lightning-rod",amount:1}],inputs:[{material:"copper-cable",amount:12},{material:"steel-plate",amount:8},{material:"stone-brick",amount:4}],spaceAge:!0},{id:"holmium-solution",name:"Holmium solution",outputs:[{material:"holmium-solution",amount:100}],inputs:[{material:"holmium-ore",amount:2},{material:"stone",amount:1},{material:"water",amount:10}]},{id:"holmium-plate",name:"Holmium plate",outputs:[{material:"holmium-plate",amount:1}],inputs:[{material:"holmium-solution",amount:20}],spaceAge:!0},{id:"electromagnetic-plant",name:"Electromagnetic plant",outputs:[{material:"electromagnetic-plant",amount:1}],inputs:[{material:"holmium-plate",amount:150},{material:"steel-plate",amount:50},{material:"processing-unit",amount:50},{material:"refined-concrete",amount:50}],spaceAge:!0},{id:"superconductor",name:"Superconductor",outputs:[{material:"superconductor",amount:2}],inputs:[{material:"holmium-plate",amount:1},{material:"copper-plate",amount:1},{material:"plastic-bar",amount:1},{material:"light-oil",amount:5}],spaceAge:!0},{id:"supercapacitor",name:"Supercapacitor",outputs:[{material:"supercapacitor",amount:1}],inputs:[{material:"holmium-plate",amount:2},{material:"superconductor",amount:2},{material:"electronic-circuit",amount:4},{material:"battery",amount:1},{material:"electrolyte",amount:10}],spaceAge:!0},{id:"electrolyte",name:"Electrolyte",outputs:[{material:"electrolyte",amount:10}],inputs:[{material:"stone",amount:1},{material:"heavy-oil",amount:10},{material:"holmium-solution",amount:10}]},{id:"lightning-collector",name:"Lightning collector",outputs:[{material:"lightning-collector",amount:1}],inputs:[{material:"lightning-rod",amount:1},{material:"supercapacitor",amount:8},{material:"accumulator",amount:1},{material:"electrolyte",amount:80}],spaceAge:!0},{id:"teslagun",name:"Tesla gun",outputs:[{material:"teslagun",amount:1}],inputs:[{material:"holmium-plate",amount:10},{material:"superconductor",amount:10},{material:"plastic-bar",amount:30},{material:"electrolyte",amount:100}]},{id:"tesla-turret",name:"Tesla turret",outputs:[{material:"tesla-turret",amount:1}],inputs:[{material:"teslagun",amount:1},{material:"supercapacitor",amount:10},{material:"processing-unit",amount:10},{material:"superconductor",amount:50},{material:"electrolyte",amount:500}],spaceAge:!0},{id:"tesla-ammo",name:"Tesla ammo",outputs:[{material:"tesla-ammo",amount:1}],inputs:[{material:"supercapacitor",amount:1},{material:"plastic-bar",amount:1},{material:"electrolyte",amount:10}]},{id:"heating-tower",name:"Heating tower",outputs:[{material:"heating-tower",amount:1}],inputs:[{material:"boiler",amount:2},{material:"heat-pipe",amount:5},{material:"concrete",amount:20}],spaceAge:!0},{id:"lithium",name:"Lithium",outputs:[{material:"lithium",amount:5}],inputs:[{material:"holmium-plate",amount:1},{material:"lithium-brine",amount:50},{material:"ammonia",amount:50}],spaceAge:!0},{id:"lithium-plate",name:"Lithium plate",outputs:[{material:"lithium-plate",amount:1}],inputs:[{material:"lithium",amount:1}],spaceAge:!0},{id:"fluoroketone",name:"Fluoroketone",outputs:[{material:"fluoroketone-hot",amount:50}],inputs:[{material:"fluorine",amount:50},{material:"ammonia",amount:50},{material:"solid-fuel",amount:1},{material:"lithium",amount:1}]},{id:"fluoroketone-cooling",name:"Cooling hot fluoroketone",outputs:[{material:"fluoroketone-cold",amount:10}],inputs:[{material:"fluoroketone-hot",amount:10}]},{id:"cryogenic-plant",name:"Cryogenic plant",outputs:[{material:"cryogenic-plant",amount:1}],inputs:[{material:"refined-concrete",amount:40},{material:"superconductor",amount:20},{material:"processing-unit",amount:20},{material:"lithium-plate",amount:20}],spaceAge:!0},{id:"quantum-processor",name:"Quantum processor",outputs:[{material:"quantum-processor",amount:1},{material:"fluoroketone-hot",amount:5}],inputs:[{material:"tungsten-carbide",amount:1},{material:"processing-unit",amount:1},{material:"superconductor",amount:1},{material:"carbon-fiber",amount:1},{material:"lithium-plate",amount:2},{material:"fluoroketone-cold",amount:10}],spaceAge:!0},{id:"ammoniacal-solution-separation",name:"Ammoniacal solution separation",outputs:[{material:"ice",amount:5},{material:"ammonia",amount:50}],inputs:[{material:"ammoniacal-solution",amount:50}],alternate:!0,spaceAge:!0},{id:"fusion-reactor-equipment",name:"Portable fusion reactor",outputs:[{material:"fusion-reactor-equipment",amount:1}],inputs:[{material:"fission-reactor-equipment",amount:1},{material:"fusion-power-cell",amount:10},{material:"tungsten-plate",amount:250},{material:"carbon-fiber",amount:100},{material:"supercapacitor",amount:25},{material:"quantum-processor",amount:250}],spaceAge:!0},{id:"fusion-power-cell",name:"Fusion power cell",outputs:[{material:"fusion-power-cell",amount:1}],inputs:[{material:"lithium-plate",amount:5},{material:"holmium-plate",amount:1},{material:"ammonia",amount:100}],spaceAge:!0},{id:"fusion-reactor",name:"Fusion reactor",outputs:[{material:"fusion-reactor",amount:1}],inputs:[{material:"tungsten-plate",amount:200},{material:"superconductor",amount:200},{material:"quantum-processor",amount:250}],spaceAge:!0},{id:"fusion-generator",name:"Fusion generator",outputs:[{material:"fusion-generator",amount:1}],inputs:[{material:"tungsten-plate",amount:100},{material:"superconductor",amount:100},{material:"quantum-processor",amount:50}],spaceAge:!0},{id:"ice-platform",name:"Ice platform",outputs:[{material:"ice-platform",amount:1}],inputs:[{material:"ammonia",amount:400},{material:"ice",amount:50}],spaceAge:!0},{id:"solid-fuel-from-ammonia",name:"Solid fuel from ammonia",outputs:[{material:"solid-fuel",amount:1}],inputs:[{material:"ammonia",amount:15},{material:"crude-oil",amount:6}],alternate:!0},{id:"ammonia-rocket-fuel",name:"Ammonia rocket fuel",outputs:[{material:"rocket-fuel",amount:1}],inputs:[{material:"solid-fuel",amount:10},{material:"water",amount:50},{material:"ammonia",amount:500}],alternate:!0},{id:"foundation",name:"Foundation",outputs:[{material:"foundation",amount:1}],inputs:[{material:"tungsten-plate",amount:4},{material:"lithium-plate",amount:4},{material:"carbon-fiber",amount:4},{material:"stone",amount:20},{material:"fluoroketone-cold",amount:20}],spaceAge:!0},{id:"promethium-science-pack",name:"Promethium science pack",outputs:[{material:"promethium-science-pack",amount:10}],inputs:[{material:"promethium-asteroid-chunk",amount:25},{material:"quantum-processor",amount:1},{material:"biter-egg",amount:10}],spaceAge:!0},{id:"tree-seed",name:"Tree seed",outputs:[{material:"tree-seed",amount:1}],inputs:[{material:"wood",amount:2}],spaceAge:!0},{id:"water-barrel",name:"Fill Water barrel",outputs:[{material:"water-barrel",amount:1}],inputs:[{material:"water",amount:50},{material:"barrel",amount:1}]},{id:"empty-water-barrel",name:"Empty Water barrel",outputs:[{material:"water",amount:50},{material:"barrel",amount:1}],inputs:[{material:"water-barrel",amount:1}],alternate:!0},{id:"sulfuric-acid-barrel",name:"Fill Sulfuric acid barrel",outputs:[{material:"sulfuric-acid-barrel",amount:1}],inputs:[{material:"sulfuric-acid",amount:50},{material:"barrel",amount:1}]},{id:"empty-sulfuric-acid-barrel",name:"Empty Sulfuric acid barrel",outputs:[{material:"sulfuric-acid",amount:50},{material:"barrel",amount:1}],inputs:[{material:"sulfuric-acid-barrel",amount:1}],alternate:!0},{id:"crude-oil-barrel",name:"Fill Crude oil barrel",outputs:[{material:"crude-oil-barrel",amount:1}],inputs:[{material:"crude-oil",amount:50},{material:"barrel",amount:1}]},{id:"empty-crude-oil-barrel",name:"Empty Crude oil barrel",outputs:[{material:"crude-oil",amount:50},{material:"barrel",amount:1}],inputs:[{material:"crude-oil-barrel",amount:1}]},{id:"heavy-oil-barrel",name:"Fill Heavy oil barrel",outputs:[{material:"heavy-oil-barrel",amount:1}],inputs:[{material:"heavy-oil",amount:50},{material:"barrel",amount:1}]},{id:"empty-heavy-oil-barrel",name:"Empty Heavy oil barrel",outputs:[{material:"heavy-oil",amount:50},{material:"barrel",amount:1}],inputs:[{material:"heavy-oil-barrel",amount:1}],alternate:!0},{id:"light-oil-barrel",name:"Fill Light oil barrel",outputs:[{material:"light-oil-barrel",amount:1}],inputs:[{material:"light-oil",amount:50},{material:"barrel",amount:1}]},{id:"empty-light-oil-barrel",name:"Empty Light oil barrel",outputs:[{material:"light-oil",amount:50},{material:"barrel",amount:1}],inputs:[{material:"light-oil-barrel",amount:1}],alternate:!0},{id:"petroleum-gas-barrel",name:"Fill Petroleum gas barrel",outputs:[{material:"petroleum-gas-barrel",amount:1}],inputs:[{material:"petroleum-gas",amount:50},{material:"barrel",amount:1}]},{id:"empty-petroleum-gas-barrel",name:"Empty Petroleum gas barrel",outputs:[{material:"petroleum-gas",amount:50},{material:"barrel",amount:1}],inputs:[{material:"petroleum-gas-barrel",amount:1}],alternate:!0},{id:"lubricant-barrel",name:"Fill Lubricant barrel",outputs:[{material:"lubricant-barrel",amount:1}],inputs:[{material:"lubricant",amount:50},{material:"barrel",amount:1}]},{id:"empty-lubricant-barrel",name:"Empty Lubricant barrel",outputs:[{material:"lubricant",amount:50},{material:"barrel",amount:1}],inputs:[{material:"lubricant-barrel",amount:1}],alternate:!0},{id:"fluoroketone-cold-barrel",name:"Fill Fluoroketone (Cold) barrel",outputs:[{material:"fluoroketone-cold-barrel",amount:1}],inputs:[{material:"fluoroketone-cold",amount:50},{material:"barrel",amount:1}]},{id:"empty-fluoroketone-cold-barrel",name:"Empty Fluoroketone (Cold) barrel",outputs:[{material:"fluoroketone-cold",amount:50},{material:"barrel",amount:1}],inputs:[{material:"fluoroketone-cold-barrel",amount:1}],alternate:!0},{id:"fluoroketone-hot-barrel",name:"Fill Fluoroketone (Hot) barrel",outputs:[{material:"fluoroketone-hot-barrel",amount:1}],inputs:[{material:"fluoroketone-hot",amount:50},{material:"barrel",amount:1}]},{id:"empty-fluoroketone-hot-barrel",name:"Empty Fluoroketone (Hot) barrel",outputs:[{material:"fluoroketone-hot",amount:50},{material:"barrel",amount:1}],inputs:[{material:"fluoroketone-hot-barrel",amount:1}],alternate:!0},{id:"speed-module-recycling",name:"Speed module recycling",outputs:[{material:"advanced-circuit",amount:1},{material:"electronic-circuit",amount:1}],inputs:[{material:"speed-module",amount:1}],alternate:!0},{id:"speed-module-2-recycling",name:"Speed module 2 recycling",outputs:[{material:"speed-module",amount:1},{material:"advanced-circuit",amount:1},{material:"processing-unit",amount:1}],inputs:[{material:"speed-module-2",amount:1}],alternate:!0},{id:"speed-module-3-recycling",name:"Speed module 3 recycling",outputs:[{material:"speed-module-2",amount:1},{material:"advanced-circuit",amount:1},{material:"processing-unit",amount:1},{material:"tungsten-carbide",amount:0}],inputs:[{material:"speed-module-3",amount:1}],alternate:!0},{id:"productivity-module-recycling",name:"Productivity module recycling",outputs:[{material:"advanced-circuit",amount:1},{material:"electronic-circuit",amount:1}],inputs:[{material:"productivity-module",amount:1}],alternate:!0},{id:"productivity-module-2-recycling",name:"Productivity module 2 recycling",outputs:[{material:"productivity-module",amount:1},{material:"advanced-circuit",amount:1},{material:"processing-unit",amount:1}],inputs:[{material:"productivity-module-2",amount:1}],alternate:!0},{id:"productivity-module-3-recycling",name:"Productivity module 3 recycling",outputs:[{material:"productivity-module-2",amount:1},{material:"advanced-circuit",amount:1},{material:"processing-unit",amount:1},{material:"biter-egg",amount:0}],inputs:[{material:"productivity-module-3",amount:1}],alternate:!0},{id:"efficiency-module-recycling",name:"Efficiency module recycling",outputs:[{material:"advanced-circuit",amount:1},{material:"electronic-circuit",amount:1}],inputs:[{material:"efficiency-module",amount:1}],alternate:!0},{id:"efficiency-module-2-recycling",name:"Efficiency module 2 recycling",outputs:[{material:"efficiency-module",amount:1},{material:"advanced-circuit",amount:1},{material:"processing-unit",amount:1}],inputs:[{material:"efficiency-module-2",amount:1}],alternate:!0},{id:"efficiency-module-3-recycling",name:"Efficiency module 3 recycling",outputs:[{material:"efficiency-module-2",amount:1},{material:"advanced-circuit",amount:1},{material:"processing-unit",amount:1},{material:"spoilage",amount:1}],inputs:[{material:"efficiency-module-3",amount:1}],alternate:!0},{id:"bulk-inserter-recycling",name:"Bulk inserter recycling",outputs:[{material:"iron-gear-wheel",amount:3},{material:"electronic-circuit",amount:3},{material:"advanced-circuit",amount:0},{material:"fast-inserter",amount:0}],inputs:[{material:"bulk-inserter",amount:1}],alternate:!0},{id:"barrel-recycling",name:"Barrel recycling",outputs:[{material:"steel-plate",amount:0}],inputs:[{material:"barrel",amount:1}],alternate:!0},{id:"night-vision-equipment-recycling",name:"Nightvision recycling",outputs:[{material:"advanced-circuit",amount:1},{material:"steel-plate",amount:2}],inputs:[{material:"night-vision-equipment",amount:1}],alternate:!0},{id:"belt-immunity-equipment-recycling",name:"Belt immunity equipment recycling",outputs:[{material:"advanced-circuit",amount:1},{material:"steel-plate",amount:2}],inputs:[{material:"belt-immunity-equipment",amount:1}],alternate:!0},{id:"energy-shield-equipment-recycling",name:"Energy shield recycling",outputs:[{material:"advanced-circuit",amount:1},{material:"steel-plate",amount:2}],inputs:[{material:"energy-shield-equipment",amount:1}],alternate:!0},{id:"energy-shield-mk2-equipment-recycling",name:"Energy shield MK2 recycling",outputs:[{material:"energy-shield-equipment",amount:2},{material:"processing-unit",amount:1},{material:"low-density-structure",amount:1}],inputs:[{material:"energy-shield-mk2-equipment",amount:1}],alternate:!0},{id:"battery-equipment-recycling",name:"Personal battery recycling",outputs:[{material:"battery",amount:1},{material:"steel-plate",amount:2}],inputs:[{material:"battery-equipment",amount:1}],alternate:!0},{id:"battery-mk2-equipment-recycling",name:"Personal battery MK2 recycling",outputs:[{material:"battery-equipment",amount:2},{material:"processing-unit",amount:3},{material:"low-density-structure",amount:1}],inputs:[{material:"battery-mk2-equipment",amount:1}],alternate:!0},{id:"solar-panel-equipment-recycling",name:"Portable solar panel recycling",outputs:[{material:"solar-panel",amount:0},{material:"advanced-circuit",amount:0},{material:"steel-plate",amount:1}],inputs:[{material:"solar-panel-equipment",amount:1}],alternate:!0},{id:"fission-reactor-equipment-recycling",name:"Portable fission reactor recycling",outputs:[{material:"processing-unit",amount:50},{material:"low-density-structure",amount:12},{material:"uranium-fuel-cell",amount:1}],inputs:[{material:"fission-reactor-equipment",amount:1}],alternate:!0},{id:"personal-laser-defense-equipment-recycling",name:"Personal laser defense recycling",outputs:[{material:"processing-unit",amount:5},{material:"low-density-structure",amount:1},{material:"laser-turret",amount:1}],inputs:[{material:"personal-laser-defense-equipment",amount:1}],alternate:!0},{id:"discharge-defense-equipment-recycling",name:"Discharge defense recycling",outputs:[{material:"processing-unit",amount:1},{material:"steel-plate",amount:5},{material:"laser-turret",amount:2}],inputs:[{material:"discharge-defense-equipment",amount:1}],alternate:!0},{id:"exoskeleton-equipment-recycling",name:"Exoskeleton recycling",outputs:[{material:"processing-unit",amount:2},{material:"electric-engine-unit",amount:7},{material:"steel-plate",amount:5}],inputs:[{material:"exoskeleton-equipment",amount:1}],alternate:!0},{id:"personal-roboport-equipment-recycling",name:"Personal roboport recycling",outputs:[{material:"advanced-circuit",amount:2},{material:"iron-gear-wheel",amount:10},{material:"steel-plate",amount:5},{material:"battery",amount:11}],inputs:[{material:"personal-roboport-equipment",amount:1}],alternate:!0},{id:"personal-roboport-mk2-equipment-recycling",name:"Personal roboport MK2 recycling",outputs:[{material:"personal-roboport-equipment",amount:1},{material:"processing-unit",amount:12},{material:"superconductor",amount:12}],inputs:[{material:"personal-roboport-mk2-equipment",amount:1}],alternate:!0},{id:"laser-turret-recycling",name:"Laser turret recycling",outputs:[{material:"steel-plate",amount:5},{material:"electronic-circuit",amount:5},{material:"battery",amount:3}],inputs:[{material:"laser-turret",amount:1}],alternate:!0},{id:"flamethrower-turret-recycling",name:"Flamethrower turret recycling",outputs:[{material:"steel-plate",amount:7},{material:"iron-gear-wheel",amount:3},{material:"pipe",amount:2},{material:"engine-unit",amount:1}],inputs:[{material:"flamethrower-turret",amount:1}],alternate:!0},{id:"artillery-turret-recycling",name:"Artillery turret recycling",outputs:[{material:"tungsten-plate",amount:15},{material:"refined-concrete",amount:15},{material:"iron-gear-wheel",amount:10},{material:"processing-unit",amount:2}],inputs:[{material:"artillery-turret",amount:1}],alternate:!0,spaceAge:!0},{id:"gun-turret-recycling",name:"Gun turret recycling",outputs:[{material:"iron-gear-wheel",amount:2},{material:"copper-plate",amount:2},{material:"iron-plate",amount:5}],inputs:[{material:"gun-turret",amount:1}],alternate:!0},{id:"wooden-chest-recycling",name:"Wooden chest recycling",outputs:[{material:"wood",amount:0}],inputs:[{material:"wooden-chest",amount:1}]},{id:"display-panel-recycling",name:"Display panel recycling",outputs:[{material:"iron-plate",amount:0},{material:"electronic-circuit",amount:0}],inputs:[{material:"display-panel",amount:1}],alternate:!0},{id:"iron-stick-recycling",name:"Iron stick recycling",outputs:[{material:"iron-plate",amount:0}],inputs:[{material:"iron-stick",amount:1}],alternate:!0},{id:"stone-furnace-recycling",name:"Stone furnace recycling",outputs:[{material:"stone",amount:1}],inputs:[{material:"stone-furnace",amount:1}]},{id:"boiler-recycling",name:"Boiler recycling",outputs:[{material:"stone-furnace",amount:0},{material:"pipe",amount:1}],inputs:[{material:"boiler",amount:1}],alternate:!0},{id:"steam-engine-recycling",name:"Steam engine recycling",outputs:[{material:"iron-gear-wheel",amount:2},{material:"pipe",amount:1},{material:"iron-plate",amount:2}],inputs:[{material:"steam-engine",amount:1}],alternate:!0},{id:"iron-gear-wheel-recycling",name:"Iron gear wheel recycling",outputs:[{material:"iron-plate",amount:0}],inputs:[{material:"iron-gear-wheel",amount:1}],alternate:!0},{id:"electronic-circuit-recycling",name:"Electronic circuit recycling",outputs:[{material:"iron-plate",amount:0},{material:"copper-cable",amount:0}],inputs:[{material:"electronic-circuit",amount:1}],alternate:!0},{id:"transport-belt-recycling",name:"Transport belt recycling",outputs:[{material:"iron-plate",amount:0},{material:"iron-gear-wheel",amount:0}],inputs:[{material:"transport-belt",amount:1}],alternate:!0},{id:"electric-mining-drill-recycling",name:"Electric mining drill recycling",outputs:[{material:"electronic-circuit",amount:0},{material:"iron-gear-wheel",amount:1},{material:"iron-plate",amount:2}],inputs:[{material:"electric-mining-drill",amount:1}],alternate:!0},{id:"burner-mining-drill-recycling",name:"Burner mining drill recycling",outputs:[{material:"iron-gear-wheel",amount:0},{material:"stone-furnace",amount:0},{material:"iron-plate",amount:0}],inputs:[{material:"burner-mining-drill",amount:1}],alternate:!0},{id:"inserter-recycling",name:"Inserter recycling",outputs:[{material:"electronic-circuit",amount:0},{material:"iron-gear-wheel",amount:0},{material:"iron-plate",amount:0}],inputs:[{material:"inserter",amount:1}],alternate:!0},{id:"fast-inserter-recycling",name:"Fast inserter recycling",outputs:[{material:"electronic-circuit",amount:0},{material:"iron-plate",amount:0},{material:"inserter",amount:0}],inputs:[{material:"fast-inserter",amount:1}],alternate:!0},{id:"long-handed-inserter-recycling",name:"Long-handed inserter recycling",outputs:[{material:"iron-gear-wheel",amount:0},{material:"iron-plate",amount:0},{material:"inserter",amount:0}],inputs:[{material:"long-handed-inserter",amount:1}],alternate:!0},{id:"burner-inserter-recycling",name:"Burner inserter recycling",outputs:[{material:"iron-plate",amount:0},{material:"iron-gear-wheel",amount:0}],inputs:[{material:"burner-inserter",amount:1}],alternate:!0},{id:"pipe-recycling",name:"Pipe recycling",outputs:[{material:"iron-plate",amount:0}],inputs:[{material:"pipe",amount:1}],alternate:!0},{id:"offshore-pump-recycling",name:"Offshore pump recycling",outputs:[{material:"pipe",amount:0},{material:"iron-gear-wheel",amount:0}],inputs:[{material:"offshore-pump",amount:1}],alternate:!0},{id:"copper-cable-recycling",name:"Copper cable recycling",outputs:[{material:"copper-plate",amount:0}],inputs:[{material:"copper-cable",amount:1}],alternate:!0},{id:"small-electric-pole-recycling",name:"Small electric pole recycling",outputs:[{material:"wood",amount:0},{material:"copper-cable",amount:0}],inputs:[{material:"small-electric-pole",amount:1}],alternate:!0},{id:"submachine-gun-recycling",name:"Submachine gun recycling",outputs:[{material:"iron-gear-wheel",amount:2},{material:"copper-plate",amount:1},{material:"iron-plate",amount:2}],inputs:[{material:"submachine-gun",amount:1}],alternate:!0},{id:"firearm-magazine-recycling",name:"Firearm magazine recycling",outputs:[{material:"iron-plate",amount:1}],inputs:[{material:"firearm-magazine",amount:1}],alternate:!0},{id:"light-armor-recycling",name:"Light armor recycling",outputs:[{material:"iron-plate",amount:10}],inputs:[{material:"light-armor",amount:1}],alternate:!0},{id:"radar-recycling",name:"Radar recycling",outputs:[{material:"electronic-circuit",amount:1},{material:"iron-gear-wheel",amount:1},{material:"iron-plate",amount:2}],inputs:[{material:"radar",amount:1}],alternate:!0},{id:"small-lamp-recycling",name:"Lamp recycling",outputs:[{material:"electronic-circuit",amount:0},{material:"copper-cable",amount:0},{material:"iron-plate",amount:0}],inputs:[{material:"small-lamp",amount:1}],alternate:!0},{id:"pipe-to-ground-recycling",name:"Pipe to ground recycling",outputs:[{material:"pipe",amount:1},{material:"iron-plate",amount:0}],inputs:[{material:"pipe-to-ground",amount:1}],alternate:!0},{id:"assembling-machine-1-recycling",name:"Assembling machine 1 recycling",outputs:[{material:"electronic-circuit",amount:0},{material:"iron-gear-wheel",amount:1},{material:"iron-plate",amount:2}],inputs:[{material:"assembling-machine-1",amount:1}],alternate:!0},{id:"repair-pack-recycling",name:"Repair pack recycling",outputs:[{material:"electronic-circuit",amount:0},{material:"iron-gear-wheel",amount:0}],inputs:[{material:"repair-pack",amount:1}],alternate:!0},{id:"lab-recycling",name:"Lab recycling",outputs:[{material:"electronic-circuit",amount:2},{material:"iron-gear-wheel",amount:2},{material:"transport-belt",amount:1}],inputs:[{material:"lab",amount:1}],alternate:!0},{id:"stone-wall-recycling",name:"Wall recycling",outputs:[{material:"stone-brick",amount:1}],inputs:[{material:"stone-wall",amount:1}],alternate:!0},{id:"assembling-machine-2-recycling",name:"Assembling machine 2 recycling",outputs:[{material:"steel-plate",amount:0},{material:"electronic-circuit",amount:0},{material:"iron-gear-wheel",amount:1},{material:"assembling-machine-1",amount:0}],inputs:[{material:"assembling-machine-2",amount:1}],alternate:!0},{id:"splitter-recycling",name:"Splitter recycling",outputs:[{material:"electronic-circuit",amount:1},{material:"iron-plate",amount:1},{material:"transport-belt",amount:1}],inputs:[{material:"splitter",amount:1}],alternate:!0},{id:"underground-belt-recycling",name:"Underground belt recycling",outputs:[{material:"iron-plate",amount:1},{material:"transport-belt",amount:0}],inputs:[{material:"underground-belt",amount:1}],alternate:!0},{id:"loader-recycling",name:"Loader recycling",outputs:[{material:"inserter",amount:1},{material:"electronic-circuit",amount:1},{material:"iron-gear-wheel",amount:1},{material:"iron-plate",amount:1},{material:"transport-belt",amount:1}],inputs:[{material:"loader",amount:1}],alternate:!0},{id:"car-recycling",name:"Car recycling",outputs:[{material:"engine-unit",amount:2},{material:"iron-plate",amount:5},{material:"steel-plate",amount:1}],inputs:[{material:"car",amount:1}],alternate:!0},{id:"engine-unit-recycling",name:"Engine unit recycling",outputs:[{material:"steel-plate",amount:0},{material:"iron-gear-wheel",amount:0},{material:"pipe",amount:0}],inputs:[{material:"engine-unit",amount:1}],alternate:!0},{id:"iron-chest-recycling",name:"Iron chest recycling",outputs:[{material:"iron-plate",amount:2}],inputs:[{material:"iron-chest",amount:1}],alternate:!0},{id:"big-electric-pole-recycling",name:"Big electric pole recycling",outputs:[{material:"iron-stick",amount:2},{material:"steel-plate",amount:1},{material:"copper-cable",amount:1}],inputs:[{material:"big-electric-pole",amount:1}],alternate:!0},{id:"medium-electric-pole-recycling",name:"Medium electric pole recycling",outputs:[{material:"iron-stick",amount:1},{material:"steel-plate",amount:0},{material:"copper-cable",amount:0}],inputs:[{material:"medium-electric-pole",amount:1}],alternate:!0},{id:"shotgun-recycling",name:"Shotgun recycling",outputs:[{material:"iron-plate",amount:3},{material:"iron-gear-wheel",amount:1},{material:"copper-plate",amount:2},{material:"wood",amount:1}],inputs:[{material:"shotgun",amount:1}],alternate:!0},{id:"shotgun-shell-recycling",name:"Shotgun shells recycling",outputs:[{material:"copper-plate",amount:0},{material:"iron-plate",amount:0}],inputs:[{material:"shotgun-shell",amount:1}],alternate:!0},{id:"piercing-rounds-magazine-recycling",name:"Piercing rounds magazine recycling",outputs:[{material:"firearm-magazine",amount:0},{material:"steel-plate",amount:0},{material:"copper-plate",amount:0}],inputs:[{material:"piercing-rounds-magazine",amount:1}],alternate:!0},{id:"grenade-recycling",name:"Grenade recycling",outputs:[{material:"iron-plate",amount:1},{material:"coal",amount:2}],inputs:[{material:"grenade",amount:1}],alternate:!0},{id:"steel-furnace-recycling",name:"Steel furnace recycling",outputs:[{material:"steel-plate",amount:1},{material:"stone-brick",amount:2}],inputs:[{material:"steel-furnace",amount:1}],alternate:!0},{id:"gate-recycling",name:"Gate recycling",outputs:[{material:"stone-wall",amount:0},{material:"steel-plate",amount:0},{material:"electronic-circuit",amount:0}],inputs:[{material:"gate",amount:1}],alternate:!0},{id:"heavy-armor-recycling",name:"Heavy armor recycling",outputs:[{material:"copper-plate",amount:25},{material:"steel-plate",amount:12}],inputs:[{material:"heavy-armor",amount:1}],alternate:!0},{id:"steel-chest-recycling",name:"Steel chest recycling",outputs:[{material:"steel-plate",amount:2}],inputs:[{material:"steel-chest",amount:1}],alternate:!0},{id:"fast-underground-belt-recycling",name:"Fast underground belt recycling",outputs:[{material:"iron-gear-wheel",amount:5},{material:"underground-belt",amount:0}],inputs:[{material:"fast-underground-belt",amount:1}],alternate:!0},{id:"fast-splitter-recycling",name:"Fast splitter recycling",outputs:[{material:"splitter",amount:0},{material:"iron-gear-wheel",amount:2},{material:"electronic-circuit",amount:2}],inputs:[{material:"fast-splitter",amount:1}],alternate:!0},{id:"concrete-recycling",name:"Concrete recycling",outputs:[{material:"stone-brick",amount:0},{material:"iron-ore",amount:0}],inputs:[{material:"concrete",amount:1}],alternate:!0},{id:"hazard-concrete-recycling",name:"Hazard concrete recycling",outputs:[{material:"stone-brick",amount:0},{material:"iron-ore",amount:0}],inputs:[{material:"hazard-concrete",amount:1}],alternate:!0},{id:"refined-concrete-recycling",name:"Refined concrete recycling",outputs:[{material:"concrete",amount:0},{material:"iron-stick",amount:0},{material:"steel-plate",amount:0}],inputs:[{material:"refined-concrete",amount:1}],alternate:!0},{id:"refined-hazard-concrete-recycling",name:"Refined hazard concrete recycling",outputs:[{material:"concrete",amount:0},{material:"iron-stick",amount:0},{material:"steel-plate",amount:0}],inputs:[{material:"refined-hazard-concrete",amount:1}],alternate:!0},{id:"fast-transport-belt-recycling",name:"Fast transport belt recycling",outputs:[{material:"iron-gear-wheel",amount:1},{material:"transport-belt",amount:0}],inputs:[{material:"fast-transport-belt",amount:1}],alternate:!0},{id:"solar-panel-recycling",name:"Solar panel recycling",outputs:[{material:"steel-plate",amount:1},{material:"electronic-circuit",amount:3},{material:"copper-plate",amount:1}],inputs:[{material:"solar-panel",amount:1}],alternate:!0},{id:"rail-recycling",name:"Rail recycling",outputs:[{material:"stone",amount:0},{material:"iron-stick",amount:0},{material:"steel-plate",amount:0}],inputs:[{material:"rail",amount:1}],alternate:!0},{id:"locomotive-recycling",name:"Locomotive recycling",outputs:[{material:"engine-unit",amount:5},{material:"electronic-circuit",amount:2},{material:"steel-plate",amount:7}],inputs:[{material:"locomotive",amount:1}],alternate:!0},{id:"cargo-wagon-recycling",name:"Cargo wagon recycling",outputs:[{material:"iron-gear-wheel",amount:2},{material:"iron-plate",amount:5},{material:"steel-plate",amount:5}],inputs:[{material:"cargo-wagon",amount:1}],alternate:!0},{id:"rail-signal-recycling",name:"Rail signal recycling",outputs:[{material:"electronic-circuit",amount:0},{material:"iron-plate",amount:1}],inputs:[{material:"rail-signal",amount:1}],alternate:!0},{id:"rail-chain-signal-recycling",name:"Rail chain signal recycling",outputs:[{material:"electronic-circuit",amount:0},{material:"iron-plate",amount:1}],inputs:[{material:"rail-chain-signal",amount:1}],alternate:!0},{id:"train-stop-recycling",name:"Train stop recycling",outputs:[{material:"electronic-circuit",amount:1},{material:"iron-plate",amount:1},{material:"iron-stick",amount:1},{material:"steel-plate",amount:0}],inputs:[{material:"train-stop",amount:1}],alternate:!0},{id:"arithmetic-combinator-recycling",name:"Arithmetic combinator recycling",outputs:[{material:"copper-cable",amount:1},{material:"electronic-circuit",amount:1}],inputs:[{material:"arithmetic-combinator",amount:1}],alternate:!0},{id:"decider-combinator-recycling",name:"Decider combinator recycling",outputs:[{material:"copper-cable",amount:1},{material:"electronic-circuit",amount:1}],inputs:[{material:"decider-combinator",amount:1}],alternate:!0},{id:"constant-combinator-recycling",name:"Constant combinator recycling",outputs:[{material:"copper-cable",amount:1},{material:"electronic-circuit",amount:0}],inputs:[{material:"constant-combinator",amount:1}],alternate:!0},{id:"selector-combinator-recycling",name:"Selector combinator recycling",outputs:[{material:"advanced-circuit",amount:0},{material:"decider-combinator",amount:1}],inputs:[{material:"selector-combinator",amount:1}],alternate:!0},{id:"power-switch-recycling",name:"Power switch recycling",outputs:[{material:"iron-plate",amount:1},{material:"copper-cable",amount:1},{material:"electronic-circuit",amount:0}],inputs:[{material:"power-switch",amount:1}],alternate:!0},{id:"programmable-speaker-recycling",name:"Programmable speaker recycling",outputs:[{material:"iron-plate",amount:0},{material:"iron-stick",amount:1},{material:"copper-cable",amount:1},{material:"electronic-circuit",amount:1}],inputs:[{material:"programmable-speaker",amount:1}],alternate:!0},{id:"poison-capsule-recycling",name:"Poison capsule recycling",outputs:[{material:"steel-plate",amount:0},{material:"electronic-circuit",amount:0},{material:"coal",amount:2}],inputs:[{material:"poison-capsule",amount:1}],alternate:!0},{id:"slowdown-capsule-recycling",name:"Slowdown capsule recycling",outputs:[{material:"steel-plate",amount:0},{material:"electronic-circuit",amount:0},{material:"coal",amount:1}],inputs:[{material:"slowdown-capsule",amount:1}],alternate:!0},{id:"cluster-grenade-recycling",name:"Cluster grenade recycling",outputs:[{material:"grenade",amount:1},{material:"explosives",amount:1},{material:"steel-plate",amount:1}],inputs:[{material:"cluster-grenade",amount:1}],alternate:!0},{id:"defender-capsule-recycling",name:"Defender capsule recycling",outputs:[{material:"piercing-rounds-magazine",amount:0},{material:"electronic-circuit",amount:0},{material:"iron-gear-wheel",amount:0}],inputs:[{material:"defender-capsule",amount:1}],alternate:!0},{id:"distractor-capsule-recycling",name:"Distractor capsule recycling",outputs:[{material:"defender-capsule",amount:1},{material:"advanced-circuit",amount:0}],inputs:[{material:"distractor-capsule",amount:1}],alternate:!0},{id:"destroyer-capsule-recycling",name:"Destroyer capsule recycling",outputs:[{material:"distractor-capsule",amount:1},{material:"steel-plate",amount:1},{material:"processing-unit",amount:0}],inputs:[{material:"destroyer-capsule",amount:1}],alternate:!0},{id:"cliff-explosives-recycling",name:"Cliff explosives recycling",outputs:[{material:"explosives",amount:2},{material:"calcite",amount:2},{material:"grenade",amount:0},{material:"barrel",amount:0}],inputs:[{material:"cliff-explosives",amount:1}],alternate:!0},{id:"uranium-rounds-magazine-recycling",name:"Uranium rounds magazine recycling",outputs:[{material:"piercing-rounds-magazine",amount:0},{material:"uranium-238",amount:0}],inputs:[{material:"uranium-rounds-magazine",amount:1}],alternate:!0},{id:"rocket-recycling",name:"Rocket recycling",outputs:[{material:"explosives",amount:0},{material:"iron-plate",amount:0}],inputs:[{material:"rocket",amount:1}],alternate:!0},{id:"explosive-rocket-recycling",name:"Explosive rocket recycling",outputs:[{material:"rocket",amount:0},{material:"explosives",amount:0}],inputs:[{material:"explosive-rocket",amount:1}],alternate:!0},{id:"atomic-bomb-recycling",name:"Atomic bomb recycling",outputs:[{material:"processing-unit",amount:2},{material:"explosives",amount:2},{material:"uranium-235",amount:25}],inputs:[{material:"atomic-bomb",amount:1}],alternate:!0},{id:"piercing-shotgun-shell-recycling",name:"Piercing shotgun shells recycling",outputs:[{material:"shotgun-shell",amount:0},{material:"copper-plate",amount:0},{material:"steel-plate",amount:0}],inputs:[{material:"piercing-shotgun-shell",amount:1}],alternate:!0},{id:"cannon-shell-recycling",name:"Cannon shell recycling",outputs:[{material:"steel-plate",amount:0},{material:"plastic-bar",amount:0},{material:"explosives",amount:0}],inputs:[{material:"cannon-shell",amount:1}],alternate:!0},{id:"explosive-cannon-shell-recycling",name:"Explosive cannon shell recycling",outputs:[{material:"steel-plate",amount:0},{material:"plastic-bar",amount:0},{material:"explosives",amount:0}],inputs:[{material:"explosive-cannon-shell",amount:1}],alternate:!0},{id:"uranium-cannon-shell-recycling",name:"Uranium cannon shell recycling",outputs:[{material:"cannon-shell",amount:0},{material:"uranium-238",amount:0}],inputs:[{material:"uranium-cannon-shell",amount:1}],alternate:!0},{id:"explosive-uranium-cannon-shell-recycling",name:"Explosive uranium cannon shell recycling",outputs:[{material:"explosive-cannon-shell",amount:0},{material:"uranium-238",amount:0}],inputs:[{material:"explosive-uranium-cannon-shell",amount:1}],alternate:!0},{id:"artillery-shell-recycling",name:"Artillery shell recycling",outputs:[{material:"radar",amount:0},{material:"calcite",amount:0},{material:"tungsten-plate",amount:1},{material:"explosives",amount:2}],inputs:[{material:"artillery-shell",amount:1}],alternate:!0},{id:"express-transport-belt-recycling",name:"Express transport belt recycling",outputs:[{material:"iron-gear-wheel",amount:2},{material:"fast-transport-belt",amount:0}],inputs:[{material:"express-transport-belt",amount:1}],alternate:!0},{id:"assembling-machine-3-recycling",name:"Assembling machine 3 recycling",outputs:[{material:"assembling-machine-2",amount:0},{material:"speed-module",amount:1}],inputs:[{material:"assembling-machine-3",amount:1}],alternate:!0},{id:"tank-recycling",name:"Tank recycling",outputs:[{material:"engine-unit",amount:8},{material:"steel-plate",amount:12},{material:"iron-gear-wheel",amount:3},{material:"advanced-circuit",amount:2}],inputs:[{material:"tank",amount:1}],alternate:!0},{id:"spidertron-recycling",name:"Spidertron recycling",outputs:[{material:"exoskeleton-equipment",amount:1},{material:"fission-reactor-equipment",amount:0},{material:"rocket-turret",amount:0},{material:"radar",amount:0},{material:"raw-fish",amount:0}],inputs:[{material:"spidertron",amount:1}],alternate:!0},{id:"fluid-wagon-recycling",name:"Fluid wagon recycling",outputs:[{material:"iron-gear-wheel",amount:2},{material:"steel-plate",amount:4},{material:"pipe",amount:2},{material:"storage-tank",amount:0}],inputs:[{material:"fluid-wagon",amount:1}],alternate:!0},{id:"artillery-wagon-recycling",name:"Artillery wagon recycling",outputs:[{material:"engine-unit",amount:15},{material:"tungsten-plate",amount:15},{material:"refined-concrete",amount:15},{material:"iron-gear-wheel",amount:10},{material:"processing-unit",amount:2}],inputs:[{material:"artillery-wagon",amount:1}],alternate:!0},{id:"modular-armor-recycling",name:"Modular armor recycling",outputs:[{material:"advanced-circuit",amount:7},{material:"steel-plate",amount:12}],inputs:[{material:"modular-armor",amount:1}],alternate:!0},{id:"power-armor-recycling",name:"Power armor recycling",outputs:[{material:"processing-unit",amount:10},{material:"electric-engine-unit",amount:5},{material:"steel-plate",amount:10}],inputs:[{material:"power-armor",amount:1}],alternate:!0},{id:"power-armor-mk2-recycling",name:"Power armor MK2 recycling",outputs:[{material:"efficiency-module",amount:25},{material:"speed-module",amount:25},{material:"processing-unit",amount:15},{material:"electric-engine-unit",amount:10},{material:"low-density-structure",amount:7}],inputs:[{material:"power-armor-mk2",amount:1}],alternate:!0},{id:"flamethrower-recycling",name:"Flamethrower recycling",outputs:[{material:"steel-plate",amount:1},{material:"iron-gear-wheel",amount:2}],inputs:[{material:"flamethrower",amount:1}],alternate:!0},{id:"land-mine-recycling",name:"Land mine recycling",outputs:[{material:"steel-plate",amount:0},{material:"explosives",amount:0}],inputs:[{material:"land-mine",amount:1}],alternate:!0},{id:"rocket-launcher-recycling",name:"Rocket launcher recycling",outputs:[{material:"iron-plate",amount:1},{material:"iron-gear-wheel",amount:1},{material:"electronic-circuit",amount:1}],inputs:[{material:"rocket-launcher",amount:1}],alternate:!0},{id:"combat-shotgun-recycling",name:"Combat shotgun recycling",outputs:[{material:"steel-plate",amount:3},{material:"iron-gear-wheel",amount:1},{material:"copper-plate",amount:2},{material:"wood",amount:2}],inputs:[{material:"combat-shotgun",amount:1}],alternate:!0},{id:"express-underground-belt-recycling",name:"Express underground belt recycling",outputs:[{material:"iron-gear-wheel",amount:10},{material:"fast-underground-belt",amount:0}],inputs:[{material:"express-underground-belt",amount:1}],alternate:!0},{id:"fast-loader-recycling",name:"Fast loader recycling",outputs:[{material:"fast-transport-belt",amount:1},{material:"loader",amount:0}],inputs:[{material:"fast-loader",amount:1}],alternate:!0},{id:"express-loader-recycling",name:"Express loader recycling",outputs:[{material:"express-transport-belt",amount:1},{material:"fast-loader",amount:0}],inputs:[{material:"express-loader",amount:1}],alternate:!0},{id:"express-splitter-recycling",name:"Express splitter recycling",outputs:[{material:"fast-splitter",amount:0},{material:"iron-gear-wheel",amount:2},{material:"advanced-circuit",amount:2}],inputs:[{material:"express-splitter",amount:1}],alternate:!0},{id:"advanced-circuit-recycling",name:"Advanced circuit recycling",outputs:[{material:"electronic-circuit",amount:0},{material:"plastic-bar",amount:0},{material:"copper-cable",amount:1}],inputs:[{material:"advanced-circuit",amount:1}],alternate:!0},{id:"processing-unit-recycling",name:"Processing unit recycling",outputs:[{material:"electronic-circuit",amount:5},{material:"advanced-circuit",amount:0}],inputs:[{material:"processing-unit",amount:1}],alternate:!0},{id:"logistic-robot-recycling",name:"Logistic robot recycling",outputs:[{material:"flying-robot-frame",amount:0},{material:"advanced-circuit",amount:0}],inputs:[{material:"logistic-robot",amount:1}],alternate:!0},{id:"construction-robot-recycling",name:"Construction robot recycling",outputs:[{material:"flying-robot-frame",amount:0},{material:"electronic-circuit",amount:0}],inputs:[{material:"construction-robot",amount:1}],alternate:!0},{id:"passive-provider-chest-recycling",name:"Passive provider chest recycling",outputs:[{material:"steel-chest",amount:0},{material:"electronic-circuit",amount:0},{material:"advanced-circuit",amount:0}],inputs:[{material:"passive-provider-chest",amount:1}],alternate:!0},{id:"active-provider-chest-recycling",name:"Active provider chest recycling",outputs:[{material:"steel-chest",amount:0},{material:"electronic-circuit",amount:0},{material:"advanced-circuit",amount:0}],inputs:[{material:"active-provider-chest",amount:1}],alternate:!0},{id:"storage-chest-recycling",name:"Storage chest recycling",outputs:[{material:"steel-chest",amount:0},{material:"electronic-circuit",amount:0},{material:"advanced-circuit",amount:0}],inputs:[{material:"storage-chest",amount:1}],alternate:!0},{id:"buffer-chest-recycling",name:"Buffer chest recycling",outputs:[{material:"steel-chest",amount:0},{material:"electronic-circuit",amount:0},{material:"advanced-circuit",amount:0}],inputs:[{material:"buffer-chest",amount:1}],alternate:!0},{id:"requester-chest-recycling",name:"Requester chest recycling",outputs:[{material:"steel-chest",amount:0},{material:"electronic-circuit",amount:0},{material:"advanced-circuit",amount:0}],inputs:[{material:"requester-chest",amount:1}],alternate:!0},{id:"rocket-silo-recycling",name:"Rocket silo recycling",outputs:[{material:"steel-plate",amount:250},{material:"concrete",amount:250},{material:"pipe",amount:25},{material:"processing-unit",amount:50},{material:"electric-engine-unit",amount:50}],inputs:[{material:"rocket-silo",amount:1}],alternate:!0},{id:"cargo-landing-pad-recycling",name:"Cargo landing pad recycling",outputs:[{material:"concrete",amount:50},{material:"steel-plate",amount:6},{material:"processing-unit",amount:2}],inputs:[{material:"cargo-landing-pad",amount:1}],alternate:!0},{id:"roboport-recycling",name:"Roboport recycling",outputs:[{material:"steel-plate",amount:11},{material:"iron-gear-wheel",amount:11},{material:"advanced-circuit",amount:11}],inputs:[{material:"roboport",amount:1}],alternate:!0},{id:"substation-recycling",name:"Substation recycling",outputs:[{material:"steel-plate",amount:2},{material:"advanced-circuit",amount:1},{material:"copper-cable",amount:1}],inputs:[{material:"substation",amount:1}],alternate:!0},{id:"accumulator-recycling",name:"Accumulator recycling",outputs:[{material:"iron-plate",amount:0},{material:"battery",amount:1}],inputs:[{material:"accumulator",amount:1}],alternate:!0},{id:"electric-furnace-recycling",name:"Electric furnace recycling",outputs:[{material:"steel-plate",amount:2},{material:"advanced-circuit",amount:1},{material:"stone-brick",amount:2}],inputs:[{material:"electric-furnace",amount:1}],alternate:!0},{id:"beacon-recycling",name:"Beacon recycling",outputs:[{material:"electronic-circuit",amount:5},{material:"advanced-circuit",amount:5},{material:"steel-plate",amount:2},{material:"copper-cable",amount:2}],inputs:[{material:"beacon",amount:1}],alternate:!0},{id:"pumpjack-recycling",name:"Pumpjack recycling",outputs:[{material:"steel-plate",amount:1},{material:"iron-gear-wheel",amount:2},{material:"electronic-circuit",amount:1},{material:"pipe",amount:2}],inputs:[{material:"pumpjack",amount:1}],alternate:!0},{id:"oil-refinery-recycling",name:"Oil refinery recycling",outputs:[{material:"steel-plate",amount:3},{material:"iron-gear-wheel",amount:2},{material:"stone-brick",amount:2},{material:"electronic-circuit",amount:2},{material:"pipe",amount:2}],inputs:[{material:"oil-refinery",amount:1}],alternate:!0},{id:"electric-engine-unit-recycling",name:"Electric engine unit recycling",outputs:[{material:"engine-unit",amount:0},{material:"electronic-circuit",amount:0}],inputs:[{material:"electric-engine-unit",amount:1}],alternate:!0},{id:"flying-robot-frame-recycling",name:"Flying robot frame recycling",outputs:[{material:"electric-engine-unit",amount:0},{material:"battery",amount:0},{material:"steel-plate",amount:0},{material:"electronic-circuit",amount:0}],inputs:[{material:"flying-robot-frame",amount:1}],alternate:!0},{id:"battery-recycling",name:"Battery recycling",outputs:[{material:"iron-plate",amount:0},{material:"copper-plate",amount:0}],inputs:[{material:"battery",amount:1}],alternate:!0},{id:"storage-tank-recycling",name:"Storage tank recycling",outputs:[{material:"iron-plate",amount:5},{material:"steel-plate",amount:1}],inputs:[{material:"storage-tank",amount:1}],alternate:!0},{id:"pump-recycling",name:"Pump recycling",outputs:[{material:"engine-unit",amount:0},{material:"steel-plate",amount:0},{material:"pipe",amount:0}],inputs:[{material:"pump",amount:1}],alternate:!0},{id:"chemical-plant-recycling",name:"Chemical plant recycling",outputs:[{material:"steel-plate",amount:1},{material:"iron-gear-wheel",amount:1},{material:"electronic-circuit",amount:1},{material:"pipe",amount:1}],inputs:[{material:"chemical-plant",amount:1}],alternate:!0},{id:"low-density-structure-recycling",name:"Low density structure recycling",outputs:[{material:"steel-plate",amount:0},{material:"copper-plate",amount:5},{material:"plastic-bar",amount:1}],inputs:[{material:"low-density-structure",amount:1}],alternate:!0},{id:"rocket-fuel-recycling",name:"Rocket fuel recycling",outputs:[{material:"solid-fuel",amount:2}],inputs:[{material:"rocket-fuel",amount:1}],alternate:!0},{id:"nuclear-reactor-recycling",name:"Nuclear reactor recycling",outputs:[{material:"concrete",amount:125},{material:"steel-plate",amount:125},{material:"advanced-circuit",amount:125},{material:"copper-plate",amount:125}],inputs:[{material:"nuclear-reactor",amount:1}],alternate:!0},{id:"centrifuge-recycling",name:"Centrifuge recycling",outputs:[{material:"concrete",amount:25},{material:"steel-plate",amount:12},{material:"advanced-circuit",amount:25},{material:"iron-gear-wheel",amount:25}],inputs:[{material:"centrifuge",amount:1}],alternate:!0},{id:"nuclear-fuel-recycling",name:"Nuclear fuel recycling",outputs:[{material:"uranium-235",amount:0},{material:"rocket-fuel",amount:0}],inputs:[{material:"nuclear-fuel",amount:1}],alternate:!0},{id:"heat-exchanger-recycling",name:"Heat exchanger recycling",outputs:[{material:"steel-plate",amount:2},{material:"copper-plate",amount:25},{material:"pipe",amount:2}],inputs:[{material:"heat-exchanger",amount:1}],alternate:!0},{id:"heat-pipe-recycling",name:"Heat pipe recycling",outputs:[{material:"steel-plate",amount:2},{material:"copper-plate",amount:5}],inputs:[{material:"heat-pipe",amount:1}],alternate:!0},{id:"steam-turbine-recycling",name:"Steam turbine recycling",outputs:[{material:"iron-gear-wheel",amount:12},{material:"copper-plate",amount:12},{material:"pipe",amount:5}],inputs:[{material:"steam-turbine",amount:1}],alternate:!0},{id:"rail-support-recycling",name:"Rail support recycling",outputs:[{material:"refined-concrete",amount:5},{material:"steel-plate",amount:2}],inputs:[{material:"rail-support",amount:1}],alternate:!0},{id:"rail-ramp-recycling",name:"Rail ramp recycling",outputs:[{material:"refined-concrete",amount:25},{material:"rail",amount:2},{material:"steel-plate",amount:2}],inputs:[{material:"rail-ramp",amount:1}],alternate:!0},{id:"recycler-recycling",name:"Recycler recycling",outputs:[{material:"processing-unit",amount:1},{material:"steel-plate",amount:5},{material:"iron-gear-wheel",amount:10},{material:"concrete",amount:5}],inputs:[{material:"recycler",amount:1}],alternate:!0},{id:"quality-module-recycling",name:"Quality module recycling",outputs:[{material:"electronic-circuit",amount:1},{material:"advanced-circuit",amount:1}],inputs:[{material:"quality-module",amount:1}],alternate:!0},{id:"quality-module-2-recycling",name:"Quality module 2 recycling",outputs:[{material:"quality-module",amount:1},{material:"advanced-circuit",amount:1},{material:"processing-unit",amount:1}],inputs:[{material:"quality-module-2",amount:1}],alternate:!0},{id:"quality-module-3-recycling",name:"Quality module 3 recycling",outputs:[{material:"quality-module-2",amount:1},{material:"advanced-circuit",amount:1},{material:"processing-unit",amount:1},{material:"superconductor",amount:0}],inputs:[{material:"quality-module-3",amount:1}],alternate:!0},{id:"artificial-yumako-soil-recycling",name:"Artificial yumako soil recycling",outputs:[{material:"yumako-seed",amount:0},{material:"nutrients",amount:1},{material:"landfill",amount:0}],inputs:[{material:"artificial-yumako-soil",amount:1}],alternate:!0,spaceAge:!0},{id:"overgrowth-yumako-soil-recycling",name:"Overgrowth yumako soil recycling",outputs:[{material:"artificial-yumako-soil",amount:0},{material:"yumako-seed",amount:1},{material:"biter-egg",amount:2},{material:"spoilage",amount:12}],inputs:[{material:"overgrowth-yumako-soil",amount:1}],alternate:!0,spaceAge:!0},{id:"artificial-jellynut-soil-recycling",name:"Artificial jellynut soil recycling",outputs:[{material:"jellynut-seed",amount:0},{material:"nutrients",amount:1},{material:"landfill",amount:0}],inputs:[{material:"artificial-jellynut-soil",amount:1}],alternate:!0,spaceAge:!0},{id:"overgrowth-jellynut-soil-recycling",name:"Overgrowth jellynut soil recycling",outputs:[{material:"artificial-jellynut-soil",amount:0},{material:"jellynut-seed",amount:1},{material:"biter-egg",amount:2},{material:"spoilage",amount:12}],inputs:[{material:"overgrowth-jellynut-soil",amount:1}],alternate:!0,spaceAge:!0},{id:"nutrients-recycling",name:"Nutrients recycling",outputs:[{material:"spoilage",amount:2}],inputs:[{material:"nutrients",amount:1}],spaceAge:!0},{id:"toolbelt-equipment-recycling",name:"Toolbelt equipment recycling",outputs:[{material:"advanced-circuit",amount:0},{material:"carbon-fiber",amount:2}],inputs:[{material:"toolbelt-equipment",amount:1}],alternate:!0},{id:"battery-mk3-equipment-recycling",name:"Personal battery MK3 recycling",outputs:[{material:"battery-mk2-equipment",amount:1},{material:"supercapacitor",amount:2}],inputs:[{material:"battery-mk3-equipment",amount:1}],alternate:!0},{id:"space-platform-foundation-recycling",name:"Space platform foundation recycling",outputs:[{material:"steel-plate",amount:5},{material:"copper-cable",amount:5}],inputs:[{material:"space-platform-foundation",amount:1}],alternate:!0},{id:"stack-inserter-recycling",name:"Stack inserter recycling",outputs:[{material:"bulk-inserter",amount:0},{material:"processing-unit",amount:0},{material:"carbon-fiber",amount:0},{material:"jelly",amount:2}],inputs:[{material:"stack-inserter",amount:1}],alternate:!0},{id:"rocket-turret-recycling",name:"Rocket turret recycling",outputs:[{material:"rocket-launcher",amount:1},{material:"processing-unit",amount:1},{material:"carbon-fiber",amount:5},{material:"steel-plate",amount:5},{material:"iron-gear-wheel",amount:5}],inputs:[{material:"rocket-turret",amount:1}],alternate:!0},{id:"infinity-chest-recycling",name:"Infinity chest recycling",outputs:[{material:"steel-chest",amount:0},{material:"electronic-circuit",amount:1}],inputs:[{material:"infinity-chest",amount:1}],alternate:!0},{id:"infinity-pipe-recycling",name:"Infinity pipe recycling",outputs:[{material:"pipe",amount:0},{material:"electronic-circuit",amount:1}],inputs:[{material:"infinity-pipe",amount:1}],alternate:!0},{id:"heat-interface-recycling",name:"Heat interface recycling",outputs:[{material:"heat-pipe",amount:0},{material:"electronic-circuit",amount:1}],inputs:[{material:"heat-interface",amount:1}],alternate:!0},{id:"space-platform-starter-pack-recycling",name:"Space platform starter pack recycling",outputs:[{material:"space-platform-foundation",amount:15},{material:"steel-plate",amount:5},{material:"processing-unit",amount:5}],inputs:[{material:"space-platform-starter-pack",amount:1}],alternate:!0,spaceAge:!0},{id:"cargo-bay-recycling",name:"Cargo bay recycling",outputs:[{material:"steel-plate",amount:5},{material:"low-density-structure",amount:5},{material:"processing-unit",amount:1}],inputs:[{material:"cargo-bay",amount:1}],alternate:!0},{id:"landing-pad-unloading-bay-recycling",name:"Landing pad unloading bay recycling",outputs:[{material:"cargo-bay",amount:0},{material:"steel-chest",amount:1},{material:"electric-engine-unit",amount:3},{material:"processing-unit",amount:2}],inputs:[{material:"landing-pad-unloading-bay",amount:1}],alternate:!0,spaceAge:!0},{id:"asteroid-collector-recycling",name:"Asteroid collector recycling",outputs:[{material:"low-density-structure",amount:5},{material:"electric-engine-unit",amount:2},{material:"processing-unit",amount:1}],inputs:[{material:"asteroid-collector",amount:1}],alternate:!0},{id:"crusher-recycling",name:"Crusher recycling",outputs:[{material:"low-density-structure",amount:5},{material:"steel-plate",amount:2},{material:"electric-engine-unit",amount:2}],inputs:[{material:"crusher",amount:1}],alternate:!0},{id:"thruster-recycling",name:"Thruster recycling",outputs:[{material:"steel-plate",amount:2},{material:"processing-unit",amount:2},{material:"electric-engine-unit",amount:1}],inputs:[{material:"thruster",amount:1}],alternate:!0},{id:"foundry-recycling",name:"Foundry recycling",outputs:[{material:"tungsten-carbide",amount:12},{material:"steel-plate",amount:12},{material:"electronic-circuit",amount:7},{material:"refined-concrete",amount:5}],inputs:[{material:"foundry",amount:1}],alternate:!0,spaceAge:!0},{id:"turbo-transport-belt-recycling",name:"Turbo transport belt recycling",outputs:[{material:"tungsten-plate",amount:1},{material:"express-transport-belt",amount:0}],inputs:[{material:"turbo-transport-belt",amount:1}],alternate:!0,spaceAge:!0},{id:"turbo-underground-belt-recycling",name:"Turbo underground belt recycling",outputs:[{material:"tungsten-plate",amount:5},{material:"express-underground-belt",amount:0}],inputs:[{material:"turbo-underground-belt",amount:1}],alternate:!0,spaceAge:!0},{id:"turbo-splitter-recycling",name:"Turbo splitter recycling",outputs:[{material:"express-splitter",amount:0},{material:"tungsten-plate",amount:3},{material:"processing-unit",amount:0}],inputs:[{material:"turbo-splitter",amount:1}],alternate:!0},{id:"turbo-loader-recycling",name:"Turbo loader recycling",outputs:[{material:"turbo-transport-belt",amount:1},{material:"express-loader",amount:0}],inputs:[{material:"turbo-loader",amount:1}],alternate:!0,spaceAge:!0},{id:"big-mining-drill-recycling",name:"Big mining drill recycling",outputs:[{material:"electric-mining-drill",amount:0},{material:"tungsten-carbide",amount:5},{material:"electric-engine-unit",amount:2},{material:"advanced-circuit",amount:2}],inputs:[{material:"big-mining-drill",amount:1}],alternate:!0},{id:"mech-armor-recycling",name:"Mech armor recycling",outputs:[{material:"power-armor-mk2",amount:0},{material:"holmium-plate",amount:50},{material:"processing-unit",amount:25},{material:"superconductor",amount:12},{material:"supercapacitor",amount:12}],inputs:[{material:"mech-armor",amount:1}],alternate:!0},{id:"railgun-recycling",name:"Railgun recycling",outputs:[{material:"tungsten-plate",amount:2},{material:"superconductor",amount:2},{material:"quantum-processor",amount:5}],inputs:[{material:"railgun",amount:1}],alternate:!0,spaceAge:!0},{id:"railgun-turret-recycling",name:"Railgun turret recycling",outputs:[{material:"quantum-processor",amount:25},{material:"tungsten-plate",amount:7},{material:"superconductor",amount:12},{material:"carbon-fiber",amount:5}],inputs:[{material:"railgun-turret",amount:1}],alternate:!0,spaceAge:!0},{id:"railgun-ammo-recycling",name:"Railgun ammo recycling",outputs:[{material:"steel-plate",amount:1},{material:"copper-cable",amount:2},{material:"explosives",amount:0}],inputs:[{material:"railgun-ammo",amount:1}],alternate:!0},{id:"agricultural-tower-recycling",name:"Agricultural tower recycling",outputs:[{material:"steel-plate",amount:2},{material:"electronic-circuit",amount:0},{material:"spoilage",amount:5},{material:"landfill",amount:0}],inputs:[{material:"agricultural-tower",amount:1}],alternate:!0},{id:"biochamber-recycling",name:"Biochamber recycling",outputs:[{material:"nutrients",amount:1},{material:"pentapod-egg",amount:0},{material:"iron-plate",amount:5},{material:"electronic-circuit",amount:1},{material:"landfill",amount:0}],inputs:[{material:"biochamber",amount:1}],alternate:!0,spaceAge:!0},{id:"capture-robot-rocket-recycling",name:"Capture bot rocket recycling",outputs:[{material:"flying-robot-frame",amount:0},{material:"steel-plate",amount:0},{material:"bioflux",amount:5},{material:"processing-unit",amount:0}],inputs:[{material:"capture-robot-rocket",amount:1}],alternate:!0},{id:"lightning-rod-recycling",name:"Lightning rod recycling",outputs:[{material:"copper-cable",amount:3},{material:"steel-plate",amount:2},{material:"stone-brick",amount:1}],inputs:[{material:"lightning-rod",amount:1}],alternate:!0},{id:"electromagnetic-plant-recycling",name:"Electromagnetic plant recycling",outputs:[{material:"holmium-plate",amount:37},{material:"steel-plate",amount:12},{material:"processing-unit",amount:12},{material:"refined-concrete",amount:12}],inputs:[{material:"electromagnetic-plant",amount:1}],alternate:!0,spaceAge:!0},{id:"supercapacitor-recycling",name:"Supercapacitor recycling",outputs:[{material:"holmium-plate",amount:0},{material:"superconductor",amount:0},{material:"electronic-circuit",amount:1},{material:"battery",amount:0}],inputs:[{material:"supercapacitor",amount:1}],alternate:!0,spaceAge:!0},{id:"lightning-collector-recycling",name:"Lightning collector recycling",outputs:[{material:"lightning-rod",amount:0},{material:"supercapacitor",amount:2},{material:"accumulator",amount:0}],inputs:[{material:"lightning-collector",amount:1}],alternate:!0,spaceAge:!0},{id:"teslagun-recycling",name:"Tesla gun recycling",outputs:[{material:"holmium-plate",amount:2},{material:"superconductor",amount:2},{material:"plastic-bar",amount:7}],inputs:[{material:"teslagun",amount:1}],alternate:!0,spaceAge:!0},{id:"tesla-turret-recycling",name:"Tesla turret recycling",outputs:[{material:"teslagun",amount:0},{material:"supercapacitor",amount:2},{material:"processing-unit",amount:2},{material:"superconductor",amount:12}],inputs:[{material:"tesla-turret",amount:1}],alternate:!0},{id:"tesla-ammo-recycling",name:"Tesla ammo recycling",outputs:[{material:"supercapacitor",amount:0},{material:"plastic-bar",amount:0}],inputs:[{material:"tesla-ammo",amount:1}],alternate:!0,spaceAge:!0},{id:"heating-tower-recycling",name:"Heating tower recycling",outputs:[{material:"boiler",amount:0},{material:"heat-pipe",amount:1},{material:"concrete",amount:5}],inputs:[{material:"heating-tower",amount:1}],alternate:!0},{id:"cryogenic-plant-recycling",name:"Cryogenic plant recycling",outputs:[{material:"refined-concrete",amount:10},{material:"superconductor",amount:5},{material:"processing-unit",amount:5},{material:"lithium-plate",amount:5}],inputs:[{material:"cryogenic-plant",amount:1}],alternate:!0},{id:"quantum-processor-recycling",name:"Quantum processor recycling",outputs:[{material:"tungsten-carbide",amount:0},{material:"processing-unit",amount:0},{material:"superconductor",amount:0},{material:"carbon-fiber",amount:0},{material:"lithium-plate",amount:0}],inputs:[{material:"quantum-processor",amount:1}],alternate:!0,spaceAge:!0},{id:"fusion-reactor-equipment-recycling",name:"Portable fusion reactor recycling",outputs:[{material:"fission-reactor-equipment",amount:0},{material:"fusion-power-cell",amount:2},{material:"tungsten-plate",amount:62},{material:"carbon-fiber",amount:25},{material:"supercapacitor",amount:6},{material:"quantum-processor",amount:62}],inputs:[{material:"fusion-reactor-equipment",amount:1}],alternate:!0},{id:"fusion-reactor-recycling",name:"Fusion reactor recycling",outputs:[{material:"tungsten-plate",amount:50},{material:"superconductor",amount:50},{material:"quantum-processor",amount:62}],inputs:[{material:"fusion-reactor",amount:1}],alternate:!0,spaceAge:!0},{id:"fusion-generator-recycling",name:"Fusion generator recycling",outputs:[{material:"tungsten-plate",amount:25},{material:"superconductor",amount:25},{material:"quantum-processor",amount:12}],inputs:[{material:"fusion-generator",amount:1}],alternate:!0,spaceAge:!0},{id:"ice-platform-recycling",name:"Ice platform recycling",outputs:[{material:"ice",amount:12}],inputs:[{material:"ice-platform",amount:1}],alternate:!0,spaceAge:!0},{id:"foundation-recycling",name:"Foundation recycling",outputs:[{material:"tungsten-plate",amount:1},{material:"lithium-plate",amount:1},{material:"carbon-fiber",amount:1},{material:"stone",amount:5}],inputs:[{material:"foundation",amount:1}],alternate:!0,spaceAge:!0},{id:"water-barrel-recycling",name:"Water barrel recycling",outputs:[{material:"barrel",amount:0}],inputs:[{material:"water-barrel",amount:1}],alternate:!0},{id:"sulfuric-acid-barrel-recycling",name:"Sulfuric acid barrel recycling",outputs:[{material:"barrel",amount:0}],inputs:[{material:"sulfuric-acid-barrel",amount:1}],alternate:!0},{id:"crude-oil-barrel-recycling",name:"Crude oil barrel recycling",outputs:[{material:"barrel",amount:0}],inputs:[{material:"crude-oil-barrel",amount:1}],alternate:!0},{id:"heavy-oil-barrel-recycling",name:"Heavy oil barrel recycling",outputs:[{material:"barrel",amount:0}],inputs:[{material:"heavy-oil-barrel",amount:1}],alternate:!0},{id:"light-oil-barrel-recycling",name:"Light oil barrel recycling",outputs:[{material:"barrel",amount:0}],inputs:[{material:"light-oil-barrel",amount:1}],alternate:!0},{id:"petroleum-gas-barrel-recycling",name:"Petroleum gas barrel recycling",outputs:[{material:"barrel",amount:0}],inputs:[{material:"petroleum-gas-barrel",amount:1}],alternate:!0},{id:"lubricant-barrel-recycling",name:"Lubricant barrel recycling",outputs:[{material:"barrel",amount:0}],inputs:[{material:"lubricant-barrel",amount:1}],alternate:!0},{id:"fluoroketone-cold-barrel-recycling",name:"Fluoroketone (Cold) barrel recycling",outputs:[{material:"barrel",amount:0}],inputs:[{material:"fluoroketone-cold-barrel",amount:1}],alternate:!0},{id:"fluoroketone-hot-barrel-recycling",name:"Fluoroketone (Hot) barrel recycling",outputs:[{material:"barrel",amount:0}],inputs:[{material:"fluoroketone-hot-barrel",amount:1}],alternate:!0},{id:"flamethrower-ammo-recycling",name:"Flamethrower ammo recycling",outputs:[{material:"flamethrower-ammo",amount:1}],inputs:[{material:"flamethrower-ammo",amount:1}],alternate:!0},{id:"blueprint-recycling",name:"Blueprint recycling",outputs:[{material:"blueprint",amount:1}],inputs:[{material:"blueprint",amount:1}]},{id:"blueprint-book-recycling",name:"Blueprint book recycling",outputs:[{material:"blueprint-book",amount:1}],inputs:[{material:"blueprint-book",amount:1}]},{id:"raw-fish-recycling",name:"Raw fish recycling",outputs:[{material:"raw-fish",amount:1}],inputs:[{material:"raw-fish",amount:1}],alternate:!0},{id:"yumako-recycling",name:"Yumako recycling",outputs:[{material:"yumako",amount:1}],inputs:[{material:"yumako",amount:1}]},{id:"jellynut-recycling",name:"Jellynut recycling",outputs:[{material:"jellynut",amount:1}],inputs:[{material:"jellynut",amount:1}]},{id:"yumako-mash-recycling",name:"Yumako mash recycling",outputs:[{material:"yumako-mash",amount:1}],inputs:[{material:"yumako-mash",amount:1}]},{id:"jelly-recycling",name:"Jelly recycling",outputs:[{material:"jelly",amount:1}],inputs:[{material:"jelly",amount:1}]},{id:"bioflux-recycling",name:"Bioflux recycling",outputs:[{material:"bioflux",amount:1}],inputs:[{material:"bioflux",amount:1}],alternate:!0},{id:"deconstruction-planner-recycling",name:"Deconstruction planner recycling",outputs:[{material:"deconstruction-planner",amount:1}],inputs:[{material:"deconstruction-planner",amount:1}]},{id:"pistol-recycling",name:"Pistol recycling",outputs:[{material:"pistol",amount:1}],inputs:[{material:"pistol",amount:1}],alternate:!0},{id:"stone-brick-recycling",name:"Stone brick recycling",outputs:[{material:"stone-brick",amount:1}],inputs:[{material:"stone-brick",amount:1}],alternate:!0},{id:"wood-recycling",name:"Wood recycling",outputs:[{material:"wood",amount:1}],inputs:[{material:"wood",amount:1}],alternate:!0},{id:"coal-recycling",name:"Coal recycling",outputs:[{material:"coal",amount:1}],inputs:[{material:"coal",amount:1}],alternate:!0},{id:"stone-recycling",name:"Stone recycling",outputs:[{material:"stone",amount:1}],inputs:[{material:"stone",amount:1}],alternate:!0},{id:"iron-ore-recycling",name:"Iron ore recycling",outputs:[{material:"iron-ore",amount:1}],inputs:[{material:"iron-ore",amount:1}],alternate:!0},{id:"copper-ore-recycling",name:"Copper ore recycling",outputs:[{material:"copper-ore",amount:1}],inputs:[{material:"copper-ore",amount:1}]},{id:"iron-plate-recycling",name:"Iron plate recycling",outputs:[{material:"iron-plate",amount:1}],inputs:[{material:"iron-plate",amount:1}],alternate:!0},{id:"copper-plate-recycling",name:"Copper plate recycling",outputs:[{material:"copper-plate",amount:1}],inputs:[{material:"copper-plate",amount:1}],alternate:!0},{id:"automation-science-pack-recycling",name:"Automation science pack recycling",outputs:[{material:"automation-science-pack",amount:1}],inputs:[{material:"automation-science-pack",amount:1}],alternate:!0},{id:"logistic-science-pack-recycling",name:"Logistic science pack recycling",outputs:[{material:"logistic-science-pack",amount:1}],inputs:[{material:"logistic-science-pack",amount:1}],alternate:!0},{id:"steel-plate-recycling",name:"Steel plate recycling",outputs:[{material:"steel-plate",amount:1}],inputs:[{material:"steel-plate",amount:1}],alternate:!0},{id:"solid-fuel-recycling",name:"Solid fuel recycling",outputs:[{material:"solid-fuel",amount:1}],inputs:[{material:"solid-fuel",amount:1}],alternate:!0},{id:"landfill-recycling",name:"Landfill recycling",outputs:[{material:"landfill",amount:1}],inputs:[{material:"landfill",amount:1}],alternate:!0},{id:"uranium-ore-recycling",name:"Uranium ore recycling",outputs:[{material:"uranium-ore",amount:1}],inputs:[{material:"uranium-ore",amount:1}]},{id:"chemical-science-pack-recycling",name:"Chemical science pack recycling",outputs:[{material:"chemical-science-pack",amount:1}],inputs:[{material:"chemical-science-pack",amount:1}],alternate:!0},{id:"military-science-pack-recycling",name:"Military science pack recycling",outputs:[{material:"military-science-pack",amount:1}],inputs:[{material:"military-science-pack",amount:1}],alternate:!0},{id:"production-science-pack-recycling",name:"Production science pack recycling",outputs:[{material:"production-science-pack",amount:1}],inputs:[{material:"production-science-pack",amount:1}],alternate:!0},{id:"utility-science-pack-recycling",name:"Utility science pack recycling",outputs:[{material:"utility-science-pack",amount:1}],inputs:[{material:"utility-science-pack",amount:1}],alternate:!0},{id:"space-science-pack-recycling",name:"Space science pack recycling",outputs:[{material:"space-science-pack",amount:1}],inputs:[{material:"space-science-pack",amount:1}],alternate:!0},{id:"lane-splitter-recycling",name:"Lane splitter recycling",outputs:[{material:"lane-splitter",amount:1}],inputs:[{material:"lane-splitter",amount:1}]},{id:"coin-recycling",name:"Coin recycling",outputs:[{material:"coin",amount:1}],inputs:[{material:"coin",amount:1}]},{id:"sulfur-recycling",name:"Sulfur recycling",outputs:[{material:"sulfur",amount:1}],inputs:[{material:"sulfur",amount:1}],alternate:!0},{id:"plastic-bar-recycling",name:"Plastic bar recycling",outputs:[{material:"plastic-bar",amount:1}],inputs:[{material:"plastic-bar",amount:1}],alternate:!0},{id:"explosives-recycling",name:"Explosives recycling",outputs:[{material:"explosives",amount:1}],inputs:[{material:"explosives",amount:1}],alternate:!0},{id:"electric-energy-interface-recycling",name:"Electric energy interface recycling",outputs:[{material:"electric-energy-interface",amount:1}],inputs:[{material:"electric-energy-interface",amount:1}]},{id:"uranium-235-recycling",name:"Uranium-235 recycling",outputs:[{material:"uranium-235",amount:1}],inputs:[{material:"uranium-235",amount:1}],alternate:!0},{id:"uranium-238-recycling",name:"Uranium-238 recycling",outputs:[{material:"uranium-238",amount:1}],inputs:[{material:"uranium-238",amount:1}],alternate:!0},{id:"uranium-fuel-cell-recycling",name:"Uranium fuel cell recycling",outputs:[{material:"uranium-fuel-cell",amount:1}],inputs:[{material:"uranium-fuel-cell",amount:1}],alternate:!0},{id:"depleted-uranium-fuel-cell-recycling",name:"Depleted uranium fuel cell recycling",outputs:[{material:"depleted-uranium-fuel-cell",amount:1}],inputs:[{material:"depleted-uranium-fuel-cell",amount:1}]},{id:"simple-entity-with-force-recycling",name:"Simple entity with force recycling",outputs:[{material:"simple-entity-with-force",amount:1}],inputs:[{material:"simple-entity-with-force",amount:1}]},{id:"simple-entity-with-owner-recycling",name:"Simple entity with owner recycling",outputs:[{material:"simple-entity-with-owner",amount:1}],inputs:[{material:"simple-entity-with-owner",amount:1}]},{id:"infinity-cargo-wagon-recycling",name:"Infinity cargo wagon recycling",outputs:[{material:"infinity-cargo-wagon",amount:1}],inputs:[{material:"infinity-cargo-wagon",amount:1}]},{id:"burner-generator-recycling",name:"Burner generator recycling",outputs:[{material:"burner-generator",amount:1}],inputs:[{material:"burner-generator",amount:1}]},{id:"linked-chest-recycling",name:"Linked chest recycling",outputs:[{material:"linked-chest",amount:1}],inputs:[{material:"linked-chest",amount:1}]},{id:"proxy-container-recycling",name:"Proxy container recycling",outputs:[{material:"proxy-container",amount:1}],inputs:[{material:"proxy-container",amount:1}]},{id:"bottomless-chest-recycling",name:"Bottomless chest recycling",outputs:[{material:"bottomless-chest",amount:1}],inputs:[{material:"bottomless-chest",amount:1}]},{id:"linked-belt-recycling",name:"Linked belt recycling",outputs:[{material:"linked-belt",amount:1}],inputs:[{material:"linked-belt",amount:1}]},{id:"one-way-valve-recycling",name:"One-way valve recycling",outputs:[{material:"one-way-valve",amount:1}],inputs:[{material:"one-way-valve",amount:1}]},{id:"overflow-valve-recycling",name:"Overflow valve recycling",outputs:[{material:"overflow-valve",amount:1}],inputs:[{material:"overflow-valve",amount:1}]},{id:"top-up-valve-recycling",name:"Top-up valve recycling",outputs:[{material:"top-up-valve",amount:1}],inputs:[{material:"top-up-valve",amount:1}]},{id:"electric-energy-interface-equipment-recycling",name:"Electric energy interface equipment recycling",outputs:[{material:"electric-energy-interface-equipment",amount:1}],inputs:[{material:"electric-energy-interface-equipment",amount:1}]},{id:"science-recycling",name:"Science recycling",outputs:[{material:"science",amount:1}],inputs:[{material:"science",amount:1}]},{id:"metallurgic-science-pack-recycling",name:"Metallurgic science pack recycling",outputs:[{material:"metallurgic-science-pack",amount:1}],inputs:[{material:"metallurgic-science-pack",amount:1}],alternate:!0,spaceAge:!0},{id:"agricultural-science-pack-recycling",name:"Agricultural science pack recycling",outputs:[{material:"agricultural-science-pack",amount:1}],inputs:[{material:"agricultural-science-pack",amount:1}],alternate:!0,spaceAge:!0},{id:"electromagnetic-science-pack-recycling",name:"Electromagnetic science pack recycling",outputs:[{material:"electromagnetic-science-pack",amount:1}],inputs:[{material:"electromagnetic-science-pack",amount:1}],alternate:!0,spaceAge:!0},{id:"cryogenic-science-pack-recycling",name:"Cryogenic science pack recycling",outputs:[{material:"cryogenic-science-pack",amount:1}],inputs:[{material:"cryogenic-science-pack",amount:1}],alternate:!0,spaceAge:!0},{id:"promethium-science-pack-recycling",name:"Promethium science pack recycling",outputs:[{material:"promethium-science-pack",amount:1}],inputs:[{material:"promethium-science-pack",amount:1}],alternate:!0,spaceAge:!0},{id:"metallic-asteroid-chunk-recycling",name:"Metallic asteroid chunk recycling",outputs:[{material:"metallic-asteroid-chunk",amount:1}],inputs:[{material:"metallic-asteroid-chunk",amount:1}],alternate:!0,spaceAge:!0},{id:"carbonic-asteroid-chunk-recycling",name:"Carbonic asteroid chunk recycling",outputs:[{material:"carbonic-asteroid-chunk",amount:1}],inputs:[{material:"carbonic-asteroid-chunk",amount:1}],alternate:!0,spaceAge:!0},{id:"oxide-asteroid-chunk-recycling",name:"Oxide asteroid chunk recycling",outputs:[{material:"oxide-asteroid-chunk",amount:1}],inputs:[{material:"oxide-asteroid-chunk",amount:1}],alternate:!0,spaceAge:!0},{id:"promethium-asteroid-chunk-recycling",name:"Promethium asteroid chunk recycling",outputs:[{material:"promethium-asteroid-chunk",amount:1}],inputs:[{material:"promethium-asteroid-chunk",amount:1}],spaceAge:!0},{id:"ice-recycling",name:"Ice recycling",outputs:[{material:"ice",amount:1}],inputs:[{material:"ice",amount:1}],alternate:!0,spaceAge:!0},{id:"carbon-recycling",name:"Carbon recycling",outputs:[{material:"carbon",amount:1}],inputs:[{material:"carbon",amount:1}],alternate:!0,spaceAge:!0},{id:"calcite-recycling",name:"Calcite recycling",outputs:[{material:"calcite",amount:1}],inputs:[{material:"calcite",amount:1}],spaceAge:!0},{id:"tungsten-ore-recycling",name:"Tungsten ore recycling",outputs:[{material:"tungsten-ore",amount:1}],inputs:[{material:"tungsten-ore",amount:1}],spaceAge:!0},{id:"tungsten-plate-recycling",name:"Tungsten plate recycling",outputs:[{material:"tungsten-plate",amount:1}],inputs:[{material:"tungsten-plate",amount:1}],alternate:!0,spaceAge:!0},{id:"tungsten-carbide-recycling",name:"Tungsten carbide recycling",outputs:[{material:"tungsten-carbide",amount:1}],inputs:[{material:"tungsten-carbide",amount:1}],alternate:!0,spaceAge:!0},{id:"copper-bacteria-recycling",name:"Copper bacteria recycling",outputs:[{material:"copper-bacteria",amount:1}],inputs:[{material:"copper-bacteria",amount:1}],alternate:!0,spaceAge:!0},{id:"iron-bacteria-recycling",name:"Iron bacteria recycling",outputs:[{material:"iron-bacteria",amount:1}],inputs:[{material:"iron-bacteria",amount:1}],alternate:!0,spaceAge:!0},{id:"yumako-seed-recycling",name:"Yumako seed recycling",outputs:[{material:"yumako-seed",amount:1}],inputs:[{material:"yumako-seed",amount:1}],alternate:!0,spaceAge:!0},{id:"jellynut-seed-recycling",name:"Jellynut seed recycling",outputs:[{material:"jellynut-seed",amount:1}],inputs:[{material:"jellynut-seed",amount:1}],alternate:!0,spaceAge:!0},{id:"biolab-recycling",name:"Biolab recycling",outputs:[{material:"biolab",amount:1}],inputs:[{material:"biolab",amount:1}],alternate:!0,spaceAge:!0},{id:"captive-biter-spawner-recycling",name:"Captive biter spawner recycling",outputs:[{material:"captive-biter-spawner",amount:1}],inputs:[{material:"captive-biter-spawner",amount:1}],alternate:!0,spaceAge:!0},{id:"biter-egg-recycling",name:"Biter egg recycling",outputs:[{material:"biter-egg",amount:1}],inputs:[{material:"biter-egg",amount:1}],spaceAge:!0},{id:"pentapod-egg-recycling",name:"Pentapod egg recycling",outputs:[{material:"pentapod-egg",amount:1}],inputs:[{material:"pentapod-egg",amount:1}],alternate:!0,spaceAge:!0},{id:"carbon-fiber-recycling",name:"Carbon fiber recycling",outputs:[{material:"carbon-fiber",amount:1}],inputs:[{material:"carbon-fiber",amount:1}],alternate:!0,spaceAge:!0},{id:"holmium-ore-recycling",name:"Holmium ore recycling",outputs:[{material:"holmium-ore",amount:1}],inputs:[{material:"holmium-ore",amount:1}],spaceAge:!0},{id:"holmium-plate-recycling",name:"Holmium plate recycling",outputs:[{material:"holmium-plate",amount:1}],inputs:[{material:"holmium-plate",amount:1}],alternate:!0,spaceAge:!0},{id:"lithium-recycling",name:"Lithium recycling",outputs:[{material:"lithium",amount:1}],inputs:[{material:"lithium",amount:1}],alternate:!0,spaceAge:!0},{id:"lithium-plate-recycling",name:"Lithium plate recycling",outputs:[{material:"lithium-plate",amount:1}],inputs:[{material:"lithium-plate",amount:1}],alternate:!0,spaceAge:!0},{id:"superconductor-recycling",name:"Superconductor recycling",outputs:[{material:"superconductor",amount:1}],inputs:[{material:"superconductor",amount:1}],alternate:!0,spaceAge:!0},{id:"fusion-power-cell-recycling",name:"Fusion power cell recycling",outputs:[{material:"fusion-power-cell",amount:1}],inputs:[{material:"fusion-power-cell",amount:1}],alternate:!0,spaceAge:!0},{id:"spoilage-recycling",name:"Spoilage recycling",outputs:[{material:"spoilage",amount:1}],inputs:[{material:"spoilage",amount:1}],alternate:!0,spaceAge:!0},{id:"space-platform-hub-recycling",name:"Space platform hub recycling",outputs:[{material:"space-platform-hub",amount:1}],inputs:[{material:"space-platform-hub",amount:1}],spaceAge:!0},{id:"tree-seed-recycling",name:"Tree seed recycling",outputs:[{material:"tree-seed",amount:1}],inputs:[{material:"tree-seed",amount:1}],alternate:!0,spaceAge:!0},{id:"selection-tool-recycling",name:"Selection tool recycling",outputs:[{material:"selection-tool",amount:1}],inputs:[{material:"selection-tool",amount:1}]},{id:"upgrade-planner-recycling",name:"Upgrade planner recycling",outputs:[{material:"upgrade-planner",amount:1}],inputs:[{material:"upgrade-planner",amount:1}]}],W=new Map(Se.map(e=>[e.id,e]));function nt(e){return qt.filter(t=>t.outputs.some(a=>a.material===e))}var Lt=0;function u(e,t,a,i,o,r){t||(t={});var p,c,d=t;if("ref"in d)for(c in d={},t)c=="ref"?p=t[c]:d[c]=t[c];var m={type:e,props:d,key:a,ref:p,__k:null,__:null,__b:0,__e:null,__c:null,constructor:void 0,__v:--Lt,__i:-1,__u:0,__source:o,__self:r};if(typeof e=="function"&&(p=e.defaultProps))for(c in p)d[c]===void 0&&(d[c]=p[c]);return S.vnode&&S.vnode(m),m}var it="1.0.37",rt="dev",mt="factorio-bus-planner",Et=60,Ce={lanes:[],stations:[]};function ot(e){return`${e}-${Date.now()}-${Math.random().toString(36).slice(2,7)}`}function Tt(){let e=new URLSearchParams(window.location.hash.slice(1)).get("plan"),t=e?Mt(e):localStorage.getItem(mt);if(!t)return Ce;try{let a=JSON.parse(t);if(Array.isArray(a.lanes)&&Array.isArray(a.stations))return a}catch(a){console.error("Could not load saved bus plan:",a)}return Ce}function Mt(e){try{let t=atob(e.replace(/-/g,"+").replace(/_/g,"/"));return new TextDecoder().decode(Uint8Array.from(t,a=>a.charCodeAt(0)))}catch(t){return console.error("Could not decode shared bus plan:",t),null}}function Rt(e){let t=new TextEncoder().encode(JSON.stringify(e)),a=String.fromCharCode(...t);return btoa(a).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}function Z(e){return W.get(e)?.name??e}function ut(e){let t=nt(e);return t.find(a=>!a.alternate)??t[0]}function Pe(e,t){return e.busInputs?.includes(t)??!1}function G({material:e,size:t="medium"}){return e?u("img",{class:`material-icon ${t}`,src:e.icon,alt:"",draggable:!1}):u("span",{class:`material-icon missing ${t}`,children:"?"})}function Dt(){return u(O,{children:[u("footer",{class:"app-footer",children:[u("span",{children:["A vibe-coded micro-app via ",u("a",{href:"https://searyanc.dev",target:"_blank",rel:"noopener noreferrer",children:"SeaRyanC"})]}),u("a",{class:"github-link",href:"https://github.com/SeaRyanC/app/tree/main/bus",target:"_blank",rel:"noopener noreferrer",title:"View source on GitHub","aria-label":"View source on GitHub",children:"\u2318"}),u("span",{class:"version",children:["v",it,"+",rt]})]}),u("span",{class:"build-stamp",children:["BUILD v",it,"+",rt]})]})}function Ft({material:e,onDragStart:t}){return u("button",{class:"item-card",draggable:!0,onDragStart:a=>{let i={kind:"material",id:e.id};t(i),a.dataTransfer?.setData("application/x-factorio-bus",JSON.stringify(i)),a.dataTransfer?.setData("text/plain",e.id),a.dataTransfer&&(a.dataTransfer.effectAllowed="copy")},title:`Drag ${e.name} into the bus`,children:[u(G,{material:e}),u("span",{children:e.name}),e.spaceAge&&u("em",{children:"SA"})]})}var ct=()=>{let[e,t]=U(Tt),[a,i]=U([]),[o,r]=U([]),[p,c]=U(""),[d,m]=U(null),[h,k]=U(""),n=ce(null),s=ce(new Map),f=ce(new Map),v=T((l,y)=>{y?s.current.set(l,y):s.current.delete(l)},[]),w=T((l,y)=>{y?f.current.set(l,y):f.current.delete(l)},[]),_=V(()=>{let l=p.trim().toLowerCase();return Se.filter(y=>!l||y.name.toLowerCase().includes(l)||y.id.includes(l))},[p]),g=e.stations.find(l=>l.id===d),x=g?ut(g.material):void 0;Ae(()=>{localStorage.setItem(mt,JSON.stringify(e))},[e]);let A=T(l=>{i(y=>[...y.slice(-(Et-1)),e]),r([]),t(l)},[e]),M=T(l=>{A({...e,lanes:[...e.lanes,{id:ot("lane"),material:l}]})},[e,A]),L=T((l,y)=>{let b=ut(l),R=b?e.lanes.filter(H=>b.inputs.some(B=>B.material===H.material)).map(H=>H.id):[],D={id:ot("station"),material:l,side:y,...R.length>0?{busInputs:R}:{}};A({...e,stations:[...e.stations,D]}),m(D.id)},[e,A]),z=T(l=>{A({...e,stations:e.stations.map(y=>y.id===l?{...y,side:y.side==="left"?"right":"left"}:y)})},[e,A]),F=T(l=>{window.__busPlannerDrag=l},[]),I=T(l=>{if(window.__busPlannerDrag)return window.__busPlannerDrag;let y=l.dataTransfer?.getData("application/x-factorio-bus");if(!y)return null;try{return JSON.parse(y)}catch(b){return console.error("Could not read dragged bus payload:",b),null}},[]),q=T((l,y)=>{if(l===y)return;let b=[...e.lanes],R=b.findIndex(B=>B.id===l),D=b.findIndex(B=>B.id===y);if(R<0||D<0)return;let[H]=b.splice(R,1);H&&b.splice(D,0,H),A({...e,lanes:b})},[e,A]),E=T((l,y)=>{if(l===y)return;let b=[...e.stations],R=b.findIndex(B=>B.id===l),D=b.findIndex(B=>B.id===y);if(R<0||D<0)return;let[H]=b.splice(R,1);H&&b.splice(D,0,H),A({...e,stations:b})},[e,A]),Le=T((l,y)=>{let b=[...e.stations],R=b.findIndex(B=>B.id===l),D=R+y;if(R<0||D<0||D>=b.length)return;let[H]=b.splice(R,1);H&&b.splice(D,0,H),A({...e,stations:b})},[e,A]),Y=T((l,y)=>{y.preventDefault();let b=I(y);b&&(l==="lane"?b.kind==="material"?M(b.id):b.kind==="lane"&&q(b.id,b.id):l==="station-add"?b.kind==="material"&&L(b.id,"left"):b.kind==="lane"?q(b.id,l):b.kind==="station"&&E(b.id,l),window.__busPlannerDrag=void 0)},[M,L,I,q,E]),st=T((l,y)=>{d&&A({...e,stations:e.stations.map(b=>{if(b.id!==d)return b;let R=new Set(b.busInputs??[]);if(y?R.add(l):R.delete(l),R.size>0)return{...b,busInputs:[...R]};let D={...b};return delete D.busInputs,D})})},[e,d,A]),de=T(()=>{d&&(A({...e,stations:e.stations.filter(l=>l.id!==d)}),m(null))},[e,d,A]);Ae(()=>{let l=y=>{let b=y.target;!d||b?.matches("input, select, textarea")||y.key!=="Delete"&&y.key!=="Backspace"||(y.preventDefault(),de())};return window.addEventListener("keydown",l),()=>window.removeEventListener("keydown",l)},[de,d]);let pt=T(()=>{let l=a.at(-1);l&&(r(y=>[...y,e]),t(l),i(y=>y.slice(0,-1)))},[a,e]),dt=T(()=>{let l=o.at(-1);l&&(i(y=>[...y,e]),t(l),r(y=>y.slice(0,-1)))},[o,e]),gt=T(async()=>{let l=`${window.location.origin}${window.location.pathname}#plan=${Rt(e)}`;window.history.replaceState(null,"",l);try{await navigator.clipboard.writeText(l),k("Share link copied")}catch{k("Share link ready in the address bar")}window.setTimeout(()=>k(""),2200)},[e]),yt=T(()=>{e.lanes.length===0&&e.stations.length===0||(A(Ce),m(null))},[e,A]);return u("div",{class:"app",children:[u("main",{class:"workspace",children:[u("aside",{class:"catalog panel",children:[u("div",{class:"toolbar",children:[u("button",{onClick:pt,disabled:!a.length,title:"Undo (\u2318Z)",children:"\u21B6 Undo"}),u("button",{onClick:dt,disabled:!o.length,title:"Redo (\u21E7\u2318Z)",children:"\u21B7 Redo"}),u("button",{onClick:()=>{gt()},class:"share-button",children:"\u2197 Share link"}),u("button",{onClick:yt,class:"quiet-button",children:"Reset"})]}),u("div",{class:"panel-heading",children:[u("div",{children:[u("span",{class:"section-kicker",children:"01 / CATALOG"}),u("h2",{children:"Materials"})]}),u("span",{class:"count",children:_.length})]}),u("label",{class:"search-box",children:[u("span",{children:"\u2315"}),u("input",{value:p,onInput:l=>c(l.currentTarget.value),placeholder:"Search items and fluids"})]}),u("p",{class:"catalog-help",children:"Drag a material into the bus, or drop it below the stations to add one."}),u("div",{class:"item-list",children:_.map(l=>u(Ft,{material:l,onDragStart:F},l.id))})]}),u("section",{class:"planner panel",children:[u("div",{class:"planner-heading",children:[u("div",{children:[u("span",{class:"section-kicker",children:"02 / FIELD"}),u("h2",{children:"Your bus"})]}),u("span",{class:"field-hint",children:["bottom \u2192 top ",u("span",{class:"arrow",children:"\u2191"})]})]}),u("div",{class:"bus-shell",children:[u("div",{class:"bus-columns",ref:n,children:[u("div",{class:"station-bay left-bay",children:[u("div",{class:"bay-label",children:"\u25C2 stations"}),e.stations.map((l,y)=>l.side==="left"?u(lt,{station:l,index:y,isFirst:y===0,isLast:y===e.stations.length-1,selected:d===l.id,onSelect:m,onDragStart:F,onDrop:Y,onToggleSide:z,onMove:Le,portRef:b=>v(l.id,b)},l.id):u("div",{class:"station-spacer"},l.id))]}),u("div",{class:"lanes",onDragOver:l=>l.preventDefault(),onDrop:l=>Y("lane",l),children:e.lanes.length===0?u("div",{class:"empty-field",children:[u("div",{class:"empty-icon",children:"\uFF0B"}),u("strong",{children:"Drop items here to create lanes"}),u("span",{children:"Your bus grows upward from each item's lowest producing station."})]}):e.lanes.map(l=>u(Ot,{lane:l,onDragStart:F,onDrop:Y,spineRef:y=>w(l.id,y)},l.id))}),u("div",{class:"station-bay right-bay",children:[u("div",{class:"bay-label",children:"stations \u25B8"}),e.stations.map((l,y)=>l.side==="right"?u(lt,{station:l,index:y,isFirst:y===0,isLast:y===e.stations.length-1,selected:d===l.id,onSelect:m,onDragStart:F,onDrop:Y,onToggleSide:z,onMove:Le,portRef:b=>v(l.id,b)},l.id):u("div",{class:"station-spacer"},l.id))]}),u($t,{plan:e,stageRef:n,stationPortRefs:s,laneSpineRefs:f})]}),u("div",{class:"add-station-row",onDragOver:l=>l.preventDefault(),onDrop:l=>Y("station-add",l),children:"Drop an item here to add a station \xB7 use \u21C4 on a station to flip which side it taps from"})]}),e.lanes.length>0&&u("div",{class:"legend",children:[u("span",{class:"legend-line"})," normal flow ",u("span",{class:"legend-line dashed"})," counterflow ",u("span",{class:"legend-note",children:"Select a station to edit its bus inputs"})]})]})]}),g&&u("div",{class:"modal-backdrop",onClick:l=>{l.target===l.currentTarget&&m(null)},children:u("section",{class:"recipe-modal",role:"dialog","aria-modal":"true","aria-labelledby":"recipe-title",children:[u("button",{class:"modal-close",onClick:()=>m(null),"aria-label":"Close",children:"\xD7"}),u("div",{class:"modal-material",children:u(G,{material:W.get(g.material)})}),u("span",{class:"section-kicker",children:["STATION / ",g.side.toUpperCase()]}),u("h2",{id:"recipe-title",children:Z(g.material)}),x&&x.inputs.length>0&&u("div",{class:"recipe-info",children:[u("h3",{children:"Recipe inputs"}),u("div",{class:"recipe-inputs",children:x.inputs.map(l=>u("span",{class:"recipe-input",title:`${l.amount} ${Z(l.material)}`,children:[u(G,{material:W.get(l.material),size:"small"}),u("span",{children:Z(l.material)})]},l.material))})]}),u("div",{class:"lane-inputs",children:[u("h3",{children:"Bus inputs"}),e.lanes.length>0?u("div",{class:"lane-input-grid",children:e.lanes.map(l=>{let y=Z(l.material);return u("label",{class:"lane-input-cell",title:`${y}: ${Pe(g,l.id)?"pulling from bus":"not pulled"}`,children:[u("input",{type:"checkbox",checked:Pe(g,l.id),onChange:b=>st(l.id,b.currentTarget.checked),"aria-label":`Pull ${y} from this lane`}),u(G,{material:W.get(l.material)}),u("span",{class:"lane-input-name",children:y})]},l.id)})}):u("p",{class:"modal-help",children:"Add lanes to the bus, then choose which ones this station consumes."})]}),u("button",{class:"remove-button",onClick:de,children:"Dismantle station"})]})}),h&&u("div",{class:"notice",children:h}),u(Dt,{})]})},It=.5522848,pe=12,Ht=11,se=6;function Bt(e,t){return e.material===t}function qe(e,t){let a=null;return e.stations.forEach((i,o)=>{Bt(i,t)&&(a=o)}),a}function jt(e){let t=new Set(e.lanes.map(i=>i.id));return e.stations.flatMap((i,o)=>{let r=new Set((i.busInputs??[]).filter(c=>t.has(c))),p=new Set(e.lanes.filter(c=>c.material===i.material).map(c=>c.id));return e.lanes.flatMap(c=>{let d=[];if(r.has(c.id)){let m=qe(e,c.material);d.push({id:`${i.id}:input:${c.id}`,stationId:i.id,laneId:c.id,kind:"input",counterflow:m!==null&&o>m})}return p.has(c.id)&&d.push({id:`${i.id}:output:${c.id}`,stationId:i.id,laneId:c.id,kind:"output",counterflow:!1}),d})})}function zt(e,t,a,i,o){let r=e.y+t,p=a-e.x,c=p>=0?1:-1,d=Math.min(pe,Math.abs(p)),m=i==="output"?-1:1,h=a-c*d,k=r+m*d,n=It*d,s=h+c*n,f=k-m*n,v=`M ${e.x} ${e.y}`;t!==0&&(v+=` V ${r}`);let w=c>0?1:0,_=[...o].sort((g,x)=>c>0?g-x:x-g);for(let g of _)v+=` H ${g-c*se} A ${se} ${se} 0 0 ${w} ${g+c*se} ${r}`;return v+=` H ${h} C ${s} ${r} ${a} ${f} ${a} ${k}`,v}function $t({plan:e,stageRef:t,stationPortRefs:a,laneSpineRefs:i}){let[o,r]=U(null),p=V(()=>jt(e),[e]);if(tt(()=>{let n=!1,s=0,f=t.current;if(r(null),!f||e.lanes.length===0)return()=>{};let v=()=>{if(n)return;let g=f.getBoundingClientRect(),x=g.left+f.clientLeft,A=g.top+f.clientTop,M=f.clientWidth,L=f.clientHeight;if(M<=0||L<=0)return;let z=new Map;for(let I of e.stations){let q=a.current.get(I.id);if(!q)return;let E=q.getBoundingClientRect();z.set(I.id,{x:E.left+E.width/2-x,y:E.top+E.height/2-A})}let F=new Map;for(let I of e.lanes){let q=i.current.get(I.id);if(!q)return;let E=q.getBoundingClientRect();F.set(I.id,{x:E.left+E.width/2-x,top:E.top-A,bottom:E.bottom-A})}r({width:M,height:L,stationPorts:z,laneSpines:F})},w=()=>{n||(r(null),s&&cancelAnimationFrame(s),s=requestAnimationFrame(()=>{s=0,v()}))},_=typeof ResizeObserver>"u"?null:new ResizeObserver(w);return _?.observe(f),a.current.forEach(g=>_?.observe(g)),i.current.forEach(g=>_?.observe(g)),w(),()=>{n=!0,s&&cancelAnimationFrame(s),_?.disconnect()}},[i,e,t,a]),!o||e.lanes.length===0)return null;let c=new Map,d=new Map;for(let n of p){let s=d.get(n.stationId)??[];s.push(n),d.set(n.stationId,s)}for(let[n,s]of d){let f=o.stationPorts.get(n);if(!f)continue;let v=s.map(_=>{let g=o.laneSpines.get(_.laneId);return{connector:_,dx:g?Math.abs(g.x-f.x):0}});v.sort((_,g)=>_.dx-g.dx);let w=v.length;v.forEach(({connector:_},g)=>{c.set(_.id,(g-(w-1)/2)*Ht)})}let m=new Map,h=new Set;for(let n of e.lanes){let s=o.laneSpines.get(n.id);if(!s)continue;let f=qe(e,n.material),v=s.bottom;if(f!==null){let w=e.stations[f],_=w?o.stationPorts.get(w.id):void 0;if(w&&_){let x=c.get(`${w.id}:output:${n.id}`)??0;v=_.y+x-pe}let g=null;e.stations.forEach((x,A)=>{if(A<=f||!Pe(x,n.id))return;let M=o.stationPorts.get(x.id);if(!M)return;let L=c.get(`${x.id}:input:${n.id}`)??0;g=M.y+L+pe}),g!==null&&g>v&&(v=g,h.add(n.id))}m.set(n.id,{x:s.x,top:s.top,bottom:v})}let k=e.lanes.map(n=>{let s=m.get(n.id);if(!s)return null;let f=qe(e,n.material),v=f!==null?e.stations[f]:void 0,w=v?o.stationPorts.get(v.id):void 0,_=v?c.get(`${v.id}:output:${n.id}`)??0:0,g=w?w.y+_-pe:s.bottom;return u("g",{children:[u("line",{class:"lane-spine",x1:s.x,y1:g,x2:s.x,y2:s.top}),h.has(n.id)&&u("line",{class:"lane-spine counterflow",x1:s.x,y1:g,x2:s.x,y2:s.bottom}),u("polygon",{class:"lane-arrowhead",points:`${s.x-6},${s.top+11} ${s.x+6},${s.top+11} ${s.x},${s.top}`})]},n.id)});return u("svg",{class:"belt-overlay","aria-hidden":"true",width:o.width,height:o.height,viewBox:`0 0 ${o.width} ${o.height}`,children:[k,p.map(n=>{let s=o.stationPorts.get(n.stationId),f=o.laneSpines.get(n.laneId);if(!s||!f)return null;let v=c.get(n.id)??0,w=s.y+v,_=Math.min(s.x,f.x),g=Math.max(s.x,f.x),x=[];for(let[M,L]of m)M!==n.laneId&&(L.x<=_||L.x>=g||w<L.top||w>L.bottom||x.push(L.x));let A=zt(s,v,f.x,n.kind,x);return u("path",{class:`connector ${n.kind} ${n.counterflow?"counterflow":""}`,d:A},n.id)})]})}function lt({station:e,index:t,isFirst:a,isLast:i,selected:o,onSelect:r,onDragStart:p,onDrop:c,onToggleSide:d,onMove:m,portRef:h}){return u("div",{class:`station-card ${o?"selected":""}`,role:"button",tabIndex:0,draggable:!0,onClick:()=>r(e.id),onKeyDown:k=>{(k.key==="Enter"||k.key===" ")&&r(e.id)},onDragStart:()=>p({kind:"station",id:e.id}),onDragOver:k=>k.preventDefault(),onDrop:k=>{k.preventDefault(),k.stopPropagation(),c(e.id,k)},title:`${Z(e.material)} \xB7 station ${t+1} \xB7 click to edit bus inputs`,children:[u("span",{ref:h,class:`station-port-anchor ${e.side}`,"aria-hidden":"true"}),u(G,{material:W.get(e.material)}),u("span",{class:"station-controls",children:[u("button",{class:"move-button",disabled:a,title:"Move up (toward the top of the bus)",onClick:k=>{k.stopPropagation(),m(e.id,-1)},children:"\u25B2"}),u("button",{class:"side-toggle",title:`Tapping from the ${e.side} side \xB7 click to flip`,onClick:k=>{k.stopPropagation(),d(e.id)},children:"\u21C4"}),u("button",{class:"move-button",disabled:i,title:"Move down (toward the bottom of the bus)",onClick:k=>{k.stopPropagation(),m(e.id,1)},children:"\u25BC"})]})]})}function Ot({lane:e,onDragStart:t,onDrop:a,spineRef:i}){let o=W.get(e.material);return u("div",{class:"lane-column",draggable:!0,onDragStart:()=>t({kind:"lane",id:e.id}),onDragOver:r=>r.preventDefault(),onDrop:r=>a(e.id,r),title:o?.name??e.material,children:[u("div",{class:"lane-header",children:u(G,{material:o})}),u("div",{class:"lane-track",children:u("span",{ref:i,class:"lane-spine-anchor","aria-hidden":"true"})})]})}We(u(ct,{}),document.getElementById("app"));})();
+"use strict";
+(() => {
+  // node_modules/preact/dist/preact.module.js
+  var n;
+  var l;
+  var u;
+  var t;
+  var i;
+  var r;
+  var o;
+  var e;
+  var f;
+  var c;
+  var a;
+  var s;
+  var h;
+  var p;
+  var v;
+  var y;
+  var d = {};
+  var w = [];
+  var _ = /acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i;
+  var g = Array.isArray;
+  function m(n2, l3) {
+    for (var u4 in l3) n2[u4] = l3[u4];
+    return n2;
+  }
+  function b(n2) {
+    n2 && n2.parentNode && n2.parentNode.removeChild(n2);
+  }
+  function k(l3, u4, t3) {
+    var i3, r3, o3, e3 = {};
+    for (o3 in u4) "key" == o3 ? i3 = u4[o3] : "ref" == o3 ? r3 = u4[o3] : e3[o3] = u4[o3];
+    if (arguments.length > 2 && (e3.children = arguments.length > 3 ? n.call(arguments, 2) : t3), "function" == typeof l3 && null != l3.defaultProps) for (o3 in l3.defaultProps) void 0 === e3[o3] && (e3[o3] = l3.defaultProps[o3]);
+    return x(l3, e3, i3, r3, null);
+  }
+  function x(n2, t3, i3, r3, o3) {
+    var e3 = { type: n2, props: t3, key: i3, ref: r3, __k: null, __: null, __b: 0, __e: null, __c: null, constructor: void 0, __v: null == o3 ? ++u : o3, __i: -1, __u: 0 };
+    return null == o3 && null != l.vnode && l.vnode(e3), e3;
+  }
+  function S(n2) {
+    return n2.children;
+  }
+  function C(n2, l3) {
+    this.props = n2, this.context = l3;
+  }
+  function $(n2, l3) {
+    if (null == l3) return n2.__ ? $(n2.__, n2.__i + 1) : null;
+    for (var u4; l3 < n2.__k.length; l3++) if (null != (u4 = n2.__k[l3]) && null != u4.__e) return u4.__e;
+    return "function" == typeof n2.type ? $(n2) : null;
+  }
+  function I(n2) {
+    if (n2.__P && n2.__d) {
+      var u4 = n2.__v, t3 = u4.__e, i3 = [], r3 = [], o3 = m({}, u4);
+      o3.__v = u4.__v + 1, l.vnode && l.vnode(o3), q(n2.__P, o3, u4, n2.__n, n2.__P.namespaceURI, 32 & u4.__u ? [t3] : null, i3, null == t3 ? $(u4) : t3, !!(32 & u4.__u), r3), o3.__v = u4.__v, o3.__.__k[o3.__i] = o3, D(i3, o3, r3), u4.__e = u4.__ = null, o3.__e != t3 && P(o3);
+    }
+  }
+  function P(n2) {
+    if (null != (n2 = n2.__) && null != n2.__c) return n2.__e = n2.__c.base = null, n2.__k.some(function(l3) {
+      if (null != l3 && null != l3.__e) return n2.__e = n2.__c.base = l3.__e;
+    }), P(n2);
+  }
+  function A(n2) {
+    (!n2.__d && (n2.__d = true) && i.push(n2) && !H.__r++ || r != l.debounceRendering) && ((r = l.debounceRendering) || o)(H);
+  }
+  function H() {
+    try {
+      for (var n2, l3 = 1; i.length; ) i.length > l3 && i.sort(e), n2 = i.shift(), l3 = i.length, I(n2);
+    } finally {
+      i.length = H.__r = 0;
+    }
+  }
+  function L(n2, l3, u4, t3, i3, r3, o3, e3, f4, c3, a3) {
+    var s3, h3, p3, v3, y3, _3, g2 = t3 && t3.__k || w, m3 = l3.length;
+    for (f4 = T(u4, l3, g2, f4, m3), s3 = 0; s3 < m3; s3++) null != (p3 = u4.__k[s3]) && (h3 = -1 != p3.__i && g2[p3.__i] || d, p3.__i = s3, _3 = q(n2, p3, h3, i3, r3, o3, e3, f4, c3, a3), v3 = p3.__e, p3.ref && h3.ref != p3.ref && (h3.ref && J(h3.ref, null, p3), a3.push(p3.ref, p3.__c || v3, p3)), null == y3 && null != v3 && (y3 = v3), 4 & p3.__u ? (f4 = j(p3, f4, n2), h3.__e && (h3.__e = null)) : "function" == typeof p3.type && void 0 !== _3 ? f4 = _3 : v3 && (f4 = v3.nextSibling), p3.__u &= -7);
+    return u4.__e = y3, f4;
+  }
+  function T(n2, l3, u4, t3, i3) {
+    var r3, o3, e3, f4, c3, a3 = u4.length, s3 = a3, h3 = 0;
+    for (n2.__k = new Array(i3), r3 = 0; r3 < i3; r3++) null != (o3 = l3[r3]) && "boolean" != typeof o3 && "function" != typeof o3 ? ("string" == typeof o3 || "number" == typeof o3 || "bigint" == typeof o3 || o3.constructor == String ? o3 = n2.__k[r3] = x(null, o3, null, null, null) : g(o3) ? o3 = n2.__k[r3] = x(S, { children: o3 }, null, null, null) : void 0 === o3.constructor && o3.__b > 0 ? o3 = n2.__k[r3] = x(o3.type, o3.props, o3.key, o3.ref ? o3.ref : null, o3.__v) : n2.__k[r3] = o3, f4 = r3 + h3, o3.__ = n2, o3.__b = n2.__b + 1, e3 = null, -1 != (c3 = o3.__i = O(o3, u4, f4, s3)) && (s3--, (e3 = u4[c3]) && (e3.__u |= 2)), null == e3 || null == e3.__v ? (-1 == c3 && (i3 > a3 ? h3-- : i3 < a3 && h3++), "function" != typeof o3.type && (o3.__u |= 4)) : c3 != f4 && (c3 == f4 - 1 ? h3-- : c3 == f4 + 1 ? h3++ : (c3 > f4 ? h3-- : h3++, o3.__u |= 4))) : n2.__k[r3] = null;
+    if (s3) for (r3 = 0; r3 < a3; r3++) null != (e3 = u4[r3]) && 0 == (2 & e3.__u) && (e3.__e == t3 && (t3 = $(e3)), K(e3, e3));
+    return t3;
+  }
+  function j(n2, l3, u4) {
+    var t3, i3;
+    if ("function" == typeof n2.type) {
+      for (t3 = n2.__k, i3 = 0; t3 && i3 < t3.length; i3++) t3[i3] && (t3[i3].__ = n2, l3 = j(t3[i3], l3, u4));
+      return l3;
+    }
+    n2.__e != l3 && (l3 && n2.type && !l3.parentNode && (l3 = $(n2)), l3 = u4.insertBefore(n2.__e, l3 || null));
+    do {
+      l3 = l3 && l3.nextSibling;
+    } while (null != l3 && 8 == l3.nodeType);
+    return l3;
+  }
+  function O(n2, l3, u4, t3) {
+    var i3, r3, o3, e3 = n2.key, f4 = n2.type, c3 = l3[u4], a3 = null != c3 && 0 == (2 & c3.__u);
+    if (null === c3 && null == e3 || a3 && e3 == c3.key && f4 == c3.type) return u4;
+    if (t3 > (a3 ? 1 : 0)) {
+      for (i3 = u4 - 1, r3 = u4 + 1; i3 >= 0 || r3 < l3.length; ) if (null != (c3 = l3[o3 = i3 >= 0 ? i3-- : r3++]) && 0 == (2 & c3.__u) && e3 == c3.key && f4 == c3.type) return o3;
+    }
+    return -1;
+  }
+  function z(n2, l3, u4) {
+    "-" == l3[0] ? n2.setProperty(l3, null == u4 ? "" : u4) : n2[l3] = null == u4 ? "" : "number" != typeof u4 || _.test(l3) ? u4 : u4 + "px";
+  }
+  function N(n2, l3, u4, t3, i3) {
+    var r3, o3;
+    n: if ("style" == l3) if ("string" == typeof u4) n2.style.cssText = u4;
+    else {
+      if ("string" == typeof t3 && (n2.style.cssText = t3 = ""), t3) for (l3 in t3) u4 && l3 in u4 || z(n2.style, l3, "");
+      if (u4) for (l3 in u4) t3 && u4[l3] == t3[l3] || z(n2.style, l3, u4[l3]);
+    }
+    else if ("o" == l3[0] && "n" == l3[1]) r3 = l3 != (l3 = l3.replace(s, "$1")), o3 = l3.toLowerCase(), l3 = o3 in n2 || "onFocusOut" == l3 || "onFocusIn" == l3 ? o3.slice(2) : l3.slice(2), n2.l || (n2.l = {}), n2.l[l3 + r3] = u4, u4 ? t3 ? u4[a] = t3[a] : (u4[a] = h, n2.addEventListener(l3, r3 ? v : p, r3)) : n2.removeEventListener(l3, r3 ? v : p, r3);
+    else {
+      if ("http://www.w3.org/2000/svg" == i3) l3 = l3.replace(/xlink(H|:h)/, "h").replace(/sName$/, "s");
+      else if ("width" != l3 && "height" != l3 && "href" != l3 && "list" != l3 && "form" != l3 && "tabIndex" != l3 && "download" != l3 && "rowSpan" != l3 && "colSpan" != l3 && "role" != l3 && "popover" != l3 && l3 in n2) try {
+        n2[l3] = null == u4 ? "" : u4;
+        break n;
+      } catch (n3) {
+      }
+      "function" == typeof u4 || (null == u4 || false === u4 && "-" != l3[4] ? n2.removeAttribute(l3) : n2.setAttribute(l3, "popover" == l3 && 1 == u4 ? "" : u4));
+    }
+  }
+  function V(n2) {
+    return function(u4) {
+      if (this.l) {
+        var t3 = this.l[u4.type + n2];
+        if (null == u4[c]) u4[c] = h++;
+        else if (u4[c] < t3[a]) return;
+        return t3(l.event ? l.event(u4) : u4);
+      }
+    };
+  }
+  function q(n2, u4, t3, i3, r3, o3, e3, f4, c3, a3) {
+    var s3, h3, p3, v3, y3, d3, _3, k3, x2, M, I2, P2, A3, H2, T3, j3, F = u4.type;
+    if (void 0 !== u4.constructor) return null;
+    128 & t3.__u && (c3 = !!(32 & t3.__u), o3 = [f4 = u4.__e = t3.__e]), (s3 = l.__b) && s3(u4);
+    n: if ("function" == typeof F) {
+      h3 = e3.length;
+      try {
+        if (x2 = u4.props, M = F.prototype && F.prototype.render, I2 = (s3 = F.contextType) && i3[s3.__c], P2 = s3 ? I2 ? I2.props.value : s3.__ : i3, t3.__c ? k3 = (p3 = u4.__c = t3.__c).__ = p3.__E : (M ? u4.__c = p3 = new F(x2, P2) : (u4.__c = p3 = new C(x2, P2), p3.constructor = F, p3.render = Q), I2 && I2.sub(p3), p3.state || (p3.state = {}), p3.__n = i3, v3 = p3.__d = true, p3.__h = [], p3._sb = []), M && null == p3.__s && (p3.__s = p3.state), M && null != F.getDerivedStateFromProps && (p3.__s == p3.state && (p3.__s = m({}, p3.__s)), m(p3.__s, F.getDerivedStateFromProps(x2, p3.__s))), y3 = p3.props, d3 = p3.state, p3.__v = u4, v3) M && null == F.getDerivedStateFromProps && null != p3.componentWillMount && p3.componentWillMount(), M && null != p3.componentDidMount && p3.__h.push(p3.componentDidMount);
+        else {
+          if (M && null == F.getDerivedStateFromProps && x2 !== y3 && null != p3.componentWillReceiveProps && p3.componentWillReceiveProps(x2, P2), u4.__v == t3.__v || !p3.__e && null != p3.shouldComponentUpdate && false === p3.shouldComponentUpdate(x2, p3.__s, P2)) {
+            u4.__v != t3.__v && (p3.props = x2, p3.state = p3.__s, p3.__d = false), u4.__e = t3.__e, u4.__k = t3.__k, u4.__k.some(function(n3) {
+              n3 && (n3.__ = u4);
+            }), w.push.apply(p3.__h, p3._sb), p3._sb = [], p3.__h.length && e3.push(p3), f4 = $(t3);
+            break n;
+          }
+          null != p3.componentWillUpdate && p3.componentWillUpdate(x2, p3.__s, P2), M && null != p3.componentDidUpdate && p3.__h.push(function() {
+            p3.componentDidUpdate(y3, d3, _3);
+          });
+        }
+        if (p3.context = P2, p3.props = x2, p3.__P = n2, p3.__e = false, A3 = l.__r, H2 = 0, M) p3.state = p3.__s, p3.__d = false, A3 && A3(u4), s3 = p3.render(p3.props, p3.state, p3.context), w.push.apply(p3.__h, p3._sb), p3._sb = [];
+        else do {
+          p3.__d = false, A3 && A3(u4), s3 = p3.render(p3.props, p3.state, p3.context), p3.state = p3.__s;
+        } while (p3.__d && ++H2 < 25);
+        p3.state = p3.__s, null != p3.getChildContext && (i3 = m(m({}, i3), p3.getChildContext())), M && !v3 && null != p3.getSnapshotBeforeUpdate && (_3 = p3.getSnapshotBeforeUpdate(y3, d3)), T3 = null != s3 && s3.type === S && null == s3.key ? E(s3.props.children) : s3, f4 = L(n2, g(T3) ? T3 : [T3], u4, t3, i3, r3, o3, e3, f4, c3, a3), p3.base = u4.__e, u4.__u &= -161, p3.__h.length && e3.push(p3), k3 && (p3.__E = p3.__ = null);
+      } catch (n3) {
+        if (e3.length = h3, u4.__v = null, c3 || null != o3) {
+          if (n3.then) {
+            for (u4.__u |= c3 ? 160 : 128; f4 && 8 == f4.nodeType && f4.nextSibling; ) f4 = f4.nextSibling;
+            null != o3 && (o3[o3.indexOf(f4)] = null), u4.__e = f4;
+          } else if (null != o3) for (j3 = o3.length; j3--; ) b(o3[j3]);
+        } else u4.__e = t3.__e;
+        null == u4.__k && (u4.__k = t3.__k || []), n3.then || B(u4), l.__e(n3, u4, t3);
+      }
+    } else null == o3 && u4.__v == t3.__v ? (u4.__k = t3.__k, u4.__e = t3.__e) : f4 = u4.__e = G(t3.__e, u4, t3, i3, r3, o3, e3, c3, a3);
+    return (s3 = l.diffed) && s3(u4), 128 & u4.__u ? void 0 : f4;
+  }
+  function B(n2) {
+    n2 && (n2.__c && (n2.__c.__e = true), n2.__k && n2.__k.some(B));
+  }
+  function D(n2, u4, t3) {
+    for (var i3 = 0; i3 < t3.length; i3++) J(t3[i3], t3[++i3], t3[++i3]);
+    l.__c && l.__c(u4, n2), n2.some(function(u5) {
+      try {
+        n2 = u5.__h, u5.__h = [], n2.some(function(n3) {
+          n3.call(u5);
+        });
+      } catch (n3) {
+        l.__e(n3, u5.__v);
+      }
+    });
+  }
+  function E(n2) {
+    return "object" != typeof n2 || null == n2 || n2.__b > 0 ? n2 : g(n2) ? n2.map(E) : void 0 !== n2.constructor ? null : m({}, n2);
+  }
+  function G(u4, t3, i3, r3, o3, e3, f4, c3, a3) {
+    var s3, h3, p3, v3, y3, w3, _3, m3 = i3.props || d, k3 = t3.props, x2 = t3.type;
+    if ("svg" == x2 ? o3 = "http://www.w3.org/2000/svg" : "math" == x2 ? o3 = "http://www.w3.org/1998/Math/MathML" : o3 || (o3 = "http://www.w3.org/1999/xhtml"), null != e3) {
+      for (s3 = 0; s3 < e3.length; s3++) if ((y3 = e3[s3]) && "setAttribute" in y3 == !!x2 && (x2 ? y3.localName == x2 : 3 == y3.nodeType)) {
+        u4 = y3, e3[s3] = null;
+        break;
+      }
+    }
+    if (null == u4) {
+      if (null == x2) return document.createTextNode(k3);
+      u4 = document.createElementNS(o3, x2, k3.is && k3), c3 && (l.__m && l.__m(t3, e3), c3 = false), e3 = null;
+    }
+    if (null == x2) m3 === k3 || c3 && u4.data == k3 || (u4.data = k3);
+    else {
+      if (e3 = "textarea" == x2 && null != k3.defaultValue ? null : e3 && n.call(u4.childNodes), !c3 && null != e3) for (m3 = {}, s3 = 0; s3 < u4.attributes.length; s3++) m3[(y3 = u4.attributes[s3]).name] = y3.value;
+      for (s3 in m3) y3 = m3[s3], "dangerouslySetInnerHTML" == s3 ? p3 = y3 : "children" == s3 || s3 in k3 || "value" == s3 && "defaultValue" in k3 || "checked" == s3 && "defaultChecked" in k3 || N(u4, s3, null, y3, o3);
+      for (s3 in k3) y3 = k3[s3], "children" == s3 ? v3 = y3 : "dangerouslySetInnerHTML" == s3 ? h3 = y3 : "value" == s3 ? w3 = y3 : "checked" == s3 ? _3 = y3 : c3 && "function" != typeof y3 || m3[s3] === y3 || N(u4, s3, y3, m3[s3], o3);
+      if (h3) c3 || p3 && (h3.__html == p3.__html || h3.__html == u4.innerHTML) || (u4.innerHTML = h3.__html), t3.__k = [];
+      else if (p3 && (u4.innerHTML = ""), L("template" == t3.type ? u4.content : u4, g(v3) ? v3 : [v3], t3, i3, r3, "foreignObject" == x2 ? "http://www.w3.org/1999/xhtml" : o3, e3, f4, e3 ? e3[0] : i3.__k && $(i3, 0), c3, a3), null != e3) for (s3 = e3.length; s3--; ) b(e3[s3]);
+      c3 && "textarea" != x2 || (s3 = "value", "progress" == x2 && null == w3 ? u4.removeAttribute("value") : null != w3 && (w3 !== u4[s3] || "progress" == x2 && !w3 || "option" == x2 && w3 != m3[s3]) && N(u4, s3, w3, m3[s3], o3), s3 = "checked", null != _3 && _3 != u4[s3] && N(u4, s3, _3, m3[s3], o3));
+    }
+    return u4;
+  }
+  function J(n2, u4, t3) {
+    try {
+      if ("function" == typeof n2) {
+        var i3 = "function" == typeof n2.__u;
+        i3 && n2.__u(), i3 && null == u4 || (n2.__u = n2(u4));
+      } else n2.current = u4;
+    } catch (n3) {
+      l.__e(n3, t3);
+    }
+  }
+  function K(n2, u4, t3) {
+    var i3, r3;
+    if (l.unmount && l.unmount(n2), (i3 = n2.ref) && (i3.current && i3.current != n2.__e || J(i3, null, u4)), null != (i3 = n2.__c)) {
+      if (i3.componentWillUnmount) try {
+        i3.componentWillUnmount();
+      } catch (n3) {
+        l.__e(n3, u4);
+      }
+      i3.base = i3.__P = i3.__n = null;
+    }
+    if (i3 = n2.__k) for (r3 = 0; r3 < i3.length; r3++) i3[r3] && K(i3[r3], u4, t3 || "function" != typeof n2.type);
+    t3 || b(n2.__e), n2.__c = n2.__ = n2.__e = void 0;
+  }
+  function Q(n2, l3, u4) {
+    return this.constructor(n2, u4);
+  }
+  function R(u4, t3, i3) {
+    var r3, o3, e3, f4;
+    t3 == document && (t3 = document.documentElement), l.__ && l.__(u4, t3), o3 = (r3 = "function" == typeof i3) ? null : i3 && i3.__k || t3.__k, e3 = [], f4 = [], q(t3, u4 = (!r3 && i3 || t3).__k = k(S, null, [u4]), o3 || d, d, t3.namespaceURI, !r3 && i3 ? [i3] : o3 ? null : t3.firstChild ? n.call(t3.childNodes) : null, e3, !r3 && i3 ? i3 : o3 ? o3.__e : t3.firstChild, r3, f4), D(e3, u4, f4), u4.props.children = null;
+  }
+  n = w.slice, l = { __e: function(n2, l3, u4, t3) {
+    for (var i3, r3, o3; l3 = l3.__; ) if ((i3 = l3.__c) && !i3.__) try {
+      if ((r3 = i3.constructor) && null != r3.getDerivedStateFromError && (i3.setState(r3.getDerivedStateFromError(n2)), o3 = i3.__d), null != i3.componentDidCatch && (i3.componentDidCatch(n2, t3 || {}), o3 = i3.__d), o3) return i3.__E = i3;
+    } catch (l4) {
+      n2 = l4;
+    }
+    throw n2;
+  } }, u = 0, t = function(n2) {
+    return null != n2 && void 0 === n2.constructor;
+  }, C.prototype.setState = function(n2, l3) {
+    var u4;
+    u4 = null != this.__s && this.__s != this.state ? this.__s : this.__s = m({}, this.state), "function" == typeof n2 && (n2 = n2(m({}, u4), this.props)), n2 && m(u4, n2), null != n2 && this.__v && (l3 && this._sb.push(l3), A(this));
+  }, C.prototype.forceUpdate = function(n2) {
+    this.__v && (this.__e = true, n2 && this.__h.push(n2), A(this));
+  }, C.prototype.render = S, i = [], o = "function" == typeof Promise ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, e = function(n2, l3) {
+    return n2.__v.__b - l3.__v.__b;
+  }, H.__r = 0, f = Math.random().toString(8), c = "__d" + f, a = "__a" + f, s = /(PointerCapture)$|Capture$/i, h = 0, p = V(false), v = V(true), y = 0;
+
+  // node_modules/preact/hooks/dist/hooks.module.js
+  var t2;
+  var r2;
+  var u2;
+  var i2;
+  var o2 = 0;
+  var f2 = [];
+  var c2 = l;
+  var e2 = c2.__b;
+  var a2 = c2.__r;
+  var v2 = c2.diffed;
+  var l2 = c2.__c;
+  var m2 = c2.unmount;
+  var p2 = c2.__;
+  function s2(n2, t3) {
+    c2.__h && c2.__h(r2, n2, o2 || t3), o2 = 0;
+    var u4 = r2.__H || (r2.__H = { __: [], __h: [] });
+    return n2 >= u4.__.length && u4.__.push({}), u4.__[n2];
+  }
+  function d2(n2) {
+    return o2 = 1, y2(D2, n2);
+  }
+  function y2(n2, u4, i3) {
+    var o3 = s2(t2++, 2);
+    if (o3.t = n2, !o3.__c && (o3.__ = [i3 ? i3(u4) : D2(void 0, u4), function(n3) {
+      var t3 = o3.__N ? o3.__N[0] : o3.__[0], r3 = o3.t(t3, n3);
+      t3 !== r3 && (o3.__N = [r3, o3.__[1]], o3.__c.setState({}));
+    }], o3.__c = r2, !r2.__f)) {
+      var f4 = function(n3, t3, r3) {
+        if (!o3.__c.__H) return true;
+        var u5 = false, i4 = o3.__c.props !== n3;
+        if (o3.__c.__H.__.some(function(n4) {
+          if (n4.__N) {
+            u5 = true;
+            var t4 = n4.__[0];
+            n4.__ = n4.__N, n4.__N = void 0, t4 !== n4.__[0] && (i4 = true);
+          }
+        }), c3) {
+          var f5 = c3.call(this, n3, t3, r3);
+          return u5 ? f5 || i4 : f5;
+        }
+        return !u5 || i4;
+      };
+      r2.__f = true;
+      var c3 = r2.shouldComponentUpdate, e3 = r2.componentWillUpdate;
+      r2.componentWillUpdate = function(n3, t3, r3) {
+        if (this.__e) {
+          var u5 = c3;
+          c3 = void 0, f4(n3, t3, r3), c3 = u5;
+        }
+        e3 && e3.call(this, n3, t3, r3);
+      }, r2.shouldComponentUpdate = f4;
+    }
+    return o3.__N || o3.__;
+  }
+  function h2(n2, u4) {
+    var i3 = s2(t2++, 3);
+    !c2.__s && C2(i3.__H, u4) && (i3.__ = n2, i3.u = u4, r2.__H.__h.push(i3));
+  }
+  function _2(n2, u4) {
+    var i3 = s2(t2++, 4);
+    !c2.__s && C2(i3.__H, u4) && (i3.__ = n2, i3.u = u4, r2.__h.push(i3));
+  }
+  function A2(n2) {
+    return o2 = 5, T2(function() {
+      return { current: n2 };
+    }, []);
+  }
+  function T2(n2, r3) {
+    var u4 = s2(t2++, 7);
+    return C2(u4.__H, r3) && (u4.__ = n2(), u4.__H = r3, u4.__h = n2), u4.__;
+  }
+  function q2(n2, t3) {
+    return o2 = 8, T2(function() {
+      return n2;
+    }, t3);
+  }
+  function j2() {
+    for (var n2; n2 = f2.shift(); ) {
+      var t3 = n2.__H;
+      if (n2.__P && t3) try {
+        t3.__h.some(z2), t3.__h.some(B2), t3.__h = [];
+      } catch (r3) {
+        t3.__h = [], c2.__e(r3, n2.__v);
+      }
+    }
+  }
+  c2.__b = function(n2) {
+    r2 = null, e2 && e2(n2);
+  }, c2.__ = function(n2, t3) {
+    n2 && t3.__k && t3.__k.__m && (n2.__m = t3.__k.__m), p2 && p2(n2, t3);
+  }, c2.__r = function(n2) {
+    a2 && a2(n2), t2 = 0;
+    var i3 = (r2 = n2.__c).__H;
+    i3 && (u2 === r2 ? (i3.__h = [], r2.__h = [], i3.__.some(function(n3) {
+      n3.__N && (n3.__ = n3.__N), n3.u = n3.__N = void 0;
+    })) : (i3.__h.some(z2), i3.__h.some(B2), i3.__h = [], t2 = 0)), u2 = r2;
+  }, c2.diffed = function(n2) {
+    v2 && v2(n2);
+    var t3 = n2.__c;
+    t3 && t3.__H && (t3.__H.__h.length && (1 !== f2.push(t3) && i2 === c2.requestAnimationFrame || ((i2 = c2.requestAnimationFrame) || w2)(j2)), t3.__H.__.some(function(n3) {
+      n3.u && (n3.__H = n3.u, n3.u = void 0);
+    })), u2 = r2 = null;
+  }, c2.__c = function(n2, t3) {
+    t3.some(function(n3) {
+      try {
+        n3.__h.some(z2), n3.__h = n3.__h.filter(function(n4) {
+          return !n4.__ || B2(n4);
+        });
+      } catch (r3) {
+        t3.some(function(n4) {
+          n4.__h && (n4.__h = []);
+        }), t3 = [], c2.__e(r3, n3.__v);
+      }
+    }), l2 && l2(n2, t3);
+  }, c2.unmount = function(n2) {
+    m2 && m2(n2);
+    var t3, r3 = n2.__c;
+    r3 && r3.__H && (r3.__H.__.some(function(n3) {
+      try {
+        z2(n3);
+      } catch (n4) {
+        t3 = n4;
+      }
+    }), r3.__H = void 0, t3 && c2.__e(t3, r3.__v));
+  };
+  var k2 = "function" == typeof requestAnimationFrame;
+  function w2(n2) {
+    var t3, r3 = function() {
+      clearTimeout(u4), k2 && cancelAnimationFrame(t3), setTimeout(n2);
+    }, u4 = setTimeout(r3, 35);
+    k2 && (t3 = requestAnimationFrame(r3));
+  }
+  function z2(n2) {
+    var t3 = r2, u4 = n2.__c;
+    "function" == typeof u4 && (n2.__c = void 0, u4()), r2 = t3;
+  }
+  function B2(n2) {
+    var t3 = r2;
+    n2.__c = n2.__(), r2 = t3;
+  }
+  function C2(n2, t3) {
+    return !n2 || n2.length !== t3.length || t3.some(function(t4, r3) {
+      return t4 !== n2[r3];
+    });
+  }
+  function D2(n2, t3) {
+    return "function" == typeof t3 ? t3(n2) : t3;
+  }
+
+  // src/data.ts
+  var materials = [
+    {
+      "id": "stone-brick",
+      "name": "Stone brick",
+      "kind": "item",
+      "icon": "icons/stone-brick.png"
+    },
+    {
+      "id": "wood",
+      "name": "Wood",
+      "kind": "item",
+      "icon": "icons/wood.png"
+    },
+    {
+      "id": "coal",
+      "name": "Coal",
+      "kind": "item",
+      "icon": "icons/coal.png"
+    },
+    {
+      "id": "stone",
+      "name": "Stone",
+      "kind": "item",
+      "icon": "icons/stone.png"
+    },
+    {
+      "id": "iron-ore",
+      "name": "Iron ore",
+      "kind": "item",
+      "icon": "icons/iron-ore.png"
+    },
+    {
+      "id": "copper-ore",
+      "name": "Copper ore",
+      "kind": "item",
+      "icon": "icons/copper-ore.png"
+    },
+    {
+      "id": "iron-plate",
+      "name": "Iron plate",
+      "kind": "item",
+      "icon": "icons/iron-plate.png"
+    },
+    {
+      "id": "copper-plate",
+      "name": "Copper plate",
+      "kind": "item",
+      "icon": "icons/copper-plate.png"
+    },
+    {
+      "id": "copper-cable",
+      "name": "Copper cable",
+      "kind": "item",
+      "icon": "icons/copper-cable.png"
+    },
+    {
+      "id": "iron-stick",
+      "name": "Iron stick",
+      "kind": "item",
+      "icon": "icons/iron-stick.png"
+    },
+    {
+      "id": "iron-gear-wheel",
+      "name": "Iron gear wheel",
+      "kind": "item",
+      "icon": "icons/iron-gear-wheel.png"
+    },
+    {
+      "id": "electronic-circuit",
+      "name": "Electronic circuit",
+      "kind": "item",
+      "icon": "icons/electronic-circuit.png"
+    },
+    {
+      "id": "wooden-chest",
+      "name": "Wooden chest",
+      "kind": "item",
+      "icon": "icons/wooden-chest.png"
+    },
+    {
+      "id": "stone-furnace",
+      "name": "Stone furnace",
+      "kind": "item",
+      "icon": "icons/stone-furnace.png"
+    },
+    {
+      "id": "burner-mining-drill",
+      "name": "Burner mining drill",
+      "kind": "item",
+      "icon": "icons/burner-mining-drill.png"
+    },
+    {
+      "id": "electric-mining-drill",
+      "name": "Electric mining drill",
+      "kind": "item",
+      "icon": "icons/electric-mining-drill.png"
+    },
+    {
+      "id": "burner-inserter",
+      "name": "Burner inserter",
+      "kind": "item",
+      "icon": "icons/burner-inserter.png"
+    },
+    {
+      "id": "inserter",
+      "name": "Inserter",
+      "kind": "item",
+      "icon": "icons/inserter.png"
+    },
+    {
+      "id": "fast-inserter",
+      "name": "Fast inserter",
+      "kind": "item",
+      "icon": "icons/fast-inserter.png"
+    },
+    {
+      "id": "long-handed-inserter",
+      "name": "Long-handed inserter",
+      "kind": "item",
+      "icon": "icons/long-handed-inserter.png"
+    },
+    {
+      "id": "offshore-pump",
+      "name": "Offshore pump",
+      "kind": "item",
+      "icon": "icons/offshore-pump.png"
+    },
+    {
+      "id": "pipe",
+      "name": "Pipe",
+      "kind": "item",
+      "icon": "icons/pipe.png"
+    },
+    {
+      "id": "boiler",
+      "name": "Boiler",
+      "kind": "item",
+      "icon": "icons/boiler.png"
+    },
+    {
+      "id": "steam-engine",
+      "name": "Steam engine",
+      "kind": "item",
+      "icon": "icons/steam-engine.png"
+    },
+    {
+      "id": "small-electric-pole",
+      "name": "Small electric pole",
+      "kind": "item",
+      "icon": "icons/small-electric-pole.png"
+    },
+    {
+      "id": "radar",
+      "name": "Radar",
+      "kind": "item",
+      "icon": "icons/radar.png"
+    },
+    {
+      "id": "small-lamp",
+      "name": "Lamp",
+      "kind": "item",
+      "icon": "icons/small-lamp.png"
+    },
+    {
+      "id": "pipe-to-ground",
+      "name": "Pipe to ground",
+      "kind": "item",
+      "icon": "icons/pipe-to-ground.png"
+    },
+    {
+      "id": "assembling-machine-1",
+      "name": "Assembling machine 1",
+      "kind": "item",
+      "icon": "icons/assembling-machine-1.png"
+    },
+    {
+      "id": "assembling-machine-2",
+      "name": "Assembling machine 2",
+      "kind": "item",
+      "icon": "icons/assembling-machine-2.png"
+    },
+    {
+      "id": "red-wire",
+      "name": "Red wire",
+      "kind": "item",
+      "icon": "icons/red-wire.png"
+    },
+    {
+      "id": "green-wire",
+      "name": "Green wire",
+      "kind": "item",
+      "icon": "icons/green-wire.png"
+    },
+    {
+      "id": "copper-wire",
+      "name": "Copper wire",
+      "kind": "item",
+      "icon": "icons/copper-wire.png"
+    },
+    {
+      "id": "stone-wall",
+      "name": "Wall",
+      "kind": "item",
+      "icon": "icons/stone-wall.png"
+    },
+    {
+      "id": "lab",
+      "name": "Lab",
+      "kind": "item",
+      "icon": "icons/lab.png"
+    },
+    {
+      "id": "automation-science-pack",
+      "name": "Automation science pack",
+      "kind": "item",
+      "icon": "icons/automation-science-pack.png"
+    },
+    {
+      "id": "logistic-science-pack",
+      "name": "Logistic science pack",
+      "kind": "item",
+      "icon": "icons/logistic-science-pack.png"
+    },
+    {
+      "id": "steel-plate",
+      "name": "Steel plate",
+      "kind": "item",
+      "icon": "icons/steel-plate.png"
+    },
+    {
+      "id": "engine-unit",
+      "name": "Engine unit",
+      "kind": "item",
+      "icon": "icons/engine-unit.png"
+    },
+    {
+      "id": "electric-furnace",
+      "name": "Electric furnace",
+      "kind": "item",
+      "icon": "icons/electric-furnace.png"
+    },
+    {
+      "id": "solid-fuel",
+      "name": "Solid fuel",
+      "kind": "item",
+      "icon": "icons/solid-fuel.png"
+    },
+    {
+      "id": "rocket-fuel",
+      "name": "Rocket fuel",
+      "kind": "item",
+      "icon": "icons/rocket-fuel.png"
+    },
+    {
+      "id": "iron-chest",
+      "name": "Iron chest",
+      "kind": "item",
+      "icon": "icons/iron-chest.png"
+    },
+    {
+      "id": "big-electric-pole",
+      "name": "Big electric pole",
+      "kind": "item",
+      "icon": "icons/big-electric-pole.png"
+    },
+    {
+      "id": "medium-electric-pole",
+      "name": "Medium electric pole",
+      "kind": "item",
+      "icon": "icons/medium-electric-pole.png"
+    },
+    {
+      "id": "steel-furnace",
+      "name": "Steel furnace",
+      "kind": "item",
+      "icon": "icons/steel-furnace.png"
+    },
+    {
+      "id": "gate",
+      "name": "Gate",
+      "kind": "item",
+      "icon": "icons/gate.png"
+    },
+    {
+      "id": "steel-chest",
+      "name": "Steel chest",
+      "kind": "item",
+      "icon": "icons/steel-chest.png"
+    },
+    {
+      "id": "solar-panel",
+      "name": "Solar panel",
+      "kind": "item",
+      "icon": "icons/solar-panel.png"
+    },
+    {
+      "id": "train-stop",
+      "name": "Train stop",
+      "kind": "item",
+      "icon": "icons/train-stop.png"
+    },
+    {
+      "id": "rail-signal",
+      "name": "Rail signal",
+      "kind": "item",
+      "icon": "icons/rail-signal.png"
+    },
+    {
+      "id": "rail-chain-signal",
+      "name": "Rail chain signal",
+      "kind": "item",
+      "icon": "icons/rail-chain-signal.png"
+    },
+    {
+      "id": "concrete",
+      "name": "Concrete",
+      "kind": "item",
+      "icon": "icons/concrete.png"
+    },
+    {
+      "id": "refined-concrete",
+      "name": "Refined concrete",
+      "kind": "item",
+      "icon": "icons/refined-concrete.png"
+    },
+    {
+      "id": "hazard-concrete",
+      "name": "Hazard concrete",
+      "kind": "item",
+      "icon": "icons/hazard-concrete.png"
+    },
+    {
+      "id": "refined-hazard-concrete",
+      "name": "Refined hazard concrete",
+      "kind": "item",
+      "icon": "icons/refined-hazard-concrete.png"
+    },
+    {
+      "id": "landfill",
+      "name": "Landfill",
+      "kind": "item",
+      "icon": "icons/landfill.png"
+    },
+    {
+      "id": "accumulator",
+      "name": "Accumulator",
+      "kind": "item",
+      "icon": "icons/accumulator.png"
+    },
+    {
+      "id": "uranium-ore",
+      "name": "Uranium ore",
+      "kind": "item",
+      "icon": "icons/uranium-ore.png"
+    },
+    {
+      "id": "transport-belt",
+      "name": "Transport belt",
+      "kind": "item",
+      "icon": "icons/transport-belt.png"
+    },
+    {
+      "id": "fast-transport-belt",
+      "name": "Fast transport belt",
+      "kind": "item",
+      "icon": "icons/fast-transport-belt.png"
+    },
+    {
+      "id": "express-transport-belt",
+      "name": "Express transport belt",
+      "kind": "item",
+      "icon": "icons/express-transport-belt.png"
+    },
+    {
+      "id": "bulk-inserter",
+      "name": "Bulk inserter",
+      "kind": "item",
+      "icon": "icons/bulk-inserter.png"
+    },
+    {
+      "id": "assembling-machine-3",
+      "name": "Assembling machine 3",
+      "kind": "item",
+      "icon": "icons/assembling-machine-3.png"
+    },
+    {
+      "id": "chemical-science-pack",
+      "name": "Chemical science pack",
+      "kind": "item",
+      "icon": "icons/chemical-science-pack.png"
+    },
+    {
+      "id": "military-science-pack",
+      "name": "Military science pack",
+      "kind": "item",
+      "icon": "icons/military-science-pack.png"
+    },
+    {
+      "id": "production-science-pack",
+      "name": "Production science pack",
+      "kind": "item",
+      "icon": "icons/production-science-pack.png"
+    },
+    {
+      "id": "utility-science-pack",
+      "name": "Utility science pack",
+      "kind": "item",
+      "icon": "icons/utility-science-pack.png"
+    },
+    {
+      "id": "space-science-pack",
+      "name": "Space science pack",
+      "kind": "item",
+      "icon": "icons/space-science-pack.png"
+    },
+    {
+      "id": "underground-belt",
+      "name": "Underground belt",
+      "kind": "item",
+      "icon": "icons/underground-belt.png"
+    },
+    {
+      "id": "fast-underground-belt",
+      "name": "Fast underground belt",
+      "kind": "item",
+      "icon": "icons/fast-underground-belt.png"
+    },
+    {
+      "id": "express-underground-belt",
+      "name": "Express underground belt",
+      "kind": "item",
+      "icon": "icons/express-underground-belt.png"
+    },
+    {
+      "id": "splitter",
+      "name": "Splitter",
+      "kind": "item",
+      "icon": "icons/splitter.png"
+    },
+    {
+      "id": "lane-splitter",
+      "name": "Lane splitter",
+      "kind": "item",
+      "icon": "icons/lane-splitter.png"
+    },
+    {
+      "id": "fast-splitter",
+      "name": "Fast splitter",
+      "kind": "item",
+      "icon": "icons/fast-splitter.png"
+    },
+    {
+      "id": "express-splitter",
+      "name": "Express splitter",
+      "kind": "item",
+      "icon": "icons/express-splitter.png"
+    },
+    {
+      "id": "loader",
+      "name": "Loader",
+      "kind": "item",
+      "icon": "icons/loader.png"
+    },
+    {
+      "id": "fast-loader",
+      "name": "Fast loader",
+      "kind": "item",
+      "icon": "icons/fast-loader.png"
+    },
+    {
+      "id": "express-loader",
+      "name": "Express loader",
+      "kind": "item",
+      "icon": "icons/express-loader.png"
+    },
+    {
+      "id": "advanced-circuit",
+      "name": "Advanced circuit",
+      "kind": "item",
+      "icon": "icons/advanced-circuit.png"
+    },
+    {
+      "id": "processing-unit",
+      "name": "Processing unit",
+      "kind": "item",
+      "icon": "icons/processing-unit.png"
+    },
+    {
+      "id": "logistic-robot",
+      "name": "Logistic robot",
+      "kind": "item",
+      "icon": "icons/logistic-robot.png"
+    },
+    {
+      "id": "construction-robot",
+      "name": "Construction robot",
+      "kind": "item",
+      "icon": "icons/construction-robot.png"
+    },
+    {
+      "id": "passive-provider-chest",
+      "name": "Passive provider chest",
+      "kind": "item",
+      "icon": "icons/passive-provider-chest.png"
+    },
+    {
+      "id": "active-provider-chest",
+      "name": "Active provider chest",
+      "kind": "item",
+      "icon": "icons/active-provider-chest.png"
+    },
+    {
+      "id": "storage-chest",
+      "name": "Storage chest",
+      "kind": "item",
+      "icon": "icons/storage-chest.png"
+    },
+    {
+      "id": "buffer-chest",
+      "name": "Buffer chest",
+      "kind": "item",
+      "icon": "icons/buffer-chest.png"
+    },
+    {
+      "id": "requester-chest",
+      "name": "Requester chest",
+      "kind": "item",
+      "icon": "icons/requester-chest.png"
+    },
+    {
+      "id": "rocket-silo",
+      "name": "Rocket silo",
+      "kind": "item",
+      "icon": "icons/rocket-silo.png"
+    },
+    {
+      "id": "cargo-landing-pad",
+      "name": "Cargo landing pad",
+      "kind": "item",
+      "icon": "icons/cargo-landing-pad.png"
+    },
+    {
+      "id": "roboport",
+      "name": "Roboport",
+      "kind": "item",
+      "icon": "icons/roboport.png"
+    },
+    {
+      "id": "coin",
+      "name": "Coin",
+      "kind": "item",
+      "icon": "icons/coin.png"
+    },
+    {
+      "id": "substation",
+      "name": "Substation",
+      "kind": "item",
+      "icon": "icons/substation.png"
+    },
+    {
+      "id": "beacon",
+      "name": "Beacon",
+      "kind": "item",
+      "icon": "icons/beacon.png"
+    },
+    {
+      "id": "storage-tank",
+      "name": "Storage tank",
+      "kind": "item",
+      "icon": "icons/storage-tank.png"
+    },
+    {
+      "id": "pump",
+      "name": "Pump",
+      "kind": "item",
+      "icon": "icons/pump.png"
+    },
+    {
+      "id": "pumpjack",
+      "name": "Pumpjack",
+      "kind": "item",
+      "icon": "icons/pumpjack.png"
+    },
+    {
+      "id": "oil-refinery",
+      "name": "Oil refinery",
+      "kind": "item",
+      "icon": "icons/oil-refinery.png"
+    },
+    {
+      "id": "chemical-plant",
+      "name": "Chemical plant",
+      "kind": "item",
+      "icon": "icons/chemical-plant.png"
+    },
+    {
+      "id": "sulfur",
+      "name": "Sulfur",
+      "kind": "item",
+      "icon": "icons/sulfur.png"
+    },
+    {
+      "id": "barrel",
+      "name": "Barrel",
+      "kind": "item",
+      "icon": "icons/barrel.png"
+    },
+    {
+      "id": "plastic-bar",
+      "name": "Plastic bar",
+      "kind": "item",
+      "icon": "icons/plastic-bar.png"
+    },
+    {
+      "id": "electric-engine-unit",
+      "name": "Electric engine unit",
+      "kind": "item",
+      "icon": "icons/electric-engine-unit.png"
+    },
+    {
+      "id": "explosives",
+      "name": "Explosives",
+      "kind": "item",
+      "icon": "icons/explosives.png"
+    },
+    {
+      "id": "battery",
+      "name": "Battery",
+      "kind": "item",
+      "icon": "icons/battery.png"
+    },
+    {
+      "id": "flying-robot-frame",
+      "name": "Flying robot frame",
+      "kind": "item",
+      "icon": "icons/flying-robot-frame.png"
+    },
+    {
+      "id": "low-density-structure",
+      "name": "Low density structure",
+      "kind": "item",
+      "icon": "icons/low-density-structure.png"
+    },
+    {
+      "id": "nuclear-fuel",
+      "name": "Nuclear fuel",
+      "kind": "item",
+      "icon": "icons/nuclear-fuel.png"
+    },
+    {
+      "id": "rocket-part",
+      "name": "Rocket part",
+      "kind": "item",
+      "icon": "icons/rocket-part.png"
+    },
+    {
+      "id": "electric-energy-interface",
+      "name": "Electric energy interface",
+      "kind": "item",
+      "icon": "icons/electric-energy-interface.png"
+    },
+    {
+      "id": "heat-interface",
+      "name": "Heat interface",
+      "kind": "item",
+      "icon": "icons/heat-interface.png"
+    },
+    {
+      "id": "nuclear-reactor",
+      "name": "Nuclear reactor",
+      "kind": "item",
+      "icon": "icons/nuclear-reactor.png"
+    },
+    {
+      "id": "uranium-235",
+      "name": "Uranium-235",
+      "kind": "item",
+      "icon": "icons/uranium-235.png"
+    },
+    {
+      "id": "uranium-238",
+      "name": "Uranium-238",
+      "kind": "item",
+      "icon": "icons/uranium-238.png"
+    },
+    {
+      "id": "centrifuge",
+      "name": "Centrifuge",
+      "kind": "item",
+      "icon": "icons/centrifuge.png"
+    },
+    {
+      "id": "uranium-fuel-cell",
+      "name": "Uranium fuel cell",
+      "kind": "item",
+      "icon": "icons/uranium-fuel-cell.png"
+    },
+    {
+      "id": "depleted-uranium-fuel-cell",
+      "name": "Depleted uranium fuel cell",
+      "kind": "item",
+      "icon": "icons/depleted-uranium-fuel-cell.png"
+    },
+    {
+      "id": "heat-exchanger",
+      "name": "Heat exchanger",
+      "kind": "item",
+      "icon": "icons/heat-exchanger.png"
+    },
+    {
+      "id": "steam-turbine",
+      "name": "Steam turbine",
+      "kind": "item",
+      "icon": "icons/steam-turbine.png"
+    },
+    {
+      "id": "heat-pipe",
+      "name": "Heat pipe",
+      "kind": "item",
+      "icon": "icons/heat-pipe.png"
+    },
+    {
+      "id": "simple-entity-with-force",
+      "name": "Simple entity with force",
+      "kind": "item",
+      "icon": "icons/simple-entity-with-force.png"
+    },
+    {
+      "id": "simple-entity-with-owner",
+      "name": "Simple entity with owner",
+      "kind": "item",
+      "icon": "icons/simple-entity-with-owner.png"
+    },
+    {
+      "id": "infinity-chest",
+      "name": "Infinity chest",
+      "kind": "item",
+      "icon": "icons/infinity-chest.png"
+    },
+    {
+      "id": "infinity-cargo-wagon",
+      "name": "Infinity cargo wagon",
+      "kind": "item",
+      "icon": "icons/infinity-cargo-wagon.png"
+    },
+    {
+      "id": "infinity-pipe",
+      "name": "Infinity pipe",
+      "kind": "item",
+      "icon": "icons/infinity-pipe.png"
+    },
+    {
+      "id": "burner-generator",
+      "name": "Burner generator",
+      "kind": "item",
+      "icon": "icons/burner-generator.png"
+    },
+    {
+      "id": "linked-chest",
+      "name": "Linked chest",
+      "kind": "item",
+      "icon": "icons/linked-chest.png"
+    },
+    {
+      "id": "proxy-container",
+      "name": "Proxy container",
+      "kind": "item",
+      "icon": "icons/proxy-container.png"
+    },
+    {
+      "id": "bottomless-chest",
+      "name": "Bottomless chest",
+      "kind": "item",
+      "icon": "icons/bottomless-chest.png"
+    },
+    {
+      "id": "linked-belt",
+      "name": "Linked belt",
+      "kind": "item",
+      "icon": "icons/linked-belt.png"
+    },
+    {
+      "id": "one-way-valve",
+      "name": "One-way valve",
+      "kind": "item",
+      "icon": "icons/one-way-valve.png"
+    },
+    {
+      "id": "overflow-valve",
+      "name": "Overflow valve",
+      "kind": "item",
+      "icon": "icons/overflow-valve.png"
+    },
+    {
+      "id": "top-up-valve",
+      "name": "Top-up valve",
+      "kind": "item",
+      "icon": "icons/top-up-valve.png"
+    },
+    {
+      "id": "land-mine",
+      "name": "Land mine",
+      "kind": "item",
+      "icon": "icons/land-mine.png"
+    },
+    {
+      "id": "solar-panel-equipment",
+      "name": "Portable solar panel",
+      "kind": "item",
+      "icon": "icons/solar-panel-equipment.png"
+    },
+    {
+      "id": "fission-reactor-equipment",
+      "name": "Portable fission reactor",
+      "kind": "item",
+      "icon": "icons/fission-reactor-equipment.png"
+    },
+    {
+      "id": "electric-energy-interface-equipment",
+      "name": "Electric energy interface equipment",
+      "kind": "item",
+      "icon": "icons/electric-energy-interface-equipment.png"
+    },
+    {
+      "id": "battery-equipment",
+      "name": "Personal battery",
+      "kind": "item",
+      "icon": "icons/battery-equipment.png"
+    },
+    {
+      "id": "battery-mk2-equipment",
+      "name": "Personal battery MK2",
+      "kind": "item",
+      "icon": "icons/battery-mk2-equipment.png"
+    },
+    {
+      "id": "belt-immunity-equipment",
+      "name": "Belt immunity equipment",
+      "kind": "item",
+      "icon": "icons/belt-immunity-equipment.png"
+    },
+    {
+      "id": "exoskeleton-equipment",
+      "name": "Exoskeleton",
+      "kind": "item",
+      "icon": "icons/exoskeleton-equipment.png"
+    },
+    {
+      "id": "personal-roboport-equipment",
+      "name": "Personal roboport",
+      "kind": "item",
+      "icon": "icons/personal-roboport-equipment.png"
+    },
+    {
+      "id": "personal-roboport-mk2-equipment",
+      "name": "Personal roboport MK2",
+      "kind": "item",
+      "icon": "icons/personal-roboport-mk2-equipment.png"
+    },
+    {
+      "id": "night-vision-equipment",
+      "name": "Nightvision",
+      "kind": "item",
+      "icon": "icons/night-vision-equipment.png"
+    },
+    {
+      "id": "energy-shield-equipment",
+      "name": "Energy shield",
+      "kind": "item",
+      "icon": "icons/energy-shield-equipment.png"
+    },
+    {
+      "id": "energy-shield-mk2-equipment",
+      "name": "Energy shield MK2",
+      "kind": "item",
+      "icon": "icons/energy-shield-mk2-equipment.png"
+    },
+    {
+      "id": "personal-laser-defense-equipment",
+      "name": "Personal laser defense",
+      "kind": "item",
+      "icon": "icons/personal-laser-defense-equipment.png"
+    },
+    {
+      "id": "discharge-defense-equipment",
+      "name": "Discharge defense",
+      "kind": "item",
+      "icon": "icons/discharge-defense-equipment.png"
+    },
+    {
+      "id": "gun-turret",
+      "name": "Gun turret",
+      "kind": "item",
+      "icon": "icons/gun-turret.png"
+    },
+    {
+      "id": "laser-turret",
+      "name": "Laser turret",
+      "kind": "item",
+      "icon": "icons/laser-turret.png"
+    },
+    {
+      "id": "flamethrower-turret",
+      "name": "Flamethrower turret",
+      "kind": "item",
+      "icon": "icons/flamethrower-turret.png"
+    },
+    {
+      "id": "artillery-turret",
+      "name": "Artillery turret",
+      "kind": "item",
+      "icon": "icons/artillery-turret.png"
+    },
+    {
+      "id": "arithmetic-combinator",
+      "name": "Arithmetic combinator",
+      "kind": "item",
+      "icon": "icons/arithmetic-combinator.png"
+    },
+    {
+      "id": "decider-combinator",
+      "name": "Decider combinator",
+      "kind": "item",
+      "icon": "icons/decider-combinator.png"
+    },
+    {
+      "id": "constant-combinator",
+      "name": "Constant combinator",
+      "kind": "item",
+      "icon": "icons/constant-combinator.png"
+    },
+    {
+      "id": "selector-combinator",
+      "name": "Selector combinator",
+      "kind": "item",
+      "icon": "icons/selector-combinator.png"
+    },
+    {
+      "id": "power-switch",
+      "name": "Power switch",
+      "kind": "item",
+      "icon": "icons/power-switch.png"
+    },
+    {
+      "id": "programmable-speaker",
+      "name": "Programmable speaker",
+      "kind": "item",
+      "icon": "icons/programmable-speaker.png"
+    },
+    {
+      "id": "display-panel",
+      "name": "Display panel",
+      "kind": "item",
+      "icon": "icons/display-panel.png"
+    },
+    {
+      "id": "science",
+      "name": "Science",
+      "kind": "item",
+      "icon": "icons/science.png"
+    },
+    {
+      "id": "rail-support",
+      "name": "Rail support",
+      "kind": "item",
+      "icon": "icons/rail-support.png"
+    },
+    {
+      "id": "recycler",
+      "name": "Recycler",
+      "kind": "item",
+      "icon": "icons/recycler.png"
+    },
+    {
+      "id": "space-platform-foundation",
+      "name": "Space platform foundation",
+      "kind": "item",
+      "icon": "icons/space-platform-foundation.png",
+      "spaceAge": true
+    },
+    {
+      "id": "metallurgic-science-pack",
+      "name": "Metallurgic science pack",
+      "kind": "item",
+      "icon": "icons/metallurgic-science-pack.png",
+      "spaceAge": true
+    },
+    {
+      "id": "agricultural-science-pack",
+      "name": "Agricultural science pack",
+      "kind": "item",
+      "icon": "icons/agricultural-science-pack.png",
+      "spaceAge": true
+    },
+    {
+      "id": "electromagnetic-science-pack",
+      "name": "Electromagnetic science pack",
+      "kind": "item",
+      "icon": "icons/electromagnetic-science-pack.png",
+      "spaceAge": true
+    },
+    {
+      "id": "cryogenic-science-pack",
+      "name": "Cryogenic science pack",
+      "kind": "item",
+      "icon": "icons/cryogenic-science-pack.png",
+      "spaceAge": true
+    },
+    {
+      "id": "promethium-science-pack",
+      "name": "Promethium science pack",
+      "kind": "item",
+      "icon": "icons/promethium-science-pack.png",
+      "spaceAge": true
+    },
+    {
+      "id": "turbo-transport-belt",
+      "name": "Turbo transport belt",
+      "kind": "item",
+      "icon": "icons/turbo-transport-belt.png",
+      "spaceAge": true
+    },
+    {
+      "id": "turbo-underground-belt",
+      "name": "Turbo underground belt",
+      "kind": "item",
+      "icon": "icons/turbo-underground-belt.png",
+      "spaceAge": true
+    },
+    {
+      "id": "turbo-splitter",
+      "name": "Turbo splitter",
+      "kind": "item",
+      "icon": "icons/turbo-splitter.png",
+      "spaceAge": true
+    },
+    {
+      "id": "turbo-loader",
+      "name": "Turbo loader",
+      "kind": "item",
+      "icon": "icons/turbo-loader.png",
+      "spaceAge": true
+    },
+    {
+      "id": "toolbelt-equipment",
+      "name": "Toolbelt equipment",
+      "kind": "item",
+      "icon": "icons/toolbelt-equipment.png",
+      "spaceAge": true
+    },
+    {
+      "id": "battery-mk3-equipment",
+      "name": "Personal battery MK3",
+      "kind": "item",
+      "icon": "icons/battery-mk3-equipment.png",
+      "spaceAge": true
+    },
+    {
+      "id": "cargo-bay",
+      "name": "Cargo bay",
+      "kind": "item",
+      "icon": "icons/cargo-bay.png",
+      "spaceAge": true
+    },
+    {
+      "id": "landing-pad-unloading-bay",
+      "name": "Landing pad unloading bay",
+      "kind": "item",
+      "icon": "icons/landing-pad-unloading-bay.png",
+      "spaceAge": true
+    },
+    {
+      "id": "metallic-asteroid-chunk",
+      "name": "Metallic asteroid chunk",
+      "kind": "item",
+      "icon": "icons/metallic-asteroid-chunk.png",
+      "spaceAge": true
+    },
+    {
+      "id": "carbonic-asteroid-chunk",
+      "name": "Carbonic asteroid chunk",
+      "kind": "item",
+      "icon": "icons/carbonic-asteroid-chunk.png",
+      "spaceAge": true
+    },
+    {
+      "id": "oxide-asteroid-chunk",
+      "name": "Oxide asteroid chunk",
+      "kind": "item",
+      "icon": "icons/oxide-asteroid-chunk.png",
+      "spaceAge": true
+    },
+    {
+      "id": "promethium-asteroid-chunk",
+      "name": "Promethium asteroid chunk",
+      "kind": "item",
+      "icon": "icons/promethium-asteroid-chunk.png",
+      "spaceAge": true
+    },
+    {
+      "id": "asteroid-collector",
+      "name": "Asteroid collector",
+      "kind": "item",
+      "icon": "icons/asteroid-collector.png",
+      "spaceAge": true
+    },
+    {
+      "id": "crusher",
+      "name": "Crusher",
+      "kind": "item",
+      "icon": "icons/crusher.png",
+      "spaceAge": true
+    },
+    {
+      "id": "thruster",
+      "name": "Thruster",
+      "kind": "item",
+      "icon": "icons/thruster.png",
+      "spaceAge": true
+    },
+    {
+      "id": "ice",
+      "name": "Ice",
+      "kind": "item",
+      "icon": "icons/ice.png",
+      "spaceAge": true
+    },
+    {
+      "id": "carbon",
+      "name": "Carbon",
+      "kind": "item",
+      "icon": "icons/carbon.png",
+      "spaceAge": true
+    },
+    {
+      "id": "calcite",
+      "name": "Calcite",
+      "kind": "item",
+      "icon": "icons/calcite.png",
+      "spaceAge": true
+    },
+    {
+      "id": "tungsten-ore",
+      "name": "Tungsten ore",
+      "kind": "item",
+      "icon": "icons/tungsten-ore.png",
+      "spaceAge": true
+    },
+    {
+      "id": "tungsten-plate",
+      "name": "Tungsten plate",
+      "kind": "item",
+      "icon": "icons/tungsten-plate.png",
+      "spaceAge": true
+    },
+    {
+      "id": "big-mining-drill",
+      "name": "Big mining drill",
+      "kind": "item",
+      "icon": "icons/big-mining-drill.png",
+      "spaceAge": true
+    },
+    {
+      "id": "tungsten-carbide",
+      "name": "Tungsten carbide",
+      "kind": "item",
+      "icon": "icons/tungsten-carbide.png",
+      "spaceAge": true
+    },
+    {
+      "id": "foundry",
+      "name": "Foundry",
+      "kind": "item",
+      "icon": "icons/foundry.png",
+      "spaceAge": true
+    },
+    {
+      "id": "railgun-turret",
+      "name": "Railgun turret",
+      "kind": "item",
+      "icon": "icons/railgun-turret.png",
+      "spaceAge": true
+    },
+    {
+      "id": "copper-bacteria",
+      "name": "Copper bacteria",
+      "kind": "item",
+      "icon": "icons/copper-bacteria.png",
+      "spaceAge": true
+    },
+    {
+      "id": "iron-bacteria",
+      "name": "Iron bacteria",
+      "kind": "item",
+      "icon": "icons/iron-bacteria.png",
+      "spaceAge": true
+    },
+    {
+      "id": "yumako-seed",
+      "name": "Yumako seed",
+      "kind": "item",
+      "icon": "icons/yumako-seed.png",
+      "spaceAge": true
+    },
+    {
+      "id": "jellynut-seed",
+      "name": "Jellynut seed",
+      "kind": "item",
+      "icon": "icons/jellynut-seed.png",
+      "spaceAge": true
+    },
+    {
+      "id": "nutrients",
+      "name": "Nutrients",
+      "kind": "item",
+      "icon": "icons/nutrients.png",
+      "spaceAge": true
+    },
+    {
+      "id": "artificial-yumako-soil",
+      "name": "Artificial yumako soil",
+      "kind": "item",
+      "icon": "icons/artificial-yumako-soil.png",
+      "spaceAge": true
+    },
+    {
+      "id": "overgrowth-yumako-soil",
+      "name": "Overgrowth yumako soil",
+      "kind": "item",
+      "icon": "icons/overgrowth-yumako-soil.png",
+      "spaceAge": true
+    },
+    {
+      "id": "artificial-jellynut-soil",
+      "name": "Artificial jellynut soil",
+      "kind": "item",
+      "icon": "icons/artificial-jellynut-soil.png",
+      "spaceAge": true
+    },
+    {
+      "id": "overgrowth-jellynut-soil",
+      "name": "Overgrowth jellynut soil",
+      "kind": "item",
+      "icon": "icons/overgrowth-jellynut-soil.png",
+      "spaceAge": true
+    },
+    {
+      "id": "agricultural-tower",
+      "name": "Agricultural tower",
+      "kind": "item",
+      "icon": "icons/agricultural-tower.png",
+      "spaceAge": true
+    },
+    {
+      "id": "biochamber",
+      "name": "Biochamber",
+      "kind": "item",
+      "icon": "icons/biochamber.png",
+      "spaceAge": true
+    },
+    {
+      "id": "biolab",
+      "name": "Biolab",
+      "kind": "item",
+      "icon": "icons/biolab.png",
+      "spaceAge": true
+    },
+    {
+      "id": "captive-biter-spawner",
+      "name": "Captive biter spawner",
+      "kind": "item",
+      "icon": "icons/captive-biter-spawner.png",
+      "spaceAge": true
+    },
+    {
+      "id": "biter-egg",
+      "name": "Biter egg",
+      "kind": "item",
+      "icon": "icons/biter-egg.png",
+      "spaceAge": true
+    },
+    {
+      "id": "pentapod-egg",
+      "name": "Pentapod egg",
+      "kind": "item",
+      "icon": "icons/pentapod-egg.png",
+      "spaceAge": true
+    },
+    {
+      "id": "carbon-fiber",
+      "name": "Carbon fiber",
+      "kind": "item",
+      "icon": "icons/carbon-fiber.png",
+      "spaceAge": true
+    },
+    {
+      "id": "stack-inserter",
+      "name": "Stack inserter",
+      "kind": "item",
+      "icon": "icons/stack-inserter.png",
+      "spaceAge": true
+    },
+    {
+      "id": "rocket-turret",
+      "name": "Rocket turret",
+      "kind": "item",
+      "icon": "icons/rocket-turret.png",
+      "spaceAge": true
+    },
+    {
+      "id": "holmium-ore",
+      "name": "Holmium ore",
+      "kind": "item",
+      "icon": "icons/holmium-ore.png",
+      "spaceAge": true
+    },
+    {
+      "id": "holmium-plate",
+      "name": "Holmium plate",
+      "kind": "item",
+      "icon": "icons/holmium-plate.png",
+      "spaceAge": true
+    },
+    {
+      "id": "lithium",
+      "name": "Lithium",
+      "kind": "item",
+      "icon": "icons/lithium.png",
+      "spaceAge": true
+    },
+    {
+      "id": "lithium-plate",
+      "name": "Lithium plate",
+      "kind": "item",
+      "icon": "icons/lithium-plate.png",
+      "spaceAge": true
+    },
+    {
+      "id": "scrap",
+      "name": "Scrap",
+      "kind": "item",
+      "icon": "icons/scrap.png",
+      "spaceAge": true
+    },
+    {
+      "id": "lightning-rod",
+      "name": "Lightning rod",
+      "kind": "item",
+      "icon": "icons/lightning-rod.png",
+      "spaceAge": true
+    },
+    {
+      "id": "lightning-collector",
+      "name": "Lightning collector",
+      "kind": "item",
+      "icon": "icons/lightning-collector.png",
+      "spaceAge": true
+    },
+    {
+      "id": "heating-tower",
+      "name": "Heating tower",
+      "kind": "item",
+      "icon": "icons/heating-tower.png",
+      "spaceAge": true
+    },
+    {
+      "id": "electromagnetic-plant",
+      "name": "Electromagnetic plant",
+      "kind": "item",
+      "icon": "icons/electromagnetic-plant.png",
+      "spaceAge": true
+    },
+    {
+      "id": "superconductor",
+      "name": "Superconductor",
+      "kind": "item",
+      "icon": "icons/superconductor.png",
+      "spaceAge": true
+    },
+    {
+      "id": "supercapacitor",
+      "name": "Supercapacitor",
+      "kind": "item",
+      "icon": "icons/supercapacitor.png",
+      "spaceAge": true
+    },
+    {
+      "id": "tesla-turret",
+      "name": "Tesla turret",
+      "kind": "item",
+      "icon": "icons/tesla-turret.png",
+      "spaceAge": true
+    },
+    {
+      "id": "quantum-processor",
+      "name": "Quantum processor",
+      "kind": "item",
+      "icon": "icons/quantum-processor.png",
+      "spaceAge": true
+    },
+    {
+      "id": "fusion-reactor-equipment",
+      "name": "Portable fusion reactor",
+      "kind": "item",
+      "icon": "icons/fusion-reactor-equipment.png",
+      "spaceAge": true
+    },
+    {
+      "id": "fusion-power-cell",
+      "name": "Fusion power cell",
+      "kind": "item",
+      "icon": "icons/fusion-power-cell.png",
+      "spaceAge": true
+    },
+    {
+      "id": "fusion-reactor",
+      "name": "Fusion reactor",
+      "kind": "item",
+      "icon": "icons/fusion-reactor.png",
+      "spaceAge": true
+    },
+    {
+      "id": "fusion-generator",
+      "name": "Fusion generator",
+      "kind": "item",
+      "icon": "icons/fusion-generator.png",
+      "spaceAge": true
+    },
+    {
+      "id": "cryogenic-plant",
+      "name": "Cryogenic plant",
+      "kind": "item",
+      "icon": "icons/cryogenic-plant.png",
+      "spaceAge": true
+    },
+    {
+      "id": "spoilage",
+      "name": "Spoilage",
+      "kind": "item",
+      "icon": "icons/spoilage.png",
+      "spaceAge": true
+    },
+    {
+      "id": "ice-platform",
+      "name": "Ice platform",
+      "kind": "item",
+      "icon": "icons/ice-platform.png",
+      "spaceAge": true
+    },
+    {
+      "id": "foundation",
+      "name": "Foundation",
+      "kind": "item",
+      "icon": "icons/foundation.png",
+      "spaceAge": true
+    },
+    {
+      "id": "space-platform-hub",
+      "name": "Space platform hub",
+      "kind": "item",
+      "icon": "icons/space-platform-hub.png",
+      "spaceAge": true
+    },
+    {
+      "id": "tree-seed",
+      "name": "Tree seed",
+      "kind": "item",
+      "icon": "icons/tree-seed.png",
+      "spaceAge": true
+    },
+    {
+      "id": "water-barrel",
+      "name": "Water barrel",
+      "kind": "item",
+      "icon": "icons/water-barrel.png"
+    },
+    {
+      "id": "sulfuric-acid-barrel",
+      "name": "Sulfuric acid barrel",
+      "kind": "item",
+      "icon": "icons/sulfuric-acid-barrel.png"
+    },
+    {
+      "id": "crude-oil-barrel",
+      "name": "Crude oil barrel",
+      "kind": "item",
+      "icon": "icons/crude-oil-barrel.png"
+    },
+    {
+      "id": "heavy-oil-barrel",
+      "name": "Heavy oil barrel",
+      "kind": "item",
+      "icon": "icons/heavy-oil-barrel.png"
+    },
+    {
+      "id": "light-oil-barrel",
+      "name": "Light oil barrel",
+      "kind": "item",
+      "icon": "icons/light-oil-barrel.png"
+    },
+    {
+      "id": "petroleum-gas-barrel",
+      "name": "Petroleum gas barrel",
+      "kind": "item",
+      "icon": "icons/petroleum-gas-barrel.png"
+    },
+    {
+      "id": "lubricant-barrel",
+      "name": "Lubricant barrel",
+      "kind": "item",
+      "icon": "icons/lubricant-barrel.png"
+    },
+    {
+      "id": "fluoroketone-cold-barrel",
+      "name": "Fluoroketone (Cold) barrel",
+      "kind": "item",
+      "icon": "icons/fluoroketone-cold-barrel.png"
+    },
+    {
+      "id": "fluoroketone-hot-barrel",
+      "name": "Fluoroketone (Hot) barrel",
+      "kind": "item",
+      "icon": "icons/fluoroketone-hot-barrel.png"
+    },
+    {
+      "id": "water",
+      "name": "Water",
+      "kind": "fluid",
+      "icon": "icons/fluid/water.png"
+    },
+    {
+      "id": "steam",
+      "name": "Steam",
+      "kind": "fluid",
+      "icon": "icons/fluid/steam.png"
+    },
+    {
+      "id": "sulfuric-acid",
+      "name": "Sulfuric Acid",
+      "kind": "fluid",
+      "icon": "icons/fluid/sulfuric-acid.png"
+    },
+    {
+      "id": "crude-oil",
+      "name": "Crude Oil",
+      "kind": "fluid",
+      "icon": "icons/fluid/crude-oil.png"
+    },
+    {
+      "id": "heavy-oil",
+      "name": "Heavy Oil",
+      "kind": "fluid",
+      "icon": "icons/fluid/heavy-oil.png"
+    },
+    {
+      "id": "light-oil",
+      "name": "Light Oil",
+      "kind": "fluid",
+      "icon": "icons/fluid/light-oil.png"
+    },
+    {
+      "id": "petroleum-gas",
+      "name": "Petroleum Gas",
+      "kind": "fluid",
+      "icon": "icons/fluid/petroleum-gas.png"
+    },
+    {
+      "id": "lubricant",
+      "name": "Lubricant",
+      "kind": "fluid",
+      "icon": "icons/fluid/lubricant.png"
+    },
+    {
+      "id": "ammoniacal-solution",
+      "name": "Ammoniacal Solution",
+      "kind": "fluid",
+      "icon": "icons/fluid/ammoniacal-solution.png",
+      "spaceAge": true
+    },
+    {
+      "id": "ammonia",
+      "name": "Ammonia",
+      "kind": "fluid",
+      "icon": "icons/fluid/ammonia.png",
+      "spaceAge": true
+    },
+    {
+      "id": "fluorine",
+      "name": "Fluorine",
+      "kind": "fluid",
+      "icon": "icons/fluid/fluorine.png",
+      "spaceAge": true
+    },
+    {
+      "id": "fluoroketone-cold",
+      "name": "Fluoroketone Cold",
+      "kind": "fluid",
+      "icon": "icons/fluid/fluoroketone-cold.png",
+      "spaceAge": true
+    },
+    {
+      "id": "fluoroketone-hot",
+      "name": "Fluoroketone Hot",
+      "kind": "fluid",
+      "icon": "icons/fluid/fluoroketone-hot.png",
+      "spaceAge": true
+    },
+    {
+      "id": "holmium-solution",
+      "name": "Holmium Solution",
+      "kind": "fluid",
+      "icon": "icons/fluid/holmium-solution.png",
+      "spaceAge": true
+    },
+    {
+      "id": "electrolyte",
+      "name": "Electrolyte",
+      "kind": "fluid",
+      "icon": "icons/fluid/electrolyte.png",
+      "spaceAge": true
+    },
+    {
+      "id": "lithium-brine",
+      "name": "Lithium Brine",
+      "kind": "fluid",
+      "icon": "icons/fluid/lithium-brine.png",
+      "spaceAge": true
+    },
+    {
+      "id": "lava",
+      "name": "Lava",
+      "kind": "fluid",
+      "icon": "icons/fluid/lava.png",
+      "spaceAge": true
+    },
+    {
+      "id": "molten-iron",
+      "name": "Molten Iron",
+      "kind": "fluid",
+      "icon": "icons/fluid/molten-iron.png",
+      "spaceAge": true
+    },
+    {
+      "id": "molten-copper",
+      "name": "Molten Copper",
+      "kind": "fluid",
+      "icon": "icons/fluid/molten-copper.png",
+      "spaceAge": true
+    },
+    {
+      "id": "thruster-fuel",
+      "name": "Thruster Fuel",
+      "kind": "fluid",
+      "icon": "icons/fluid/thruster-fuel.png",
+      "spaceAge": true
+    },
+    {
+      "id": "thruster-oxidizer",
+      "name": "Thruster Oxidizer",
+      "kind": "fluid",
+      "icon": "icons/fluid/thruster-oxidizer.png",
+      "spaceAge": true
+    },
+    {
+      "id": "fusion-plasma",
+      "name": "Fusion Plasma",
+      "kind": "fluid",
+      "icon": "icons/fluid/fusion-plasma.png",
+      "spaceAge": true
+    },
+    {
+      "id": "speed-module",
+      "name": "Speed module",
+      "kind": "item",
+      "icon": "icons/speed-module.png"
+    },
+    {
+      "id": "speed-module-2",
+      "name": "Speed module 2",
+      "kind": "item",
+      "icon": "icons/speed-module-2.png"
+    },
+    {
+      "id": "speed-module-3",
+      "name": "Speed module 3",
+      "kind": "item",
+      "icon": "icons/speed-module-3.png"
+    },
+    {
+      "id": "productivity-module",
+      "name": "Productivity module",
+      "kind": "item",
+      "icon": "icons/productivity-module.png"
+    },
+    {
+      "id": "productivity-module-2",
+      "name": "Productivity module 2",
+      "kind": "item",
+      "icon": "icons/productivity-module-2.png"
+    },
+    {
+      "id": "productivity-module-3",
+      "name": "Productivity module 3",
+      "kind": "item",
+      "icon": "icons/productivity-module-3.png"
+    },
+    {
+      "id": "efficiency-module",
+      "name": "Efficiency module",
+      "kind": "item",
+      "icon": "icons/efficiency-module.png"
+    },
+    {
+      "id": "efficiency-module-2",
+      "name": "Efficiency module 2",
+      "kind": "item",
+      "icon": "icons/efficiency-module-2.png"
+    },
+    {
+      "id": "efficiency-module-3",
+      "name": "Efficiency module 3",
+      "kind": "item",
+      "icon": "icons/efficiency-module-3.png"
+    },
+    {
+      "id": "pistol",
+      "name": "Pistol",
+      "kind": "item",
+      "icon": "icons/pistol.png"
+    },
+    {
+      "id": "submachine-gun",
+      "name": "Submachine gun",
+      "kind": "item",
+      "icon": "icons/submachine-gun.png"
+    },
+    {
+      "id": "firearm-magazine",
+      "name": "Firearm magazine",
+      "kind": "item",
+      "icon": "icons/firearm-magazine.png"
+    },
+    {
+      "id": "light-armor",
+      "name": "Light armor",
+      "kind": "item",
+      "icon": "icons/light-armor.png"
+    },
+    {
+      "id": "repair-pack",
+      "name": "Repair pack",
+      "kind": "item",
+      "icon": "icons/repair-pack.png"
+    },
+    {
+      "id": "car",
+      "name": "Car",
+      "kind": "item",
+      "icon": "icons/car.png"
+    },
+    {
+      "id": "shotgun",
+      "name": "Shotgun",
+      "kind": "item",
+      "icon": "icons/shotgun.png"
+    },
+    {
+      "id": "shotgun-shell",
+      "name": "Shotgun shells",
+      "kind": "item",
+      "icon": "icons/shotgun-shell.png"
+    },
+    {
+      "id": "piercing-rounds-magazine",
+      "name": "Piercing rounds magazine",
+      "kind": "item",
+      "icon": "icons/piercing-rounds-magazine.png"
+    },
+    {
+      "id": "grenade",
+      "name": "Grenade",
+      "kind": "item",
+      "icon": "icons/grenade.png"
+    },
+    {
+      "id": "heavy-armor",
+      "name": "Heavy armor",
+      "kind": "item",
+      "icon": "icons/heavy-armor.png"
+    },
+    {
+      "id": "rail",
+      "name": "Rail",
+      "kind": "item",
+      "icon": "icons/rail.png"
+    },
+    {
+      "id": "locomotive",
+      "name": "Locomotive",
+      "kind": "item",
+      "icon": "icons/locomotive.png"
+    },
+    {
+      "id": "cargo-wagon",
+      "name": "Cargo wagon",
+      "kind": "item",
+      "icon": "icons/cargo-wagon.png"
+    },
+    {
+      "id": "poison-capsule",
+      "name": "Poison capsule",
+      "kind": "item",
+      "icon": "icons/poison-capsule.png"
+    },
+    {
+      "id": "slowdown-capsule",
+      "name": "Slowdown capsule",
+      "kind": "item",
+      "icon": "icons/slowdown-capsule.png"
+    },
+    {
+      "id": "cluster-grenade",
+      "name": "Cluster grenade",
+      "kind": "item",
+      "icon": "icons/cluster-grenade.png"
+    },
+    {
+      "id": "defender-capsule",
+      "name": "Defender capsule",
+      "kind": "item",
+      "icon": "icons/defender-capsule.png"
+    },
+    {
+      "id": "distractor-capsule",
+      "name": "Distractor capsule",
+      "kind": "item",
+      "icon": "icons/distractor-capsule.png"
+    },
+    {
+      "id": "destroyer-capsule",
+      "name": "Destroyer capsule",
+      "kind": "item",
+      "icon": "icons/destroyer-capsule.png"
+    },
+    {
+      "id": "cliff-explosives",
+      "name": "Cliff explosives",
+      "kind": "item",
+      "icon": "icons/cliff-explosives.png"
+    },
+    {
+      "id": "uranium-rounds-magazine",
+      "name": "Uranium rounds magazine",
+      "kind": "item",
+      "icon": "icons/uranium-rounds-magazine.png"
+    },
+    {
+      "id": "rocket",
+      "name": "Rocket",
+      "kind": "item",
+      "icon": "icons/rocket.png"
+    },
+    {
+      "id": "explosive-rocket",
+      "name": "Explosive rocket",
+      "kind": "item",
+      "icon": "icons/explosive-rocket.png"
+    },
+    {
+      "id": "atomic-bomb",
+      "name": "Atomic bomb",
+      "kind": "item",
+      "icon": "icons/atomic-bomb.png"
+    },
+    {
+      "id": "piercing-shotgun-shell",
+      "name": "Piercing shotgun shells",
+      "kind": "item",
+      "icon": "icons/piercing-shotgun-shell.png"
+    },
+    {
+      "id": "cannon-shell",
+      "name": "Cannon shell",
+      "kind": "item",
+      "icon": "icons/cannon-shell.png"
+    },
+    {
+      "id": "explosive-cannon-shell",
+      "name": "Explosive cannon shell",
+      "kind": "item",
+      "icon": "icons/explosive-cannon-shell.png"
+    },
+    {
+      "id": "uranium-cannon-shell",
+      "name": "Uranium cannon shell",
+      "kind": "item",
+      "icon": "icons/uranium-cannon-shell.png"
+    },
+    {
+      "id": "explosive-uranium-cannon-shell",
+      "name": "Explosive uranium cannon shell",
+      "kind": "item",
+      "icon": "icons/explosive-uranium-cannon-shell.png"
+    },
+    {
+      "id": "artillery-shell",
+      "name": "Artillery shell",
+      "kind": "item",
+      "icon": "icons/artillery-shell.png"
+    },
+    {
+      "id": "flamethrower-ammo",
+      "name": "Flamethrower ammo",
+      "kind": "item",
+      "icon": "icons/flamethrower-ammo.png"
+    },
+    {
+      "id": "tank",
+      "name": "Tank",
+      "kind": "item",
+      "icon": "icons/tank.png"
+    },
+    {
+      "id": "raw-fish",
+      "name": "Raw fish",
+      "kind": "item",
+      "icon": "icons/raw-fish.png"
+    },
+    {
+      "id": "spidertron",
+      "name": "Spidertron",
+      "kind": "item",
+      "icon": "icons/spidertron.png"
+    },
+    {
+      "id": "fluid-wagon",
+      "name": "Fluid wagon",
+      "kind": "item",
+      "icon": "icons/fluid-wagon.png"
+    },
+    {
+      "id": "artillery-wagon",
+      "name": "Artillery wagon",
+      "kind": "item",
+      "icon": "icons/artillery-wagon.png"
+    },
+    {
+      "id": "modular-armor",
+      "name": "Modular armor",
+      "kind": "item",
+      "icon": "icons/modular-armor.png"
+    },
+    {
+      "id": "power-armor",
+      "name": "Power armor",
+      "kind": "item",
+      "icon": "icons/power-armor.png"
+    },
+    {
+      "id": "power-armor-mk2",
+      "name": "Power armor MK2",
+      "kind": "item",
+      "icon": "icons/power-armor-mk2.png"
+    },
+    {
+      "id": "flamethrower",
+      "name": "Flamethrower",
+      "kind": "item",
+      "icon": "icons/flamethrower.png"
+    },
+    {
+      "id": "rocket-launcher",
+      "name": "Rocket launcher",
+      "kind": "item",
+      "icon": "icons/rocket-launcher.png"
+    },
+    {
+      "id": "combat-shotgun",
+      "name": "Combat shotgun",
+      "kind": "item",
+      "icon": "icons/combat-shotgun.png"
+    },
+    {
+      "id": "rail-ramp",
+      "name": "Rail ramp",
+      "kind": "item",
+      "icon": "icons/rail-ramp.png"
+    },
+    {
+      "id": "quality-module",
+      "name": "Quality module",
+      "kind": "item",
+      "icon": "icons/quality-module.png"
+    },
+    {
+      "id": "quality-module-2",
+      "name": "Quality module 2",
+      "kind": "item",
+      "icon": "icons/quality-module-2.png"
+    },
+    {
+      "id": "quality-module-3",
+      "name": "Quality module 3",
+      "kind": "item",
+      "icon": "icons/quality-module-3.png"
+    },
+    {
+      "id": "yumako",
+      "name": "Yumako",
+      "kind": "item",
+      "icon": "icons/yumako.png",
+      "spaceAge": true
+    },
+    {
+      "id": "yumako-mash",
+      "name": "Yumako mash",
+      "kind": "item",
+      "icon": "icons/yumako-mash.png",
+      "spaceAge": true
+    },
+    {
+      "id": "jellynut",
+      "name": "Jellynut",
+      "kind": "item",
+      "icon": "icons/jellynut.png",
+      "spaceAge": true
+    },
+    {
+      "id": "jelly",
+      "name": "Jelly",
+      "kind": "item",
+      "icon": "icons/jelly.png",
+      "spaceAge": true
+    },
+    {
+      "id": "bioflux",
+      "name": "Bioflux",
+      "kind": "item",
+      "icon": "icons/bioflux.png",
+      "spaceAge": true
+    },
+    {
+      "id": "space-platform-starter-pack",
+      "name": "Space platform starter pack",
+      "kind": "item",
+      "icon": "icons/space-platform-starter-pack.png",
+      "spaceAge": true
+    },
+    {
+      "id": "mech-armor",
+      "name": "Mech armor",
+      "kind": "item",
+      "icon": "icons/mech-armor.png",
+      "spaceAge": true
+    },
+    {
+      "id": "railgun",
+      "name": "Railgun",
+      "kind": "item",
+      "icon": "icons/railgun.png",
+      "spaceAge": true
+    },
+    {
+      "id": "railgun-ammo",
+      "name": "Railgun ammo",
+      "kind": "item",
+      "icon": "icons/railgun-ammo.png",
+      "spaceAge": true
+    },
+    {
+      "id": "capture-robot-rocket",
+      "name": "Capture bot rocket",
+      "kind": "item",
+      "icon": "icons/capture-robot-rocket.png",
+      "spaceAge": true
+    },
+    {
+      "id": "teslagun",
+      "name": "Tesla gun",
+      "kind": "item",
+      "icon": "icons/teslagun.png",
+      "spaceAge": true
+    },
+    {
+      "id": "tesla-ammo",
+      "name": "Tesla ammo",
+      "kind": "item",
+      "icon": "icons/tesla-ammo.png",
+      "spaceAge": true
+    },
+    {
+      "id": "blueprint",
+      "name": "Blueprint",
+      "kind": "item",
+      "icon": "icons/blueprint.png"
+    },
+    {
+      "id": "blueprint-book",
+      "name": "Blueprint book",
+      "kind": "item",
+      "icon": "icons/blueprint-book.png"
+    },
+    {
+      "id": "deconstruction-planner",
+      "name": "Deconstruction planner",
+      "kind": "item",
+      "icon": "icons/deconstruction-planner.png"
+    },
+    {
+      "id": "selection-tool",
+      "name": "Selection tool",
+      "kind": "item",
+      "icon": "icons/selection-tool.png"
+    },
+    {
+      "id": "upgrade-planner",
+      "name": "Upgrade planner",
+      "kind": "item",
+      "icon": "icons/upgrade-planner.png"
+    }
+  ];
+  var recipes = [
+    {
+      "id": "speed-module",
+      "name": "Speed module",
+      "outputs": [
+        {
+          "material": "speed-module",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "advanced-circuit",
+          "amount": 5
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "speed-module-2",
+      "name": "Speed module 2",
+      "outputs": [
+        {
+          "material": "speed-module-2",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "speed-module",
+          "amount": 4
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 5
+        },
+        {
+          "material": "processing-unit",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "speed-module-3",
+      "name": "Speed module 3",
+      "outputs": [
+        {
+          "material": "speed-module-3",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "speed-module-2",
+          "amount": 4
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 5
+        },
+        {
+          "material": "processing-unit",
+          "amount": 5
+        },
+        {
+          "material": "tungsten-carbide",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "productivity-module",
+      "name": "Productivity module",
+      "outputs": [
+        {
+          "material": "productivity-module",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "advanced-circuit",
+          "amount": 5
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "productivity-module-2",
+      "name": "Productivity module 2",
+      "outputs": [
+        {
+          "material": "productivity-module-2",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "productivity-module",
+          "amount": 4
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 5
+        },
+        {
+          "material": "processing-unit",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "productivity-module-3",
+      "name": "Productivity module 3",
+      "outputs": [
+        {
+          "material": "productivity-module-3",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "productivity-module-2",
+          "amount": 4
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 5
+        },
+        {
+          "material": "processing-unit",
+          "amount": 5
+        },
+        {
+          "material": "biter-egg",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "efficiency-module",
+      "name": "Efficiency module",
+      "outputs": [
+        {
+          "material": "efficiency-module",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "advanced-circuit",
+          "amount": 5
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "efficiency-module-2",
+      "name": "Efficiency module 2",
+      "outputs": [
+        {
+          "material": "efficiency-module-2",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "efficiency-module",
+          "amount": 4
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 5
+        },
+        {
+          "material": "processing-unit",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "efficiency-module-3",
+      "name": "Efficiency module 3",
+      "outputs": [
+        {
+          "material": "efficiency-module-3",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "efficiency-module-2",
+          "amount": 4
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 5
+        },
+        {
+          "material": "processing-unit",
+          "amount": 5
+        },
+        {
+          "material": "spoilage",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "bulk-inserter",
+      "name": "Bulk inserter",
+      "outputs": [
+        {
+          "material": "bulk-inserter",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 15
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 15
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        },
+        {
+          "material": "fast-inserter",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "basic-oil-processing",
+      "name": "Basic oil processing",
+      "outputs": [
+        {
+          "material": "petroleum-gas",
+          "amount": 45
+        }
+      ],
+      "inputs": [
+        {
+          "material": "crude-oil",
+          "amount": 100
+        }
+      ]
+    },
+    {
+      "id": "advanced-oil-processing",
+      "name": "Advanced oil processing",
+      "outputs": [
+        {
+          "material": "heavy-oil",
+          "amount": 25
+        },
+        {
+          "material": "light-oil",
+          "amount": 45
+        },
+        {
+          "material": "petroleum-gas",
+          "amount": 55
+        }
+      ],
+      "inputs": [
+        {
+          "material": "water",
+          "amount": 50
+        },
+        {
+          "material": "crude-oil",
+          "amount": 100
+        }
+      ]
+    },
+    {
+      "id": "coal-liquefaction",
+      "name": "Coal liquefaction",
+      "outputs": [
+        {
+          "material": "heavy-oil",
+          "amount": 90
+        },
+        {
+          "material": "light-oil",
+          "amount": 20
+        },
+        {
+          "material": "petroleum-gas",
+          "amount": 10
+        }
+      ],
+      "inputs": [
+        {
+          "material": "coal",
+          "amount": 10
+        },
+        {
+          "material": "heavy-oil",
+          "amount": 25
+        },
+        {
+          "material": "steam",
+          "amount": 50
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "heavy-oil-cracking",
+      "name": "Heavy oil cracking to light oil",
+      "outputs": [
+        {
+          "material": "light-oil",
+          "amount": 30
+        }
+      ],
+      "inputs": [
+        {
+          "material": "water",
+          "amount": 30
+        },
+        {
+          "material": "heavy-oil",
+          "amount": 40
+        }
+      ]
+    },
+    {
+      "id": "light-oil-cracking",
+      "name": "Light oil cracking to petroleum gas",
+      "outputs": [
+        {
+          "material": "petroleum-gas",
+          "amount": 20
+        }
+      ],
+      "inputs": [
+        {
+          "material": "water",
+          "amount": 30
+        },
+        {
+          "material": "light-oil",
+          "amount": 30
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "sulfuric-acid",
+      "name": "Sulfuric acid",
+      "outputs": [
+        {
+          "material": "sulfuric-acid",
+          "amount": 50
+        }
+      ],
+      "inputs": [
+        {
+          "material": "sulfur",
+          "amount": 5
+        },
+        {
+          "material": "iron-plate",
+          "amount": 1
+        },
+        {
+          "material": "water",
+          "amount": 100
+        }
+      ]
+    },
+    {
+      "id": "plastic-bar",
+      "name": "Plastic bar",
+      "outputs": [
+        {
+          "material": "plastic-bar",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "petroleum-gas",
+          "amount": 20
+        },
+        {
+          "material": "coal",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "solid-fuel-from-light-oil",
+      "name": "Solid fuel from light oil",
+      "outputs": [
+        {
+          "material": "solid-fuel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "light-oil",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "solid-fuel-from-petroleum-gas",
+      "name": "Solid fuel from petroleum gas",
+      "outputs": [
+        {
+          "material": "solid-fuel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "petroleum-gas",
+          "amount": 20
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "solid-fuel-from-heavy-oil",
+      "name": "Solid fuel from heavy oil",
+      "outputs": [
+        {
+          "material": "solid-fuel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "heavy-oil",
+          "amount": 20
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "sulfur",
+      "name": "Sulfur",
+      "outputs": [
+        {
+          "material": "sulfur",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "water",
+          "amount": 30
+        },
+        {
+          "material": "petroleum-gas",
+          "amount": 30
+        }
+      ]
+    },
+    {
+      "id": "lubricant",
+      "name": "Lubricant",
+      "outputs": [
+        {
+          "material": "lubricant",
+          "amount": 10
+        }
+      ],
+      "inputs": [
+        {
+          "material": "heavy-oil",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "barrel",
+      "name": "Barrel",
+      "outputs": [
+        {
+          "material": "barrel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "night-vision-equipment",
+      "name": "Nightvision",
+      "outputs": [
+        {
+          "material": "night-vision-equipment",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "advanced-circuit",
+          "amount": 5
+        },
+        {
+          "material": "steel-plate",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "belt-immunity-equipment",
+      "name": "Belt immunity equipment",
+      "outputs": [
+        {
+          "material": "belt-immunity-equipment",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "advanced-circuit",
+          "amount": 5
+        },
+        {
+          "material": "steel-plate",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "energy-shield-equipment",
+      "name": "Energy shield",
+      "outputs": [
+        {
+          "material": "energy-shield-equipment",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "advanced-circuit",
+          "amount": 5
+        },
+        {
+          "material": "steel-plate",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "energy-shield-mk2-equipment",
+      "name": "Energy shield MK2",
+      "outputs": [
+        {
+          "material": "energy-shield-mk2-equipment",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "energy-shield-equipment",
+          "amount": 10
+        },
+        {
+          "material": "processing-unit",
+          "amount": 5
+        },
+        {
+          "material": "low-density-structure",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "battery-equipment",
+      "name": "Personal battery",
+      "outputs": [
+        {
+          "material": "battery-equipment",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "battery",
+          "amount": 5
+        },
+        {
+          "material": "steel-plate",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "battery-mk2-equipment",
+      "name": "Personal battery MK2",
+      "outputs": [
+        {
+          "material": "battery-mk2-equipment",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "battery-equipment",
+          "amount": 10
+        },
+        {
+          "material": "processing-unit",
+          "amount": 15
+        },
+        {
+          "material": "low-density-structure",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "solar-panel-equipment",
+      "name": "Portable solar panel",
+      "outputs": [
+        {
+          "material": "solar-panel-equipment",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "solar-panel",
+          "amount": 1
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 2
+        },
+        {
+          "material": "steel-plate",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "fission-reactor-equipment",
+      "name": "Portable fission reactor",
+      "outputs": [
+        {
+          "material": "fission-reactor-equipment",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "processing-unit",
+          "amount": 200
+        },
+        {
+          "material": "low-density-structure",
+          "amount": 50
+        },
+        {
+          "material": "uranium-fuel-cell",
+          "amount": 4
+        }
+      ]
+    },
+    {
+      "id": "personal-laser-defense-equipment",
+      "name": "Personal laser defense",
+      "outputs": [
+        {
+          "material": "personal-laser-defense-equipment",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "processing-unit",
+          "amount": 20
+        },
+        {
+          "material": "low-density-structure",
+          "amount": 5
+        },
+        {
+          "material": "laser-turret",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "discharge-defense-equipment",
+      "name": "Discharge defense",
+      "outputs": [
+        {
+          "material": "discharge-defense-equipment",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "processing-unit",
+          "amount": 5
+        },
+        {
+          "material": "steel-plate",
+          "amount": 20
+        },
+        {
+          "material": "laser-turret",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "exoskeleton-equipment",
+      "name": "Exoskeleton",
+      "outputs": [
+        {
+          "material": "exoskeleton-equipment",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "processing-unit",
+          "amount": 10
+        },
+        {
+          "material": "electric-engine-unit",
+          "amount": 30
+        },
+        {
+          "material": "steel-plate",
+          "amount": 20
+        }
+      ]
+    },
+    {
+      "id": "personal-roboport-equipment",
+      "name": "Personal roboport",
+      "outputs": [
+        {
+          "material": "personal-roboport-equipment",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "advanced-circuit",
+          "amount": 10
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 40
+        },
+        {
+          "material": "steel-plate",
+          "amount": 20
+        },
+        {
+          "material": "battery",
+          "amount": 45
+        }
+      ]
+    },
+    {
+      "id": "personal-roboport-mk2-equipment",
+      "name": "Personal roboport MK2",
+      "outputs": [
+        {
+          "material": "personal-roboport-mk2-equipment",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "personal-roboport-equipment",
+          "amount": 5
+        },
+        {
+          "material": "processing-unit",
+          "amount": 50
+        },
+        {
+          "material": "superconductor",
+          "amount": 50
+        }
+      ]
+    },
+    {
+      "id": "laser-turret",
+      "name": "Laser turret",
+      "outputs": [
+        {
+          "material": "laser-turret",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 20
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 20
+        },
+        {
+          "material": "battery",
+          "amount": 12
+        }
+      ]
+    },
+    {
+      "id": "flamethrower-turret",
+      "name": "Flamethrower turret",
+      "outputs": [
+        {
+          "material": "flamethrower-turret",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 30
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 15
+        },
+        {
+          "material": "pipe",
+          "amount": 10
+        },
+        {
+          "material": "engine-unit",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "artillery-turret",
+      "name": "Artillery turret",
+      "outputs": [
+        {
+          "material": "artillery-turret",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "tungsten-plate",
+          "amount": 60
+        },
+        {
+          "material": "refined-concrete",
+          "amount": 60
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 40
+        },
+        {
+          "material": "processing-unit",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "gun-turret",
+      "name": "Gun turret",
+      "outputs": [
+        {
+          "material": "gun-turret",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 10
+        },
+        {
+          "material": "copper-plate",
+          "amount": 10
+        },
+        {
+          "material": "iron-plate",
+          "amount": 20
+        }
+      ]
+    },
+    {
+      "id": "wooden-chest",
+      "name": "Wooden chest",
+      "outputs": [
+        {
+          "material": "wooden-chest",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "wood",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "display-panel",
+      "name": "Display panel",
+      "outputs": [
+        {
+          "material": "display-panel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-plate",
+          "amount": 1
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "iron-stick",
+      "name": "Iron stick",
+      "outputs": [
+        {
+          "material": "iron-stick",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-plate",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "stone-furnace",
+      "name": "Stone furnace",
+      "outputs": [
+        {
+          "material": "stone-furnace",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "stone",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "boiler",
+      "name": "Boiler",
+      "outputs": [
+        {
+          "material": "boiler",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "stone-furnace",
+          "amount": 1
+        },
+        {
+          "material": "pipe",
+          "amount": 4
+        }
+      ]
+    },
+    {
+      "id": "steam-engine",
+      "name": "Steam engine",
+      "outputs": [
+        {
+          "material": "steam-engine",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 8
+        },
+        {
+          "material": "pipe",
+          "amount": 5
+        },
+        {
+          "material": "iron-plate",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "iron-gear-wheel",
+      "name": "Iron gear wheel",
+      "outputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-plate",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "electronic-circuit",
+      "name": "Electronic circuit",
+      "outputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-plate",
+          "amount": 1
+        },
+        {
+          "material": "copper-cable",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "id": "transport-belt",
+      "name": "Transport belt",
+      "outputs": [
+        {
+          "material": "transport-belt",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-plate",
+          "amount": 1
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "electric-mining-drill",
+      "name": "Electric mining drill",
+      "outputs": [
+        {
+          "material": "electric-mining-drill",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 3
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 5
+        },
+        {
+          "material": "iron-plate",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "burner-mining-drill",
+      "name": "Burner mining drill",
+      "outputs": [
+        {
+          "material": "burner-mining-drill",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 3
+        },
+        {
+          "material": "stone-furnace",
+          "amount": 1
+        },
+        {
+          "material": "iron-plate",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "id": "inserter",
+      "name": "Inserter",
+      "outputs": [
+        {
+          "material": "inserter",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 1
+        },
+        {
+          "material": "iron-plate",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "fast-inserter",
+      "name": "Fast inserter",
+      "outputs": [
+        {
+          "material": "fast-inserter",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 2
+        },
+        {
+          "material": "iron-plate",
+          "amount": 2
+        },
+        {
+          "material": "inserter",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "long-handed-inserter",
+      "name": "Long-handed inserter",
+      "outputs": [
+        {
+          "material": "long-handed-inserter",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 1
+        },
+        {
+          "material": "iron-plate",
+          "amount": 1
+        },
+        {
+          "material": "inserter",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "burner-inserter",
+      "name": "Burner inserter",
+      "outputs": [
+        {
+          "material": "burner-inserter",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-plate",
+          "amount": 1
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "pipe",
+      "name": "Pipe",
+      "outputs": [
+        {
+          "material": "pipe",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-plate",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "offshore-pump",
+      "name": "Offshore pump",
+      "outputs": [
+        {
+          "material": "offshore-pump",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "pipe",
+          "amount": 3
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "copper-cable",
+      "name": "Copper cable",
+      "outputs": [
+        {
+          "material": "copper-cable",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "copper-plate",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "small-electric-pole",
+      "name": "Small electric pole",
+      "outputs": [
+        {
+          "material": "small-electric-pole",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "wood",
+          "amount": 1
+        },
+        {
+          "material": "copper-cable",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "pistol",
+      "name": "Pistol",
+      "outputs": [
+        {
+          "material": "pistol",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "copper-plate",
+          "amount": 5
+        },
+        {
+          "material": "iron-plate",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "submachine-gun",
+      "name": "Submachine gun",
+      "outputs": [
+        {
+          "material": "submachine-gun",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 10
+        },
+        {
+          "material": "copper-plate",
+          "amount": 5
+        },
+        {
+          "material": "iron-plate",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "firearm-magazine",
+      "name": "Firearm magazine",
+      "outputs": [
+        {
+          "material": "firearm-magazine",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-plate",
+          "amount": 4
+        }
+      ]
+    },
+    {
+      "id": "light-armor",
+      "name": "Light armor",
+      "outputs": [
+        {
+          "material": "light-armor",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-plate",
+          "amount": 40
+        }
+      ]
+    },
+    {
+      "id": "radar",
+      "name": "Radar",
+      "outputs": [
+        {
+          "material": "radar",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 5
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 5
+        },
+        {
+          "material": "iron-plate",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "small-lamp",
+      "name": "Lamp",
+      "outputs": [
+        {
+          "material": "small-lamp",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        },
+        {
+          "material": "copper-cable",
+          "amount": 3
+        },
+        {
+          "material": "iron-plate",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "pipe-to-ground",
+      "name": "Pipe to ground",
+      "outputs": [
+        {
+          "material": "pipe-to-ground",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "pipe",
+          "amount": 10
+        },
+        {
+          "material": "iron-plate",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "assembling-machine-1",
+      "name": "Assembling machine 1",
+      "outputs": [
+        {
+          "material": "assembling-machine-1",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 3
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 5
+        },
+        {
+          "material": "iron-plate",
+          "amount": 9
+        }
+      ]
+    },
+    {
+      "id": "repair-pack",
+      "name": "Repair pack",
+      "outputs": [
+        {
+          "material": "repair-pack",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 2
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "automation-science-pack",
+      "name": "Automation science pack",
+      "outputs": [
+        {
+          "material": "automation-science-pack",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "copper-plate",
+          "amount": 1
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "logistic-science-pack",
+      "name": "Logistic science pack",
+      "outputs": [
+        {
+          "material": "logistic-science-pack",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "inserter",
+          "amount": 1
+        },
+        {
+          "material": "transport-belt",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "lab",
+      "name": "Lab",
+      "outputs": [
+        {
+          "material": "lab",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 10
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 10
+        },
+        {
+          "material": "transport-belt",
+          "amount": 4
+        }
+      ]
+    },
+    {
+      "id": "stone-wall",
+      "name": "Wall",
+      "outputs": [
+        {
+          "material": "stone-wall",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "stone-brick",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "assembling-machine-2",
+      "name": "Assembling machine 2",
+      "outputs": [
+        {
+          "material": "assembling-machine-2",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 2
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 3
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 5
+        },
+        {
+          "material": "assembling-machine-1",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "splitter",
+      "name": "Splitter",
+      "outputs": [
+        {
+          "material": "splitter",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 5
+        },
+        {
+          "material": "iron-plate",
+          "amount": 5
+        },
+        {
+          "material": "transport-belt",
+          "amount": 4
+        }
+      ]
+    },
+    {
+      "id": "underground-belt",
+      "name": "Underground belt",
+      "outputs": [
+        {
+          "material": "underground-belt",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-plate",
+          "amount": 10
+        },
+        {
+          "material": "transport-belt",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "loader",
+      "name": "Loader",
+      "outputs": [
+        {
+          "material": "loader",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "inserter",
+          "amount": 5
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 5
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 5
+        },
+        {
+          "material": "iron-plate",
+          "amount": 5
+        },
+        {
+          "material": "transport-belt",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "car",
+      "name": "Car",
+      "outputs": [
+        {
+          "material": "car",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "engine-unit",
+          "amount": 8
+        },
+        {
+          "material": "iron-plate",
+          "amount": 20
+        },
+        {
+          "material": "steel-plate",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "engine-unit",
+      "name": "Engine unit",
+      "outputs": [
+        {
+          "material": "engine-unit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 1
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 1
+        },
+        {
+          "material": "pipe",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "iron-chest",
+      "name": "Iron chest",
+      "outputs": [
+        {
+          "material": "iron-chest",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-plate",
+          "amount": 8
+        }
+      ]
+    },
+    {
+      "id": "big-electric-pole",
+      "name": "Big electric pole",
+      "outputs": [
+        {
+          "material": "big-electric-pole",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-stick",
+          "amount": 8
+        },
+        {
+          "material": "steel-plate",
+          "amount": 5
+        },
+        {
+          "material": "copper-cable",
+          "amount": 4
+        }
+      ]
+    },
+    {
+      "id": "medium-electric-pole",
+      "name": "Medium electric pole",
+      "outputs": [
+        {
+          "material": "medium-electric-pole",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-stick",
+          "amount": 4
+        },
+        {
+          "material": "steel-plate",
+          "amount": 2
+        },
+        {
+          "material": "copper-cable",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "shotgun",
+      "name": "Shotgun",
+      "outputs": [
+        {
+          "material": "shotgun",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-plate",
+          "amount": 15
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 5
+        },
+        {
+          "material": "copper-plate",
+          "amount": 10
+        },
+        {
+          "material": "wood",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "shotgun-shell",
+      "name": "Shotgun shells",
+      "outputs": [
+        {
+          "material": "shotgun-shell",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "copper-plate",
+          "amount": 2
+        },
+        {
+          "material": "iron-plate",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "piercing-rounds-magazine",
+      "name": "Piercing rounds magazine",
+      "outputs": [
+        {
+          "material": "piercing-rounds-magazine",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "firearm-magazine",
+          "amount": 2
+        },
+        {
+          "material": "steel-plate",
+          "amount": 1
+        },
+        {
+          "material": "copper-plate",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "grenade",
+      "name": "Grenade",
+      "outputs": [
+        {
+          "material": "grenade",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-plate",
+          "amount": 5
+        },
+        {
+          "material": "coal",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "steel-furnace",
+      "name": "Steel furnace",
+      "outputs": [
+        {
+          "material": "steel-furnace",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 6
+        },
+        {
+          "material": "stone-brick",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "gate",
+      "name": "Gate",
+      "outputs": [
+        {
+          "material": "gate",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "stone-wall",
+          "amount": 1
+        },
+        {
+          "material": "steel-plate",
+          "amount": 2
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "heavy-armor",
+      "name": "Heavy armor",
+      "outputs": [
+        {
+          "material": "heavy-armor",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "copper-plate",
+          "amount": 100
+        },
+        {
+          "material": "steel-plate",
+          "amount": 50
+        }
+      ]
+    },
+    {
+      "id": "steel-chest",
+      "name": "Steel chest",
+      "outputs": [
+        {
+          "material": "steel-chest",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 8
+        }
+      ]
+    },
+    {
+      "id": "fast-underground-belt",
+      "name": "Fast underground belt",
+      "outputs": [
+        {
+          "material": "fast-underground-belt",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 40
+        },
+        {
+          "material": "underground-belt",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "fast-splitter",
+      "name": "Fast splitter",
+      "outputs": [
+        {
+          "material": "fast-splitter",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "splitter",
+          "amount": 1
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 10
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "concrete",
+      "name": "Concrete",
+      "outputs": [
+        {
+          "material": "concrete",
+          "amount": 10
+        }
+      ],
+      "inputs": [
+        {
+          "material": "stone-brick",
+          "amount": 5
+        },
+        {
+          "material": "iron-ore",
+          "amount": 1
+        },
+        {
+          "material": "water",
+          "amount": 100
+        }
+      ]
+    },
+    {
+      "id": "hazard-concrete",
+      "name": "Hazard concrete",
+      "outputs": [
+        {
+          "material": "hazard-concrete",
+          "amount": 10
+        }
+      ],
+      "inputs": [
+        {
+          "material": "concrete",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "refined-concrete",
+      "name": "Refined concrete",
+      "outputs": [
+        {
+          "material": "refined-concrete",
+          "amount": 10
+        }
+      ],
+      "inputs": [
+        {
+          "material": "concrete",
+          "amount": 20
+        },
+        {
+          "material": "iron-stick",
+          "amount": 8
+        },
+        {
+          "material": "steel-plate",
+          "amount": 1
+        },
+        {
+          "material": "water",
+          "amount": 100
+        }
+      ]
+    },
+    {
+      "id": "refined-hazard-concrete",
+      "name": "Refined hazard concrete",
+      "outputs": [
+        {
+          "material": "refined-hazard-concrete",
+          "amount": 10
+        }
+      ],
+      "inputs": [
+        {
+          "material": "refined-concrete",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "landfill",
+      "name": "Landfill",
+      "outputs": [
+        {
+          "material": "landfill",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "stone",
+          "amount": 50
+        }
+      ]
+    },
+    {
+      "id": "fast-transport-belt",
+      "name": "Fast transport belt",
+      "outputs": [
+        {
+          "material": "fast-transport-belt",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 5
+        },
+        {
+          "material": "transport-belt",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "solar-panel",
+      "name": "Solar panel",
+      "outputs": [
+        {
+          "material": "solar-panel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 5
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 15
+        },
+        {
+          "material": "copper-plate",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "rail",
+      "name": "Rail",
+      "outputs": [
+        {
+          "material": "rail",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "stone",
+          "amount": 1
+        },
+        {
+          "material": "iron-stick",
+          "amount": 1
+        },
+        {
+          "material": "steel-plate",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "locomotive",
+      "name": "Locomotive",
+      "outputs": [
+        {
+          "material": "locomotive",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "engine-unit",
+          "amount": 20
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 10
+        },
+        {
+          "material": "steel-plate",
+          "amount": 30
+        }
+      ]
+    },
+    {
+      "id": "cargo-wagon",
+      "name": "Cargo wagon",
+      "outputs": [
+        {
+          "material": "cargo-wagon",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 10
+        },
+        {
+          "material": "iron-plate",
+          "amount": 20
+        },
+        {
+          "material": "steel-plate",
+          "amount": 20
+        }
+      ]
+    },
+    {
+      "id": "rail-signal",
+      "name": "Rail signal",
+      "outputs": [
+        {
+          "material": "rail-signal",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        },
+        {
+          "material": "iron-plate",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "rail-chain-signal",
+      "name": "Rail chain signal",
+      "outputs": [
+        {
+          "material": "rail-chain-signal",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        },
+        {
+          "material": "iron-plate",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "train-stop",
+      "name": "Train stop",
+      "outputs": [
+        {
+          "material": "train-stop",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 5
+        },
+        {
+          "material": "iron-plate",
+          "amount": 6
+        },
+        {
+          "material": "iron-stick",
+          "amount": 6
+        },
+        {
+          "material": "steel-plate",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "id": "copper-plate",
+      "name": "Copper plate",
+      "outputs": [
+        {
+          "material": "copper-plate",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "copper-ore",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "iron-plate",
+      "name": "Iron plate",
+      "outputs": [
+        {
+          "material": "iron-plate",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-ore",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "stone-brick",
+      "name": "Stone brick",
+      "outputs": [
+        {
+          "material": "stone-brick",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "stone",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "steel-plate",
+      "name": "Steel plate",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-plate",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "arithmetic-combinator",
+      "name": "Arithmetic combinator",
+      "outputs": [
+        {
+          "material": "arithmetic-combinator",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "copper-cable",
+          "amount": 5
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "decider-combinator",
+      "name": "Decider combinator",
+      "outputs": [
+        {
+          "material": "decider-combinator",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "copper-cable",
+          "amount": 5
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "constant-combinator",
+      "name": "Constant combinator",
+      "outputs": [
+        {
+          "material": "constant-combinator",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "copper-cable",
+          "amount": 5
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "selector-combinator",
+      "name": "Selector combinator",
+      "outputs": [
+        {
+          "material": "selector-combinator",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "advanced-circuit",
+          "amount": 2
+        },
+        {
+          "material": "decider-combinator",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "power-switch",
+      "name": "Power switch",
+      "outputs": [
+        {
+          "material": "power-switch",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-plate",
+          "amount": 5
+        },
+        {
+          "material": "copper-cable",
+          "amount": 5
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "programmable-speaker",
+      "name": "Programmable speaker",
+      "outputs": [
+        {
+          "material": "programmable-speaker",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-plate",
+          "amount": 3
+        },
+        {
+          "material": "iron-stick",
+          "amount": 4
+        },
+        {
+          "material": "copper-cable",
+          "amount": 5
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 4
+        }
+      ]
+    },
+    {
+      "id": "poison-capsule",
+      "name": "Poison capsule",
+      "outputs": [
+        {
+          "material": "poison-capsule",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 3
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 3
+        },
+        {
+          "material": "coal",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "slowdown-capsule",
+      "name": "Slowdown capsule",
+      "outputs": [
+        {
+          "material": "slowdown-capsule",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 2
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 2
+        },
+        {
+          "material": "coal",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "cluster-grenade",
+      "name": "Cluster grenade",
+      "outputs": [
+        {
+          "material": "cluster-grenade",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "grenade",
+          "amount": 7
+        },
+        {
+          "material": "explosives",
+          "amount": 5
+        },
+        {
+          "material": "steel-plate",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "defender-capsule",
+      "name": "Defender capsule",
+      "outputs": [
+        {
+          "material": "defender-capsule",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "piercing-rounds-magazine",
+          "amount": 3
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 3
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "id": "distractor-capsule",
+      "name": "Distractor capsule",
+      "outputs": [
+        {
+          "material": "distractor-capsule",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "defender-capsule",
+          "amount": 4
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "id": "destroyer-capsule",
+      "name": "Destroyer capsule",
+      "outputs": [
+        {
+          "material": "destroyer-capsule",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "distractor-capsule",
+          "amount": 4
+        },
+        {
+          "material": "steel-plate",
+          "amount": 4
+        },
+        {
+          "material": "processing-unit",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "cliff-explosives",
+      "name": "Cliff explosives",
+      "outputs": [
+        {
+          "material": "cliff-explosives",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "explosives",
+          "amount": 10
+        },
+        {
+          "material": "calcite",
+          "amount": 10
+        },
+        {
+          "material": "grenade",
+          "amount": 1
+        },
+        {
+          "material": "barrel",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "uranium-rounds-magazine",
+      "name": "Uranium rounds magazine",
+      "outputs": [
+        {
+          "material": "uranium-rounds-magazine",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "piercing-rounds-magazine",
+          "amount": 1
+        },
+        {
+          "material": "uranium-238",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "rocket",
+      "name": "Rocket",
+      "outputs": [
+        {
+          "material": "rocket",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "explosives",
+          "amount": 1
+        },
+        {
+          "material": "iron-plate",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "explosive-rocket",
+      "name": "Explosive rocket",
+      "outputs": [
+        {
+          "material": "explosive-rocket",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "rocket",
+          "amount": 1
+        },
+        {
+          "material": "explosives",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "atomic-bomb",
+      "name": "Atomic bomb",
+      "outputs": [
+        {
+          "material": "atomic-bomb",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "processing-unit",
+          "amount": 10
+        },
+        {
+          "material": "explosives",
+          "amount": 10
+        },
+        {
+          "material": "uranium-235",
+          "amount": 100
+        }
+      ]
+    },
+    {
+      "id": "piercing-shotgun-shell",
+      "name": "Piercing shotgun shells",
+      "outputs": [
+        {
+          "material": "piercing-shotgun-shell",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "shotgun-shell",
+          "amount": 2
+        },
+        {
+          "material": "copper-plate",
+          "amount": 2
+        },
+        {
+          "material": "steel-plate",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "cannon-shell",
+      "name": "Cannon shell",
+      "outputs": [
+        {
+          "material": "cannon-shell",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 2
+        },
+        {
+          "material": "plastic-bar",
+          "amount": 2
+        },
+        {
+          "material": "explosives",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "explosive-cannon-shell",
+      "name": "Explosive cannon shell",
+      "outputs": [
+        {
+          "material": "explosive-cannon-shell",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 2
+        },
+        {
+          "material": "plastic-bar",
+          "amount": 2
+        },
+        {
+          "material": "explosives",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "uranium-cannon-shell",
+      "name": "Uranium cannon shell",
+      "outputs": [
+        {
+          "material": "uranium-cannon-shell",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "cannon-shell",
+          "amount": 1
+        },
+        {
+          "material": "uranium-238",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "explosive-uranium-cannon-shell",
+      "name": "Explosive uranium cannon shell",
+      "outputs": [
+        {
+          "material": "explosive-uranium-cannon-shell",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "explosive-cannon-shell",
+          "amount": 1
+        },
+        {
+          "material": "uranium-238",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "artillery-shell",
+      "name": "Artillery shell",
+      "outputs": [
+        {
+          "material": "artillery-shell",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "radar",
+          "amount": 1
+        },
+        {
+          "material": "calcite",
+          "amount": 1
+        },
+        {
+          "material": "tungsten-plate",
+          "amount": 4
+        },
+        {
+          "material": "explosives",
+          "amount": 8
+        }
+      ]
+    },
+    {
+      "id": "flamethrower-ammo",
+      "name": "Flamethrower ammo",
+      "outputs": [
+        {
+          "material": "flamethrower-ammo",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 5
+        },
+        {
+          "material": "crude-oil",
+          "amount": 100
+        }
+      ]
+    },
+    {
+      "id": "express-transport-belt",
+      "name": "Express transport belt",
+      "outputs": [
+        {
+          "material": "express-transport-belt",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 10
+        },
+        {
+          "material": "fast-transport-belt",
+          "amount": 1
+        },
+        {
+          "material": "lubricant",
+          "amount": 20
+        }
+      ]
+    },
+    {
+      "id": "assembling-machine-3",
+      "name": "Assembling machine 3",
+      "outputs": [
+        {
+          "material": "assembling-machine-3",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "assembling-machine-2",
+          "amount": 2
+        },
+        {
+          "material": "speed-module",
+          "amount": 4
+        }
+      ]
+    },
+    {
+      "id": "tank",
+      "name": "Tank",
+      "outputs": [
+        {
+          "material": "tank",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "engine-unit",
+          "amount": 32
+        },
+        {
+          "material": "steel-plate",
+          "amount": 50
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 15
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "spidertron",
+      "name": "Spidertron",
+      "outputs": [
+        {
+          "material": "spidertron",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "exoskeleton-equipment",
+          "amount": 4
+        },
+        {
+          "material": "fission-reactor-equipment",
+          "amount": 2
+        },
+        {
+          "material": "rocket-turret",
+          "amount": 1
+        },
+        {
+          "material": "radar",
+          "amount": 2
+        },
+        {
+          "material": "raw-fish",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "fluid-wagon",
+      "name": "Fluid wagon",
+      "outputs": [
+        {
+          "material": "fluid-wagon",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 10
+        },
+        {
+          "material": "steel-plate",
+          "amount": 16
+        },
+        {
+          "material": "pipe",
+          "amount": 8
+        },
+        {
+          "material": "storage-tank",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "artillery-wagon",
+      "name": "Artillery wagon",
+      "outputs": [
+        {
+          "material": "artillery-wagon",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "engine-unit",
+          "amount": 60
+        },
+        {
+          "material": "tungsten-plate",
+          "amount": 60
+        },
+        {
+          "material": "refined-concrete",
+          "amount": 60
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 40
+        },
+        {
+          "material": "processing-unit",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "modular-armor",
+      "name": "Modular armor",
+      "outputs": [
+        {
+          "material": "modular-armor",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "advanced-circuit",
+          "amount": 30
+        },
+        {
+          "material": "steel-plate",
+          "amount": 50
+        }
+      ]
+    },
+    {
+      "id": "power-armor",
+      "name": "Power armor",
+      "outputs": [
+        {
+          "material": "power-armor",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "processing-unit",
+          "amount": 40
+        },
+        {
+          "material": "electric-engine-unit",
+          "amount": 20
+        },
+        {
+          "material": "steel-plate",
+          "amount": 40
+        }
+      ]
+    },
+    {
+      "id": "power-armor-mk2",
+      "name": "Power armor MK2",
+      "outputs": [
+        {
+          "material": "power-armor-mk2",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "efficiency-module",
+          "amount": 100
+        },
+        {
+          "material": "speed-module",
+          "amount": 100
+        },
+        {
+          "material": "processing-unit",
+          "amount": 60
+        },
+        {
+          "material": "electric-engine-unit",
+          "amount": 40
+        },
+        {
+          "material": "low-density-structure",
+          "amount": 30
+        }
+      ]
+    },
+    {
+      "id": "flamethrower",
+      "name": "Flamethrower",
+      "outputs": [
+        {
+          "material": "flamethrower",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 5
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "land-mine",
+      "name": "Land mine",
+      "outputs": [
+        {
+          "material": "land-mine",
+          "amount": 4
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 1
+        },
+        {
+          "material": "explosives",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "rocket-launcher",
+      "name": "Rocket launcher",
+      "outputs": [
+        {
+          "material": "rocket-launcher",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-plate",
+          "amount": 5
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 5
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "combat-shotgun",
+      "name": "Combat shotgun",
+      "outputs": [
+        {
+          "material": "combat-shotgun",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 15
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 5
+        },
+        {
+          "material": "copper-plate",
+          "amount": 10
+        },
+        {
+          "material": "wood",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "chemical-science-pack",
+      "name": "Chemical science pack",
+      "outputs": [
+        {
+          "material": "chemical-science-pack",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "engine-unit",
+          "amount": 2
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 3
+        },
+        {
+          "material": "sulfur",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "military-science-pack",
+      "name": "Military science pack",
+      "outputs": [
+        {
+          "material": "military-science-pack",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "piercing-rounds-magazine",
+          "amount": 1
+        },
+        {
+          "material": "grenade",
+          "amount": 1
+        },
+        {
+          "material": "stone-wall",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "production-science-pack",
+      "name": "Production science pack",
+      "outputs": [
+        {
+          "material": "production-science-pack",
+          "amount": 3
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electric-furnace",
+          "amount": 1
+        },
+        {
+          "material": "productivity-module",
+          "amount": 1
+        },
+        {
+          "material": "rail",
+          "amount": 30
+        }
+      ]
+    },
+    {
+      "id": "utility-science-pack",
+      "name": "Utility science pack",
+      "outputs": [
+        {
+          "material": "utility-science-pack",
+          "amount": 3
+        }
+      ],
+      "inputs": [
+        {
+          "material": "low-density-structure",
+          "amount": 3
+        },
+        {
+          "material": "processing-unit",
+          "amount": 2
+        },
+        {
+          "material": "flying-robot-frame",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "express-underground-belt",
+      "name": "Express underground belt",
+      "outputs": [
+        {
+          "material": "express-underground-belt",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 80
+        },
+        {
+          "material": "fast-underground-belt",
+          "amount": 2
+        },
+        {
+          "material": "lubricant",
+          "amount": 40
+        }
+      ]
+    },
+    {
+      "id": "fast-loader",
+      "name": "Fast loader",
+      "outputs": [
+        {
+          "material": "fast-loader",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "fast-transport-belt",
+          "amount": 5
+        },
+        {
+          "material": "loader",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "express-loader",
+      "name": "Express loader",
+      "outputs": [
+        {
+          "material": "express-loader",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "express-transport-belt",
+          "amount": 5
+        },
+        {
+          "material": "fast-loader",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "express-splitter",
+      "name": "Express splitter",
+      "outputs": [
+        {
+          "material": "express-splitter",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "fast-splitter",
+          "amount": 1
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 10
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 10
+        },
+        {
+          "material": "lubricant",
+          "amount": 80
+        }
+      ]
+    },
+    {
+      "id": "advanced-circuit",
+      "name": "Advanced circuit",
+      "outputs": [
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 2
+        },
+        {
+          "material": "plastic-bar",
+          "amount": 2
+        },
+        {
+          "material": "copper-cable",
+          "amount": 4
+        }
+      ]
+    },
+    {
+      "id": "processing-unit",
+      "name": "Processing unit",
+      "outputs": [
+        {
+          "material": "processing-unit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 20
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 2
+        },
+        {
+          "material": "sulfuric-acid",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "logistic-robot",
+      "name": "Logistic robot",
+      "outputs": [
+        {
+          "material": "logistic-robot",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "flying-robot-frame",
+          "amount": 1
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "construction-robot",
+      "name": "Construction robot",
+      "outputs": [
+        {
+          "material": "construction-robot",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "flying-robot-frame",
+          "amount": 1
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "passive-provider-chest",
+      "name": "Passive provider chest",
+      "outputs": [
+        {
+          "material": "passive-provider-chest",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-chest",
+          "amount": 1
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 3
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "active-provider-chest",
+      "name": "Active provider chest",
+      "outputs": [
+        {
+          "material": "active-provider-chest",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-chest",
+          "amount": 1
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 3
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "storage-chest",
+      "name": "Storage chest",
+      "outputs": [
+        {
+          "material": "storage-chest",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-chest",
+          "amount": 1
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 3
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "buffer-chest",
+      "name": "Buffer chest",
+      "outputs": [
+        {
+          "material": "buffer-chest",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-chest",
+          "amount": 1
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 3
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "requester-chest",
+      "name": "Requester chest",
+      "outputs": [
+        {
+          "material": "requester-chest",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-chest",
+          "amount": 1
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 3
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "rocket-silo",
+      "name": "Rocket silo",
+      "outputs": [
+        {
+          "material": "rocket-silo",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 1e3
+        },
+        {
+          "material": "concrete",
+          "amount": 1e3
+        },
+        {
+          "material": "pipe",
+          "amount": 100
+        },
+        {
+          "material": "processing-unit",
+          "amount": 200
+        },
+        {
+          "material": "electric-engine-unit",
+          "amount": 200
+        }
+      ]
+    },
+    {
+      "id": "cargo-landing-pad",
+      "name": "Cargo landing pad",
+      "outputs": [
+        {
+          "material": "cargo-landing-pad",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "concrete",
+          "amount": 200
+        },
+        {
+          "material": "steel-plate",
+          "amount": 25
+        },
+        {
+          "material": "processing-unit",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "roboport",
+      "name": "Roboport",
+      "outputs": [
+        {
+          "material": "roboport",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 45
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 45
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 45
+        }
+      ]
+    },
+    {
+      "id": "substation",
+      "name": "Substation",
+      "outputs": [
+        {
+          "material": "substation",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 10
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 5
+        },
+        {
+          "material": "copper-cable",
+          "amount": 6
+        }
+      ]
+    },
+    {
+      "id": "accumulator",
+      "name": "Accumulator",
+      "outputs": [
+        {
+          "material": "accumulator",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-plate",
+          "amount": 2
+        },
+        {
+          "material": "battery",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "electric-furnace",
+      "name": "Electric furnace",
+      "outputs": [
+        {
+          "material": "electric-furnace",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 10
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 5
+        },
+        {
+          "material": "stone-brick",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "beacon",
+      "name": "Beacon",
+      "outputs": [
+        {
+          "material": "beacon",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 20
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 20
+        },
+        {
+          "material": "steel-plate",
+          "amount": 10
+        },
+        {
+          "material": "copper-cable",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "pumpjack",
+      "name": "Pumpjack",
+      "outputs": [
+        {
+          "material": "pumpjack",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 5
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 10
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 5
+        },
+        {
+          "material": "pipe",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "oil-refinery",
+      "name": "Oil refinery",
+      "outputs": [
+        {
+          "material": "oil-refinery",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 15
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 10
+        },
+        {
+          "material": "stone-brick",
+          "amount": 10
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 10
+        },
+        {
+          "material": "pipe",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "electric-engine-unit",
+      "name": "Electric engine unit",
+      "outputs": [
+        {
+          "material": "electric-engine-unit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "engine-unit",
+          "amount": 1
+        },
+        {
+          "material": "lubricant",
+          "amount": 15
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "flying-robot-frame",
+      "name": "Flying robot frame",
+      "outputs": [
+        {
+          "material": "flying-robot-frame",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electric-engine-unit",
+          "amount": 1
+        },
+        {
+          "material": "battery",
+          "amount": 2
+        },
+        {
+          "material": "steel-plate",
+          "amount": 1
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "id": "explosives",
+      "name": "Explosives",
+      "outputs": [
+        {
+          "material": "explosives",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "sulfur",
+          "amount": 1
+        },
+        {
+          "material": "coal",
+          "amount": 1
+        },
+        {
+          "material": "water",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "battery",
+      "name": "Battery",
+      "outputs": [
+        {
+          "material": "battery",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "sulfuric-acid",
+          "amount": 20
+        },
+        {
+          "material": "iron-plate",
+          "amount": 1
+        },
+        {
+          "material": "copper-plate",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "storage-tank",
+      "name": "Storage tank",
+      "outputs": [
+        {
+          "material": "storage-tank",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-plate",
+          "amount": 20
+        },
+        {
+          "material": "steel-plate",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "pump",
+      "name": "Pump",
+      "outputs": [
+        {
+          "material": "pump",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "engine-unit",
+          "amount": 1
+        },
+        {
+          "material": "steel-plate",
+          "amount": 1
+        },
+        {
+          "material": "pipe",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "chemical-plant",
+      "name": "Chemical plant",
+      "outputs": [
+        {
+          "material": "chemical-plant",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 5
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 5
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 5
+        },
+        {
+          "material": "pipe",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "low-density-structure",
+      "name": "Low density structure",
+      "outputs": [
+        {
+          "material": "low-density-structure",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 2
+        },
+        {
+          "material": "copper-plate",
+          "amount": 20
+        },
+        {
+          "material": "plastic-bar",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "rocket-fuel",
+      "name": "Rocket fuel",
+      "outputs": [
+        {
+          "material": "rocket-fuel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "solid-fuel",
+          "amount": 10
+        },
+        {
+          "material": "light-oil",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "rocket-part",
+      "name": "Rocket part",
+      "outputs": [
+        {
+          "material": "rocket-part",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "processing-unit",
+          "amount": 1
+        },
+        {
+          "material": "low-density-structure",
+          "amount": 1
+        },
+        {
+          "material": "rocket-fuel",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "nuclear-reactor",
+      "name": "Nuclear reactor",
+      "outputs": [
+        {
+          "material": "nuclear-reactor",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "concrete",
+          "amount": 500
+        },
+        {
+          "material": "steel-plate",
+          "amount": 500
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 500
+        },
+        {
+          "material": "copper-plate",
+          "amount": 500
+        }
+      ]
+    },
+    {
+      "id": "centrifuge",
+      "name": "Centrifuge",
+      "outputs": [
+        {
+          "material": "centrifuge",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "concrete",
+          "amount": 100
+        },
+        {
+          "material": "steel-plate",
+          "amount": 50
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 100
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 100
+        }
+      ]
+    },
+    {
+      "id": "uranium-processing",
+      "name": "Uranium processing",
+      "outputs": [
+        {
+          "material": "uranium-235",
+          "amount": 1
+        },
+        {
+          "material": "uranium-238",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "uranium-ore",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "kovarex-enrichment-process",
+      "name": "Kovarex enrichment process",
+      "outputs": [
+        {
+          "material": "uranium-235",
+          "amount": 41
+        },
+        {
+          "material": "uranium-238",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "uranium-235",
+          "amount": 40
+        },
+        {
+          "material": "uranium-238",
+          "amount": 5
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "nuclear-fuel",
+      "name": "Nuclear fuel",
+      "outputs": [
+        {
+          "material": "nuclear-fuel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "uranium-235",
+          "amount": 1
+        },
+        {
+          "material": "rocket-fuel",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "nuclear-fuel-reprocessing",
+      "name": "Nuclear fuel reprocessing",
+      "outputs": [
+        {
+          "material": "uranium-238",
+          "amount": 3
+        }
+      ],
+      "inputs": [
+        {
+          "material": "depleted-uranium-fuel-cell",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "uranium-fuel-cell",
+      "name": "Uranium fuel cell",
+      "outputs": [
+        {
+          "material": "uranium-fuel-cell",
+          "amount": 10
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-plate",
+          "amount": 10
+        },
+        {
+          "material": "uranium-235",
+          "amount": 1
+        },
+        {
+          "material": "uranium-238",
+          "amount": 19
+        }
+      ]
+    },
+    {
+      "id": "heat-exchanger",
+      "name": "Heat exchanger",
+      "outputs": [
+        {
+          "material": "heat-exchanger",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 10
+        },
+        {
+          "material": "copper-plate",
+          "amount": 100
+        },
+        {
+          "material": "pipe",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "heat-pipe",
+      "name": "Heat pipe",
+      "outputs": [
+        {
+          "material": "heat-pipe",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 10
+        },
+        {
+          "material": "copper-plate",
+          "amount": 20
+        }
+      ]
+    },
+    {
+      "id": "steam-turbine",
+      "name": "Steam turbine",
+      "outputs": [
+        {
+          "material": "steam-turbine",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 50
+        },
+        {
+          "material": "copper-plate",
+          "amount": 50
+        },
+        {
+          "material": "pipe",
+          "amount": 20
+        }
+      ]
+    },
+    {
+      "id": "rail-support",
+      "name": "Rail support",
+      "outputs": [
+        {
+          "material": "rail-support",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "refined-concrete",
+          "amount": 20
+        },
+        {
+          "material": "steel-plate",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "rail-ramp",
+      "name": "Rail ramp",
+      "outputs": [
+        {
+          "material": "rail-ramp",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "refined-concrete",
+          "amount": 100
+        },
+        {
+          "material": "rail",
+          "amount": 8
+        },
+        {
+          "material": "steel-plate",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "recycler",
+      "name": "Recycler",
+      "outputs": [
+        {
+          "material": "recycler",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "processing-unit",
+          "amount": 6
+        },
+        {
+          "material": "steel-plate",
+          "amount": 20
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 40
+        },
+        {
+          "material": "concrete",
+          "amount": 20
+        }
+      ]
+    },
+    {
+      "id": "quality-module",
+      "name": "Quality module",
+      "outputs": [
+        {
+          "material": "quality-module",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 5
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "quality-module-2",
+      "name": "Quality module 2",
+      "outputs": [
+        {
+          "material": "quality-module-2",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "quality-module",
+          "amount": 4
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 5
+        },
+        {
+          "material": "processing-unit",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "quality-module-3",
+      "name": "Quality module 3",
+      "outputs": [
+        {
+          "material": "quality-module-3",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "quality-module-2",
+          "amount": 4
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 5
+        },
+        {
+          "material": "processing-unit",
+          "amount": 5
+        },
+        {
+          "material": "superconductor",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "simple-coal-liquefaction",
+      "name": "Simple coal liquefaction",
+      "outputs": [
+        {
+          "material": "heavy-oil",
+          "amount": 50
+        }
+      ],
+      "inputs": [
+        {
+          "material": "coal",
+          "amount": 10
+        },
+        {
+          "material": "calcite",
+          "amount": 2
+        },
+        {
+          "material": "sulfuric-acid",
+          "amount": 25
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "yumako-processing",
+      "name": "Yumako processing",
+      "outputs": [
+        {
+          "material": "yumako-seed",
+          "amount": 1
+        },
+        {
+          "material": "yumako-mash",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "yumako",
+          "amount": 1
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "jellynut-processing",
+      "name": "Jellynut processing",
+      "outputs": [
+        {
+          "material": "jellynut-seed",
+          "amount": 1
+        },
+        {
+          "material": "jelly",
+          "amount": 4
+        }
+      ],
+      "inputs": [
+        {
+          "material": "jellynut",
+          "amount": 1
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "copper-bacteria",
+      "name": "Copper bacteria",
+      "outputs": [
+        {
+          "material": "copper-bacteria",
+          "amount": 1
+        },
+        {
+          "material": "spoilage",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "yumako-mash",
+          "amount": 3
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "copper-bacteria-cultivation",
+      "name": "Copper bacteria cultivation",
+      "outputs": [
+        {
+          "material": "copper-bacteria",
+          "amount": 4
+        }
+      ],
+      "inputs": [
+        {
+          "material": "copper-bacteria",
+          "amount": 1
+        },
+        {
+          "material": "bioflux",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "iron-bacteria",
+      "name": "Iron bacteria",
+      "outputs": [
+        {
+          "material": "iron-bacteria",
+          "amount": 1
+        },
+        {
+          "material": "spoilage",
+          "amount": 4
+        }
+      ],
+      "inputs": [
+        {
+          "material": "jelly",
+          "amount": 6
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "iron-bacteria-cultivation",
+      "name": "Iron bacteria cultivation",
+      "outputs": [
+        {
+          "material": "iron-bacteria",
+          "amount": 4
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-bacteria",
+          "amount": 1
+        },
+        {
+          "material": "bioflux",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "artificial-yumako-soil",
+      "name": "Artificial yumako soil",
+      "outputs": [
+        {
+          "material": "artificial-yumako-soil",
+          "amount": 10
+        }
+      ],
+      "inputs": [
+        {
+          "material": "yumako-seed",
+          "amount": 2
+        },
+        {
+          "material": "nutrients",
+          "amount": 50
+        },
+        {
+          "material": "landfill",
+          "amount": 5
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "overgrowth-yumako-soil",
+      "name": "Overgrowth yumako soil",
+      "outputs": [
+        {
+          "material": "overgrowth-yumako-soil",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "artificial-yumako-soil",
+          "amount": 2
+        },
+        {
+          "material": "yumako-seed",
+          "amount": 5
+        },
+        {
+          "material": "biter-egg",
+          "amount": 10
+        },
+        {
+          "material": "spoilage",
+          "amount": 50
+        },
+        {
+          "material": "water",
+          "amount": 100
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "artificial-jellynut-soil",
+      "name": "Artificial jellynut soil",
+      "outputs": [
+        {
+          "material": "artificial-jellynut-soil",
+          "amount": 10
+        }
+      ],
+      "inputs": [
+        {
+          "material": "jellynut-seed",
+          "amount": 2
+        },
+        {
+          "material": "nutrients",
+          "amount": 50
+        },
+        {
+          "material": "landfill",
+          "amount": 5
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "overgrowth-jellynut-soil",
+      "name": "Overgrowth jellynut soil",
+      "outputs": [
+        {
+          "material": "overgrowth-jellynut-soil",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "artificial-jellynut-soil",
+          "amount": 2
+        },
+        {
+          "material": "jellynut-seed",
+          "amount": 5
+        },
+        {
+          "material": "biter-egg",
+          "amount": 10
+        },
+        {
+          "material": "spoilage",
+          "amount": 50
+        },
+        {
+          "material": "water",
+          "amount": 100
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "nutrients-from-spoilage",
+      "name": "Nutrients from spoilage",
+      "outputs": [
+        {
+          "material": "nutrients",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "spoilage",
+          "amount": 10
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "nutrients-from-yumako-mash",
+      "name": "Nutrients from yumako mash",
+      "outputs": [
+        {
+          "material": "nutrients",
+          "amount": 6
+        }
+      ],
+      "inputs": [
+        {
+          "material": "yumako-mash",
+          "amount": 4
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "nutrients-from-bioflux",
+      "name": "Nutrients from bioflux",
+      "outputs": [
+        {
+          "material": "nutrients",
+          "amount": 40
+        }
+      ],
+      "inputs": [
+        {
+          "material": "bioflux",
+          "amount": 5
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "pentapod-egg",
+      "name": "Pentapod egg",
+      "outputs": [
+        {
+          "material": "pentapod-egg",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "pentapod-egg",
+          "amount": 1
+        },
+        {
+          "material": "nutrients",
+          "amount": 30
+        },
+        {
+          "material": "water",
+          "amount": 60
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "rocket-fuel-from-jelly",
+      "name": "Rocket fuel from jelly",
+      "outputs": [
+        {
+          "material": "rocket-fuel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "water",
+          "amount": 30
+        },
+        {
+          "material": "jelly",
+          "amount": 30
+        },
+        {
+          "material": "bioflux",
+          "amount": 2
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "bioflux",
+      "name": "Bioflux",
+      "outputs": [
+        {
+          "material": "bioflux",
+          "amount": 4
+        }
+      ],
+      "inputs": [
+        {
+          "material": "yumako-mash",
+          "amount": 15
+        },
+        {
+          "material": "jelly",
+          "amount": 12
+        }
+      ]
+    },
+    {
+      "id": "bioplastic",
+      "name": "Bioplastic",
+      "outputs": [
+        {
+          "material": "plastic-bar",
+          "amount": 3
+        }
+      ],
+      "inputs": [
+        {
+          "material": "bioflux",
+          "amount": 1
+        },
+        {
+          "material": "yumako-mash",
+          "amount": 4
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "biosulfur",
+      "name": "Biosulfur",
+      "outputs": [
+        {
+          "material": "sulfur",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "spoilage",
+          "amount": 5
+        },
+        {
+          "material": "bioflux",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "biolubricant",
+      "name": "Biolubricant",
+      "outputs": [
+        {
+          "material": "lubricant",
+          "amount": 20
+        }
+      ],
+      "inputs": [
+        {
+          "material": "jelly",
+          "amount": 60
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "carbon-fiber",
+      "name": "Carbon fiber",
+      "outputs": [
+        {
+          "material": "carbon-fiber",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "yumako-mash",
+          "amount": 10
+        },
+        {
+          "material": "carbon",
+          "amount": 1
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "toolbelt-equipment",
+      "name": "Toolbelt equipment",
+      "outputs": [
+        {
+          "material": "toolbelt-equipment",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "advanced-circuit",
+          "amount": 3
+        },
+        {
+          "material": "carbon-fiber",
+          "amount": 10
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "battery-mk3-equipment",
+      "name": "Personal battery MK3",
+      "outputs": [
+        {
+          "material": "battery-mk3-equipment",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "battery-mk2-equipment",
+          "amount": 5
+        },
+        {
+          "material": "supercapacitor",
+          "amount": 10
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "space-platform-foundation",
+      "name": "Space platform foundation",
+      "outputs": [
+        {
+          "material": "space-platform-foundation",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 20
+        },
+        {
+          "material": "copper-cable",
+          "amount": 20
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "stack-inserter",
+      "name": "Stack inserter",
+      "outputs": [
+        {
+          "material": "stack-inserter",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "bulk-inserter",
+          "amount": 1
+        },
+        {
+          "material": "processing-unit",
+          "amount": 1
+        },
+        {
+          "material": "carbon-fiber",
+          "amount": 2
+        },
+        {
+          "material": "jelly",
+          "amount": 10
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "rocket-turret",
+      "name": "Rocket turret",
+      "outputs": [
+        {
+          "material": "rocket-turret",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "rocket-launcher",
+          "amount": 4
+        },
+        {
+          "material": "processing-unit",
+          "amount": 4
+        },
+        {
+          "material": "carbon-fiber",
+          "amount": 20
+        },
+        {
+          "material": "steel-plate",
+          "amount": 20
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 20
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "infinity-chest",
+      "name": "Infinity chest",
+      "outputs": [
+        {
+          "material": "infinity-chest",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-chest",
+          "amount": 1
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "infinity-pipe",
+      "name": "Infinity pipe",
+      "outputs": [
+        {
+          "material": "infinity-pipe",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "pipe",
+          "amount": 1
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "heat-interface",
+      "name": "Heat interface",
+      "outputs": [
+        {
+          "material": "heat-interface",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "heat-pipe",
+          "amount": 1
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "space-platform-starter-pack",
+      "name": "Space platform starter pack",
+      "outputs": [
+        {
+          "material": "space-platform-starter-pack",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "space-platform-foundation",
+          "amount": 60
+        },
+        {
+          "material": "steel-plate",
+          "amount": 20
+        },
+        {
+          "material": "processing-unit",
+          "amount": 20
+        }
+      ]
+    },
+    {
+      "id": "cargo-bay",
+      "name": "Cargo bay",
+      "outputs": [
+        {
+          "material": "cargo-bay",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 20
+        },
+        {
+          "material": "low-density-structure",
+          "amount": 20
+        },
+        {
+          "material": "processing-unit",
+          "amount": 5
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "landing-pad-unloading-bay",
+      "name": "Landing pad unloading bay",
+      "outputs": [
+        {
+          "material": "landing-pad-unloading-bay",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "cargo-bay",
+          "amount": 1
+        },
+        {
+          "material": "steel-chest",
+          "amount": 4
+        },
+        {
+          "material": "electric-engine-unit",
+          "amount": 15
+        },
+        {
+          "material": "processing-unit",
+          "amount": 8
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "asteroid-collector",
+      "name": "Asteroid collector",
+      "outputs": [
+        {
+          "material": "asteroid-collector",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "low-density-structure",
+          "amount": 20
+        },
+        {
+          "material": "electric-engine-unit",
+          "amount": 8
+        },
+        {
+          "material": "processing-unit",
+          "amount": 5
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "crusher",
+      "name": "Crusher",
+      "outputs": [
+        {
+          "material": "crusher",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "low-density-structure",
+          "amount": 20
+        },
+        {
+          "material": "steel-plate",
+          "amount": 10
+        },
+        {
+          "material": "electric-engine-unit",
+          "amount": 10
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "thruster",
+      "name": "Thruster",
+      "outputs": [
+        {
+          "material": "thruster",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 10
+        },
+        {
+          "material": "processing-unit",
+          "amount": 10
+        },
+        {
+          "material": "electric-engine-unit",
+          "amount": 5
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "space-science-pack",
+      "name": "Space science pack",
+      "outputs": [
+        {
+          "material": "space-science-pack",
+          "amount": 5
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-plate",
+          "amount": 2
+        },
+        {
+          "material": "carbon",
+          "amount": 1
+        },
+        {
+          "material": "ice",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "metallurgic-science-pack",
+      "name": "Metallurgic science pack",
+      "outputs": [
+        {
+          "material": "metallurgic-science-pack",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "tungsten-carbide",
+          "amount": 3
+        },
+        {
+          "material": "tungsten-plate",
+          "amount": 2
+        },
+        {
+          "material": "molten-copper",
+          "amount": 200
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "agricultural-science-pack",
+      "name": "Agricultural science pack",
+      "outputs": [
+        {
+          "material": "agricultural-science-pack",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "bioflux",
+          "amount": 1
+        },
+        {
+          "material": "pentapod-egg",
+          "amount": 1
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "electromagnetic-science-pack",
+      "name": "Electromagnetic science pack",
+      "outputs": [
+        {
+          "material": "electromagnetic-science-pack",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "supercapacitor",
+          "amount": 1
+        },
+        {
+          "material": "accumulator",
+          "amount": 1
+        },
+        {
+          "material": "electrolyte",
+          "amount": 25
+        },
+        {
+          "material": "holmium-solution",
+          "amount": 25
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "cryogenic-science-pack",
+      "name": "Cryogenic science pack",
+      "outputs": [
+        {
+          "material": "cryogenic-science-pack",
+          "amount": 1
+        },
+        {
+          "material": "fluoroketone-hot",
+          "amount": 3
+        }
+      ],
+      "inputs": [
+        {
+          "material": "ice",
+          "amount": 3
+        },
+        {
+          "material": "lithium-plate",
+          "amount": 1
+        },
+        {
+          "material": "fluoroketone-cold",
+          "amount": 6
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "metallic-asteroid-crushing",
+      "name": "Metallic asteroid crushing",
+      "outputs": [
+        {
+          "material": "iron-ore",
+          "amount": 20
+        },
+        {
+          "material": "metallic-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "metallic-asteroid-chunk",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "carbonic-asteroid-crushing",
+      "name": "Carbonic asteroid crushing",
+      "outputs": [
+        {
+          "material": "carbon",
+          "amount": 10
+        },
+        {
+          "material": "carbonic-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "carbonic-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "oxide-asteroid-crushing",
+      "name": "Oxide asteroid crushing",
+      "outputs": [
+        {
+          "material": "ice",
+          "amount": 5
+        },
+        {
+          "material": "oxide-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "oxide-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "advanced-metallic-asteroid-crushing",
+      "name": "Advanced metallic asteroid crushing",
+      "outputs": [
+        {
+          "material": "iron-ore",
+          "amount": 10
+        },
+        {
+          "material": "copper-ore",
+          "amount": 4
+        },
+        {
+          "material": "metallic-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "metallic-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "advanced-carbonic-asteroid-crushing",
+      "name": "Advanced carbonic asteroid crushing",
+      "outputs": [
+        {
+          "material": "carbon",
+          "amount": 5
+        },
+        {
+          "material": "sulfur",
+          "amount": 2
+        },
+        {
+          "material": "carbonic-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "carbonic-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "advanced-oxide-asteroid-crushing",
+      "name": "Advanced oxide asteroid crushing",
+      "outputs": [
+        {
+          "material": "ice",
+          "amount": 3
+        },
+        {
+          "material": "calcite",
+          "amount": 2
+        },
+        {
+          "material": "oxide-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "oxide-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "metallic-asteroid-reprocessing",
+      "name": "Metallic asteroid reprocessing",
+      "outputs": [
+        {
+          "material": "metallic-asteroid-chunk",
+          "amount": 1
+        },
+        {
+          "material": "carbonic-asteroid-chunk",
+          "amount": 1
+        },
+        {
+          "material": "oxide-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "metallic-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "carbonic-asteroid-reprocessing",
+      "name": "Carbonic asteroid reprocessing",
+      "outputs": [
+        {
+          "material": "carbonic-asteroid-chunk",
+          "amount": 1
+        },
+        {
+          "material": "metallic-asteroid-chunk",
+          "amount": 1
+        },
+        {
+          "material": "oxide-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "carbonic-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "oxide-asteroid-reprocessing",
+      "name": "Oxide asteroid reprocessing",
+      "outputs": [
+        {
+          "material": "oxide-asteroid-chunk",
+          "amount": 1
+        },
+        {
+          "material": "metallic-asteroid-chunk",
+          "amount": 1
+        },
+        {
+          "material": "carbonic-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "oxide-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "thruster-fuel",
+      "name": "Thruster fuel",
+      "outputs": [
+        {
+          "material": "thruster-fuel",
+          "amount": 75
+        }
+      ],
+      "inputs": [
+        {
+          "material": "carbon",
+          "amount": 2
+        },
+        {
+          "material": "water",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "thruster-oxidizer",
+      "name": "Thruster oxidizer",
+      "outputs": [
+        {
+          "material": "thruster-oxidizer",
+          "amount": 75
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-ore",
+          "amount": 2
+        },
+        {
+          "material": "water",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "ice-melting",
+      "name": "Ice melting",
+      "outputs": [
+        {
+          "material": "water",
+          "amount": 20
+        }
+      ],
+      "inputs": [
+        {
+          "material": "ice",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "advanced-thruster-fuel",
+      "name": "Advanced thruster fuel",
+      "outputs": [
+        {
+          "material": "thruster-fuel",
+          "amount": 1500
+        }
+      ],
+      "inputs": [
+        {
+          "material": "carbon",
+          "amount": 2
+        },
+        {
+          "material": "calcite",
+          "amount": 1
+        },
+        {
+          "material": "water",
+          "amount": 100
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "advanced-thruster-oxidizer",
+      "name": "Advanced thruster oxidizer",
+      "outputs": [
+        {
+          "material": "thruster-oxidizer",
+          "amount": 1500
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-ore",
+          "amount": 2
+        },
+        {
+          "material": "calcite",
+          "amount": 1
+        },
+        {
+          "material": "water",
+          "amount": 100
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "acid-neutralisation",
+      "name": "Acid neutralisation",
+      "outputs": [
+        {
+          "material": "steam",
+          "amount": 1e3
+        }
+      ],
+      "inputs": [
+        {
+          "material": "calcite",
+          "amount": 1
+        },
+        {
+          "material": "sulfuric-acid",
+          "amount": 100
+        }
+      ]
+    },
+    {
+      "id": "steam-condensation",
+      "name": "Steam condensation",
+      "outputs": [
+        {
+          "material": "water",
+          "amount": 90
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steam",
+          "amount": 1e3
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "carbon",
+      "name": "Carbon",
+      "outputs": [
+        {
+          "material": "carbon",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "coal",
+          "amount": 2
+        },
+        {
+          "material": "sulfuric-acid",
+          "amount": 20
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "tungsten-carbide",
+      "name": "Tungsten carbide",
+      "outputs": [
+        {
+          "material": "tungsten-carbide",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "tungsten-ore",
+          "amount": 2
+        },
+        {
+          "material": "sulfuric-acid",
+          "amount": 10
+        },
+        {
+          "material": "carbon",
+          "amount": 1
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "foundry",
+      "name": "Foundry",
+      "outputs": [
+        {
+          "material": "foundry",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "tungsten-carbide",
+          "amount": 50
+        },
+        {
+          "material": "steel-plate",
+          "amount": 50
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 30
+        },
+        {
+          "material": "refined-concrete",
+          "amount": 20
+        },
+        {
+          "material": "lubricant",
+          "amount": 20
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "molten-iron-from-lava",
+      "name": "Molten iron from lava",
+      "outputs": [
+        {
+          "material": "molten-iron",
+          "amount": 250
+        },
+        {
+          "material": "stone",
+          "amount": 10
+        }
+      ],
+      "inputs": [
+        {
+          "material": "lava",
+          "amount": 500
+        },
+        {
+          "material": "calcite",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "molten-copper-from-lava",
+      "name": "Molten copper from lava",
+      "outputs": [
+        {
+          "material": "molten-copper",
+          "amount": 250
+        },
+        {
+          "material": "stone",
+          "amount": 15
+        }
+      ],
+      "inputs": [
+        {
+          "material": "lava",
+          "amount": 500
+        },
+        {
+          "material": "calcite",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "iron-ore-melting",
+      "name": "Iron ore melting",
+      "outputs": [
+        {
+          "material": "molten-iron",
+          "amount": 500
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-ore",
+          "amount": 50
+        },
+        {
+          "material": "calcite",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "copper-ore-melting",
+      "name": "Copper ore melting",
+      "outputs": [
+        {
+          "material": "molten-copper",
+          "amount": 500
+        }
+      ],
+      "inputs": [
+        {
+          "material": "copper-ore",
+          "amount": 50
+        },
+        {
+          "material": "calcite",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "casting-iron",
+      "name": "Casting iron",
+      "outputs": [
+        {
+          "material": "iron-plate",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "molten-iron",
+          "amount": 20
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "casting-steel",
+      "name": "Casting steel",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "molten-iron",
+          "amount": 30
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "casting-copper",
+      "name": "Casting copper",
+      "outputs": [
+        {
+          "material": "copper-plate",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "molten-copper",
+          "amount": 20
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "casting-iron-gear-wheel",
+      "name": "Casting iron gear wheel",
+      "outputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "molten-iron",
+          "amount": 10
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "casting-iron-stick",
+      "name": "Casting iron stick",
+      "outputs": [
+        {
+          "material": "iron-stick",
+          "amount": 4
+        }
+      ],
+      "inputs": [
+        {
+          "material": "molten-iron",
+          "amount": 20
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "casting-pipe",
+      "name": "Casting pipe",
+      "outputs": [
+        {
+          "material": "pipe",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "molten-iron",
+          "amount": 10
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "casting-pipe-to-ground",
+      "name": "Casting pipe to ground",
+      "outputs": [
+        {
+          "material": "pipe-to-ground",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "molten-iron",
+          "amount": 50
+        },
+        {
+          "material": "pipe",
+          "amount": 10
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "casting-low-density-structure",
+      "name": "Casting low density structure",
+      "outputs": [
+        {
+          "material": "low-density-structure",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "molten-iron",
+          "amount": 80
+        },
+        {
+          "material": "molten-copper",
+          "amount": 250
+        },
+        {
+          "material": "plastic-bar",
+          "amount": 5
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "concrete-from-molten-iron",
+      "name": "Concrete from molten iron",
+      "outputs": [
+        {
+          "material": "concrete",
+          "amount": 10
+        }
+      ],
+      "inputs": [
+        {
+          "material": "molten-iron",
+          "amount": 20
+        },
+        {
+          "material": "water",
+          "amount": 100
+        },
+        {
+          "material": "stone-brick",
+          "amount": 5
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "casting-copper-cable",
+      "name": "Casting copper cable",
+      "outputs": [
+        {
+          "material": "copper-cable",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "molten-copper",
+          "amount": 5
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "tungsten-plate",
+      "name": "Tungsten plate",
+      "outputs": [
+        {
+          "material": "tungsten-plate",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "tungsten-ore",
+          "amount": 4
+        },
+        {
+          "material": "molten-iron",
+          "amount": 10
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "turbo-transport-belt",
+      "name": "Turbo transport belt",
+      "outputs": [
+        {
+          "material": "turbo-transport-belt",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "tungsten-plate",
+          "amount": 5
+        },
+        {
+          "material": "express-transport-belt",
+          "amount": 1
+        },
+        {
+          "material": "lubricant",
+          "amount": 20
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "turbo-underground-belt",
+      "name": "Turbo underground belt",
+      "outputs": [
+        {
+          "material": "turbo-underground-belt",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "tungsten-plate",
+          "amount": 40
+        },
+        {
+          "material": "express-underground-belt",
+          "amount": 2
+        },
+        {
+          "material": "lubricant",
+          "amount": 40
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "turbo-splitter",
+      "name": "Turbo splitter",
+      "outputs": [
+        {
+          "material": "turbo-splitter",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "express-splitter",
+          "amount": 1
+        },
+        {
+          "material": "tungsten-plate",
+          "amount": 15
+        },
+        {
+          "material": "processing-unit",
+          "amount": 2
+        },
+        {
+          "material": "lubricant",
+          "amount": 80
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "turbo-loader",
+      "name": "Turbo loader",
+      "outputs": [
+        {
+          "material": "turbo-loader",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "turbo-transport-belt",
+          "amount": 5
+        },
+        {
+          "material": "express-loader",
+          "amount": 1
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "big-mining-drill",
+      "name": "Big mining drill",
+      "outputs": [
+        {
+          "material": "big-mining-drill",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electric-mining-drill",
+          "amount": 1
+        },
+        {
+          "material": "molten-iron",
+          "amount": 200
+        },
+        {
+          "material": "tungsten-carbide",
+          "amount": 20
+        },
+        {
+          "material": "electric-engine-unit",
+          "amount": 10
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 10
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "mech-armor",
+      "name": "Mech armor",
+      "outputs": [
+        {
+          "material": "mech-armor",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "power-armor-mk2",
+          "amount": 1
+        },
+        {
+          "material": "holmium-plate",
+          "amount": 200
+        },
+        {
+          "material": "processing-unit",
+          "amount": 100
+        },
+        {
+          "material": "superconductor",
+          "amount": 50
+        },
+        {
+          "material": "supercapacitor",
+          "amount": 50
+        }
+      ]
+    },
+    {
+      "id": "railgun",
+      "name": "Railgun",
+      "outputs": [
+        {
+          "material": "railgun",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "tungsten-plate",
+          "amount": 10
+        },
+        {
+          "material": "superconductor",
+          "amount": 10
+        },
+        {
+          "material": "quantum-processor",
+          "amount": 20
+        },
+        {
+          "material": "fluoroketone-cold",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "railgun-turret",
+      "name": "Railgun turret",
+      "outputs": [
+        {
+          "material": "railgun-turret",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "quantum-processor",
+          "amount": 100
+        },
+        {
+          "material": "tungsten-plate",
+          "amount": 30
+        },
+        {
+          "material": "superconductor",
+          "amount": 50
+        },
+        {
+          "material": "carbon-fiber",
+          "amount": 20
+        },
+        {
+          "material": "fluoroketone-cold",
+          "amount": 100
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "railgun-ammo",
+      "name": "Railgun ammo",
+      "outputs": [
+        {
+          "material": "railgun-ammo",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 5
+        },
+        {
+          "material": "copper-cable",
+          "amount": 10
+        },
+        {
+          "material": "explosives",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "agricultural-tower",
+      "name": "Agricultural tower",
+      "outputs": [
+        {
+          "material": "agricultural-tower",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 10
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 3
+        },
+        {
+          "material": "spoilage",
+          "amount": 20
+        },
+        {
+          "material": "landfill",
+          "amount": 1
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "biochamber",
+      "name": "Biochamber",
+      "outputs": [
+        {
+          "material": "biochamber",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "nutrients",
+          "amount": 5
+        },
+        {
+          "material": "pentapod-egg",
+          "amount": 1
+        },
+        {
+          "material": "iron-plate",
+          "amount": 20
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 5
+        },
+        {
+          "material": "landfill",
+          "amount": 1
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "burnt-spoilage",
+      "name": "Burnt spoilage",
+      "outputs": [
+        {
+          "material": "carbon",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "spoilage",
+          "amount": 6
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "coal-synthesis",
+      "name": "Coal synthesis",
+      "outputs": [
+        {
+          "material": "coal",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "carbon",
+          "amount": 5
+        },
+        {
+          "material": "sulfur",
+          "amount": 1
+        },
+        {
+          "material": "water",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "capture-robot-rocket",
+      "name": "Capture bot rocket",
+      "outputs": [
+        {
+          "material": "capture-robot-rocket",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "flying-robot-frame",
+          "amount": 1
+        },
+        {
+          "material": "steel-plate",
+          "amount": 2
+        },
+        {
+          "material": "bioflux",
+          "amount": 20
+        },
+        {
+          "material": "processing-unit",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "id": "biolab",
+      "name": "Biolab",
+      "outputs": [
+        {
+          "material": "biolab",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "lab",
+          "amount": 1
+        },
+        {
+          "material": "biter-egg",
+          "amount": 10
+        },
+        {
+          "material": "refined-concrete",
+          "amount": 25
+        },
+        {
+          "material": "capture-robot-rocket",
+          "amount": 2
+        },
+        {
+          "material": "uranium-235",
+          "amount": 3
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "captive-biter-spawner",
+      "name": "Captive biter spawner",
+      "outputs": [
+        {
+          "material": "captive-biter-spawner",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "biter-egg",
+          "amount": 10
+        },
+        {
+          "material": "capture-robot-rocket",
+          "amount": 1
+        },
+        {
+          "material": "uranium-235",
+          "amount": 15
+        },
+        {
+          "material": "fluoroketone-cold",
+          "amount": 100
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "fish-breeding",
+      "name": "Fish breeding",
+      "outputs": [
+        {
+          "material": "raw-fish",
+          "amount": 3
+        }
+      ],
+      "inputs": [
+        {
+          "material": "raw-fish",
+          "amount": 2
+        },
+        {
+          "material": "nutrients",
+          "amount": 100
+        },
+        {
+          "material": "water",
+          "amount": 100
+        }
+      ]
+    },
+    {
+      "id": "nutrients-from-fish",
+      "name": "Nutrients from fish",
+      "outputs": [
+        {
+          "material": "nutrients",
+          "amount": 20
+        }
+      ],
+      "inputs": [
+        {
+          "material": "raw-fish",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "nutrients-from-biter-egg",
+      "name": "Nutrients from biter egg",
+      "outputs": [
+        {
+          "material": "nutrients",
+          "amount": 20
+        }
+      ],
+      "inputs": [
+        {
+          "material": "biter-egg",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "scrap-recycling",
+      "name": "Scrap recycling",
+      "outputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 1
+        },
+        {
+          "material": "solid-fuel",
+          "amount": 1
+        },
+        {
+          "material": "concrete",
+          "amount": 1
+        },
+        {
+          "material": "ice",
+          "amount": 1
+        },
+        {
+          "material": "steel-plate",
+          "amount": 1
+        },
+        {
+          "material": "battery",
+          "amount": 1
+        },
+        {
+          "material": "stone",
+          "amount": 1
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        },
+        {
+          "material": "copper-cable",
+          "amount": 1
+        },
+        {
+          "material": "processing-unit",
+          "amount": 1
+        },
+        {
+          "material": "low-density-structure",
+          "amount": 1
+        },
+        {
+          "material": "holmium-ore",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "scrap",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "lightning-rod",
+      "name": "Lightning rod",
+      "outputs": [
+        {
+          "material": "lightning-rod",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "copper-cable",
+          "amount": 12
+        },
+        {
+          "material": "steel-plate",
+          "amount": 8
+        },
+        {
+          "material": "stone-brick",
+          "amount": 4
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "holmium-solution",
+      "name": "Holmium solution",
+      "outputs": [
+        {
+          "material": "holmium-solution",
+          "amount": 100
+        }
+      ],
+      "inputs": [
+        {
+          "material": "holmium-ore",
+          "amount": 2
+        },
+        {
+          "material": "stone",
+          "amount": 1
+        },
+        {
+          "material": "water",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "holmium-plate",
+      "name": "Holmium plate",
+      "outputs": [
+        {
+          "material": "holmium-plate",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "holmium-solution",
+          "amount": 20
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "electromagnetic-plant",
+      "name": "Electromagnetic plant",
+      "outputs": [
+        {
+          "material": "electromagnetic-plant",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "holmium-plate",
+          "amount": 150
+        },
+        {
+          "material": "steel-plate",
+          "amount": 50
+        },
+        {
+          "material": "processing-unit",
+          "amount": 50
+        },
+        {
+          "material": "refined-concrete",
+          "amount": 50
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "superconductor",
+      "name": "Superconductor",
+      "outputs": [
+        {
+          "material": "superconductor",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "holmium-plate",
+          "amount": 1
+        },
+        {
+          "material": "copper-plate",
+          "amount": 1
+        },
+        {
+          "material": "plastic-bar",
+          "amount": 1
+        },
+        {
+          "material": "light-oil",
+          "amount": 5
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "supercapacitor",
+      "name": "Supercapacitor",
+      "outputs": [
+        {
+          "material": "supercapacitor",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "holmium-plate",
+          "amount": 2
+        },
+        {
+          "material": "superconductor",
+          "amount": 2
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 4
+        },
+        {
+          "material": "battery",
+          "amount": 1
+        },
+        {
+          "material": "electrolyte",
+          "amount": 10
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "electrolyte",
+      "name": "Electrolyte",
+      "outputs": [
+        {
+          "material": "electrolyte",
+          "amount": 10
+        }
+      ],
+      "inputs": [
+        {
+          "material": "stone",
+          "amount": 1
+        },
+        {
+          "material": "heavy-oil",
+          "amount": 10
+        },
+        {
+          "material": "holmium-solution",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "lightning-collector",
+      "name": "Lightning collector",
+      "outputs": [
+        {
+          "material": "lightning-collector",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "lightning-rod",
+          "amount": 1
+        },
+        {
+          "material": "supercapacitor",
+          "amount": 8
+        },
+        {
+          "material": "accumulator",
+          "amount": 1
+        },
+        {
+          "material": "electrolyte",
+          "amount": 80
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "teslagun",
+      "name": "Tesla gun",
+      "outputs": [
+        {
+          "material": "teslagun",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "holmium-plate",
+          "amount": 10
+        },
+        {
+          "material": "superconductor",
+          "amount": 10
+        },
+        {
+          "material": "plastic-bar",
+          "amount": 30
+        },
+        {
+          "material": "electrolyte",
+          "amount": 100
+        }
+      ]
+    },
+    {
+      "id": "tesla-turret",
+      "name": "Tesla turret",
+      "outputs": [
+        {
+          "material": "tesla-turret",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "teslagun",
+          "amount": 1
+        },
+        {
+          "material": "supercapacitor",
+          "amount": 10
+        },
+        {
+          "material": "processing-unit",
+          "amount": 10
+        },
+        {
+          "material": "superconductor",
+          "amount": 50
+        },
+        {
+          "material": "electrolyte",
+          "amount": 500
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "tesla-ammo",
+      "name": "Tesla ammo",
+      "outputs": [
+        {
+          "material": "tesla-ammo",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "supercapacitor",
+          "amount": 1
+        },
+        {
+          "material": "plastic-bar",
+          "amount": 1
+        },
+        {
+          "material": "electrolyte",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "heating-tower",
+      "name": "Heating tower",
+      "outputs": [
+        {
+          "material": "heating-tower",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "boiler",
+          "amount": 2
+        },
+        {
+          "material": "heat-pipe",
+          "amount": 5
+        },
+        {
+          "material": "concrete",
+          "amount": 20
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "lithium",
+      "name": "Lithium",
+      "outputs": [
+        {
+          "material": "lithium",
+          "amount": 5
+        }
+      ],
+      "inputs": [
+        {
+          "material": "holmium-plate",
+          "amount": 1
+        },
+        {
+          "material": "lithium-brine",
+          "amount": 50
+        },
+        {
+          "material": "ammonia",
+          "amount": 50
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "lithium-plate",
+      "name": "Lithium plate",
+      "outputs": [
+        {
+          "material": "lithium-plate",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "lithium",
+          "amount": 1
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "fluoroketone",
+      "name": "Fluoroketone",
+      "outputs": [
+        {
+          "material": "fluoroketone-hot",
+          "amount": 50
+        }
+      ],
+      "inputs": [
+        {
+          "material": "fluorine",
+          "amount": 50
+        },
+        {
+          "material": "ammonia",
+          "amount": 50
+        },
+        {
+          "material": "solid-fuel",
+          "amount": 1
+        },
+        {
+          "material": "lithium",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "fluoroketone-cooling",
+      "name": "Cooling hot fluoroketone",
+      "outputs": [
+        {
+          "material": "fluoroketone-cold",
+          "amount": 10
+        }
+      ],
+      "inputs": [
+        {
+          "material": "fluoroketone-hot",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "id": "cryogenic-plant",
+      "name": "Cryogenic plant",
+      "outputs": [
+        {
+          "material": "cryogenic-plant",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "refined-concrete",
+          "amount": 40
+        },
+        {
+          "material": "superconductor",
+          "amount": 20
+        },
+        {
+          "material": "processing-unit",
+          "amount": 20
+        },
+        {
+          "material": "lithium-plate",
+          "amount": 20
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "quantum-processor",
+      "name": "Quantum processor",
+      "outputs": [
+        {
+          "material": "quantum-processor",
+          "amount": 1
+        },
+        {
+          "material": "fluoroketone-hot",
+          "amount": 5
+        }
+      ],
+      "inputs": [
+        {
+          "material": "tungsten-carbide",
+          "amount": 1
+        },
+        {
+          "material": "processing-unit",
+          "amount": 1
+        },
+        {
+          "material": "superconductor",
+          "amount": 1
+        },
+        {
+          "material": "carbon-fiber",
+          "amount": 1
+        },
+        {
+          "material": "lithium-plate",
+          "amount": 2
+        },
+        {
+          "material": "fluoroketone-cold",
+          "amount": 10
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "ammoniacal-solution-separation",
+      "name": "Ammoniacal solution separation",
+      "outputs": [
+        {
+          "material": "ice",
+          "amount": 5
+        },
+        {
+          "material": "ammonia",
+          "amount": 50
+        }
+      ],
+      "inputs": [
+        {
+          "material": "ammoniacal-solution",
+          "amount": 50
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "fusion-reactor-equipment",
+      "name": "Portable fusion reactor",
+      "outputs": [
+        {
+          "material": "fusion-reactor-equipment",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "fission-reactor-equipment",
+          "amount": 1
+        },
+        {
+          "material": "fusion-power-cell",
+          "amount": 10
+        },
+        {
+          "material": "tungsten-plate",
+          "amount": 250
+        },
+        {
+          "material": "carbon-fiber",
+          "amount": 100
+        },
+        {
+          "material": "supercapacitor",
+          "amount": 25
+        },
+        {
+          "material": "quantum-processor",
+          "amount": 250
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "fusion-power-cell",
+      "name": "Fusion power cell",
+      "outputs": [
+        {
+          "material": "fusion-power-cell",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "lithium-plate",
+          "amount": 5
+        },
+        {
+          "material": "holmium-plate",
+          "amount": 1
+        },
+        {
+          "material": "ammonia",
+          "amount": 100
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "fusion-reactor",
+      "name": "Fusion reactor",
+      "outputs": [
+        {
+          "material": "fusion-reactor",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "tungsten-plate",
+          "amount": 200
+        },
+        {
+          "material": "superconductor",
+          "amount": 200
+        },
+        {
+          "material": "quantum-processor",
+          "amount": 250
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "fusion-generator",
+      "name": "Fusion generator",
+      "outputs": [
+        {
+          "material": "fusion-generator",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "tungsten-plate",
+          "amount": 100
+        },
+        {
+          "material": "superconductor",
+          "amount": 100
+        },
+        {
+          "material": "quantum-processor",
+          "amount": 50
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "ice-platform",
+      "name": "Ice platform",
+      "outputs": [
+        {
+          "material": "ice-platform",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "ammonia",
+          "amount": 400
+        },
+        {
+          "material": "ice",
+          "amount": 50
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "solid-fuel-from-ammonia",
+      "name": "Solid fuel from ammonia",
+      "outputs": [
+        {
+          "material": "solid-fuel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "ammonia",
+          "amount": 15
+        },
+        {
+          "material": "crude-oil",
+          "amount": 6
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "ammonia-rocket-fuel",
+      "name": "Ammonia rocket fuel",
+      "outputs": [
+        {
+          "material": "rocket-fuel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "solid-fuel",
+          "amount": 10
+        },
+        {
+          "material": "water",
+          "amount": 50
+        },
+        {
+          "material": "ammonia",
+          "amount": 500
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "foundation",
+      "name": "Foundation",
+      "outputs": [
+        {
+          "material": "foundation",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "tungsten-plate",
+          "amount": 4
+        },
+        {
+          "material": "lithium-plate",
+          "amount": 4
+        },
+        {
+          "material": "carbon-fiber",
+          "amount": 4
+        },
+        {
+          "material": "stone",
+          "amount": 20
+        },
+        {
+          "material": "fluoroketone-cold",
+          "amount": 20
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "promethium-science-pack",
+      "name": "Promethium science pack",
+      "outputs": [
+        {
+          "material": "promethium-science-pack",
+          "amount": 10
+        }
+      ],
+      "inputs": [
+        {
+          "material": "promethium-asteroid-chunk",
+          "amount": 25
+        },
+        {
+          "material": "quantum-processor",
+          "amount": 1
+        },
+        {
+          "material": "biter-egg",
+          "amount": 10
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "tree-seed",
+      "name": "Tree seed",
+      "outputs": [
+        {
+          "material": "tree-seed",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "wood",
+          "amount": 2
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "water-barrel",
+      "name": "Fill Water barrel",
+      "outputs": [
+        {
+          "material": "water-barrel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "water",
+          "amount": 50
+        },
+        {
+          "material": "barrel",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "empty-water-barrel",
+      "name": "Empty Water barrel",
+      "outputs": [
+        {
+          "material": "water",
+          "amount": 50
+        },
+        {
+          "material": "barrel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "water-barrel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "sulfuric-acid-barrel",
+      "name": "Fill Sulfuric acid barrel",
+      "outputs": [
+        {
+          "material": "sulfuric-acid-barrel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "sulfuric-acid",
+          "amount": 50
+        },
+        {
+          "material": "barrel",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "empty-sulfuric-acid-barrel",
+      "name": "Empty Sulfuric acid barrel",
+      "outputs": [
+        {
+          "material": "sulfuric-acid",
+          "amount": 50
+        },
+        {
+          "material": "barrel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "sulfuric-acid-barrel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "crude-oil-barrel",
+      "name": "Fill Crude oil barrel",
+      "outputs": [
+        {
+          "material": "crude-oil-barrel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "crude-oil",
+          "amount": 50
+        },
+        {
+          "material": "barrel",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "empty-crude-oil-barrel",
+      "name": "Empty Crude oil barrel",
+      "outputs": [
+        {
+          "material": "crude-oil",
+          "amount": 50
+        },
+        {
+          "material": "barrel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "crude-oil-barrel",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "heavy-oil-barrel",
+      "name": "Fill Heavy oil barrel",
+      "outputs": [
+        {
+          "material": "heavy-oil-barrel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "heavy-oil",
+          "amount": 50
+        },
+        {
+          "material": "barrel",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "empty-heavy-oil-barrel",
+      "name": "Empty Heavy oil barrel",
+      "outputs": [
+        {
+          "material": "heavy-oil",
+          "amount": 50
+        },
+        {
+          "material": "barrel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "heavy-oil-barrel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "light-oil-barrel",
+      "name": "Fill Light oil barrel",
+      "outputs": [
+        {
+          "material": "light-oil-barrel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "light-oil",
+          "amount": 50
+        },
+        {
+          "material": "barrel",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "empty-light-oil-barrel",
+      "name": "Empty Light oil barrel",
+      "outputs": [
+        {
+          "material": "light-oil",
+          "amount": 50
+        },
+        {
+          "material": "barrel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "light-oil-barrel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "petroleum-gas-barrel",
+      "name": "Fill Petroleum gas barrel",
+      "outputs": [
+        {
+          "material": "petroleum-gas-barrel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "petroleum-gas",
+          "amount": 50
+        },
+        {
+          "material": "barrel",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "empty-petroleum-gas-barrel",
+      "name": "Empty Petroleum gas barrel",
+      "outputs": [
+        {
+          "material": "petroleum-gas",
+          "amount": 50
+        },
+        {
+          "material": "barrel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "petroleum-gas-barrel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "lubricant-barrel",
+      "name": "Fill Lubricant barrel",
+      "outputs": [
+        {
+          "material": "lubricant-barrel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "lubricant",
+          "amount": 50
+        },
+        {
+          "material": "barrel",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "empty-lubricant-barrel",
+      "name": "Empty Lubricant barrel",
+      "outputs": [
+        {
+          "material": "lubricant",
+          "amount": 50
+        },
+        {
+          "material": "barrel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "lubricant-barrel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "fluoroketone-cold-barrel",
+      "name": "Fill Fluoroketone (Cold) barrel",
+      "outputs": [
+        {
+          "material": "fluoroketone-cold-barrel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "fluoroketone-cold",
+          "amount": 50
+        },
+        {
+          "material": "barrel",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "empty-fluoroketone-cold-barrel",
+      "name": "Empty Fluoroketone (Cold) barrel",
+      "outputs": [
+        {
+          "material": "fluoroketone-cold",
+          "amount": 50
+        },
+        {
+          "material": "barrel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "fluoroketone-cold-barrel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "fluoroketone-hot-barrel",
+      "name": "Fill Fluoroketone (Hot) barrel",
+      "outputs": [
+        {
+          "material": "fluoroketone-hot-barrel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "fluoroketone-hot",
+          "amount": 50
+        },
+        {
+          "material": "barrel",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "empty-fluoroketone-hot-barrel",
+      "name": "Empty Fluoroketone (Hot) barrel",
+      "outputs": [
+        {
+          "material": "fluoroketone-hot",
+          "amount": 50
+        },
+        {
+          "material": "barrel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "fluoroketone-hot-barrel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "speed-module-recycling",
+      "name": "Speed module recycling",
+      "outputs": [
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "speed-module",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "speed-module-2-recycling",
+      "name": "Speed module 2 recycling",
+      "outputs": [
+        {
+          "material": "speed-module",
+          "amount": 1
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        },
+        {
+          "material": "processing-unit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "speed-module-2",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "speed-module-3-recycling",
+      "name": "Speed module 3 recycling",
+      "outputs": [
+        {
+          "material": "speed-module-2",
+          "amount": 1
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        },
+        {
+          "material": "processing-unit",
+          "amount": 1
+        },
+        {
+          "material": "tungsten-carbide",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "speed-module-3",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "productivity-module-recycling",
+      "name": "Productivity module recycling",
+      "outputs": [
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "productivity-module",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "productivity-module-2-recycling",
+      "name": "Productivity module 2 recycling",
+      "outputs": [
+        {
+          "material": "productivity-module",
+          "amount": 1
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        },
+        {
+          "material": "processing-unit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "productivity-module-2",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "productivity-module-3-recycling",
+      "name": "Productivity module 3 recycling",
+      "outputs": [
+        {
+          "material": "productivity-module-2",
+          "amount": 1
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        },
+        {
+          "material": "processing-unit",
+          "amount": 1
+        },
+        {
+          "material": "biter-egg",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "productivity-module-3",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "efficiency-module-recycling",
+      "name": "Efficiency module recycling",
+      "outputs": [
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "efficiency-module",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "efficiency-module-2-recycling",
+      "name": "Efficiency module 2 recycling",
+      "outputs": [
+        {
+          "material": "efficiency-module",
+          "amount": 1
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        },
+        {
+          "material": "processing-unit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "efficiency-module-2",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "efficiency-module-3-recycling",
+      "name": "Efficiency module 3 recycling",
+      "outputs": [
+        {
+          "material": "efficiency-module-2",
+          "amount": 1
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        },
+        {
+          "material": "processing-unit",
+          "amount": 1
+        },
+        {
+          "material": "spoilage",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "efficiency-module-3",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "bulk-inserter-recycling",
+      "name": "Bulk inserter recycling",
+      "outputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 3
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 3
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 0
+        },
+        {
+          "material": "fast-inserter",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "bulk-inserter",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "barrel-recycling",
+      "name": "Barrel recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "barrel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "night-vision-equipment-recycling",
+      "name": "Nightvision recycling",
+      "outputs": [
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        },
+        {
+          "material": "steel-plate",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "night-vision-equipment",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "belt-immunity-equipment-recycling",
+      "name": "Belt immunity equipment recycling",
+      "outputs": [
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        },
+        {
+          "material": "steel-plate",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "belt-immunity-equipment",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "energy-shield-equipment-recycling",
+      "name": "Energy shield recycling",
+      "outputs": [
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        },
+        {
+          "material": "steel-plate",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "energy-shield-equipment",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "energy-shield-mk2-equipment-recycling",
+      "name": "Energy shield MK2 recycling",
+      "outputs": [
+        {
+          "material": "energy-shield-equipment",
+          "amount": 2
+        },
+        {
+          "material": "processing-unit",
+          "amount": 1
+        },
+        {
+          "material": "low-density-structure",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "energy-shield-mk2-equipment",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "battery-equipment-recycling",
+      "name": "Personal battery recycling",
+      "outputs": [
+        {
+          "material": "battery",
+          "amount": 1
+        },
+        {
+          "material": "steel-plate",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "battery-equipment",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "battery-mk2-equipment-recycling",
+      "name": "Personal battery MK2 recycling",
+      "outputs": [
+        {
+          "material": "battery-equipment",
+          "amount": 2
+        },
+        {
+          "material": "processing-unit",
+          "amount": 3
+        },
+        {
+          "material": "low-density-structure",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "battery-mk2-equipment",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "solar-panel-equipment-recycling",
+      "name": "Portable solar panel recycling",
+      "outputs": [
+        {
+          "material": "solar-panel",
+          "amount": 0
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 0
+        },
+        {
+          "material": "steel-plate",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "solar-panel-equipment",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "fission-reactor-equipment-recycling",
+      "name": "Portable fission reactor recycling",
+      "outputs": [
+        {
+          "material": "processing-unit",
+          "amount": 50
+        },
+        {
+          "material": "low-density-structure",
+          "amount": 12
+        },
+        {
+          "material": "uranium-fuel-cell",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "fission-reactor-equipment",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "personal-laser-defense-equipment-recycling",
+      "name": "Personal laser defense recycling",
+      "outputs": [
+        {
+          "material": "processing-unit",
+          "amount": 5
+        },
+        {
+          "material": "low-density-structure",
+          "amount": 1
+        },
+        {
+          "material": "laser-turret",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "personal-laser-defense-equipment",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "discharge-defense-equipment-recycling",
+      "name": "Discharge defense recycling",
+      "outputs": [
+        {
+          "material": "processing-unit",
+          "amount": 1
+        },
+        {
+          "material": "steel-plate",
+          "amount": 5
+        },
+        {
+          "material": "laser-turret",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "discharge-defense-equipment",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "exoskeleton-equipment-recycling",
+      "name": "Exoskeleton recycling",
+      "outputs": [
+        {
+          "material": "processing-unit",
+          "amount": 2
+        },
+        {
+          "material": "electric-engine-unit",
+          "amount": 7
+        },
+        {
+          "material": "steel-plate",
+          "amount": 5
+        }
+      ],
+      "inputs": [
+        {
+          "material": "exoskeleton-equipment",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "personal-roboport-equipment-recycling",
+      "name": "Personal roboport recycling",
+      "outputs": [
+        {
+          "material": "advanced-circuit",
+          "amount": 2
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 10
+        },
+        {
+          "material": "steel-plate",
+          "amount": 5
+        },
+        {
+          "material": "battery",
+          "amount": 11
+        }
+      ],
+      "inputs": [
+        {
+          "material": "personal-roboport-equipment",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "personal-roboport-mk2-equipment-recycling",
+      "name": "Personal roboport MK2 recycling",
+      "outputs": [
+        {
+          "material": "personal-roboport-equipment",
+          "amount": 1
+        },
+        {
+          "material": "processing-unit",
+          "amount": 12
+        },
+        {
+          "material": "superconductor",
+          "amount": 12
+        }
+      ],
+      "inputs": [
+        {
+          "material": "personal-roboport-mk2-equipment",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "laser-turret-recycling",
+      "name": "Laser turret recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 5
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 5
+        },
+        {
+          "material": "battery",
+          "amount": 3
+        }
+      ],
+      "inputs": [
+        {
+          "material": "laser-turret",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "flamethrower-turret-recycling",
+      "name": "Flamethrower turret recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 7
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 3
+        },
+        {
+          "material": "pipe",
+          "amount": 2
+        },
+        {
+          "material": "engine-unit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "flamethrower-turret",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "artillery-turret-recycling",
+      "name": "Artillery turret recycling",
+      "outputs": [
+        {
+          "material": "tungsten-plate",
+          "amount": 15
+        },
+        {
+          "material": "refined-concrete",
+          "amount": 15
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 10
+        },
+        {
+          "material": "processing-unit",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "artillery-turret",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "gun-turret-recycling",
+      "name": "Gun turret recycling",
+      "outputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 2
+        },
+        {
+          "material": "copper-plate",
+          "amount": 2
+        },
+        {
+          "material": "iron-plate",
+          "amount": 5
+        }
+      ],
+      "inputs": [
+        {
+          "material": "gun-turret",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "wooden-chest-recycling",
+      "name": "Wooden chest recycling",
+      "outputs": [
+        {
+          "material": "wood",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "wooden-chest",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "display-panel-recycling",
+      "name": "Display panel recycling",
+      "outputs": [
+        {
+          "material": "iron-plate",
+          "amount": 0
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "display-panel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "iron-stick-recycling",
+      "name": "Iron stick recycling",
+      "outputs": [
+        {
+          "material": "iron-plate",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-stick",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "stone-furnace-recycling",
+      "name": "Stone furnace recycling",
+      "outputs": [
+        {
+          "material": "stone",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "stone-furnace",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "boiler-recycling",
+      "name": "Boiler recycling",
+      "outputs": [
+        {
+          "material": "stone-furnace",
+          "amount": 0
+        },
+        {
+          "material": "pipe",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "boiler",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "steam-engine-recycling",
+      "name": "Steam engine recycling",
+      "outputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 2
+        },
+        {
+          "material": "pipe",
+          "amount": 1
+        },
+        {
+          "material": "iron-plate",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steam-engine",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "iron-gear-wheel-recycling",
+      "name": "Iron gear wheel recycling",
+      "outputs": [
+        {
+          "material": "iron-plate",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "electronic-circuit-recycling",
+      "name": "Electronic circuit recycling",
+      "outputs": [
+        {
+          "material": "iron-plate",
+          "amount": 0
+        },
+        {
+          "material": "copper-cable",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "transport-belt-recycling",
+      "name": "Transport belt recycling",
+      "outputs": [
+        {
+          "material": "iron-plate",
+          "amount": 0
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "transport-belt",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "electric-mining-drill-recycling",
+      "name": "Electric mining drill recycling",
+      "outputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 1
+        },
+        {
+          "material": "iron-plate",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electric-mining-drill",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "burner-mining-drill-recycling",
+      "name": "Burner mining drill recycling",
+      "outputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 0
+        },
+        {
+          "material": "stone-furnace",
+          "amount": 0
+        },
+        {
+          "material": "iron-plate",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "burner-mining-drill",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "inserter-recycling",
+      "name": "Inserter recycling",
+      "outputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 0
+        },
+        {
+          "material": "iron-plate",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "inserter",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "fast-inserter-recycling",
+      "name": "Fast inserter recycling",
+      "outputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        },
+        {
+          "material": "iron-plate",
+          "amount": 0
+        },
+        {
+          "material": "inserter",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "fast-inserter",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "long-handed-inserter-recycling",
+      "name": "Long-handed inserter recycling",
+      "outputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 0
+        },
+        {
+          "material": "iron-plate",
+          "amount": 0
+        },
+        {
+          "material": "inserter",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "long-handed-inserter",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "burner-inserter-recycling",
+      "name": "Burner inserter recycling",
+      "outputs": [
+        {
+          "material": "iron-plate",
+          "amount": 0
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "burner-inserter",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "pipe-recycling",
+      "name": "Pipe recycling",
+      "outputs": [
+        {
+          "material": "iron-plate",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "pipe",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "offshore-pump-recycling",
+      "name": "Offshore pump recycling",
+      "outputs": [
+        {
+          "material": "pipe",
+          "amount": 0
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "offshore-pump",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "copper-cable-recycling",
+      "name": "Copper cable recycling",
+      "outputs": [
+        {
+          "material": "copper-plate",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "copper-cable",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "small-electric-pole-recycling",
+      "name": "Small electric pole recycling",
+      "outputs": [
+        {
+          "material": "wood",
+          "amount": 0
+        },
+        {
+          "material": "copper-cable",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "small-electric-pole",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "submachine-gun-recycling",
+      "name": "Submachine gun recycling",
+      "outputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 2
+        },
+        {
+          "material": "copper-plate",
+          "amount": 1
+        },
+        {
+          "material": "iron-plate",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "submachine-gun",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "firearm-magazine-recycling",
+      "name": "Firearm magazine recycling",
+      "outputs": [
+        {
+          "material": "iron-plate",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "firearm-magazine",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "light-armor-recycling",
+      "name": "Light armor recycling",
+      "outputs": [
+        {
+          "material": "iron-plate",
+          "amount": 10
+        }
+      ],
+      "inputs": [
+        {
+          "material": "light-armor",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "radar-recycling",
+      "name": "Radar recycling",
+      "outputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 1
+        },
+        {
+          "material": "iron-plate",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "radar",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "small-lamp-recycling",
+      "name": "Lamp recycling",
+      "outputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        },
+        {
+          "material": "copper-cable",
+          "amount": 0
+        },
+        {
+          "material": "iron-plate",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "small-lamp",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "pipe-to-ground-recycling",
+      "name": "Pipe to ground recycling",
+      "outputs": [
+        {
+          "material": "pipe",
+          "amount": 1
+        },
+        {
+          "material": "iron-plate",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "pipe-to-ground",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "assembling-machine-1-recycling",
+      "name": "Assembling machine 1 recycling",
+      "outputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 1
+        },
+        {
+          "material": "iron-plate",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "assembling-machine-1",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "repair-pack-recycling",
+      "name": "Repair pack recycling",
+      "outputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "repair-pack",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "lab-recycling",
+      "name": "Lab recycling",
+      "outputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 2
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 2
+        },
+        {
+          "material": "transport-belt",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "lab",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "stone-wall-recycling",
+      "name": "Wall recycling",
+      "outputs": [
+        {
+          "material": "stone-brick",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "stone-wall",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "assembling-machine-2-recycling",
+      "name": "Assembling machine 2 recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 0
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 1
+        },
+        {
+          "material": "assembling-machine-1",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "assembling-machine-2",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "splitter-recycling",
+      "name": "Splitter recycling",
+      "outputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        },
+        {
+          "material": "iron-plate",
+          "amount": 1
+        },
+        {
+          "material": "transport-belt",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "splitter",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "underground-belt-recycling",
+      "name": "Underground belt recycling",
+      "outputs": [
+        {
+          "material": "iron-plate",
+          "amount": 1
+        },
+        {
+          "material": "transport-belt",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "underground-belt",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "loader-recycling",
+      "name": "Loader recycling",
+      "outputs": [
+        {
+          "material": "inserter",
+          "amount": 1
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 1
+        },
+        {
+          "material": "iron-plate",
+          "amount": 1
+        },
+        {
+          "material": "transport-belt",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "loader",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "car-recycling",
+      "name": "Car recycling",
+      "outputs": [
+        {
+          "material": "engine-unit",
+          "amount": 2
+        },
+        {
+          "material": "iron-plate",
+          "amount": 5
+        },
+        {
+          "material": "steel-plate",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "car",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "engine-unit-recycling",
+      "name": "Engine unit recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 0
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 0
+        },
+        {
+          "material": "pipe",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "engine-unit",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "iron-chest-recycling",
+      "name": "Iron chest recycling",
+      "outputs": [
+        {
+          "material": "iron-plate",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-chest",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "big-electric-pole-recycling",
+      "name": "Big electric pole recycling",
+      "outputs": [
+        {
+          "material": "iron-stick",
+          "amount": 2
+        },
+        {
+          "material": "steel-plate",
+          "amount": 1
+        },
+        {
+          "material": "copper-cable",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "big-electric-pole",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "medium-electric-pole-recycling",
+      "name": "Medium electric pole recycling",
+      "outputs": [
+        {
+          "material": "iron-stick",
+          "amount": 1
+        },
+        {
+          "material": "steel-plate",
+          "amount": 0
+        },
+        {
+          "material": "copper-cable",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "medium-electric-pole",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "shotgun-recycling",
+      "name": "Shotgun recycling",
+      "outputs": [
+        {
+          "material": "iron-plate",
+          "amount": 3
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 1
+        },
+        {
+          "material": "copper-plate",
+          "amount": 2
+        },
+        {
+          "material": "wood",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "shotgun",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "shotgun-shell-recycling",
+      "name": "Shotgun shells recycling",
+      "outputs": [
+        {
+          "material": "copper-plate",
+          "amount": 0
+        },
+        {
+          "material": "iron-plate",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "shotgun-shell",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "piercing-rounds-magazine-recycling",
+      "name": "Piercing rounds magazine recycling",
+      "outputs": [
+        {
+          "material": "firearm-magazine",
+          "amount": 0
+        },
+        {
+          "material": "steel-plate",
+          "amount": 0
+        },
+        {
+          "material": "copper-plate",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "piercing-rounds-magazine",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "grenade-recycling",
+      "name": "Grenade recycling",
+      "outputs": [
+        {
+          "material": "iron-plate",
+          "amount": 1
+        },
+        {
+          "material": "coal",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "grenade",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "steel-furnace-recycling",
+      "name": "Steel furnace recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 1
+        },
+        {
+          "material": "stone-brick",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-furnace",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "gate-recycling",
+      "name": "Gate recycling",
+      "outputs": [
+        {
+          "material": "stone-wall",
+          "amount": 0
+        },
+        {
+          "material": "steel-plate",
+          "amount": 0
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "gate",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "heavy-armor-recycling",
+      "name": "Heavy armor recycling",
+      "outputs": [
+        {
+          "material": "copper-plate",
+          "amount": 25
+        },
+        {
+          "material": "steel-plate",
+          "amount": 12
+        }
+      ],
+      "inputs": [
+        {
+          "material": "heavy-armor",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "steel-chest-recycling",
+      "name": "Steel chest recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-chest",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "fast-underground-belt-recycling",
+      "name": "Fast underground belt recycling",
+      "outputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 5
+        },
+        {
+          "material": "underground-belt",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "fast-underground-belt",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "fast-splitter-recycling",
+      "name": "Fast splitter recycling",
+      "outputs": [
+        {
+          "material": "splitter",
+          "amount": 0
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 2
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "fast-splitter",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "concrete-recycling",
+      "name": "Concrete recycling",
+      "outputs": [
+        {
+          "material": "stone-brick",
+          "amount": 0
+        },
+        {
+          "material": "iron-ore",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "concrete",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "hazard-concrete-recycling",
+      "name": "Hazard concrete recycling",
+      "outputs": [
+        {
+          "material": "stone-brick",
+          "amount": 0
+        },
+        {
+          "material": "iron-ore",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "hazard-concrete",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "refined-concrete-recycling",
+      "name": "Refined concrete recycling",
+      "outputs": [
+        {
+          "material": "concrete",
+          "amount": 0
+        },
+        {
+          "material": "iron-stick",
+          "amount": 0
+        },
+        {
+          "material": "steel-plate",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "refined-concrete",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "refined-hazard-concrete-recycling",
+      "name": "Refined hazard concrete recycling",
+      "outputs": [
+        {
+          "material": "concrete",
+          "amount": 0
+        },
+        {
+          "material": "iron-stick",
+          "amount": 0
+        },
+        {
+          "material": "steel-plate",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "refined-hazard-concrete",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "fast-transport-belt-recycling",
+      "name": "Fast transport belt recycling",
+      "outputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 1
+        },
+        {
+          "material": "transport-belt",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "fast-transport-belt",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "solar-panel-recycling",
+      "name": "Solar panel recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 1
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 3
+        },
+        {
+          "material": "copper-plate",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "solar-panel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "rail-recycling",
+      "name": "Rail recycling",
+      "outputs": [
+        {
+          "material": "stone",
+          "amount": 0
+        },
+        {
+          "material": "iron-stick",
+          "amount": 0
+        },
+        {
+          "material": "steel-plate",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "rail",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "locomotive-recycling",
+      "name": "Locomotive recycling",
+      "outputs": [
+        {
+          "material": "engine-unit",
+          "amount": 5
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 2
+        },
+        {
+          "material": "steel-plate",
+          "amount": 7
+        }
+      ],
+      "inputs": [
+        {
+          "material": "locomotive",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "cargo-wagon-recycling",
+      "name": "Cargo wagon recycling",
+      "outputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 2
+        },
+        {
+          "material": "iron-plate",
+          "amount": 5
+        },
+        {
+          "material": "steel-plate",
+          "amount": 5
+        }
+      ],
+      "inputs": [
+        {
+          "material": "cargo-wagon",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "rail-signal-recycling",
+      "name": "Rail signal recycling",
+      "outputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        },
+        {
+          "material": "iron-plate",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "rail-signal",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "rail-chain-signal-recycling",
+      "name": "Rail chain signal recycling",
+      "outputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        },
+        {
+          "material": "iron-plate",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "rail-chain-signal",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "train-stop-recycling",
+      "name": "Train stop recycling",
+      "outputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        },
+        {
+          "material": "iron-plate",
+          "amount": 1
+        },
+        {
+          "material": "iron-stick",
+          "amount": 1
+        },
+        {
+          "material": "steel-plate",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "train-stop",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "arithmetic-combinator-recycling",
+      "name": "Arithmetic combinator recycling",
+      "outputs": [
+        {
+          "material": "copper-cable",
+          "amount": 1
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "arithmetic-combinator",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "decider-combinator-recycling",
+      "name": "Decider combinator recycling",
+      "outputs": [
+        {
+          "material": "copper-cable",
+          "amount": 1
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "decider-combinator",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "constant-combinator-recycling",
+      "name": "Constant combinator recycling",
+      "outputs": [
+        {
+          "material": "copper-cable",
+          "amount": 1
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "constant-combinator",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "selector-combinator-recycling",
+      "name": "Selector combinator recycling",
+      "outputs": [
+        {
+          "material": "advanced-circuit",
+          "amount": 0
+        },
+        {
+          "material": "decider-combinator",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "selector-combinator",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "power-switch-recycling",
+      "name": "Power switch recycling",
+      "outputs": [
+        {
+          "material": "iron-plate",
+          "amount": 1
+        },
+        {
+          "material": "copper-cable",
+          "amount": 1
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "power-switch",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "programmable-speaker-recycling",
+      "name": "Programmable speaker recycling",
+      "outputs": [
+        {
+          "material": "iron-plate",
+          "amount": 0
+        },
+        {
+          "material": "iron-stick",
+          "amount": 1
+        },
+        {
+          "material": "copper-cable",
+          "amount": 1
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "programmable-speaker",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "poison-capsule-recycling",
+      "name": "Poison capsule recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 0
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        },
+        {
+          "material": "coal",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "poison-capsule",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "slowdown-capsule-recycling",
+      "name": "Slowdown capsule recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 0
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        },
+        {
+          "material": "coal",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "slowdown-capsule",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "cluster-grenade-recycling",
+      "name": "Cluster grenade recycling",
+      "outputs": [
+        {
+          "material": "grenade",
+          "amount": 1
+        },
+        {
+          "material": "explosives",
+          "amount": 1
+        },
+        {
+          "material": "steel-plate",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "cluster-grenade",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "defender-capsule-recycling",
+      "name": "Defender capsule recycling",
+      "outputs": [
+        {
+          "material": "piercing-rounds-magazine",
+          "amount": 0
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "defender-capsule",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "distractor-capsule-recycling",
+      "name": "Distractor capsule recycling",
+      "outputs": [
+        {
+          "material": "defender-capsule",
+          "amount": 1
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "distractor-capsule",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "destroyer-capsule-recycling",
+      "name": "Destroyer capsule recycling",
+      "outputs": [
+        {
+          "material": "distractor-capsule",
+          "amount": 1
+        },
+        {
+          "material": "steel-plate",
+          "amount": 1
+        },
+        {
+          "material": "processing-unit",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "destroyer-capsule",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "cliff-explosives-recycling",
+      "name": "Cliff explosives recycling",
+      "outputs": [
+        {
+          "material": "explosives",
+          "amount": 2
+        },
+        {
+          "material": "calcite",
+          "amount": 2
+        },
+        {
+          "material": "grenade",
+          "amount": 0
+        },
+        {
+          "material": "barrel",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "cliff-explosives",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "uranium-rounds-magazine-recycling",
+      "name": "Uranium rounds magazine recycling",
+      "outputs": [
+        {
+          "material": "piercing-rounds-magazine",
+          "amount": 0
+        },
+        {
+          "material": "uranium-238",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "uranium-rounds-magazine",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "rocket-recycling",
+      "name": "Rocket recycling",
+      "outputs": [
+        {
+          "material": "explosives",
+          "amount": 0
+        },
+        {
+          "material": "iron-plate",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "rocket",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "explosive-rocket-recycling",
+      "name": "Explosive rocket recycling",
+      "outputs": [
+        {
+          "material": "rocket",
+          "amount": 0
+        },
+        {
+          "material": "explosives",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "explosive-rocket",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "atomic-bomb-recycling",
+      "name": "Atomic bomb recycling",
+      "outputs": [
+        {
+          "material": "processing-unit",
+          "amount": 2
+        },
+        {
+          "material": "explosives",
+          "amount": 2
+        },
+        {
+          "material": "uranium-235",
+          "amount": 25
+        }
+      ],
+      "inputs": [
+        {
+          "material": "atomic-bomb",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "piercing-shotgun-shell-recycling",
+      "name": "Piercing shotgun shells recycling",
+      "outputs": [
+        {
+          "material": "shotgun-shell",
+          "amount": 0
+        },
+        {
+          "material": "copper-plate",
+          "amount": 0
+        },
+        {
+          "material": "steel-plate",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "piercing-shotgun-shell",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "cannon-shell-recycling",
+      "name": "Cannon shell recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 0
+        },
+        {
+          "material": "plastic-bar",
+          "amount": 0
+        },
+        {
+          "material": "explosives",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "cannon-shell",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "explosive-cannon-shell-recycling",
+      "name": "Explosive cannon shell recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 0
+        },
+        {
+          "material": "plastic-bar",
+          "amount": 0
+        },
+        {
+          "material": "explosives",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "explosive-cannon-shell",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "uranium-cannon-shell-recycling",
+      "name": "Uranium cannon shell recycling",
+      "outputs": [
+        {
+          "material": "cannon-shell",
+          "amount": 0
+        },
+        {
+          "material": "uranium-238",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "uranium-cannon-shell",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "explosive-uranium-cannon-shell-recycling",
+      "name": "Explosive uranium cannon shell recycling",
+      "outputs": [
+        {
+          "material": "explosive-cannon-shell",
+          "amount": 0
+        },
+        {
+          "material": "uranium-238",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "explosive-uranium-cannon-shell",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "artillery-shell-recycling",
+      "name": "Artillery shell recycling",
+      "outputs": [
+        {
+          "material": "radar",
+          "amount": 0
+        },
+        {
+          "material": "calcite",
+          "amount": 0
+        },
+        {
+          "material": "tungsten-plate",
+          "amount": 1
+        },
+        {
+          "material": "explosives",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "artillery-shell",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "express-transport-belt-recycling",
+      "name": "Express transport belt recycling",
+      "outputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 2
+        },
+        {
+          "material": "fast-transport-belt",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "express-transport-belt",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "assembling-machine-3-recycling",
+      "name": "Assembling machine 3 recycling",
+      "outputs": [
+        {
+          "material": "assembling-machine-2",
+          "amount": 0
+        },
+        {
+          "material": "speed-module",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "assembling-machine-3",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "tank-recycling",
+      "name": "Tank recycling",
+      "outputs": [
+        {
+          "material": "engine-unit",
+          "amount": 8
+        },
+        {
+          "material": "steel-plate",
+          "amount": 12
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 3
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "tank",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "spidertron-recycling",
+      "name": "Spidertron recycling",
+      "outputs": [
+        {
+          "material": "exoskeleton-equipment",
+          "amount": 1
+        },
+        {
+          "material": "fission-reactor-equipment",
+          "amount": 0
+        },
+        {
+          "material": "rocket-turret",
+          "amount": 0
+        },
+        {
+          "material": "radar",
+          "amount": 0
+        },
+        {
+          "material": "raw-fish",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "spidertron",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "fluid-wagon-recycling",
+      "name": "Fluid wagon recycling",
+      "outputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 2
+        },
+        {
+          "material": "steel-plate",
+          "amount": 4
+        },
+        {
+          "material": "pipe",
+          "amount": 2
+        },
+        {
+          "material": "storage-tank",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "fluid-wagon",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "artillery-wagon-recycling",
+      "name": "Artillery wagon recycling",
+      "outputs": [
+        {
+          "material": "engine-unit",
+          "amount": 15
+        },
+        {
+          "material": "tungsten-plate",
+          "amount": 15
+        },
+        {
+          "material": "refined-concrete",
+          "amount": 15
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 10
+        },
+        {
+          "material": "processing-unit",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "artillery-wagon",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "modular-armor-recycling",
+      "name": "Modular armor recycling",
+      "outputs": [
+        {
+          "material": "advanced-circuit",
+          "amount": 7
+        },
+        {
+          "material": "steel-plate",
+          "amount": 12
+        }
+      ],
+      "inputs": [
+        {
+          "material": "modular-armor",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "power-armor-recycling",
+      "name": "Power armor recycling",
+      "outputs": [
+        {
+          "material": "processing-unit",
+          "amount": 10
+        },
+        {
+          "material": "electric-engine-unit",
+          "amount": 5
+        },
+        {
+          "material": "steel-plate",
+          "amount": 10
+        }
+      ],
+      "inputs": [
+        {
+          "material": "power-armor",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "power-armor-mk2-recycling",
+      "name": "Power armor MK2 recycling",
+      "outputs": [
+        {
+          "material": "efficiency-module",
+          "amount": 25
+        },
+        {
+          "material": "speed-module",
+          "amount": 25
+        },
+        {
+          "material": "processing-unit",
+          "amount": 15
+        },
+        {
+          "material": "electric-engine-unit",
+          "amount": 10
+        },
+        {
+          "material": "low-density-structure",
+          "amount": 7
+        }
+      ],
+      "inputs": [
+        {
+          "material": "power-armor-mk2",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "flamethrower-recycling",
+      "name": "Flamethrower recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 1
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "flamethrower",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "land-mine-recycling",
+      "name": "Land mine recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 0
+        },
+        {
+          "material": "explosives",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "land-mine",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "rocket-launcher-recycling",
+      "name": "Rocket launcher recycling",
+      "outputs": [
+        {
+          "material": "iron-plate",
+          "amount": 1
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 1
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "rocket-launcher",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "combat-shotgun-recycling",
+      "name": "Combat shotgun recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 3
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 1
+        },
+        {
+          "material": "copper-plate",
+          "amount": 2
+        },
+        {
+          "material": "wood",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "combat-shotgun",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "express-underground-belt-recycling",
+      "name": "Express underground belt recycling",
+      "outputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 10
+        },
+        {
+          "material": "fast-underground-belt",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "express-underground-belt",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "fast-loader-recycling",
+      "name": "Fast loader recycling",
+      "outputs": [
+        {
+          "material": "fast-transport-belt",
+          "amount": 1
+        },
+        {
+          "material": "loader",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "fast-loader",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "express-loader-recycling",
+      "name": "Express loader recycling",
+      "outputs": [
+        {
+          "material": "express-transport-belt",
+          "amount": 1
+        },
+        {
+          "material": "fast-loader",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "express-loader",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "express-splitter-recycling",
+      "name": "Express splitter recycling",
+      "outputs": [
+        {
+          "material": "fast-splitter",
+          "amount": 0
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 2
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "express-splitter",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "advanced-circuit-recycling",
+      "name": "Advanced circuit recycling",
+      "outputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        },
+        {
+          "material": "plastic-bar",
+          "amount": 0
+        },
+        {
+          "material": "copper-cable",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "processing-unit-recycling",
+      "name": "Processing unit recycling",
+      "outputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 5
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "processing-unit",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "logistic-robot-recycling",
+      "name": "Logistic robot recycling",
+      "outputs": [
+        {
+          "material": "flying-robot-frame",
+          "amount": 0
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "logistic-robot",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "construction-robot-recycling",
+      "name": "Construction robot recycling",
+      "outputs": [
+        {
+          "material": "flying-robot-frame",
+          "amount": 0
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "construction-robot",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "passive-provider-chest-recycling",
+      "name": "Passive provider chest recycling",
+      "outputs": [
+        {
+          "material": "steel-chest",
+          "amount": 0
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "passive-provider-chest",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "active-provider-chest-recycling",
+      "name": "Active provider chest recycling",
+      "outputs": [
+        {
+          "material": "steel-chest",
+          "amount": 0
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "active-provider-chest",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "storage-chest-recycling",
+      "name": "Storage chest recycling",
+      "outputs": [
+        {
+          "material": "steel-chest",
+          "amount": 0
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "storage-chest",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "buffer-chest-recycling",
+      "name": "Buffer chest recycling",
+      "outputs": [
+        {
+          "material": "steel-chest",
+          "amount": 0
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "buffer-chest",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "requester-chest-recycling",
+      "name": "Requester chest recycling",
+      "outputs": [
+        {
+          "material": "steel-chest",
+          "amount": 0
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "requester-chest",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "rocket-silo-recycling",
+      "name": "Rocket silo recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 250
+        },
+        {
+          "material": "concrete",
+          "amount": 250
+        },
+        {
+          "material": "pipe",
+          "amount": 25
+        },
+        {
+          "material": "processing-unit",
+          "amount": 50
+        },
+        {
+          "material": "electric-engine-unit",
+          "amount": 50
+        }
+      ],
+      "inputs": [
+        {
+          "material": "rocket-silo",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "cargo-landing-pad-recycling",
+      "name": "Cargo landing pad recycling",
+      "outputs": [
+        {
+          "material": "concrete",
+          "amount": 50
+        },
+        {
+          "material": "steel-plate",
+          "amount": 6
+        },
+        {
+          "material": "processing-unit",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "cargo-landing-pad",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "roboport-recycling",
+      "name": "Roboport recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 11
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 11
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 11
+        }
+      ],
+      "inputs": [
+        {
+          "material": "roboport",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "substation-recycling",
+      "name": "Substation recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 2
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        },
+        {
+          "material": "copper-cable",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "substation",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "accumulator-recycling",
+      "name": "Accumulator recycling",
+      "outputs": [
+        {
+          "material": "iron-plate",
+          "amount": 0
+        },
+        {
+          "material": "battery",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "accumulator",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "electric-furnace-recycling",
+      "name": "Electric furnace recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 2
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        },
+        {
+          "material": "stone-brick",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electric-furnace",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "beacon-recycling",
+      "name": "Beacon recycling",
+      "outputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 5
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 5
+        },
+        {
+          "material": "steel-plate",
+          "amount": 2
+        },
+        {
+          "material": "copper-cable",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "beacon",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "pumpjack-recycling",
+      "name": "Pumpjack recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 1
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 2
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        },
+        {
+          "material": "pipe",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "pumpjack",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "oil-refinery-recycling",
+      "name": "Oil refinery recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 3
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 2
+        },
+        {
+          "material": "stone-brick",
+          "amount": 2
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 2
+        },
+        {
+          "material": "pipe",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "oil-refinery",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "electric-engine-unit-recycling",
+      "name": "Electric engine unit recycling",
+      "outputs": [
+        {
+          "material": "engine-unit",
+          "amount": 0
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electric-engine-unit",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "flying-robot-frame-recycling",
+      "name": "Flying robot frame recycling",
+      "outputs": [
+        {
+          "material": "electric-engine-unit",
+          "amount": 0
+        },
+        {
+          "material": "battery",
+          "amount": 0
+        },
+        {
+          "material": "steel-plate",
+          "amount": 0
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "flying-robot-frame",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "battery-recycling",
+      "name": "Battery recycling",
+      "outputs": [
+        {
+          "material": "iron-plate",
+          "amount": 0
+        },
+        {
+          "material": "copper-plate",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "battery",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "storage-tank-recycling",
+      "name": "Storage tank recycling",
+      "outputs": [
+        {
+          "material": "iron-plate",
+          "amount": 5
+        },
+        {
+          "material": "steel-plate",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "storage-tank",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "pump-recycling",
+      "name": "Pump recycling",
+      "outputs": [
+        {
+          "material": "engine-unit",
+          "amount": 0
+        },
+        {
+          "material": "steel-plate",
+          "amount": 0
+        },
+        {
+          "material": "pipe",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "pump",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "chemical-plant-recycling",
+      "name": "Chemical plant recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 1
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 1
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        },
+        {
+          "material": "pipe",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "chemical-plant",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "low-density-structure-recycling",
+      "name": "Low density structure recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 0
+        },
+        {
+          "material": "copper-plate",
+          "amount": 5
+        },
+        {
+          "material": "plastic-bar",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "low-density-structure",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "rocket-fuel-recycling",
+      "name": "Rocket fuel recycling",
+      "outputs": [
+        {
+          "material": "solid-fuel",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "rocket-fuel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "nuclear-reactor-recycling",
+      "name": "Nuclear reactor recycling",
+      "outputs": [
+        {
+          "material": "concrete",
+          "amount": 125
+        },
+        {
+          "material": "steel-plate",
+          "amount": 125
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 125
+        },
+        {
+          "material": "copper-plate",
+          "amount": 125
+        }
+      ],
+      "inputs": [
+        {
+          "material": "nuclear-reactor",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "centrifuge-recycling",
+      "name": "Centrifuge recycling",
+      "outputs": [
+        {
+          "material": "concrete",
+          "amount": 25
+        },
+        {
+          "material": "steel-plate",
+          "amount": 12
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 25
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 25
+        }
+      ],
+      "inputs": [
+        {
+          "material": "centrifuge",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "nuclear-fuel-recycling",
+      "name": "Nuclear fuel recycling",
+      "outputs": [
+        {
+          "material": "uranium-235",
+          "amount": 0
+        },
+        {
+          "material": "rocket-fuel",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "nuclear-fuel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "heat-exchanger-recycling",
+      "name": "Heat exchanger recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 2
+        },
+        {
+          "material": "copper-plate",
+          "amount": 25
+        },
+        {
+          "material": "pipe",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "heat-exchanger",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "heat-pipe-recycling",
+      "name": "Heat pipe recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 2
+        },
+        {
+          "material": "copper-plate",
+          "amount": 5
+        }
+      ],
+      "inputs": [
+        {
+          "material": "heat-pipe",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "steam-turbine-recycling",
+      "name": "Steam turbine recycling",
+      "outputs": [
+        {
+          "material": "iron-gear-wheel",
+          "amount": 12
+        },
+        {
+          "material": "copper-plate",
+          "amount": 12
+        },
+        {
+          "material": "pipe",
+          "amount": 5
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steam-turbine",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "rail-support-recycling",
+      "name": "Rail support recycling",
+      "outputs": [
+        {
+          "material": "refined-concrete",
+          "amount": 5
+        },
+        {
+          "material": "steel-plate",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "rail-support",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "rail-ramp-recycling",
+      "name": "Rail ramp recycling",
+      "outputs": [
+        {
+          "material": "refined-concrete",
+          "amount": 25
+        },
+        {
+          "material": "rail",
+          "amount": 2
+        },
+        {
+          "material": "steel-plate",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "rail-ramp",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "recycler-recycling",
+      "name": "Recycler recycling",
+      "outputs": [
+        {
+          "material": "processing-unit",
+          "amount": 1
+        },
+        {
+          "material": "steel-plate",
+          "amount": 5
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 10
+        },
+        {
+          "material": "concrete",
+          "amount": 5
+        }
+      ],
+      "inputs": [
+        {
+          "material": "recycler",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "quality-module-recycling",
+      "name": "Quality module recycling",
+      "outputs": [
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "quality-module",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "quality-module-2-recycling",
+      "name": "Quality module 2 recycling",
+      "outputs": [
+        {
+          "material": "quality-module",
+          "amount": 1
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        },
+        {
+          "material": "processing-unit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "quality-module-2",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "quality-module-3-recycling",
+      "name": "Quality module 3 recycling",
+      "outputs": [
+        {
+          "material": "quality-module-2",
+          "amount": 1
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 1
+        },
+        {
+          "material": "processing-unit",
+          "amount": 1
+        },
+        {
+          "material": "superconductor",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "quality-module-3",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "artificial-yumako-soil-recycling",
+      "name": "Artificial yumako soil recycling",
+      "outputs": [
+        {
+          "material": "yumako-seed",
+          "amount": 0
+        },
+        {
+          "material": "nutrients",
+          "amount": 1
+        },
+        {
+          "material": "landfill",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "artificial-yumako-soil",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "overgrowth-yumako-soil-recycling",
+      "name": "Overgrowth yumako soil recycling",
+      "outputs": [
+        {
+          "material": "artificial-yumako-soil",
+          "amount": 0
+        },
+        {
+          "material": "yumako-seed",
+          "amount": 1
+        },
+        {
+          "material": "biter-egg",
+          "amount": 2
+        },
+        {
+          "material": "spoilage",
+          "amount": 12
+        }
+      ],
+      "inputs": [
+        {
+          "material": "overgrowth-yumako-soil",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "artificial-jellynut-soil-recycling",
+      "name": "Artificial jellynut soil recycling",
+      "outputs": [
+        {
+          "material": "jellynut-seed",
+          "amount": 0
+        },
+        {
+          "material": "nutrients",
+          "amount": 1
+        },
+        {
+          "material": "landfill",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "artificial-jellynut-soil",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "overgrowth-jellynut-soil-recycling",
+      "name": "Overgrowth jellynut soil recycling",
+      "outputs": [
+        {
+          "material": "artificial-jellynut-soil",
+          "amount": 0
+        },
+        {
+          "material": "jellynut-seed",
+          "amount": 1
+        },
+        {
+          "material": "biter-egg",
+          "amount": 2
+        },
+        {
+          "material": "spoilage",
+          "amount": 12
+        }
+      ],
+      "inputs": [
+        {
+          "material": "overgrowth-jellynut-soil",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "nutrients-recycling",
+      "name": "Nutrients recycling",
+      "outputs": [
+        {
+          "material": "spoilage",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "nutrients",
+          "amount": 1
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "toolbelt-equipment-recycling",
+      "name": "Toolbelt equipment recycling",
+      "outputs": [
+        {
+          "material": "advanced-circuit",
+          "amount": 0
+        },
+        {
+          "material": "carbon-fiber",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "toolbelt-equipment",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "battery-mk3-equipment-recycling",
+      "name": "Personal battery MK3 recycling",
+      "outputs": [
+        {
+          "material": "battery-mk2-equipment",
+          "amount": 1
+        },
+        {
+          "material": "supercapacitor",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "battery-mk3-equipment",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "space-platform-foundation-recycling",
+      "name": "Space platform foundation recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 5
+        },
+        {
+          "material": "copper-cable",
+          "amount": 5
+        }
+      ],
+      "inputs": [
+        {
+          "material": "space-platform-foundation",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "stack-inserter-recycling",
+      "name": "Stack inserter recycling",
+      "outputs": [
+        {
+          "material": "bulk-inserter",
+          "amount": 0
+        },
+        {
+          "material": "processing-unit",
+          "amount": 0
+        },
+        {
+          "material": "carbon-fiber",
+          "amount": 0
+        },
+        {
+          "material": "jelly",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "stack-inserter",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "rocket-turret-recycling",
+      "name": "Rocket turret recycling",
+      "outputs": [
+        {
+          "material": "rocket-launcher",
+          "amount": 1
+        },
+        {
+          "material": "processing-unit",
+          "amount": 1
+        },
+        {
+          "material": "carbon-fiber",
+          "amount": 5
+        },
+        {
+          "material": "steel-plate",
+          "amount": 5
+        },
+        {
+          "material": "iron-gear-wheel",
+          "amount": 5
+        }
+      ],
+      "inputs": [
+        {
+          "material": "rocket-turret",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "infinity-chest-recycling",
+      "name": "Infinity chest recycling",
+      "outputs": [
+        {
+          "material": "steel-chest",
+          "amount": 0
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "infinity-chest",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "infinity-pipe-recycling",
+      "name": "Infinity pipe recycling",
+      "outputs": [
+        {
+          "material": "pipe",
+          "amount": 0
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "infinity-pipe",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "heat-interface-recycling",
+      "name": "Heat interface recycling",
+      "outputs": [
+        {
+          "material": "heat-pipe",
+          "amount": 0
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "heat-interface",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "space-platform-starter-pack-recycling",
+      "name": "Space platform starter pack recycling",
+      "outputs": [
+        {
+          "material": "space-platform-foundation",
+          "amount": 15
+        },
+        {
+          "material": "steel-plate",
+          "amount": 5
+        },
+        {
+          "material": "processing-unit",
+          "amount": 5
+        }
+      ],
+      "inputs": [
+        {
+          "material": "space-platform-starter-pack",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "cargo-bay-recycling",
+      "name": "Cargo bay recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 5
+        },
+        {
+          "material": "low-density-structure",
+          "amount": 5
+        },
+        {
+          "material": "processing-unit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "cargo-bay",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "landing-pad-unloading-bay-recycling",
+      "name": "Landing pad unloading bay recycling",
+      "outputs": [
+        {
+          "material": "cargo-bay",
+          "amount": 0
+        },
+        {
+          "material": "steel-chest",
+          "amount": 1
+        },
+        {
+          "material": "electric-engine-unit",
+          "amount": 3
+        },
+        {
+          "material": "processing-unit",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "landing-pad-unloading-bay",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "asteroid-collector-recycling",
+      "name": "Asteroid collector recycling",
+      "outputs": [
+        {
+          "material": "low-density-structure",
+          "amount": 5
+        },
+        {
+          "material": "electric-engine-unit",
+          "amount": 2
+        },
+        {
+          "material": "processing-unit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "asteroid-collector",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "crusher-recycling",
+      "name": "Crusher recycling",
+      "outputs": [
+        {
+          "material": "low-density-structure",
+          "amount": 5
+        },
+        {
+          "material": "steel-plate",
+          "amount": 2
+        },
+        {
+          "material": "electric-engine-unit",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "crusher",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "thruster-recycling",
+      "name": "Thruster recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 2
+        },
+        {
+          "material": "processing-unit",
+          "amount": 2
+        },
+        {
+          "material": "electric-engine-unit",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "thruster",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "foundry-recycling",
+      "name": "Foundry recycling",
+      "outputs": [
+        {
+          "material": "tungsten-carbide",
+          "amount": 12
+        },
+        {
+          "material": "steel-plate",
+          "amount": 12
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 7
+        },
+        {
+          "material": "refined-concrete",
+          "amount": 5
+        }
+      ],
+      "inputs": [
+        {
+          "material": "foundry",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "turbo-transport-belt-recycling",
+      "name": "Turbo transport belt recycling",
+      "outputs": [
+        {
+          "material": "tungsten-plate",
+          "amount": 1
+        },
+        {
+          "material": "express-transport-belt",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "turbo-transport-belt",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "turbo-underground-belt-recycling",
+      "name": "Turbo underground belt recycling",
+      "outputs": [
+        {
+          "material": "tungsten-plate",
+          "amount": 5
+        },
+        {
+          "material": "express-underground-belt",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "turbo-underground-belt",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "turbo-splitter-recycling",
+      "name": "Turbo splitter recycling",
+      "outputs": [
+        {
+          "material": "express-splitter",
+          "amount": 0
+        },
+        {
+          "material": "tungsten-plate",
+          "amount": 3
+        },
+        {
+          "material": "processing-unit",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "turbo-splitter",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "turbo-loader-recycling",
+      "name": "Turbo loader recycling",
+      "outputs": [
+        {
+          "material": "turbo-transport-belt",
+          "amount": 1
+        },
+        {
+          "material": "express-loader",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "turbo-loader",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "big-mining-drill-recycling",
+      "name": "Big mining drill recycling",
+      "outputs": [
+        {
+          "material": "electric-mining-drill",
+          "amount": 0
+        },
+        {
+          "material": "tungsten-carbide",
+          "amount": 5
+        },
+        {
+          "material": "electric-engine-unit",
+          "amount": 2
+        },
+        {
+          "material": "advanced-circuit",
+          "amount": 2
+        }
+      ],
+      "inputs": [
+        {
+          "material": "big-mining-drill",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "mech-armor-recycling",
+      "name": "Mech armor recycling",
+      "outputs": [
+        {
+          "material": "power-armor-mk2",
+          "amount": 0
+        },
+        {
+          "material": "holmium-plate",
+          "amount": 50
+        },
+        {
+          "material": "processing-unit",
+          "amount": 25
+        },
+        {
+          "material": "superconductor",
+          "amount": 12
+        },
+        {
+          "material": "supercapacitor",
+          "amount": 12
+        }
+      ],
+      "inputs": [
+        {
+          "material": "mech-armor",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "railgun-recycling",
+      "name": "Railgun recycling",
+      "outputs": [
+        {
+          "material": "tungsten-plate",
+          "amount": 2
+        },
+        {
+          "material": "superconductor",
+          "amount": 2
+        },
+        {
+          "material": "quantum-processor",
+          "amount": 5
+        }
+      ],
+      "inputs": [
+        {
+          "material": "railgun",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "railgun-turret-recycling",
+      "name": "Railgun turret recycling",
+      "outputs": [
+        {
+          "material": "quantum-processor",
+          "amount": 25
+        },
+        {
+          "material": "tungsten-plate",
+          "amount": 7
+        },
+        {
+          "material": "superconductor",
+          "amount": 12
+        },
+        {
+          "material": "carbon-fiber",
+          "amount": 5
+        }
+      ],
+      "inputs": [
+        {
+          "material": "railgun-turret",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "railgun-ammo-recycling",
+      "name": "Railgun ammo recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 1
+        },
+        {
+          "material": "copper-cable",
+          "amount": 2
+        },
+        {
+          "material": "explosives",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "railgun-ammo",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "agricultural-tower-recycling",
+      "name": "Agricultural tower recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 2
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 0
+        },
+        {
+          "material": "spoilage",
+          "amount": 5
+        },
+        {
+          "material": "landfill",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "agricultural-tower",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "biochamber-recycling",
+      "name": "Biochamber recycling",
+      "outputs": [
+        {
+          "material": "nutrients",
+          "amount": 1
+        },
+        {
+          "material": "pentapod-egg",
+          "amount": 0
+        },
+        {
+          "material": "iron-plate",
+          "amount": 5
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        },
+        {
+          "material": "landfill",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "biochamber",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "capture-robot-rocket-recycling",
+      "name": "Capture bot rocket recycling",
+      "outputs": [
+        {
+          "material": "flying-robot-frame",
+          "amount": 0
+        },
+        {
+          "material": "steel-plate",
+          "amount": 0
+        },
+        {
+          "material": "bioflux",
+          "amount": 5
+        },
+        {
+          "material": "processing-unit",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "capture-robot-rocket",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "lightning-rod-recycling",
+      "name": "Lightning rod recycling",
+      "outputs": [
+        {
+          "material": "copper-cable",
+          "amount": 3
+        },
+        {
+          "material": "steel-plate",
+          "amount": 2
+        },
+        {
+          "material": "stone-brick",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "lightning-rod",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "electromagnetic-plant-recycling",
+      "name": "Electromagnetic plant recycling",
+      "outputs": [
+        {
+          "material": "holmium-plate",
+          "amount": 37
+        },
+        {
+          "material": "steel-plate",
+          "amount": 12
+        },
+        {
+          "material": "processing-unit",
+          "amount": 12
+        },
+        {
+          "material": "refined-concrete",
+          "amount": 12
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electromagnetic-plant",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "supercapacitor-recycling",
+      "name": "Supercapacitor recycling",
+      "outputs": [
+        {
+          "material": "holmium-plate",
+          "amount": 0
+        },
+        {
+          "material": "superconductor",
+          "amount": 0
+        },
+        {
+          "material": "electronic-circuit",
+          "amount": 1
+        },
+        {
+          "material": "battery",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "supercapacitor",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "lightning-collector-recycling",
+      "name": "Lightning collector recycling",
+      "outputs": [
+        {
+          "material": "lightning-rod",
+          "amount": 0
+        },
+        {
+          "material": "supercapacitor",
+          "amount": 2
+        },
+        {
+          "material": "accumulator",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "lightning-collector",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "teslagun-recycling",
+      "name": "Tesla gun recycling",
+      "outputs": [
+        {
+          "material": "holmium-plate",
+          "amount": 2
+        },
+        {
+          "material": "superconductor",
+          "amount": 2
+        },
+        {
+          "material": "plastic-bar",
+          "amount": 7
+        }
+      ],
+      "inputs": [
+        {
+          "material": "teslagun",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "tesla-turret-recycling",
+      "name": "Tesla turret recycling",
+      "outputs": [
+        {
+          "material": "teslagun",
+          "amount": 0
+        },
+        {
+          "material": "supercapacitor",
+          "amount": 2
+        },
+        {
+          "material": "processing-unit",
+          "amount": 2
+        },
+        {
+          "material": "superconductor",
+          "amount": 12
+        }
+      ],
+      "inputs": [
+        {
+          "material": "tesla-turret",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "tesla-ammo-recycling",
+      "name": "Tesla ammo recycling",
+      "outputs": [
+        {
+          "material": "supercapacitor",
+          "amount": 0
+        },
+        {
+          "material": "plastic-bar",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "tesla-ammo",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "heating-tower-recycling",
+      "name": "Heating tower recycling",
+      "outputs": [
+        {
+          "material": "boiler",
+          "amount": 0
+        },
+        {
+          "material": "heat-pipe",
+          "amount": 1
+        },
+        {
+          "material": "concrete",
+          "amount": 5
+        }
+      ],
+      "inputs": [
+        {
+          "material": "heating-tower",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "cryogenic-plant-recycling",
+      "name": "Cryogenic plant recycling",
+      "outputs": [
+        {
+          "material": "refined-concrete",
+          "amount": 10
+        },
+        {
+          "material": "superconductor",
+          "amount": 5
+        },
+        {
+          "material": "processing-unit",
+          "amount": 5
+        },
+        {
+          "material": "lithium-plate",
+          "amount": 5
+        }
+      ],
+      "inputs": [
+        {
+          "material": "cryogenic-plant",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "quantum-processor-recycling",
+      "name": "Quantum processor recycling",
+      "outputs": [
+        {
+          "material": "tungsten-carbide",
+          "amount": 0
+        },
+        {
+          "material": "processing-unit",
+          "amount": 0
+        },
+        {
+          "material": "superconductor",
+          "amount": 0
+        },
+        {
+          "material": "carbon-fiber",
+          "amount": 0
+        },
+        {
+          "material": "lithium-plate",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "quantum-processor",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "fusion-reactor-equipment-recycling",
+      "name": "Portable fusion reactor recycling",
+      "outputs": [
+        {
+          "material": "fission-reactor-equipment",
+          "amount": 0
+        },
+        {
+          "material": "fusion-power-cell",
+          "amount": 2
+        },
+        {
+          "material": "tungsten-plate",
+          "amount": 62
+        },
+        {
+          "material": "carbon-fiber",
+          "amount": 25
+        },
+        {
+          "material": "supercapacitor",
+          "amount": 6
+        },
+        {
+          "material": "quantum-processor",
+          "amount": 62
+        }
+      ],
+      "inputs": [
+        {
+          "material": "fusion-reactor-equipment",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "fusion-reactor-recycling",
+      "name": "Fusion reactor recycling",
+      "outputs": [
+        {
+          "material": "tungsten-plate",
+          "amount": 50
+        },
+        {
+          "material": "superconductor",
+          "amount": 50
+        },
+        {
+          "material": "quantum-processor",
+          "amount": 62
+        }
+      ],
+      "inputs": [
+        {
+          "material": "fusion-reactor",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "fusion-generator-recycling",
+      "name": "Fusion generator recycling",
+      "outputs": [
+        {
+          "material": "tungsten-plate",
+          "amount": 25
+        },
+        {
+          "material": "superconductor",
+          "amount": 25
+        },
+        {
+          "material": "quantum-processor",
+          "amount": 12
+        }
+      ],
+      "inputs": [
+        {
+          "material": "fusion-generator",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "ice-platform-recycling",
+      "name": "Ice platform recycling",
+      "outputs": [
+        {
+          "material": "ice",
+          "amount": 12
+        }
+      ],
+      "inputs": [
+        {
+          "material": "ice-platform",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "foundation-recycling",
+      "name": "Foundation recycling",
+      "outputs": [
+        {
+          "material": "tungsten-plate",
+          "amount": 1
+        },
+        {
+          "material": "lithium-plate",
+          "amount": 1
+        },
+        {
+          "material": "carbon-fiber",
+          "amount": 1
+        },
+        {
+          "material": "stone",
+          "amount": 5
+        }
+      ],
+      "inputs": [
+        {
+          "material": "foundation",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "water-barrel-recycling",
+      "name": "Water barrel recycling",
+      "outputs": [
+        {
+          "material": "barrel",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "water-barrel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "sulfuric-acid-barrel-recycling",
+      "name": "Sulfuric acid barrel recycling",
+      "outputs": [
+        {
+          "material": "barrel",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "sulfuric-acid-barrel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "crude-oil-barrel-recycling",
+      "name": "Crude oil barrel recycling",
+      "outputs": [
+        {
+          "material": "barrel",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "crude-oil-barrel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "heavy-oil-barrel-recycling",
+      "name": "Heavy oil barrel recycling",
+      "outputs": [
+        {
+          "material": "barrel",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "heavy-oil-barrel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "light-oil-barrel-recycling",
+      "name": "Light oil barrel recycling",
+      "outputs": [
+        {
+          "material": "barrel",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "light-oil-barrel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "petroleum-gas-barrel-recycling",
+      "name": "Petroleum gas barrel recycling",
+      "outputs": [
+        {
+          "material": "barrel",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "petroleum-gas-barrel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "lubricant-barrel-recycling",
+      "name": "Lubricant barrel recycling",
+      "outputs": [
+        {
+          "material": "barrel",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "lubricant-barrel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "fluoroketone-cold-barrel-recycling",
+      "name": "Fluoroketone (Cold) barrel recycling",
+      "outputs": [
+        {
+          "material": "barrel",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "fluoroketone-cold-barrel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "fluoroketone-hot-barrel-recycling",
+      "name": "Fluoroketone (Hot) barrel recycling",
+      "outputs": [
+        {
+          "material": "barrel",
+          "amount": 0
+        }
+      ],
+      "inputs": [
+        {
+          "material": "fluoroketone-hot-barrel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "flamethrower-ammo-recycling",
+      "name": "Flamethrower ammo recycling",
+      "outputs": [
+        {
+          "material": "flamethrower-ammo",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "flamethrower-ammo",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "blueprint-recycling",
+      "name": "Blueprint recycling",
+      "outputs": [
+        {
+          "material": "blueprint",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "blueprint",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "blueprint-book-recycling",
+      "name": "Blueprint book recycling",
+      "outputs": [
+        {
+          "material": "blueprint-book",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "blueprint-book",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "raw-fish-recycling",
+      "name": "Raw fish recycling",
+      "outputs": [
+        {
+          "material": "raw-fish",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "raw-fish",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "yumako-recycling",
+      "name": "Yumako recycling",
+      "outputs": [
+        {
+          "material": "yumako",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "yumako",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "jellynut-recycling",
+      "name": "Jellynut recycling",
+      "outputs": [
+        {
+          "material": "jellynut",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "jellynut",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "yumako-mash-recycling",
+      "name": "Yumako mash recycling",
+      "outputs": [
+        {
+          "material": "yumako-mash",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "yumako-mash",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "jelly-recycling",
+      "name": "Jelly recycling",
+      "outputs": [
+        {
+          "material": "jelly",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "jelly",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "bioflux-recycling",
+      "name": "Bioflux recycling",
+      "outputs": [
+        {
+          "material": "bioflux",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "bioflux",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "deconstruction-planner-recycling",
+      "name": "Deconstruction planner recycling",
+      "outputs": [
+        {
+          "material": "deconstruction-planner",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "deconstruction-planner",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "pistol-recycling",
+      "name": "Pistol recycling",
+      "outputs": [
+        {
+          "material": "pistol",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "pistol",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "stone-brick-recycling",
+      "name": "Stone brick recycling",
+      "outputs": [
+        {
+          "material": "stone-brick",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "stone-brick",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "wood-recycling",
+      "name": "Wood recycling",
+      "outputs": [
+        {
+          "material": "wood",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "wood",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "coal-recycling",
+      "name": "Coal recycling",
+      "outputs": [
+        {
+          "material": "coal",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "coal",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "stone-recycling",
+      "name": "Stone recycling",
+      "outputs": [
+        {
+          "material": "stone",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "stone",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "iron-ore-recycling",
+      "name": "Iron ore recycling",
+      "outputs": [
+        {
+          "material": "iron-ore",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-ore",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "copper-ore-recycling",
+      "name": "Copper ore recycling",
+      "outputs": [
+        {
+          "material": "copper-ore",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "copper-ore",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "iron-plate-recycling",
+      "name": "Iron plate recycling",
+      "outputs": [
+        {
+          "material": "iron-plate",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-plate",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "copper-plate-recycling",
+      "name": "Copper plate recycling",
+      "outputs": [
+        {
+          "material": "copper-plate",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "copper-plate",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "automation-science-pack-recycling",
+      "name": "Automation science pack recycling",
+      "outputs": [
+        {
+          "material": "automation-science-pack",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "automation-science-pack",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "logistic-science-pack-recycling",
+      "name": "Logistic science pack recycling",
+      "outputs": [
+        {
+          "material": "logistic-science-pack",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "logistic-science-pack",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "steel-plate-recycling",
+      "name": "Steel plate recycling",
+      "outputs": [
+        {
+          "material": "steel-plate",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "steel-plate",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "solid-fuel-recycling",
+      "name": "Solid fuel recycling",
+      "outputs": [
+        {
+          "material": "solid-fuel",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "solid-fuel",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "landfill-recycling",
+      "name": "Landfill recycling",
+      "outputs": [
+        {
+          "material": "landfill",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "landfill",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "uranium-ore-recycling",
+      "name": "Uranium ore recycling",
+      "outputs": [
+        {
+          "material": "uranium-ore",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "uranium-ore",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "chemical-science-pack-recycling",
+      "name": "Chemical science pack recycling",
+      "outputs": [
+        {
+          "material": "chemical-science-pack",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "chemical-science-pack",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "military-science-pack-recycling",
+      "name": "Military science pack recycling",
+      "outputs": [
+        {
+          "material": "military-science-pack",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "military-science-pack",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "production-science-pack-recycling",
+      "name": "Production science pack recycling",
+      "outputs": [
+        {
+          "material": "production-science-pack",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "production-science-pack",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "utility-science-pack-recycling",
+      "name": "Utility science pack recycling",
+      "outputs": [
+        {
+          "material": "utility-science-pack",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "utility-science-pack",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "space-science-pack-recycling",
+      "name": "Space science pack recycling",
+      "outputs": [
+        {
+          "material": "space-science-pack",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "space-science-pack",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "lane-splitter-recycling",
+      "name": "Lane splitter recycling",
+      "outputs": [
+        {
+          "material": "lane-splitter",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "lane-splitter",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "coin-recycling",
+      "name": "Coin recycling",
+      "outputs": [
+        {
+          "material": "coin",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "coin",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "sulfur-recycling",
+      "name": "Sulfur recycling",
+      "outputs": [
+        {
+          "material": "sulfur",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "sulfur",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "plastic-bar-recycling",
+      "name": "Plastic bar recycling",
+      "outputs": [
+        {
+          "material": "plastic-bar",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "plastic-bar",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "explosives-recycling",
+      "name": "Explosives recycling",
+      "outputs": [
+        {
+          "material": "explosives",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "explosives",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "electric-energy-interface-recycling",
+      "name": "Electric energy interface recycling",
+      "outputs": [
+        {
+          "material": "electric-energy-interface",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electric-energy-interface",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "uranium-235-recycling",
+      "name": "Uranium-235 recycling",
+      "outputs": [
+        {
+          "material": "uranium-235",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "uranium-235",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "uranium-238-recycling",
+      "name": "Uranium-238 recycling",
+      "outputs": [
+        {
+          "material": "uranium-238",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "uranium-238",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "uranium-fuel-cell-recycling",
+      "name": "Uranium fuel cell recycling",
+      "outputs": [
+        {
+          "material": "uranium-fuel-cell",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "uranium-fuel-cell",
+          "amount": 1
+        }
+      ],
+      "alternate": true
+    },
+    {
+      "id": "depleted-uranium-fuel-cell-recycling",
+      "name": "Depleted uranium fuel cell recycling",
+      "outputs": [
+        {
+          "material": "depleted-uranium-fuel-cell",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "depleted-uranium-fuel-cell",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "simple-entity-with-force-recycling",
+      "name": "Simple entity with force recycling",
+      "outputs": [
+        {
+          "material": "simple-entity-with-force",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "simple-entity-with-force",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "simple-entity-with-owner-recycling",
+      "name": "Simple entity with owner recycling",
+      "outputs": [
+        {
+          "material": "simple-entity-with-owner",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "simple-entity-with-owner",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "infinity-cargo-wagon-recycling",
+      "name": "Infinity cargo wagon recycling",
+      "outputs": [
+        {
+          "material": "infinity-cargo-wagon",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "infinity-cargo-wagon",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "burner-generator-recycling",
+      "name": "Burner generator recycling",
+      "outputs": [
+        {
+          "material": "burner-generator",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "burner-generator",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "linked-chest-recycling",
+      "name": "Linked chest recycling",
+      "outputs": [
+        {
+          "material": "linked-chest",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "linked-chest",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "proxy-container-recycling",
+      "name": "Proxy container recycling",
+      "outputs": [
+        {
+          "material": "proxy-container",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "proxy-container",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "bottomless-chest-recycling",
+      "name": "Bottomless chest recycling",
+      "outputs": [
+        {
+          "material": "bottomless-chest",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "bottomless-chest",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "linked-belt-recycling",
+      "name": "Linked belt recycling",
+      "outputs": [
+        {
+          "material": "linked-belt",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "linked-belt",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "one-way-valve-recycling",
+      "name": "One-way valve recycling",
+      "outputs": [
+        {
+          "material": "one-way-valve",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "one-way-valve",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "overflow-valve-recycling",
+      "name": "Overflow valve recycling",
+      "outputs": [
+        {
+          "material": "overflow-valve",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "overflow-valve",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "top-up-valve-recycling",
+      "name": "Top-up valve recycling",
+      "outputs": [
+        {
+          "material": "top-up-valve",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "top-up-valve",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "electric-energy-interface-equipment-recycling",
+      "name": "Electric energy interface equipment recycling",
+      "outputs": [
+        {
+          "material": "electric-energy-interface-equipment",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electric-energy-interface-equipment",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "science-recycling",
+      "name": "Science recycling",
+      "outputs": [
+        {
+          "material": "science",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "science",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "metallurgic-science-pack-recycling",
+      "name": "Metallurgic science pack recycling",
+      "outputs": [
+        {
+          "material": "metallurgic-science-pack",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "metallurgic-science-pack",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "agricultural-science-pack-recycling",
+      "name": "Agricultural science pack recycling",
+      "outputs": [
+        {
+          "material": "agricultural-science-pack",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "agricultural-science-pack",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "electromagnetic-science-pack-recycling",
+      "name": "Electromagnetic science pack recycling",
+      "outputs": [
+        {
+          "material": "electromagnetic-science-pack",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "electromagnetic-science-pack",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "cryogenic-science-pack-recycling",
+      "name": "Cryogenic science pack recycling",
+      "outputs": [
+        {
+          "material": "cryogenic-science-pack",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "cryogenic-science-pack",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "promethium-science-pack-recycling",
+      "name": "Promethium science pack recycling",
+      "outputs": [
+        {
+          "material": "promethium-science-pack",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "promethium-science-pack",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "metallic-asteroid-chunk-recycling",
+      "name": "Metallic asteroid chunk recycling",
+      "outputs": [
+        {
+          "material": "metallic-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "metallic-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "carbonic-asteroid-chunk-recycling",
+      "name": "Carbonic asteroid chunk recycling",
+      "outputs": [
+        {
+          "material": "carbonic-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "carbonic-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "oxide-asteroid-chunk-recycling",
+      "name": "Oxide asteroid chunk recycling",
+      "outputs": [
+        {
+          "material": "oxide-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "oxide-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "promethium-asteroid-chunk-recycling",
+      "name": "Promethium asteroid chunk recycling",
+      "outputs": [
+        {
+          "material": "promethium-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "promethium-asteroid-chunk",
+          "amount": 1
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "ice-recycling",
+      "name": "Ice recycling",
+      "outputs": [
+        {
+          "material": "ice",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "ice",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "carbon-recycling",
+      "name": "Carbon recycling",
+      "outputs": [
+        {
+          "material": "carbon",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "carbon",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "calcite-recycling",
+      "name": "Calcite recycling",
+      "outputs": [
+        {
+          "material": "calcite",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "calcite",
+          "amount": 1
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "tungsten-ore-recycling",
+      "name": "Tungsten ore recycling",
+      "outputs": [
+        {
+          "material": "tungsten-ore",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "tungsten-ore",
+          "amount": 1
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "tungsten-plate-recycling",
+      "name": "Tungsten plate recycling",
+      "outputs": [
+        {
+          "material": "tungsten-plate",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "tungsten-plate",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "tungsten-carbide-recycling",
+      "name": "Tungsten carbide recycling",
+      "outputs": [
+        {
+          "material": "tungsten-carbide",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "tungsten-carbide",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "copper-bacteria-recycling",
+      "name": "Copper bacteria recycling",
+      "outputs": [
+        {
+          "material": "copper-bacteria",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "copper-bacteria",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "iron-bacteria-recycling",
+      "name": "Iron bacteria recycling",
+      "outputs": [
+        {
+          "material": "iron-bacteria",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "iron-bacteria",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "yumako-seed-recycling",
+      "name": "Yumako seed recycling",
+      "outputs": [
+        {
+          "material": "yumako-seed",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "yumako-seed",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "jellynut-seed-recycling",
+      "name": "Jellynut seed recycling",
+      "outputs": [
+        {
+          "material": "jellynut-seed",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "jellynut-seed",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "biolab-recycling",
+      "name": "Biolab recycling",
+      "outputs": [
+        {
+          "material": "biolab",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "biolab",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "captive-biter-spawner-recycling",
+      "name": "Captive biter spawner recycling",
+      "outputs": [
+        {
+          "material": "captive-biter-spawner",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "captive-biter-spawner",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "biter-egg-recycling",
+      "name": "Biter egg recycling",
+      "outputs": [
+        {
+          "material": "biter-egg",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "biter-egg",
+          "amount": 1
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "pentapod-egg-recycling",
+      "name": "Pentapod egg recycling",
+      "outputs": [
+        {
+          "material": "pentapod-egg",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "pentapod-egg",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "carbon-fiber-recycling",
+      "name": "Carbon fiber recycling",
+      "outputs": [
+        {
+          "material": "carbon-fiber",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "carbon-fiber",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "holmium-ore-recycling",
+      "name": "Holmium ore recycling",
+      "outputs": [
+        {
+          "material": "holmium-ore",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "holmium-ore",
+          "amount": 1
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "holmium-plate-recycling",
+      "name": "Holmium plate recycling",
+      "outputs": [
+        {
+          "material": "holmium-plate",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "holmium-plate",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "lithium-recycling",
+      "name": "Lithium recycling",
+      "outputs": [
+        {
+          "material": "lithium",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "lithium",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "lithium-plate-recycling",
+      "name": "Lithium plate recycling",
+      "outputs": [
+        {
+          "material": "lithium-plate",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "lithium-plate",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "superconductor-recycling",
+      "name": "Superconductor recycling",
+      "outputs": [
+        {
+          "material": "superconductor",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "superconductor",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "fusion-power-cell-recycling",
+      "name": "Fusion power cell recycling",
+      "outputs": [
+        {
+          "material": "fusion-power-cell",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "fusion-power-cell",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "spoilage-recycling",
+      "name": "Spoilage recycling",
+      "outputs": [
+        {
+          "material": "spoilage",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "spoilage",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "space-platform-hub-recycling",
+      "name": "Space platform hub recycling",
+      "outputs": [
+        {
+          "material": "space-platform-hub",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "space-platform-hub",
+          "amount": 1
+        }
+      ],
+      "spaceAge": true
+    },
+    {
+      "id": "tree-seed-recycling",
+      "name": "Tree seed recycling",
+      "outputs": [
+        {
+          "material": "tree-seed",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "tree-seed",
+          "amount": 1
+        }
+      ],
+      "alternate": true,
+      "spaceAge": true
+    },
+    {
+      "id": "selection-tool-recycling",
+      "name": "Selection tool recycling",
+      "outputs": [
+        {
+          "material": "selection-tool",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "selection-tool",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "upgrade-planner-recycling",
+      "name": "Upgrade planner recycling",
+      "outputs": [
+        {
+          "material": "upgrade-planner",
+          "amount": 1
+        }
+      ],
+      "inputs": [
+        {
+          "material": "upgrade-planner",
+          "amount": 1
+        }
+      ]
+    }
+  ];
+  var materialById = new Map(materials.map((material) => [material.id, material]));
+  function recipesForMaterial(materialId) {
+    return recipes.filter((candidate) => candidate.outputs.some((output) => output.material === materialId));
+  }
+
+  // node_modules/preact/jsx-runtime/dist/jsxRuntime.module.js
+  var f3 = 0;
+  function u3(e3, t3, n2, o3, i3, u4) {
+    t3 || (t3 = {});
+    var a3, c3, p3 = t3;
+    if ("ref" in p3) for (c3 in p3 = {}, t3) "ref" == c3 ? a3 = t3[c3] : p3[c3] = t3[c3];
+    var l3 = { type: e3, props: p3, key: n2, ref: a3, __k: null, __: null, __b: 0, __e: null, __c: null, constructor: void 0, __v: --f3, __i: -1, __u: 0, __source: i3, __self: u4 };
+    if ("function" == typeof e3 && (a3 = e3.defaultProps)) for (c3 in a3) void 0 === p3[c3] && (p3[c3] = a3[c3]);
+    return l.vnode && l.vnode(l3), l3;
+  }
+
+  // src/app.tsx
+  var VERSION = "1.0.46";
+  var COMMIT_HASH = "dev";
+  var STORAGE_KEY = "factorio-bus-planner";
+  var MAX_HISTORY = 60;
+  var emptyPlan = { lanes: [], stations: [] };
+  function newId(prefix) {
+    return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+  }
+  function loadPlan() {
+    const encoded = new URLSearchParams(window.location.hash.slice(1)).get("plan");
+    const stored = encoded ? decodePlan(encoded) : localStorage.getItem(STORAGE_KEY);
+    if (!stored) return emptyPlan;
+    try {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed.lanes) && Array.isArray(parsed.stations)) return parsed;
+    } catch (error) {
+      console.error("Could not load saved bus plan:", error);
+    }
+    return emptyPlan;
+  }
+  function decodePlan(encoded) {
+    try {
+      const binary = atob(encoded.replace(/-/g, "+").replace(/_/g, "/"));
+      return new TextDecoder().decode(Uint8Array.from(binary, (character) => character.charCodeAt(0)));
+    } catch (error) {
+      console.error("Could not decode shared bus plan:", error);
+      return null;
+    }
+  }
+  function encodePlan(plan) {
+    const bytes = new TextEncoder().encode(JSON.stringify(plan));
+    const binary = String.fromCharCode(...bytes);
+    return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  }
+  function materialName(id) {
+    return materialById.get(id)?.name ?? id;
+  }
+  function standardRecipe(materialId) {
+    const recipes2 = recipesForMaterial(materialId);
+    return recipes2.find((recipe) => !recipe.alternate) ?? recipes2[0];
+  }
+  function pullsLaneFromBus(station, laneId) {
+    return station.busInputs?.includes(laneId) ?? false;
+  }
+  function laneTapSpan(plan, lane) {
+    let first = null;
+    let last = null;
+    plan.stations.forEach((station, index) => {
+      if (station.material !== lane.material && !pullsLaneFromBus(station, lane.id)) return;
+      first = first === null ? index : Math.min(first, index);
+      last = last === null ? index : Math.max(last, index);
+    });
+    if (first === null || last === null) return null;
+    return { first, last: laneOrigin(plan, lane.material) === null ? plan.stations.length : last };
+  }
+  function spansOverlap(first, second) {
+    if (!first || !second) return false;
+    return first.first <= second.last && second.first <= first.last;
+  }
+  function collapseLaneGroups(plan) {
+    return plan.lanes.reduce((groups, lane) => {
+      const previousGroup = groups.at(-1);
+      const span = laneTapSpan(plan, lane);
+      if (previousGroup && previousGroup.every((previousLane) => !spansOverlap(span, laneTapSpan(plan, previousLane)))) {
+        previousGroup.push(lane);
+      } else {
+        groups.push([lane]);
+      }
+      return groups;
+    }, []);
+  }
+  function MaterialIcon({ material, size = "medium" }) {
+    if (!material) return /* @__PURE__ */ u3("span", { class: `material-icon missing ${size}`, children: "?" });
+    return /* @__PURE__ */ u3("img", { class: `material-icon ${size}`, src: material.icon, alt: "", draggable: false });
+  }
+  function Footer() {
+    return /* @__PURE__ */ u3(S, { children: [
+      /* @__PURE__ */ u3("footer", { class: "app-footer", children: [
+        /* @__PURE__ */ u3("span", { children: [
+          "A vibe-coded micro-app via ",
+          /* @__PURE__ */ u3("a", { href: "https://searyanc.dev", target: "_blank", rel: "noopener noreferrer", children: "SeaRyanC" })
+        ] }),
+        /* @__PURE__ */ u3("a", { class: "github-link", href: "https://github.com/SeaRyanC/app/tree/main/bus", target: "_blank", rel: "noopener noreferrer", title: "View source on GitHub", "aria-label": "View source on GitHub", children: "\u2318" }),
+        /* @__PURE__ */ u3("span", { class: "version", children: [
+          "v",
+          VERSION,
+          "+",
+          COMMIT_HASH
+        ] })
+      ] }),
+      /* @__PURE__ */ u3("span", { class: "build-stamp", children: [
+        "BUILD v",
+        VERSION,
+        "+",
+        COMMIT_HASH
+      ] })
+    ] });
+  }
+  function ItemCard({ material, onDragStart, disabled }) {
+    return /* @__PURE__ */ u3(
+      "button",
+      {
+        class: "item-card",
+        draggable: !disabled,
+        disabled,
+        onDragStart: (event) => {
+          if (disabled) return;
+          const payload = { kind: "material", id: material.id };
+          onDragStart(payload);
+          event.dataTransfer?.setData("application/x-factorio-bus", JSON.stringify(payload));
+          event.dataTransfer?.setData("text/plain", material.id);
+          if (event.dataTransfer) event.dataTransfer.effectAllowed = "copy";
+        },
+        title: `Drag ${material.name} into the bus`,
+        children: [
+          /* @__PURE__ */ u3(MaterialIcon, { material }),
+          /* @__PURE__ */ u3("span", { children: material.name }),
+          material.spaceAge && /* @__PURE__ */ u3("em", { children: "SA" })
+        ]
+      }
+    );
+  }
+  var App = () => {
+    const [plan, setPlan] = d2(loadPlan);
+    const [history, setHistory] = d2([]);
+    const [future, setFuture] = d2([]);
+    const [search, setSearch] = d2("");
+    const [selectedStationId, setSelectedStationId] = d2(null);
+    const [collapseView, setCollapseView] = d2(false);
+    const [notice, setNotice] = d2("");
+    const stageRef = A2(null);
+    const stationPortRefs = A2(/* @__PURE__ */ new Map());
+    const laneSpineRefs = A2(/* @__PURE__ */ new Map());
+    const registerStationPort = q2((stationId, element) => {
+      if (element) stationPortRefs.current.set(stationId, element);
+      else stationPortRefs.current.delete(stationId);
+    }, []);
+    const registerLaneSpine = q2((laneId, element) => {
+      if (element) laneSpineRefs.current.set(laneId, element);
+      else laneSpineRefs.current.delete(laneId);
+    }, []);
+    const filteredMaterials = T2(() => {
+      const needle = search.trim().toLowerCase();
+      return materials.filter((material) => !needle || material.name.toLowerCase().includes(needle) || material.id.includes(needle));
+    }, [search]);
+    const laneGroups = T2(() => collapseLaneGroups(plan), [plan]);
+    const visibleLaneGroups = collapseView ? laneGroups : plan.lanes.map((lane) => [lane]);
+    const inSituLaneIds = T2(
+      () => new Set(collapseView ? laneGroups.filter((group) => group.length > 1).flatMap((group) => group.map((lane) => lane.id)) : []),
+      [collapseView, laneGroups]
+    );
+    const selectedStation = plan.stations.find((station) => station.id === selectedStationId);
+    const selectedStationRecipe = selectedStation ? standardRecipe(selectedStation.material) : void 0;
+    h2(() => {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(plan));
+    }, [plan]);
+    const updatePlan = q2((next) => {
+      if (collapseView) return;
+      setHistory((previous) => [...previous.slice(-(MAX_HISTORY - 1)), plan]);
+      setFuture([]);
+      setPlan(next);
+    }, [collapseView, plan]);
+    const addLane = q2((materialId) => {
+      updatePlan({ ...plan, lanes: [...plan.lanes, { id: newId("lane"), material: materialId }] });
+    }, [plan, updatePlan]);
+    const addStation = q2((materialId, side) => {
+      const recipe = standardRecipe(materialId);
+      const busInputs = recipe ? plan.lanes.filter((lane) => recipe.inputs.some((input) => input.material === lane.material)).map((lane) => lane.id) : [];
+      const station = { id: newId("station"), material: materialId, side, ...busInputs.length > 0 ? { busInputs } : {} };
+      updatePlan({ ...plan, stations: [...plan.stations, station] });
+      setSelectedStationId(station.id);
+    }, [plan, updatePlan]);
+    const toggleStationSide = q2((stationId) => {
+      updatePlan({
+        ...plan,
+        stations: plan.stations.map((station) => station.id === stationId ? { ...station, side: station.side === "left" ? "right" : "left" } : station)
+      });
+    }, [plan, updatePlan]);
+    const onDragStart = q2((payload) => {
+      window.__busPlannerDrag = payload;
+    }, []);
+    const dropPayload = q2((event) => {
+      if (window.__busPlannerDrag) return window.__busPlannerDrag;
+      const encoded = event.dataTransfer?.getData("application/x-factorio-bus");
+      if (!encoded) return null;
+      try {
+        return JSON.parse(encoded);
+      } catch (error) {
+        console.error("Could not read dragged bus payload:", error);
+        return null;
+      }
+    }, []);
+    const reorderLane = q2((draggedId, targetId) => {
+      if (draggedId === targetId) return;
+      const lanes = [...plan.lanes];
+      const from = lanes.findIndex((lane2) => lane2.id === draggedId);
+      const to = lanes.findIndex((lane2) => lane2.id === targetId);
+      if (from < 0 || to < 0) return;
+      const [lane] = lanes.splice(from, 1);
+      if (lane) lanes.splice(to, 0, lane);
+      updatePlan({ ...plan, lanes });
+    }, [plan, updatePlan]);
+    const reorderStation = q2((draggedId, targetId) => {
+      if (draggedId === targetId) return;
+      const stations = [...plan.stations];
+      const from = stations.findIndex((station2) => station2.id === draggedId);
+      const to = stations.findIndex((station2) => station2.id === targetId);
+      if (from < 0 || to < 0) return;
+      const [station] = stations.splice(from, 1);
+      if (station) stations.splice(to, 0, station);
+      updatePlan({ ...plan, stations });
+    }, [plan, updatePlan]);
+    const removeLane = q2((laneId) => {
+      updatePlan({
+        lanes: plan.lanes.filter((lane) => lane.id !== laneId),
+        stations: plan.stations.map((station) => {
+          const busInputs = station.busInputs?.filter((inputLaneId) => inputLaneId !== laneId) ?? [];
+          if (busInputs.length > 0) return { ...station, busInputs };
+          const nextStation = { ...station };
+          delete nextStation.busInputs;
+          return nextStation;
+        })
+      });
+    }, [plan, updatePlan]);
+    const moveStation = q2((stationId, direction) => {
+      const stations = [...plan.stations];
+      const from = stations.findIndex((station2) => station2.id === stationId);
+      const to = from + direction;
+      if (from < 0 || to < 0 || to >= stations.length) return;
+      const [station] = stations.splice(from, 1);
+      if (station) stations.splice(to, 0, station);
+      updatePlan({ ...plan, stations });
+    }, [plan, updatePlan]);
+    const handleDrop = q2((target, event) => {
+      event.preventDefault();
+      if (collapseView) return;
+      const payload = dropPayload(event);
+      if (!payload) return;
+      if (target === "lane") {
+        if (payload.kind === "material") addLane(payload.id);
+        else if (payload.kind === "lane") reorderLane(payload.id, payload.id);
+      } else if (target === "station-add") {
+        if (payload.kind === "material") addStation(payload.id, "left");
+      } else if (payload.kind === "lane") {
+        reorderLane(payload.id, target);
+      } else if (payload.kind === "station") {
+        reorderStation(payload.id, target);
+      }
+      window.__busPlannerDrag = void 0;
+    }, [addLane, addStation, collapseView, dropPayload, reorderLane, reorderStation]);
+    const setLaneSource = q2((laneId, useBus) => {
+      if (!selectedStationId) return;
+      updatePlan({
+        ...plan,
+        stations: plan.stations.map((station) => {
+          if (station.id !== selectedStationId) return station;
+          const busInputs = new Set(station.busInputs ?? []);
+          if (useBus) busInputs.add(laneId);
+          else busInputs.delete(laneId);
+          if (busInputs.size > 0) return { ...station, busInputs: [...busInputs] };
+          const nextStation = { ...station };
+          delete nextStation.busInputs;
+          return nextStation;
+        })
+      });
+    }, [plan, selectedStationId, updatePlan]);
+    const removeSelectedStation = q2(() => {
+      if (!selectedStationId) return;
+      updatePlan({ ...plan, stations: plan.stations.filter((station) => station.id !== selectedStationId) });
+      setSelectedStationId(null);
+    }, [plan, selectedStationId, updatePlan]);
+    h2(() => {
+      const handleKeyDown = (event) => {
+        const target = event.target;
+        if (!selectedStationId || target?.matches("input, select, textarea")) return;
+        if (event.key !== "Delete" && event.key !== "Backspace") return;
+        event.preventDefault();
+        removeSelectedStation();
+      };
+      window.addEventListener("keydown", handleKeyDown);
+      return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [removeSelectedStation, selectedStationId]);
+    const undo = q2(() => {
+      if (collapseView) return;
+      const previous = history.at(-1);
+      if (!previous) return;
+      setFuture((current) => [...current, plan]);
+      setPlan(previous);
+      setHistory((current) => current.slice(0, -1));
+    }, [collapseView, history, plan]);
+    const redo = q2(() => {
+      if (collapseView) return;
+      const next = future.at(-1);
+      if (!next) return;
+      setHistory((current) => [...current, plan]);
+      setPlan(next);
+      setFuture((current) => current.slice(0, -1));
+    }, [collapseView, future, plan]);
+    const share = q2(async () => {
+      const url = `${window.location.origin}${window.location.pathname}#plan=${encodePlan(plan)}`;
+      window.history.replaceState(null, "", url);
+      try {
+        await navigator.clipboard.writeText(url);
+        setNotice("Share link copied");
+      } catch {
+        setNotice("Share link ready in the address bar");
+      }
+      window.setTimeout(() => setNotice(""), 2200);
+    }, [plan]);
+    const reset = q2(() => {
+      if (plan.lanes.length === 0 && plan.stations.length === 0) return;
+      updatePlan(emptyPlan);
+      setSelectedStationId(null);
+    }, [plan, updatePlan]);
+    const toggleCollapseView = q2((enabled) => {
+      setCollapseView(enabled);
+      if (enabled) setSelectedStationId(null);
+    }, []);
+    return /* @__PURE__ */ u3("div", { class: "app", children: [
+      /* @__PURE__ */ u3("main", { class: "workspace", children: [
+        /* @__PURE__ */ u3("aside", { class: "catalog panel", children: [
+          /* @__PURE__ */ u3("div", { class: "toolbar", children: [
+            /* @__PURE__ */ u3("button", { onClick: undo, disabled: collapseView || !history.length, title: "Undo (\u2318Z)", children: "\u21B6 Undo" }),
+            /* @__PURE__ */ u3("button", { onClick: redo, disabled: collapseView || !future.length, title: "Redo (\u21E7\u2318Z)", children: "\u21B7 Redo" }),
+            /* @__PURE__ */ u3("button", { onClick: () => void share(), class: "share-button", children: "\u2197 Share link" }),
+            /* @__PURE__ */ u3("button", { onClick: reset, disabled: collapseView, class: "quiet-button", children: "Reset" })
+          ] }),
+          /* @__PURE__ */ u3("div", { class: "panel-heading", children: [
+            /* @__PURE__ */ u3("div", { children: [
+              /* @__PURE__ */ u3("span", { class: "section-kicker", children: "01 / CATALOG" }),
+              /* @__PURE__ */ u3("h2", { children: "Materials" })
+            ] }),
+            /* @__PURE__ */ u3("span", { class: "count", children: filteredMaterials.length })
+          ] }),
+          /* @__PURE__ */ u3("label", { class: "search-box", children: [
+            /* @__PURE__ */ u3("span", { children: "\u2315" }),
+            /* @__PURE__ */ u3("input", { value: search, onInput: (event) => setSearch(event.currentTarget.value), placeholder: "Search items and fluids" })
+          ] }),
+          /* @__PURE__ */ u3("p", { class: "catalog-help", children: "Drag a material into the bus, or drop it below the stations to add one." }),
+          /* @__PURE__ */ u3("div", { class: "item-list", children: filteredMaterials.map((material) => /* @__PURE__ */ u3(ItemCard, { material, onDragStart, disabled: collapseView }, material.id)) })
+        ] }),
+        /* @__PURE__ */ u3("section", { class: "planner panel", children: [
+          /* @__PURE__ */ u3("div", { class: "planner-heading", children: [
+            /* @__PURE__ */ u3("div", { children: [
+              /* @__PURE__ */ u3("span", { class: "section-kicker", children: "02 / FIELD" }),
+              /* @__PURE__ */ u3("h2", { children: "Your bus" })
+            ] }),
+            /* @__PURE__ */ u3("div", { class: "planner-options", children: [
+              /* @__PURE__ */ u3("label", { class: "collapse-toggle", title: "Place adjacent lanes in one column when their visible segments do not overlap", children: [
+                /* @__PURE__ */ u3("input", { type: "checkbox", checked: collapseView, onChange: (event) => toggleCollapseView(event.currentTarget.checked) }),
+                "Collapse view"
+              ] }),
+              /* @__PURE__ */ u3("span", { class: "field-hint", children: [
+                "bottom \u2192 top ",
+                /* @__PURE__ */ u3("span", { class: "arrow", children: "\u2191" })
+              ] })
+            ] })
+          ] }),
+          /* @__PURE__ */ u3("div", { class: "bus-shell", children: [
+            /* @__PURE__ */ u3("div", { class: "bus-columns", ref: stageRef, children: [
+              /* @__PURE__ */ u3("div", { class: "station-bay left-bay", children: [
+                /* @__PURE__ */ u3("div", { class: "bay-label", children: "\u25C2 stations" }),
+                plan.stations.map((station, index) => station.side === "left" ? /* @__PURE__ */ u3(StationCard, { station, index, isFirst: index === 0, isLast: index === plan.stations.length - 1, selected: selectedStationId === station.id, onSelect: setSelectedStationId, onDragStart, onDrop: handleDrop, onToggleSide: toggleStationSide, onMove: moveStation, portRef: (element) => registerStationPort(station.id, element), editingDisabled: collapseView }, station.id) : /* @__PURE__ */ u3("div", { class: "station-spacer" }, station.id))
+              ] }),
+              /* @__PURE__ */ u3(
+                "div",
+                {
+                  class: "lanes",
+                  onDragOver: (event) => event.preventDefault(),
+                  onDrop: (event) => handleDrop("lane", event),
+                  children: plan.lanes.length === 0 ? /* @__PURE__ */ u3("div", { class: "empty-field", children: [
+                    /* @__PURE__ */ u3("div", { class: "empty-icon", children: "\uFF0B" }),
+                    /* @__PURE__ */ u3("strong", { children: "Drop items here to create lanes" }),
+                    /* @__PURE__ */ u3("span", { children: "Your bus grows upward from each item's lowest producing station." })
+                  ] }) : visibleLaneGroups.map((group) => group.length === 1 ? /* @__PURE__ */ u3(LaneColumn, { lane: group[0], onDragStart, onDrop: handleDrop, onRemove: removeLane, spineRef: (element) => registerLaneSpine(group[0].id, element), editingDisabled: collapseView }, group[0].id) : /* @__PURE__ */ u3("div", { class: "lane-column-group", children: group.map((lane, index) => /* @__PURE__ */ u3(LaneColumn, { lane, onDragStart, onDrop: handleDrop, onRemove: removeLane, spineRef: (element) => registerLaneSpine(lane.id, element), editingDisabled: true, collapsedIndex: index }, lane.id)) }, group.map((lane) => lane.id).join(":")))
+                }
+              ),
+              /* @__PURE__ */ u3("div", { class: "station-bay right-bay", children: [
+                /* @__PURE__ */ u3("div", { class: "bay-label", children: "stations \u25B8" }),
+                plan.stations.map((station, index) => station.side === "right" ? /* @__PURE__ */ u3(StationCard, { station, index, isFirst: index === 0, isLast: index === plan.stations.length - 1, selected: selectedStationId === station.id, onSelect: setSelectedStationId, onDragStart, onDrop: handleDrop, onToggleSide: toggleStationSide, onMove: moveStation, portRef: (element) => registerStationPort(station.id, element), editingDisabled: collapseView }, station.id) : /* @__PURE__ */ u3("div", { class: "station-spacer" }, station.id))
+              ] }),
+              /* @__PURE__ */ u3(BeltOverlay, { plan, stageRef, stationPortRefs, laneSpineRefs, collapseView, inSituLaneIds })
+            ] }),
+            /* @__PURE__ */ u3(
+              "div",
+              {
+                class: "add-station-row",
+                onDragOver: (event) => event.preventDefault(),
+                onDrop: (event) => handleDrop("station-add", event),
+                children: collapseView ? "Collapse view is read-only \xB7 uncheck it to edit the plan" : "Drop an item here to add a station \xB7 use \u21C4 on a station to flip which side it taps from"
+              }
+            )
+          ] }),
+          plan.lanes.length > 0 && /* @__PURE__ */ u3("div", { class: "legend", children: [
+            /* @__PURE__ */ u3("span", { class: "legend-line" }),
+            " normal flow ",
+            /* @__PURE__ */ u3("span", { class: "legend-line dashed" }),
+            " counterflow ",
+            /* @__PURE__ */ u3("span", { class: "legend-note", children: collapseView ? "Read-only collapsed layout" : "Select a station to edit its bus inputs" })
+          ] })
+        ] })
+      ] }),
+      selectedStation && /* @__PURE__ */ u3("div", { class: "modal-backdrop", onClick: (event) => {
+        if (event.target === event.currentTarget) setSelectedStationId(null);
+      }, children: /* @__PURE__ */ u3("section", { class: "recipe-modal", role: "dialog", "aria-modal": "true", "aria-labelledby": "recipe-title", children: [
+        /* @__PURE__ */ u3("button", { class: "modal-close", onClick: () => setSelectedStationId(null), "aria-label": "Close", children: "\xD7" }),
+        /* @__PURE__ */ u3("div", { class: "modal-material", children: /* @__PURE__ */ u3(MaterialIcon, { material: materialById.get(selectedStation.material) }) }),
+        /* @__PURE__ */ u3("span", { class: "section-kicker", children: [
+          "STATION / ",
+          selectedStation.side.toUpperCase()
+        ] }),
+        /* @__PURE__ */ u3("h2", { id: "recipe-title", children: materialName(selectedStation.material) }),
+        selectedStationRecipe && selectedStationRecipe.inputs.length > 0 && /* @__PURE__ */ u3("div", { class: "recipe-info", children: [
+          /* @__PURE__ */ u3("h3", { children: "Recipe inputs" }),
+          /* @__PURE__ */ u3("div", { class: "recipe-inputs", children: selectedStationRecipe.inputs.map((input) => /* @__PURE__ */ u3("span", { class: "recipe-input", title: `${input.amount} ${materialName(input.material)}`, children: [
+            /* @__PURE__ */ u3(MaterialIcon, { material: materialById.get(input.material), size: "small" }),
+            /* @__PURE__ */ u3("span", { children: materialName(input.material) })
+          ] }, input.material)) })
+        ] }),
+        /* @__PURE__ */ u3("div", { class: "lane-inputs", children: [
+          /* @__PURE__ */ u3("h3", { children: "Bus inputs" }),
+          plan.lanes.length > 0 ? /* @__PURE__ */ u3("div", { class: "lane-input-grid", children: plan.lanes.map((lane) => {
+            const name = materialName(lane.material);
+            return /* @__PURE__ */ u3("label", { class: "lane-input-cell", title: `${name}: ${pullsLaneFromBus(selectedStation, lane.id) ? "pulling from bus" : "not pulled"}`, children: [
+              /* @__PURE__ */ u3(
+                "input",
+                {
+                  type: "checkbox",
+                  checked: pullsLaneFromBus(selectedStation, lane.id),
+                  onChange: (event) => setLaneSource(lane.id, event.currentTarget.checked),
+                  "aria-label": `Pull ${name} from this lane`
+                }
+              ),
+              /* @__PURE__ */ u3(MaterialIcon, { material: materialById.get(lane.material) }),
+              /* @__PURE__ */ u3("span", { class: "lane-input-name", children: name })
+            ] }, lane.id);
+          }) }) : /* @__PURE__ */ u3("p", { class: "modal-help", children: "Add lanes to the bus, then choose which ones this station consumes." })
+        ] }),
+        /* @__PURE__ */ u3("button", { class: "remove-button", onClick: removeSelectedStation, children: "Dismantle station" })
+      ] }) }),
+      notice && /* @__PURE__ */ u3("div", { class: "notice", children: notice }),
+      /* @__PURE__ */ u3(Footer, {})
+    ] });
+  };
+  var QUARTER_TURN_CONTROL = 0.5522848;
+  var ELBOW_RADIUS = 12;
+  var TAP_SPACING = 11;
+  var HOP_RADIUS = 6;
+  var COLLAPSED_LANE_ICON_SIZE = 18;
+  function stationProducesMaterial(station, materialId) {
+    return station.material === materialId;
+  }
+  function laneOrigin(plan, materialId) {
+    let originIndex = null;
+    plan.stations.forEach((station, index) => {
+      if (stationProducesMaterial(station, materialId)) originIndex = index;
+    });
+    return originIndex;
+  }
+  function laneOnlyCounterflowsFromOrigin(plan, lane, origin) {
+    if (origin === null) return false;
+    let hasCounterflowPull = false;
+    for (const [stationIndex, station] of plan.stations.entries()) {
+      if (stationIndex < origin && (stationProducesMaterial(station, lane.material) || pullsLaneFromBus(station, lane.id))) {
+        return false;
+      }
+      if (stationIndex > origin && pullsLaneFromBus(station, lane.id)) hasCounterflowPull = true;
+    }
+    return hasCounterflowPull;
+  }
+  function buildLogicalConnectors(plan) {
+    const plannedLaneIds = new Set(plan.lanes.map((lane) => lane.id));
+    const laneOrigins = new Map(plan.lanes.map((lane) => [lane.id, laneOrigin(plan, lane.material)]));
+    const counterflowOnlyLaneIds = new Set(
+      plan.lanes.filter((lane) => laneOnlyCounterflowsFromOrigin(plan, lane, laneOrigins.get(lane.id) ?? null)).map((lane) => lane.id)
+    );
+    const connectors = plan.stations.flatMap((station, stationIndex) => {
+      const inputLaneIds = new Set((station.busInputs ?? []).filter((laneId) => plannedLaneIds.has(laneId)));
+      const outputLaneIds = new Set(
+        plan.lanes.filter((lane) => lane.material === station.material).map((lane) => lane.id)
+      );
+      return plan.lanes.flatMap((lane) => {
+        const stationConnectors = [];
+        if (inputLaneIds.has(lane.id)) {
+          const origin = laneOrigins.get(lane.id) ?? null;
+          stationConnectors.push({
+            id: `${station.id}:input:${lane.id}`,
+            stationId: station.id,
+            laneId: lane.id,
+            kind: "input",
+            counterflow: origin !== null && stationIndex > origin
+          });
+        }
+        if (outputLaneIds.has(lane.id)) {
+          stationConnectors.push({
+            id: `${station.id}:output:${lane.id}`,
+            stationId: station.id,
+            laneId: lane.id,
+            kind: "output",
+            counterflow: counterflowOnlyLaneIds.has(lane.id) && stationIndex === laneOrigins.get(lane.id)
+          });
+        }
+        return stationConnectors;
+      });
+    });
+    return connectors;
+  }
+  function connectorVerticalDirection(kind, counterflow) {
+    if (counterflow) return kind === "output" ? 1 : -1;
+    return kind === "output" ? -1 : 1;
+  }
+  function connectorPath(start, rowOffset, laneX, kind, counterflow, hopXs) {
+    const rowY = start.y + rowOffset;
+    const dx = laneX - start.x;
+    const sign = dx >= 0 ? 1 : -1;
+    const radius = Math.min(ELBOW_RADIUS, Math.abs(dx));
+    const vDir = connectorVerticalDirection(kind, counterflow);
+    const entryX = laneX - sign * radius;
+    const curveEndY = rowY + vDir * radius;
+    const control = QUARTER_TURN_CONTROL * radius;
+    const c1x = entryX + sign * control;
+    const c2y = curveEndY - vDir * control;
+    let d3 = `M ${start.x} ${start.y}`;
+    if (rowOffset !== 0) d3 += ` V ${rowY}`;
+    const sweepFlag = sign > 0 ? 1 : 0;
+    const orderedHops = [...hopXs].sort((a3, b2) => sign > 0 ? a3 - b2 : b2 - a3);
+    for (const hopX of orderedHops) {
+      d3 += ` H ${hopX - sign * HOP_RADIUS} A ${HOP_RADIUS} ${HOP_RADIUS} 0 0 ${sweepFlag} ${hopX + sign * HOP_RADIUS} ${rowY}`;
+    }
+    d3 += ` H ${entryX} C ${c1x} ${rowY} ${laneX} ${c2y} ${laneX} ${curveEndY}`;
+    return d3;
+  }
+  function BeltOverlay({ plan, stageRef, stationPortRefs, laneSpineRefs, collapseView, inSituLaneIds }) {
+    const [layout, setLayout] = d2(null);
+    const connectors = T2(() => buildLogicalConnectors(plan), [plan]);
+    _2(() => {
+      let disposed = false;
+      let frame = 0;
+      const stage = stageRef.current;
+      setLayout(null);
+      if (!stage || plan.lanes.length === 0) return () => void 0;
+      const measure = () => {
+        if (disposed) return;
+        const stageRect = stage.getBoundingClientRect();
+        const stageLeft = stageRect.left + stage.clientLeft;
+        const stageTop = stageRect.top + stage.clientTop - stage.scrollTop;
+        const width = stage.clientWidth;
+        const height = stage.scrollHeight;
+        if (width <= 0 || height <= 0) return;
+        const stationPorts = /* @__PURE__ */ new Map();
+        for (const station of plan.stations) {
+          const anchor = stationPortRefs.current.get(station.id);
+          if (!anchor) return;
+          const rect = anchor.getBoundingClientRect();
+          stationPorts.set(station.id, {
+            x: rect.left + rect.width / 2 - stageLeft,
+            y: rect.top + rect.height / 2 - stageTop
+          });
+        }
+        const laneSpines = /* @__PURE__ */ new Map();
+        for (const lane of plan.lanes) {
+          const anchor = laneSpineRefs.current.get(lane.id);
+          if (!anchor) return;
+          const rect = anchor.getBoundingClientRect();
+          laneSpines.set(lane.id, {
+            x: rect.left + rect.width / 2 - stageLeft,
+            top: rect.top - stageTop,
+            bottom: rect.bottom - stageTop
+          });
+        }
+        setLayout({ width, height, stationPorts, laneSpines });
+      };
+      const scheduleMeasure = () => {
+        if (disposed) return;
+        setLayout(null);
+        if (frame) cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(() => {
+          frame = 0;
+          measure();
+        });
+      };
+      const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(scheduleMeasure);
+      observer?.observe(stage);
+      stationPortRefs.current.forEach((anchor) => observer?.observe(anchor));
+      laneSpineRefs.current.forEach((anchor) => observer?.observe(anchor));
+      scheduleMeasure();
+      return () => {
+        disposed = true;
+        if (frame) cancelAnimationFrame(frame);
+        observer?.disconnect();
+      };
+    }, [collapseView, laneSpineRefs, plan, stageRef, stationPortRefs]);
+    if (!layout || plan.lanes.length === 0) return null;
+    const tapOffsets = /* @__PURE__ */ new Map();
+    const byStation = /* @__PURE__ */ new Map();
+    for (const connector of connectors) {
+      const list = byStation.get(connector.stationId) ?? [];
+      list.push(connector);
+      byStation.set(connector.stationId, list);
+    }
+    for (const [stationId, list] of byStation) {
+      const stationPort = layout.stationPorts.get(stationId);
+      if (!stationPort) continue;
+      const withDistance = list.map((connector) => {
+        const laneSpine = layout.laneSpines.get(connector.laneId);
+        return { connector, dx: laneSpine ? Math.abs(laneSpine.x - stationPort.x) : 0 };
+      });
+      withDistance.sort((a3, b2) => {
+        const aIsCounterflowOnlyOutput = a3.connector.kind === "output" && a3.connector.counterflow;
+        const bIsCounterflowOnlyOutput = b2.connector.kind === "output" && b2.connector.counterflow;
+        if (aIsCounterflowOnlyOutput !== bIsCounterflowOnlyOutput) return aIsCounterflowOnlyOutput ? 1 : -1;
+        return a3.dx - b2.dx;
+      });
+      const count = withDistance.length;
+      withDistance.forEach(({ connector }, i3) => {
+        tapOffsets.set(connector.id, (i3 - (count - 1) / 2) * TAP_SPACING);
+      });
+    }
+    const laneRanges = /* @__PURE__ */ new Map();
+    const laneCounterflow = /* @__PURE__ */ new Set();
+    for (const lane of plan.lanes) {
+      const metrics = layout.laneSpines.get(lane.id);
+      if (!metrics) continue;
+      const originIndex = laneOrigin(plan, lane.material);
+      const laneConnectors = connectors.filter((connector) => connector.laneId === lane.id);
+      const tapEndpoints = laneConnectors.flatMap((connector) => {
+        const port = layout.stationPorts.get(connector.stationId);
+        if (!port) return [];
+        const offset = tapOffsets.get(connector.id) ?? 0;
+        return [port.y + offset + connectorVerticalDirection(connector.kind, connector.counterflow) * ELBOW_RADIUS];
+      });
+      if (tapEndpoints.length === 0) continue;
+      let bottom = metrics.bottom;
+      let top = Math.min(...tapEndpoints);
+      if (originIndex !== null) {
+        const originStation = plan.stations[originIndex];
+        const originPort = originStation ? layout.stationPorts.get(originStation.id) : void 0;
+        let originY = null;
+        if (originStation && originPort) {
+          const offset = tapOffsets.get(`${originStation.id}:output:${lane.id}`) ?? 0;
+          const originConnector = laneConnectors.find((connector) => connector.id === `${originStation.id}:output:${lane.id}`);
+          originY = originPort.y + offset + connectorVerticalDirection("output", originConnector?.counterflow ?? false) * ELBOW_RADIUS;
+          bottom = originY;
+          top = Math.min(top, originY);
+        }
+        const counterflowBottom = laneConnectors.filter((connector) => connector.counterflow).map((connector) => {
+          const port = layout.stationPorts.get(connector.stationId);
+          if (!port) return null;
+          const offset = tapOffsets.get(connector.id) ?? 0;
+          return port.y + offset + connectorVerticalDirection(connector.kind, connector.counterflow) * ELBOW_RADIUS;
+        }).filter((endpoint) => endpoint !== null).reduce((lowest, endpoint) => lowest === null ? endpoint : Math.max(lowest, endpoint), null);
+        if (counterflowBottom !== null && counterflowBottom > bottom) {
+          bottom = counterflowBottom;
+          laneCounterflow.add(lane.id);
+        }
+      }
+      laneRanges.set(lane.id, { x: metrics.x, top, bottom });
+    }
+    const laneSpineElements = plan.lanes.map((lane) => {
+      const range = laneRanges.get(lane.id);
+      if (!range) return null;
+      const originIndex = laneOrigin(plan, lane.material);
+      const originStation = originIndex !== null ? plan.stations[originIndex] : void 0;
+      const originPort = originStation ? layout.stationPorts.get(originStation.id) : void 0;
+      const originOffset = originStation ? tapOffsets.get(`${originStation.id}:output:${lane.id}`) ?? 0 : 0;
+      const originConnector = originStation ? connectors.find((connector) => connector.id === `${originStation.id}:output:${lane.id}`) : void 0;
+      const originY = originPort ? originPort.y + originOffset + connectorVerticalDirection("output", originConnector?.counterflow ?? false) * ELBOW_RADIUS : range.bottom;
+      const hasUpwardSpine = range.top < originY;
+      return /* @__PURE__ */ u3("g", { children: [
+        hasUpwardSpine && /* @__PURE__ */ u3("line", { class: "lane-spine", x1: range.x, y1: originY, x2: range.x, y2: range.top }),
+        laneCounterflow.has(lane.id) && /* @__PURE__ */ u3("line", { class: "lane-spine counterflow", x1: range.x, y1: originY, x2: range.x, y2: range.bottom }),
+        hasUpwardSpine && /* @__PURE__ */ u3("polygon", { class: "lane-arrowhead", points: `${range.x - 6},${range.top + 11} ${range.x + 6},${range.top + 11} ${range.x},${range.top}` })
+      ] }, lane.id);
+    });
+    const collapsedLaneIndicators = plan.lanes.map((lane) => {
+      if (!inSituLaneIds.has(lane.id)) return null;
+      const range = laneRanges.get(lane.id);
+      const material = materialById.get(lane.material);
+      if (!range || !material) return null;
+      return /* @__PURE__ */ u3(
+        "image",
+        {
+          class: "collapsed-lane-indicator",
+          href: material.icon,
+          x: range.x - COLLAPSED_LANE_ICON_SIZE / 2,
+          y: Math.max(0, range.top - COLLAPSED_LANE_ICON_SIZE - 4),
+          width: COLLAPSED_LANE_ICON_SIZE,
+          height: COLLAPSED_LANE_ICON_SIZE,
+          preserveAspectRatio: "xMidYMid meet"
+        },
+        lane.id
+      );
+    });
+    return /* @__PURE__ */ u3(
+      "svg",
+      {
+        class: "belt-overlay",
+        "aria-hidden": "true",
+        width: layout.width,
+        height: layout.height,
+        viewBox: `0 0 ${layout.width} ${layout.height}`,
+        children: [
+          laneSpineElements,
+          connectors.map((connector) => {
+            const stationPort = layout.stationPorts.get(connector.stationId);
+            const laneSpine = layout.laneSpines.get(connector.laneId);
+            if (!stationPort || !laneSpine) return null;
+            const rowOffset = tapOffsets.get(connector.id) ?? 0;
+            const rowY = stationPort.y + rowOffset;
+            const lo = Math.min(stationPort.x, laneSpine.x);
+            const hi = Math.max(stationPort.x, laneSpine.x);
+            const hopXs = [];
+            for (const [laneId, range] of laneRanges) {
+              if (laneId === connector.laneId) continue;
+              if (range.x <= lo || range.x >= hi) continue;
+              if (rowY < range.top || rowY > range.bottom) continue;
+              hopXs.push(range.x);
+            }
+            const path = connectorPath(stationPort, rowOffset, laneSpine.x, connector.kind, connector.counterflow, hopXs);
+            return /* @__PURE__ */ u3("path", { class: `connector ${connector.kind} ${connector.counterflow ? "counterflow" : ""}`, d: path }, connector.id);
+          }),
+          collapsedLaneIndicators
+        ]
+      }
+    );
+  }
+  function StationCard({ station, index, isFirst, isLast, selected, onSelect, onDragStart, onDrop, onToggleSide, onMove, portRef, editingDisabled }) {
+    return /* @__PURE__ */ u3(
+      "div",
+      {
+        class: `station-card ${selected ? "selected" : ""}`,
+        role: "button",
+        tabIndex: editingDisabled ? -1 : 0,
+        draggable: !editingDisabled,
+        onClick: () => {
+          if (!editingDisabled) onSelect(station.id);
+        },
+        onKeyDown: (event) => {
+          if (!editingDisabled && (event.key === "Enter" || event.key === " ")) onSelect(station.id);
+        },
+        onDragStart: () => {
+          if (!editingDisabled) onDragStart({ kind: "station", id: station.id });
+        },
+        onDragOver: (event) => {
+          if (!editingDisabled) event.preventDefault();
+        },
+        onDrop: (event) => {
+          if (editingDisabled) return;
+          event.preventDefault();
+          event.stopPropagation();
+          onDrop(station.id, event);
+        },
+        title: `${materialName(station.material)} \xB7 station ${index + 1}${editingDisabled ? "" : " \xB7 click to edit bus inputs"}`,
+        children: [
+          /* @__PURE__ */ u3("span", { ref: portRef, class: `station-port-anchor ${station.side}`, "aria-hidden": "true" }),
+          /* @__PURE__ */ u3(MaterialIcon, { material: materialById.get(station.material) }),
+          !editingDisabled && /* @__PURE__ */ u3("span", { class: "station-controls", children: [
+            /* @__PURE__ */ u3(
+              "button",
+              {
+                class: "move-button",
+                disabled: isFirst,
+                title: "Move up (toward the top of the bus)",
+                onClick: (event) => {
+                  event.stopPropagation();
+                  onMove(station.id, -1);
+                },
+                children: "\u25B2"
+              }
+            ),
+            /* @__PURE__ */ u3(
+              "button",
+              {
+                class: "side-toggle",
+                title: `Tapping from the ${station.side} side \xB7 click to flip`,
+                onClick: (event) => {
+                  event.stopPropagation();
+                  onToggleSide(station.id);
+                },
+                children: "\u21C4"
+              }
+            ),
+            /* @__PURE__ */ u3(
+              "button",
+              {
+                class: "move-button",
+                disabled: isLast,
+                title: "Move down (toward the bottom of the bus)",
+                onClick: (event) => {
+                  event.stopPropagation();
+                  onMove(station.id, 1);
+                },
+                children: "\u25BC"
+              }
+            )
+          ] })
+        ]
+      }
+    );
+  }
+  function LaneColumn({ lane, onDragStart, onDrop, onRemove, spineRef, editingDisabled, collapsedIndex }) {
+    const material = materialById.get(lane.material);
+    return /* @__PURE__ */ u3("div", { class: `lane-column ${collapsedIndex === void 0 ? "" : "collapsed"}`, style: collapsedIndex === void 0 ? void 0 : `--collapse-index: ${collapsedIndex};`, draggable: !editingDisabled, onDragStart: () => {
+      if (!editingDisabled) onDragStart({ kind: "lane", id: lane.id });
+    }, onDragOver: (event) => {
+      if (!editingDisabled) event.preventDefault();
+    }, onDrop: (event) => {
+      if (!editingDisabled) onDrop(lane.id, event);
+    }, title: material?.name ?? lane.material, children: [
+      /* @__PURE__ */ u3("div", { class: "lane-header", children: [
+        /* @__PURE__ */ u3(MaterialIcon, { material }),
+        !editingDisabled && /* @__PURE__ */ u3("button", { class: "lane-remove", onClick: (event) => {
+          event.stopPropagation();
+          onRemove(lane.id);
+        }, "aria-label": `Remove ${material?.name ?? lane.material} lane`, title: "Remove lane", children: "\xD7" })
+      ] }),
+      /* @__PURE__ */ u3("div", { class: "lane-track", children: /* @__PURE__ */ u3("span", { ref: spineRef, class: "lane-spine-anchor", "aria-hidden": "true" }) })
+    ] });
+  }
+
+  // src/index.tsx
+  R(/* @__PURE__ */ u3(App, {}), document.getElementById("app"));
+})();
 //# sourceMappingURL=app.js.map

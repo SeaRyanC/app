@@ -8,9 +8,13 @@
 - As a player, I can reorder lanes by dragging them, and reorder stations by dragging them or by pressing the ▲/▼ buttons on a station to nudge it one position at a time.
 - As a player, I can flip which side (left or right of the bus) a station taps from with one click, without needing to drag it between separate areas.
 - As a player, I can see a lane originate at its lowest producing station and see counterflow sections as dashed lines.
+- As a player, when a lane has no producing station in the plan, I can see it enter from the bottom of the field.
+- As a player, I can see a lane stop at its highest connected tap instead of continuing indefinitely above the factory plan.
+- As a player, I can scroll vertically through a long planner without disconnecting lane spines or station taps.
 - As a player, I can see station input belts span the field to their selected lanes without changing unrelated lane geometry.
 - As a player, I can distinguish separate tap lines when a station consumes multiple planned lanes; taps from one station are spread into their own vertically-offset rows, ordered so nearer lanes get the innermost rows to minimize crossings.
-- As a player, each station connection connects to its lane with one smooth, correctly oriented quarter-turn, with outputs curving up into the flow and inputs curving down out of it.
+- As a player, when a station's output only feeds counterflow, I can see that output use the lowest horizontal tap row so it does not compete with the station's normal taps.
+- As a player, each station connection connects to its lane with one smooth, correctly oriented quarter-turn: regular outputs curve up, counterflow-only outputs curve down, and counterflow consumption taps meet the descending lane above their station.
 - As a player, a station with one connected lane still has a visible rounded turn into that lane.
 - As a player, when a tap's horizontal run has to cross a lane spine it isn't connecting to, that crossing is drawn as a small schematic "hop" so it never reads as a connection.
 - As a player, I can see a station connect to an existing lane for its own material, without duplicate output taps.
@@ -18,6 +22,11 @@
 - As a player, I can represent on-site intermediate production by leaving its lane unchecked.
 - As a player, stations and lanes show only their icon on the canvas; the material name appears as a tooltip on hover so the layout stays uncluttered.
 - As a player, the station side-bays are narrow, since they only need to fit an icon and small controls.
+- As a player, I can remove an accidentally added lane from its header, which also removes that lane from every station's bus-input selection.
+- As a player with a dense plan, I can enable read-only collapse view to stack adjacent lanes into a shared column whenever their visible spans do not overlap.
+- As a player using collapse view, I can see bottom-fed lanes remain in separate columns when they overlap at the bottom of the planner.
+- As a player using collapse view, I can identify every lane in a shared column from its icon directly above that lane's highest elbow.
+- As a player in collapse view, I cannot drag, add, remove, reorder, or otherwise edit the plan until I return to the normal view.
 
 ## Configuring a station
 

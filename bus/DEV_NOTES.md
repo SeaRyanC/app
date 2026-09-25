@@ -18,3 +18,11 @@
   Ammo, capsules, modules, tools, and other craftable prototype categories can appear as recipe
   inputs; `scripts/generate-data.ts` adds every recipe-referenced prototype to the catalog before
   building recipes, preventing ingredients from being silently discarded.
+- `scripts/copy-assets.ts` is the single publishing path for `index.html`, `style.css`, and every
+  generated material icon. Both `npm run bundle` and `npm run local` call it so paths such as
+  `icons/productivity-module.png` are available from `docs/bus`.
+- Connector paths are generated from the station toward the lane for rendering. Regular inputs use
+  a positive vertical elbow direction, but counterflow inputs use a negative direction so they meet
+  the descending lane above the consuming station. If an origin output feeds only pulls below it,
+  that output is also counterflow, so it renders dashed and downward with no green upward spine or
+  arrow.

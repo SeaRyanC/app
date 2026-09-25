@@ -1,10 +1,9 @@
-import { copyFileSync } from 'node:fs';
 import { context } from 'esbuild';
+import { copyStaticAssets } from './copy-assets.ts';
 
 const docsDir = '../docs/bus';
 
-copyFileSync('index.html', `${docsDir}/index.html`);
-copyFileSync('style.css', `${docsDir}/style.css`);
+await copyStaticAssets();
 
 const buildContext = await context({
   entryPoints: ['src/index.tsx'],
