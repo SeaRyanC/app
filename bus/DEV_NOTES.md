@@ -35,3 +35,19 @@
   move a counterflow endpoint across the origin's physical position.
 - Material drops are accepted by both the empty lane field and existing lane columns. Lane-column
   drop targets still reorder dragged lanes, while material drops always create a new lane.
+- Collapsed lane spine chevrons are built as directional physical segments from their measured
+  origin endpoint to each side of the measured destinations. This avoids using logical station
+  indices for arrow direction after left/right station-bay compaction inverts the on-screen order.
+- Connector elbows use the same measured physical direction as their lane spine endpoints. Their
+  logical flow/counterflow direction is only a tie-breaker when compaction places endpoints on one
+  row, so the quarter-turn remains attached to the correct side of the compacted lane.
+- An origin output can branch to inputs on both physical sides. Its primary elbow remains the lane
+  range anchor, while the opposite branch renders a second curve from the same horizontal tap.
+- Each output branch is styled from its physical lane direction rather than the shared logical
+  connector flag, so an upward normal branch is green even when its sibling branch is counterflow.
+- Lane spine segments are anchored independently at the output elbow for their physical direction;
+  a branch running upward starts at the top/upward elbow endpoint rather than the opposite branch's
+  lower endpoint.
+- Lane hover is mutually exclusive with station hover. Normal lane columns and collapsed shared-lane
+  icons both call the same hover callback, so a lane hover can highlight every connector using that
+  lane even when the shared columns overlap.

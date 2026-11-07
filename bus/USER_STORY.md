@@ -11,6 +11,7 @@
 - As a player, I can toggle lane flow between bottom → top and top → bottom, with the selected direction applied in both normal and collapsed views.
 - As a player, I can see a lane originate at the producing station nearest the selected flow edge and see counterflow sections as dashed lines.
 - As a player, I can see slim, continuous, unshadowed V chevrons with a small gap between neighboring Vs on each lane and horizontal station tap, showing whether material flows in the selected lane direction, toward a station, or counterflows against it.
+- As a player using collapse view, I can see lane chevrons follow the actual physical direction of each compacted segment, even when independent station-bay compaction reverses its logical row order.
 - As a player, when a lane has no producing station in the plan, I can see it enter from the selected flow's starting edge.
 - As a player, I can see a lane stop at its farthest connected tap in the selected flow direction instead of continuing indefinitely beyond the factory plan.
 - As a player, I can scroll vertically through a long planner without disconnecting lane spines or station taps.
@@ -21,12 +22,13 @@
 - As a player, when a station's output only feeds counterflow, I can see that output use the outer horizontal tap row so it does not compete with the station's normal taps.
 - As a player, I can see a regular station output use the flow-side tap row, keeping it clear of terminal input lanes that share its vertical column.
 - As a player, when a station consumes both counterflow and regular lanes, I can see its counterflow inputs use the opposite-side tap rows from its regular inputs.
-- As a player, each station connection connects to its lane with one smooth, correctly oriented quarter-turn: regular outputs curve in the selected flow direction, regular inputs curve against it, and counterflow taps reverse those directions.
+- As a player, each station connection connects to its lane with one smooth, correctly oriented quarter-turn: regular outputs curve in the selected flow direction, regular inputs curve against it, and counterflow taps reverse those directions, including when collapsed station bays change the physical order; an output that feeds both sides gets both elbows with each branch's correct flow color and its lane starts at the matching elbow.
 - As a player, a station with one connected lane still has a visible rounded turn into that lane.
 - As a player, when a tap's horizontal run has to cross a lane spine it isn't connecting to, that crossing is drawn as a small schematic "hop" so it never reads as a connection.
 - As a player, I can see a station connect to an existing lane for its own material, without duplicate output taps.
 - As a player, I can check any existing lane as an input consumed by a station.
 - As a player, I can hover a station to trace each of its input from its originating output tap through that station in a thick, distinct resource color, without highlighting the lane beyond that station.
+- As a player, I can hover a supply lane to highlight its full route and every station tap that pulls material from that lane.
 - As a player, I can represent on-site intermediate production by leaving its lane unchecked.
 - As a player, stations and lanes show only their icon on the canvas; the material name appears as a tooltip on hover so the layout stays uncluttered.
 - As a player with a wide display or many lanes, I can use the full page width without an arbitrary planner width cap.
