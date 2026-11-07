@@ -1,11 +1,8 @@
 # Dev notes
 
-- `npm run local` is currently broken: esbuild's `--servedir=. --outdir=../docs/bus` combination
-  fails because esbuild requires the outdir to live inside the serve dir. To preview locally for
-  now, run `npm run bundle` then serve `../docs/bus` with any static file server (e.g.
-  `npx serve ../docs/bus`). A proper fix would follow the `pix/dev.js` pattern (esbuild `context()`
-  + `ctx.serve({ servedir: '../docs/bus' })`, copying `index.html`/`style.css` into `docs/bus` on
-  each build) instead of the plain CLI `--servedir` flag.
+- `npm run local` runs `scripts/dev.ts`, which uses an esbuild context and serves `../docs/bus`
+  on the development server (normally `http://localhost:8000`). It copies the static assets before
+  starting and watches the source bundle through esbuild's development context.
 - Station connectors (`BeltOverlay` in `src/app.tsx`) measure pixel positions via
   `ResizeObserver` against `.station-port-anchor` / `.lane-spine-anchor` elements, not React state.
   Any layout change to station/lane markup should keep those anchor elements present and
@@ -21,11 +18,20 @@
 - `scripts/copy-assets.ts` is the single publishing path for `index.html`, `style.css`, and every
   generated material icon. Both `npm run bundle` and `npm run local` call it so paths such as
   `icons/productivity-module.png` are available from `docs/bus`.
-- Connector paths are generated from the station toward the lane for rendering. Regular inputs use
-  a positive vertical elbow direction, but counterflow inputs use a negative direction so they meet
-  the descending lane above the consuming station. If an origin output feeds only pulls below it,
-  that output is also counterflow, so it renders dashed and downward with no green upward spine or
-  arrow.
+- Connector paths are generated from the station toward the lane for rendering. `flowDirection`
+  selects the origin edge, normal/counterflow classification, elbow direction, lane extents, and
+  chevron direction; keep those calculations shared between collapsed and uncollapsed rendering.
+  Horizontal connector chevrons remain station-to-lane for outputs and lane-to-station for inputs,
+  independent of the selected vertical flow direction.
 - Collapsed lane columns are absolutely positioned within `.lane-column-group` and must explicitly
   use `width: 100%`; otherwise the normal lane column's `width: 0` flex sizing places their spine
   anchors at the group edge instead of its center.
+- Collapse view adds `.collapsed` to `.bus-columns` and hides only the opposite-side
+  `.station-spacer` elements, so each station bay compacts independently while visible station
+  port anchors remain available for `BeltOverlay` measurement.
+- Lane spine ranges are the union of measured normal and counterflow connector endpoints. Each
+  direction gets its own segment, both anchored at the producing station when present, so
+  independent bay compaction remains correct even when opposite-side stations share a row or
+  move a counterflow endpoint across the origin's physical position.
+- Material drops are accepted by both the empty lane field and existing lane columns. Lane-column
+  drop targets still reorder dragged lanes, while material drops always create a new lane.
