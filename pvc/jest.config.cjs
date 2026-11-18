@@ -1,0 +1,1 @@
+module.exports = { preset: 'ts-jest', testEnvironment: 'node', testMatch: ['**/src/**/*.test.ts'], transform: { '^.+\\.ts$': ['ts-jest', { diagnostics: false, tsconfig: { module: 'commonjs', target: 'es2022', allowImportingTsExtensions: true, noEmit: false } }] } };

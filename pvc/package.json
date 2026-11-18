@@ -1,0 +1,31 @@
+{
+  "name": "pvc",
+  "version": "1.0.0",
+  "description": "Parametric Vase Creator - design vases with JavaScript functions, preview in WebGL, export STL",
+  "main": "src/index.tsx",
+  "scripts": {
+    "bundle": "node --experimental-strip-types scripts/build.ts",
+    "check": "tsc --noEmit",
+    "lint": "eslint src/ scripts/",
+    "local": "node --experimental-strip-types scripts/build.ts --serve",
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "preact": "^11.2.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^26.6.6",
+    "esbuild": "^0.28.2",
+    "eslint": "^10.15.0",
+    "jest": "^30.5.2",
+    "ts-jest": "^29.4.15",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
+    "typescript-eslint": "^8.73.0"
+  },
+  "type": "module"
+}
