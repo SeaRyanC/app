@@ -16,9 +16,9 @@ const html = readFileSync('index.html', 'utf8').replace('../docs/pvc/app.js', 'a
 writeFileSync(`${out}/index.html`, html);
 
 const options = {
-  entryPoints: ['src/index.tsx'],
+  entryPoints: { app: 'src/index.tsx', worker: 'src/worker.ts' },
   bundle: true,
-  outfile: `${out}/app.js`,
+  outdir: out,
   sourcemap: true,
   minify: !watch,
   jsx: 'automatic' as const,
@@ -34,4 +34,6 @@ if (watch) {
 } else {
   await build(options);
 }
+
+
 

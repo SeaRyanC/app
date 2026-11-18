@@ -1,6 +1,6 @@
 {
   "name": "pvc",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Parametric Vase Creator - design vases with JavaScript functions, preview in WebGL, export STL",
   "main": "src/index.tsx",
   "scripts": {
@@ -29,3 +29,4 @@
   },
   "type": "module"
 }
+

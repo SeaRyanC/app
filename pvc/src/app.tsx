@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import { buildMesh, compileUserCode, DEFAULT_CODE, layerHeights, thetaCount, UserCodeError, validateParams, type Mesh, type Params } from './model.ts';
+import { DEFAULT_CODE, layerHeights, thetaCount, validateParams, type Mesh, type Params } from './model.ts';
+import type { WorkerRequest, WorkerResponse } from './worker.ts';
 import { meshToStl } from './stl.ts';
 import { Viewer } from './viewer.ts';
 
 const STORAGE_KEY = 'pvc:state:v1';
+const TIMEOUT_MS = 15000;
 
 interface State {
   code: string;
@@ -38,6 +40,8 @@ export function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const viewerRef = useRef<Viewer | null>(null);
   const meshRef = useRef<Mesh | null>(null);
+  const workerRef = useRef<Worker | null>(null);
+  const [busy, setBusy] = useState(false);
   const [glError, setGlError] = useState<string | undefined>();
 
   useEffect(() => {
@@ -46,28 +50,46 @@ export function App() {
     } catch (e) {
       setGlError(e instanceof Error ? e.message : String(e));
     }
-    return () => viewerRef.current?.dispose();
+    return () => { viewerRef.current?.dispose(); workerRef.current?.terminate(); };
   }, []);
 
   useEffect(() => {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch { /* storage full or disabled */ }
     const handle = setTimeout(() => {
-      try {
-        const params = toParams(state);
-        const paramError = validateParams(params);
-        if (paramError) throw new UserCodeError(paramError);
-        const mesh = buildMesh(compileUserCode(state.code), params);
+      const params = toParams(state);
+      const paramError = validateParams(params);
+      if (paramError) { setError(paramError); return; }
+      workerRef.current?.terminate();
+      const worker = new Worker('worker.js');
+      workerRef.current = worker;
+      setBusy(true);
+      const timeout = setTimeout(() => {
+        worker.terminate();
+        setBusy(false);
+        setError(`Timed out after ${TIMEOUT_MS / 1000}s. Check your code for infinite loops or use larger steps.`);
+      }, TIMEOUT_MS);
+      worker.onmessage = (e: MessageEvent<WorkerResponse>) => {
+        clearTimeout(timeout);
+        worker.terminate();
+        setBusy(false);
+        if ('error' in e.data) { setError(e.data.error); return; }
+        const mesh = e.data.mesh;
         const first = meshRef.current === null;
         meshRef.current = mesh;
         viewerRef.current?.setMesh(mesh, first);
         setError(undefined);
         setInfo(`${layerHeights(params).length} layers × ${thetaCount(params)} angles · ${mesh.triangleCount.toLocaleString()} triangles`);
-      } catch (e) {
-        setError(e instanceof UserCodeError ? e.message : `Unexpected error: ${String(e)}`);
-      }
+      };
+      worker.onerror = (e) => {
+        clearTimeout(timeout);
+        setBusy(false);
+        setError(`Worker failed: ${e.message}`);
+      };
+      worker.postMessage({ code: state.code, params } satisfies WorkerRequest);
     }, 300);
-    return () => clearTimeout(handle);
-  }, [state]);
+    return () => {
+      clearTimeout(handle);
+    };  }, [state]);
 
   const set = (k: keyof State) => (e: Event) => {
     const v = (e.target as HTMLInputElement | HTMLTextAreaElement).value;
@@ -116,7 +138,7 @@ export function App() {
           />
           <div class="actions">
             <button onClick={() => setState(DEFAULTS)}>Reset to example</button>
-            <span class="info">{info}</span>
+            <span class="info">{busy ? 'Computing… ' : ''}{info}</span>
           </div>
           {error && <pre class="error" role="alert">{error}{stale ? '\n(Preview shows the last valid shape.)' : ''}</pre>}
         </section>
@@ -136,3 +158,4 @@ export function App() {
     </div>
   );
 }
+

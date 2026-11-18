@@ -18,7 +18,7 @@ export interface Mesh {
 
 export const MAX_TRIANGLES = 2_000_000;
 
-export const DEFAULT_CODE = `// z is the height in mm, theta is the angle in radians (0..2π).
+export const DEFAULT_CODE = `// z is the height in mm, theta is the angle in degrees (0..360).
 // diameter() is the inner diameter at the wall's midpoint line;
 // thickness() extends the wall outward from there.
 
@@ -27,7 +27,11 @@ function bulge(z) {
 }
 
 function ripple(z, theta) {
-  return 4 * Math.sin(5 * theta + z / 8);
+  return 4 * Math.sin(5 * radians(theta) + z / 8);
+}
+
+function radians(deg) {
+  return deg * Math.PI / 180;
 }
 
 function diameter(z, theta) {
@@ -35,7 +39,7 @@ function diameter(z, theta) {
 }
 
 function thickness(z, theta) {
-  return 2 + 0.5 * Math.cos(3 * theta);
+  return 2 + 0.5 * Math.cos(3 * radians(theta));
 }
 `;
 
@@ -88,8 +92,7 @@ export function thetaCount(p: Params): number {
 
 /**
  * Builds a closed solid: inner wall, outer wall (inner radius + thickness),
- * a ring at the top, and a solid floor one layer (zStep) thick at the bottom.
- * The first z layer only contributes its outer profile.
+ * and rings closing the top and bottom (an open tube).
  */
 export function buildMesh(fns: VaseFunctions, p: Params): Mesh {
   const err = validateParams(p);
@@ -98,7 +101,7 @@ export function buildMesh(fns: VaseFunctions, p: Params): Mesh {
   const zs = layerHeights(p);
   const nT = thetaCount(p);
   const nZ = zs.length;
-  const triangleCount = (nZ - 1) * nT * 2 + (nZ - 2) * nT * 2 + nT * 4;
+  const triangleCount = (nZ - 1) * nT * 4 + nT * 4;
   if (triangleCount > MAX_TRIANGLES) {
     throw new UserCodeError(`Mesh would have ${triangleCount.toLocaleString()} triangles (limit ${MAX_TRIANGLES.toLocaleString()}). Increase the z step or theta step.`);
   }
@@ -108,7 +111,7 @@ export function buildMesh(fns: VaseFunctions, p: Params): Mesh {
   for (let k = 0; k < nZ; k++) {
     const z = zs[k] as number;
     for (let i = 0; i < nT; i++) {
-      const theta = (i / nT) * Math.PI * 2;
+      const theta = (i / nT) * 360;
       const ctx = `at z=${z}, theta=${theta.toFixed(4)}`;
       let d: unknown, t: unknown;
       try {
@@ -123,7 +126,8 @@ export function buildMesh(fns: VaseFunctions, p: Params): Mesh {
       if (t <= 0) throw new UserCodeError(`thickness() returned ${t} ${ctx}; it must be positive.`);
       const r0 = d / 2;
       const r1 = r0 + t;
-      const c = Math.cos(theta), s = Math.sin(theta);
+      const rad = (theta * Math.PI) / 180;
+      const c = Math.cos(rad), s = Math.sin(rad);
       const o = (k * nT + i) * 3;
       inner.set([r0 * c, r0 * s, z], o);
       outer.set([r1 * c, r1 * s, z], o);
@@ -137,7 +141,6 @@ export function buildMesh(fns: VaseFunctions, p: Params): Mesh {
     positions[w++] = src[idx * 3 + 1] as number;
     positions[w++] = src[idx * 3 + 2] as number;
   };
-  const pushXYZ = (x: number, y: number, z: number) => { positions[w++] = x; positions[w++] = y; positions[w++] = z; };
   const at = (k: number, i: number) => k * nT + (i % nT);
 
   // Counter-clockwise winding seen from outside the solid.
@@ -147,23 +150,19 @@ export function buildMesh(fns: VaseFunctions, p: Params): Mesh {
       // outer wall faces outward
       push(outer, a); push(outer, b); push(outer, d);
       push(outer, a); push(outer, d); push(outer, c);
-      if (k === 0) continue;
       // inner wall faces toward the axis
       push(inner, a); push(inner, d); push(inner, b);
       push(inner, a); push(inner, c); push(inner, d);
     }
   }
   const top = nZ - 1;
-  const z0 = zs[0] as number;
-  const z1 = zs[1] as number;
   for (let i = 0; i < nT; i++) {
     const a = at(top, i), b = at(top, i + 1);
     push(inner, a); push(outer, a); push(outer, b);
     push(inner, a); push(outer, b); push(inner, b);
-    // underside: fan to the outer rim, facing down
-    pushXYZ(0, 0, z0); push(outer, at(0, i + 1)); push(outer, at(0, i));
-    // floor of the cavity, facing up
-    pushXYZ(0, 0, z1); push(inner, at(1, i)); push(inner, at(1, i + 1));
+    const a0 = at(0, i), b0 = at(0, i + 1);
+    push(inner, a0); push(outer, b0); push(outer, a0);
+    push(inner, a0); push(inner, b0); push(outer, b0);
   }
 
   return { positions, triangleCount };
@@ -181,3 +180,4 @@ export function meshBounds(m: Mesh): { min: [number, number, number]; max: [numb
   }
   return { min, max };
 }
+
