@@ -51,3 +51,11 @@
 - Lane hover is mutually exclusive with station hover. Normal lane columns and collapsed shared-lane
   icons both call the same hover callback, so a lane hover can highlight every connector using that
   lane even when the shared columns overlap.
+- In collapse view, `directHorizontalLaneIds()` removes a lane from column allocation only when it has
+  exactly one producing station and one bus-input station, those stations are on opposite sides, and
+  their independently compacted row numbers match. `BeltOverlay` measures station ports for these
+  lanes but skips their lane-spine anchors and renders one station-center horizontal chevron route
+  instead.
+- Collapse-column packing must compare lane tap spans using the independent left/right station rows
+  used by collapsed CSS, not the master station-list indices. Otherwise a one-sided lane can be
+  placed into a cross-side lane's column even though their rendered elbows occupy the same rows.

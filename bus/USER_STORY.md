@@ -37,6 +37,7 @@
 - As a player with a dense plan, I can enable read-only collapse view to assign a lane used on only one side to the nearest compatible column on that side, working from the outer edges inward.
 - As a player using collapse view, I can see the left and right station bays compact independently without blank rows for stations assigned to the opposite side.
 - As a player using collapse view, I can see lanes fed from the selected flow edge remain in separate columns when they overlap at that edge.
+- As a player using collapse view, I can see a lane whose only route is between opposite-side stations on the same compacted row as a direct horizontal connection without an unnecessary vertical lane column.
 - As a player using collapse view, I can identify every lane in a shared column from its icon directly above that lane's highest elbow.
 - As a player using collapse view, I can share a column between a lane's final input and the lane produced by that same station, since their elbows occupy opposite sides of the station row.
 - As a player in collapse view, I cannot drag, add, remove, reorder, or otherwise edit the plan until I return to the normal view.

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import type { FunctionComponent } from 'preact';
 import { materialById, materials, recipesForMaterial, type Material } from './data';
 
-const VERSION = '1.3.24';
+const VERSION = '1.3.26';
 const COMMIT_HASH = 'dev';
 const STORAGE_KEY = 'factorio-bus-planner';
 const FLOW_DIRECTION_STORAGE_KEY = 'factorio-bus-flow-direction';
@@ -90,20 +90,33 @@ interface LaneSpan {
   last: number;
 }
 
+function compactedStationRows(plan: Plan): Map<string, number> {
+  const nextRows: Record<Station['side'], number> = { left: 0, right: 0 };
+  const stationRows = new Map<string, number>();
+  for (const station of plan.stations) {
+    stationRows.set(station.id, nextRows[station.side]);
+    nextRows[station.side] += 1;
+  }
+  return stationRows;
+}
+
 function laneTapSpan(plan: Plan, lane: Lane, flowDirection: FlowDirection): LaneSpan | null {
   let first: number | null = null;
   let last: number | null = null;
   const origin = laneOrigin(plan, lane.material, flowDirection);
+  const stationRows = compactedStationRows(plan);
+  const originRow = origin === null ? null : stationRows.get(plan.stations[origin]?.id ?? '') ?? null;
   const flowStep = flowDirection === 'up' ? -1 : 1;
   const originOnlyCounterflows = laneOnlyCounterflowsFromOrigin(plan, lane, origin, flowDirection);
   plan.stations.forEach((station, index) => {
+    const row = stationRows.get(station.id) ?? index;
     const endpointPositions: number[] = [];
     if (station.material === lane.material) {
-      endpointPositions.push(index + (originOnlyCounterflows && index === origin ? -flowStep : flowStep) * .25);
+      endpointPositions.push(row + (originOnlyCounterflows && index === origin ? -flowStep : flowStep) * .25);
     }
     if (pullsLaneFromBus(station, lane.id)) {
-      const counterflow = origin !== null && (flowDirection === 'up' ? index > origin : index < origin);
-      endpointPositions.push(index + (counterflow ? flowStep : -flowStep) * .25);
+      const counterflow = originRow !== null && (flowDirection === 'up' ? row > originRow : row < originRow);
+      endpointPositions.push(row + (counterflow ? flowStep : -flowStep) * .25);
     }
     for (const endpoint of endpointPositions) {
       first = first === null ? endpoint : Math.min(first, endpoint);
@@ -113,8 +126,9 @@ function laneTapSpan(plan: Plan, lane: Lane, flowDirection: FlowDirection): Lane
   if (first === null || last === null) return null;
   // Lanes without a producing station visibly enter from the flow's starting
   // edge, so they overlap every other no-origin lane at that boundary.
+  const rowCount = Math.max(0, ...stationRows.values()) + 1;
   return origin === null
-    ? flowDirection === 'up' ? { first, last: plan.stations.length + .5 } : { first: -.5, last }
+    ? flowDirection === 'up' ? { first, last: rowCount + .5 } : { first: -.5, last }
     : { first, last };
 }
 
@@ -131,6 +145,21 @@ function soleLaneSide(plan: Plan, lane: Lane): Station['side'] | null {
     side = station.side;
   }
   return side;
+}
+
+function directHorizontalLaneIds(plan: Plan): Set<string> {
+  const stationRows = compactedStationRows(plan);
+
+  return new Set(plan.lanes
+    .filter(lane => {
+      const producers = plan.stations.filter(station => station.material === lane.material);
+      const consumers = plan.stations.filter(station => pullsLaneFromBus(station, lane.id));
+      if (producers.length !== 1 || consumers.length !== 1) return false;
+      const producer = producers[0]!;
+      const consumer = consumers[0]!;
+      return producer.side !== consumer.side && stationRows.get(producer.id) === stationRows.get(consumer.id);
+    })
+    .map(lane => lane.id));
 }
 
 function collapseLaneGroups(plan: Plan, flowDirection: FlowDirection): Lane[][] {
@@ -249,10 +278,15 @@ export const App: FunctionComponent = () => {
     return materials.filter(material => !needle || material.name.toLowerCase().includes(needle) || material.id.includes(needle));
   }, [search]);
   const laneGroups = useMemo(() => collapseLaneGroups(plan, flowDirection), [flowDirection, plan]);
-  const visibleLaneGroups = collapseView ? laneGroups : plan.lanes.map(lane => [lane]);
+  const directLaneIds = useMemo(() => collapseView ? directHorizontalLaneIds(plan) : new Set<string>(), [collapseView, plan]);
+  const visibleLaneGroups = collapseView
+    ? laneGroups
+      .map(group => group.filter(lane => !directLaneIds.has(lane.id)))
+      .filter(group => group.length > 0)
+    : plan.lanes.map(lane => [lane]);
   const inSituLaneIds = useMemo(
-    () => new Set(collapseView ? laneGroups.filter(group => group.length > 1).flatMap(group => group.map(lane => lane.id)) : []),
-    [collapseView, laneGroups],
+    () => new Set(collapseView ? visibleLaneGroups.filter(group => group.length > 1).flatMap(group => group.map(lane => lane.id)) : []),
+    [collapseView, visibleLaneGroups],
   );
 
   const selectedStation = plan.stations.find(station => station.id === selectedStationId);
@@ -528,7 +562,7 @@ export const App: FunctionComponent = () => {
                 <StationCard key={station.id} station={station} index={index} isFirst={index === 0} isLast={index === plan.stations.length - 1} selected={selectedStationId === station.id} onSelect={setSelectedStationId} onHover={setHoveredStation} onDragStart={onDragStart} onDrop={handleDrop} onToggleSide={toggleStationSide} onMove={moveStation} portRef={element => registerStationPort(station.id, element)} editingDisabled={collapseView} />
               ) : <div key={station.id} class="station-spacer" />)}
             </div>
-            <BeltOverlay plan={plan} stageRef={stageRef} stationPortRefs={stationPortRefs} laneSpineRefs={laneSpineRefs} collapseView={collapseView} flowDirection={flowDirection} inSituLaneIds={inSituLaneIds} highlightedStationId={highlightedStationId} highlightedLaneId={highlightedLaneId} onHoverLane={setHoveredLane} />
+            <BeltOverlay plan={plan} stageRef={stageRef} stationPortRefs={stationPortRefs} laneSpineRefs={laneSpineRefs} collapseView={collapseView} flowDirection={flowDirection} inSituLaneIds={inSituLaneIds} directLaneIds={directLaneIds} highlightedStationId={highlightedStationId} highlightedLaneId={highlightedLaneId} onHoverLane={setHoveredLane} />
             </div>
             <div
               class="add-station-row"
@@ -632,6 +666,7 @@ interface BeltOverlayProps {
   collapseView: boolean;
   flowDirection: FlowDirection;
   inSituLaneIds: ReadonlySet<string>;
+  directLaneIds: ReadonlySet<string>;
   highlightedStationId: string | null;
   highlightedLaneId: string | null;
   onHoverLane: (laneId: string | null) => void;
@@ -1100,7 +1135,7 @@ function optimizeInputTapRows(plan: Plan, layout: MeasuredLayout, connectors: Lo
   return optimizedOffsets;
 }
 
-function BeltOverlay({ plan, stageRef, stationPortRefs, laneSpineRefs, collapseView, flowDirection, inSituLaneIds, highlightedStationId, highlightedLaneId, onHoverLane }: BeltOverlayProps) {
+function BeltOverlay({ plan, stageRef, stationPortRefs, laneSpineRefs, collapseView, flowDirection, inSituLaneIds, directLaneIds, highlightedStationId, highlightedLaneId, onHoverLane }: BeltOverlayProps) {
   const [layout, setLayout] = useState<MeasuredLayout | null>(null);
   const connectors = useMemo(() => buildLogicalConnectors(plan, flowDirection), [flowDirection, plan]);
 
@@ -1133,6 +1168,7 @@ function BeltOverlay({ plan, stageRef, stationPortRefs, laneSpineRefs, collapseV
 
       const laneSpines = new Map<string, LaneMetrics>();
       for (const lane of plan.lanes) {
+        if (directLaneIds.has(lane.id)) continue;
         const anchor = laneSpineRefs.current.get(lane.id);
         if (!anchor) return;
         const rect = anchor.getBoundingClientRect();
@@ -1167,7 +1203,7 @@ function BeltOverlay({ plan, stageRef, stationPortRefs, laneSpineRefs, collapseV
       if (frame) cancelAnimationFrame(frame);
       observer?.disconnect();
     };
-  }, [collapseView, flowDirection, laneSpineRefs, plan, stageRef, stationPortRefs]);
+  }, [collapseView, directLaneIds, flowDirection, laneSpineRefs, plan, stageRef, stationPortRefs]);
 
   if (!layout || plan.lanes.length === 0) return null;
 
@@ -1195,6 +1231,38 @@ function BeltOverlay({ plan, stageRef, stationPortRefs, laneSpineRefs, collapseV
       .map(lane => [lane.id, highlightedMaterialColors.get(lane.material)!]),
   );
   const laneHoverColor = highlightedLaneId ? 'var(--cyan)' : undefined;
+  const directConnectionElements = plan.lanes.map(lane => {
+    if (!directLaneIds.has(lane.id)) return null;
+    const output = connectors.find(connector => connector.laneId === lane.id && connector.kind === 'output');
+    const input = connectors.find(connector => connector.laneId === lane.id && connector.kind === 'input');
+    const outputPort = output ? layout.stationPorts.get(output.stationId) : undefined;
+    const inputPort = input ? layout.stationPorts.get(input.stationId) : undefined;
+    if (!output || !input || !outputPort || !inputPort) return null;
+
+    const direction: -1 | 1 = inputPort.x >= outputPort.x ? 1 : -1;
+    const chevrons = chevronPath(outputPort.y, outputPort.x, inputPort.x, direction, 'horizontal');
+    if (!chevrons) return null;
+    const originIndex = laneOrigin(plan, lane.material, flowDirection);
+    const originStation = originIndex === null ? undefined : plan.stations[originIndex];
+    const isHighlightedInput = input.stationId === highlightedStationId;
+    const isHighlightedOrigin = output.stationId === originStation?.id;
+    const isHighlightedLane = lane.id === highlightedLaneId;
+    const highlightColor = isHighlightedLane
+      ? laneHoverColor
+      : isHighlightedInput || isHighlightedOrigin ? highlightedLaneColors.get(lane.id) : undefined;
+    const highlightStyle = highlightColor ? `--highlight-color: ${highlightColor};` : undefined;
+    const classes = `chevron connector-chevron direct-connector ${output.counterflow ? 'counterflow' : ''} ${highlightColor ? 'highlighted' : ''}`;
+    return (
+      <path
+        key={lane.id}
+        class={classes}
+        style={highlightStyle}
+        d={chevrons}
+        onPointerEnter={() => onHoverLane(lane.id)}
+        onPointerLeave={() => onHoverLane(null)}
+      />
+    );
+  });
 
   // Lane chevrons point in the direction material flows from the selected
   // origin. In collapsed view, each physical segment points toward its actual
@@ -1281,9 +1349,11 @@ function BeltOverlay({ plan, stageRef, stationPortRefs, laneSpineRefs, collapseV
       height={layout.height}
       viewBox={`0 0 ${layout.width} ${layout.height}`}
     >
+      {directConnectionElements}
       {laneSpineElements}
       {highlightedLaneSegments}
       {connectors.map(connector => {
+        if (directLaneIds.has(connector.laneId)) return null;
         const stationPort = layout.stationPorts.get(connector.stationId);
         const laneSpine = layout.laneSpines.get(connector.laneId);
         if (!stationPort || !laneSpine) return null;

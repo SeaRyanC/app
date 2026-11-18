@@ -1,5 +1,137 @@
-"use strict";(()=>{var D=`"use strict";
-const {`+Object.getOwnPropertyNames(Math).filter(e=>e!=="constructor"&&/^[A-Za-z_$][\w$]*$/.test(e)).join(",")+`} = Math;
-`,i=class extends Error{};function I(e){return e instanceof Error?`${e.name}: ${e.message}`:String(e)}function P(e){let s;try{s=new Function(D+e+`
-;return { diameter: typeof diameter === "undefined" ? undefined : diameter, thickness: typeof thickness === "undefined" ? undefined : thickness };`)()}catch(o){throw new i(I(o))}if(typeof s.diameter!="function")throw new i("Your code must define a function named diameter(z, theta).");if(typeof s.thickness!="function")throw new i("Your code must define a function named thickness(z, theta).");return{diameter:s.diameter,thickness:s.thickness}}function R(e){if(![e.zMin,e.zMax,e.zStep,e.thetaStepDeg].every(Number.isFinite))return"All parameters must be numbers.";if(e.zMax<=e.zMin)return"Z max must be greater than Z min.";if(e.zStep<=0)return"Z step must be positive.";if(e.thetaStepDeg<=0||e.thetaStepDeg>180)return"Theta step must be between 0 and 180 degrees."}function _(e){let s=Math.max(1,Math.ceil((e.zMax-e.zMin)/e.zStep-1e-9)),o=[];for(let p=0;p<s;p++)o.push(e.zMin+p*e.zStep);return o.push(e.zMax),o}function L(e){return Math.max(3,Math.ceil(360/e.thetaStepDeg-1e-9))}function E(e,s){let o=R(s);if(o)throw new i(o);let p=_(s),f=L(s),w=p.length,M=(w-1)*f*4+f*4;if(M>2e6)throw new i(`Mesh would have ${M.toLocaleString()} triangles (limit ${2e6.toLocaleString()}). Increase the z step or theta step.`);let a=new Float32Array(w*f*3),u=new Float32Array(w*f*3);for(let n=0;n<w;n++){let r=p[n];for(let c=0;c<f;c++){let d=c/f*360,m=`at z=${r}, theta=${d.toFixed(4)}`,h,l;try{h=e.diameter(r,d),l=e.thickness(r,d)}catch(v){throw new i(`${I(v)} (${m})`)}if(typeof h!="number"||!Number.isFinite(h))throw new i(`diameter() returned ${String(h)} ${m}; expected a finite number.`);if(typeof l!="number"||!Number.isFinite(l))throw new i(`thickness() returned ${String(l)} ${m}; expected a finite number.`);if(h<=0)throw new i(`diameter() returned ${h} ${m}; it must be positive.`);if(l<=0)throw new i(`thickness() returned ${l} ${m}; it must be positive.`);let k=h/2,y=k+l,$=d*Math.PI/180,S=Math.cos($),F=Math.sin($),A=(n*f+c)*3;a.set([k*S,k*F,r],A),u.set([y*S,y*F,r],A)}}let g=new Float32Array(M*9),z=0,t=(n,r)=>{g[z++]=n[r*3],g[z++]=n[r*3+1],g[z++]=n[r*3+2]},b=(n,r)=>n*f+r%f;for(let n=0;n<w-1;n++)for(let r=0;r<f;r++){let c=b(n,r),d=b(n,r+1),m=b(n+1,r),h=b(n+1,r+1);t(u,c),t(u,d),t(u,h),t(u,c),t(u,h),t(u,m),t(a,c),t(a,h),t(a,d),t(a,c),t(a,m),t(a,h)}let x=w-1;for(let n=0;n<f;n++){let r=b(x,n),c=b(x,n+1);t(a,r),t(u,r),t(u,c),t(a,r),t(u,c),t(a,c);let d=b(0,n),m=b(0,n+1);t(a,d),t(u,m),t(u,d),t(a,d),t(a,m),t(u,m)}return{positions:g,triangleCount:M}}self.onmessage=e=>{let s;try{s={mesh:E(P(e.data.code),e.data.params)}}catch(o){s={error:o instanceof i?o.message:`Unexpected error: ${String(o)}`}}"mesh"in s?self.postMessage(s,[s.mesh.positions.buffer]):self.postMessage(s)};})();
+"use strict";
+(() => {
+  // src/model.ts
+  var MAX_TRIANGLES = 2e6;
+  var MATH_PRELUDE = '"use strict";\nconst {' + Object.getOwnPropertyNames(Math).filter((k) => k !== "constructor" && /^[A-Za-z_$][\w$]*$/.test(k)).join(",") + "} = Math;\n";
+  var UserCodeError = class extends Error {
+  };
+  function describe(e) {
+    return e instanceof Error ? `${e.name}: ${e.message}` : String(e);
+  }
+  function compileUserCode(code) {
+    let result;
+    try {
+      const factory = new Function(
+        MATH_PRELUDE + code + '\n;return { diameter: typeof diameter === "undefined" ? undefined : diameter, thickness: typeof thickness === "undefined" ? undefined : thickness };'
+      );
+      result = factory();
+    } catch (e) {
+      throw new UserCodeError(describe(e));
+    }
+    if (typeof result.diameter !== "function") throw new UserCodeError("Your code must define a function named diameter(z, theta).");
+    if (typeof result.thickness !== "function") throw new UserCodeError("Your code must define a function named thickness(z, theta).");
+    return { diameter: result.diameter, thickness: result.thickness };
+  }
+  function validateParams(p) {
+    const all = [p.zMin, p.zMax, p.zStep, p.thetaStepDeg];
+    if (!all.every(Number.isFinite)) return "All parameters must be numbers.";
+    if (p.zMax <= p.zMin) return "Z max must be greater than Z min.";
+    if (p.zStep <= 0) return "Z step must be positive.";
+    if (p.thetaStepDeg <= 0 || p.thetaStepDeg > 180) return "Theta step must be between 0 and 180 degrees.";
+    return void 0;
+  }
+  function layerHeights(p) {
+    const n = Math.max(1, Math.ceil((p.zMax - p.zMin) / p.zStep - 1e-9));
+    const out = [];
+    for (let i = 0; i < n; i++) out.push(p.zMin + i * p.zStep);
+    out.push(p.zMax);
+    return out;
+  }
+  function thetaCount(p) {
+    return Math.max(3, Math.ceil(360 / p.thetaStepDeg - 1e-9));
+  }
+  function buildMesh(fns, p) {
+    const err = validateParams(p);
+    if (err) throw new UserCodeError(err);
+    const zs = layerHeights(p);
+    const nT = thetaCount(p);
+    const nZ = zs.length;
+    const triangleCount = (nZ - 1) * nT * 4 + nT * 4;
+    if (triangleCount > MAX_TRIANGLES) {
+      throw new UserCodeError(`Mesh would have ${triangleCount.toLocaleString()} triangles (limit ${MAX_TRIANGLES.toLocaleString()}). Increase the z step or theta step.`);
+    }
+    const inner = new Float32Array(nZ * nT * 3);
+    const outer = new Float32Array(nZ * nT * 3);
+    for (let k = 0; k < nZ; k++) {
+      const z = zs[k];
+      for (let i = 0; i < nT; i++) {
+        const theta = i / nT * 360;
+        const ctx = `at z=${z}, theta=${theta.toFixed(4)}`;
+        let d, t;
+        try {
+          d = fns.diameter(z, theta);
+          t = fns.thickness(z, theta);
+        } catch (e) {
+          throw new UserCodeError(`${describe(e)} (${ctx})`);
+        }
+        if (typeof d !== "number" || !Number.isFinite(d)) throw new UserCodeError(`diameter() returned ${String(d)} ${ctx}; expected a finite number.`);
+        if (typeof t !== "number" || !Number.isFinite(t)) throw new UserCodeError(`thickness() returned ${String(t)} ${ctx}; expected a finite number.`);
+        if (d <= 0) throw new UserCodeError(`diameter() returned ${d} ${ctx}; it must be positive.`);
+        if (t <= 0) throw new UserCodeError(`thickness() returned ${t} ${ctx}; it must be positive.`);
+        const r0 = d / 2;
+        const r1 = r0 + t;
+        const rad = theta * Math.PI / 180;
+        const c = Math.cos(rad), s = Math.sin(rad);
+        const o = (k * nT + i) * 3;
+        inner.set([r0 * c, r0 * s, z], o);
+        outer.set([r1 * c, r1 * s, z], o);
+      }
+    }
+    const positions = new Float32Array(triangleCount * 9);
+    let w = 0;
+    const push = (src, idx) => {
+      positions[w++] = src[idx * 3];
+      positions[w++] = src[idx * 3 + 1];
+      positions[w++] = src[idx * 3 + 2];
+    };
+    const at = (k, i) => k * nT + i % nT;
+    for (let k = 0; k < nZ - 1; k++) {
+      for (let i = 0; i < nT; i++) {
+        const a = at(k, i), b = at(k, i + 1), c = at(k + 1, i), d = at(k + 1, i + 1);
+        push(outer, a);
+        push(outer, b);
+        push(outer, d);
+        push(outer, a);
+        push(outer, d);
+        push(outer, c);
+        push(inner, a);
+        push(inner, d);
+        push(inner, b);
+        push(inner, a);
+        push(inner, c);
+        push(inner, d);
+      }
+    }
+    const top = nZ - 1;
+    for (let i = 0; i < nT; i++) {
+      const a = at(top, i), b = at(top, i + 1);
+      push(inner, a);
+      push(outer, a);
+      push(outer, b);
+      push(inner, a);
+      push(outer, b);
+      push(inner, b);
+      const a0 = at(0, i), b0 = at(0, i + 1);
+      push(inner, a0);
+      push(outer, b0);
+      push(outer, a0);
+      push(inner, a0);
+      push(inner, b0);
+      push(outer, b0);
+    }
+    return { positions, triangleCount };
+  }
+
+  // src/worker.ts
+  self.onmessage = (e) => {
+    let res;
+    try {
+      res = { mesh: buildMesh(compileUserCode(e.data.code), e.data.params) };
+    } catch (err) {
+      res = { error: err instanceof UserCodeError ? err.message : `Unexpected error: ${String(err)}` };
+    }
+    if ("mesh" in res) self.postMessage(res, [res.mesh.positions.buffer]);
+    else self.postMessage(res);
+  };
+})();
 //# sourceMappingURL=worker.js.map

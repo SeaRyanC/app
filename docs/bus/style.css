@@ -88,6 +88,7 @@ h1, h2, h3, p { margin-top: 0; }
 .belt-overlay .connector.counterflow { stroke: var(--orange); stroke-dasharray: 6 4; filter: none; }
 .belt-overlay .connector.highlighted { stroke: var(--highlight-color); stroke-width: 5; opacity: 1; }
 .belt-overlay .connector-chevron { stroke: var(--green); }
+.belt-overlay .direct-connector { pointer-events: auto; cursor: help; }
 .belt-overlay .chevron.counterflow { stroke: var(--orange); stroke-width: 1.75; opacity: .9; filter: none; }
 .belt-overlay .chevron.highlighted { stroke: var(--highlight-color); stroke-width: 3.5; opacity: 1; filter: none; }
 .station-port-anchor { position: absolute; top: 50%; width: 2px; height: 2px; transform: translateY(-50%); pointer-events: none; opacity: 0; }
